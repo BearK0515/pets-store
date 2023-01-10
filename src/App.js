@@ -1,7 +1,7 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./App.css";
+import Footer from "./components/common/Footer";
 import { GlobalStyle, ResetStyle } from "./components/common/globalStyle";
-import Header from "./components/common/Header";
 import {
   About,
   AdminIndex,
@@ -25,7 +25,7 @@ function App() {
         <Routes>
           <Route path='/' element={<Home />} />
           <Route path='about' element={<About />} />
-          <Route path='header' element={<Header/>} />
+          <Route path='header' element={<Footer/>} />
           <Route path='product' element={<ProductPage />}>
             <Route path='all' element={<ProductAll />} />
             <Route path='dog' element={<ProductDog />} />
