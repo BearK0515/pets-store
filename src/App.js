@@ -1,5 +1,6 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./App.css";
+import Footer from "./components/common/Footer";
 import { GlobalStyle, ResetStyle } from "./components/common/globalStyle";
 import Layout from "./components/common/Layout";
 import { Orders, Products } from "./components/sectionAdmin";
