@@ -9,6 +9,7 @@ import ProductCat from "./ProductCat";
 import ProductDog from "./ProductDog";
 import Cart from "./Cart";
 import Order from "./Order";
+import Faq from "./Faq";
 
 
 export {
@@ -23,4 +24,5 @@ export {
   ProductDog,
   Cart,
   Order,
+  Faq,
 };
