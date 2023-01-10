@@ -97,6 +97,8 @@ export const GlobalStyle = createGlobalStyle`
   --light: #f8f9fa;
   --dark: #343a40;
   --text-hover:#c14848;
+  --power-by:#469189;
+  --footer-background:#4EAD99;
   --breakpoint-xs: 0;
   --breakpoint-sm: 576px;
   --breakpoint-md: 768px;
