@@ -1,6 +1,5 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./App.css";
-import Footer from "./components/common/Footer";
 import { GlobalStyle, ResetStyle } from "./components/common/globalStyle";
 import Layout from "./components/common/Layout";
 import { Orders, Products } from "./components/sectionAdmin";
@@ -37,7 +36,7 @@ function App() {
             <Route path='blogs' element={<Blogs />} />
             <Route path='cart' element={<Cart />} />
             <Route path='order/query' element={<Order />} />
-            <Route path='order/query' element={<Faq />} />
+            <Route path='faq' element={<Faq />} />
           </Route>
           <Route path='login' element={<AdminLogin />} />
           <Route path='admin' element={<AdminIndex />}>
