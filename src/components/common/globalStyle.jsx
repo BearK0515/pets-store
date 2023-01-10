@@ -74,9 +74,6 @@ button {
 `;
 
 export const GlobalStyle = createGlobalStyle`
-@import url('https://fonts.googleapis.com/css2?family=Noto+Color+Emoji&family=Noto+Sans+TC:wght@400;700&family=Noto+Sans:wght@400;700&family=Roboto:wght@400;700&display=swap');
-@import url('https://fonts.cdnfonts.com/css/helvetica-neue-9');
-
 :root{
   --blue: #007bff;
   --indigo: #6610f2;
@@ -107,7 +104,7 @@ export const GlobalStyle = createGlobalStyle`
 }
 html,body {
   box-sizing: border-box;
-  font-size: 62.5%; 
-  font-family: -apple-system,BlinkMacSystemFont,Arial, Helvetica, sans-serif;
+  font-size: 100%; 
+  font-family: -apple-system,BlinkMacSystemFont,Arial, Helvetica, Roboto, NotoSans Traditional Chinese, Noto Color Emoji,sans-serif;
 }
 `;
