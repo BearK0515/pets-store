@@ -84,10 +84,13 @@ export const GlobalStyle = createGlobalStyle`
   --yellow: #ffc107;
   --green: #28a745;
   --teal: #20c997;
+  --tiffany: #6fc38b;
   --cyan: #17a2b8;
   --white: #fff;
   --gray: #6c757d;
   --gray-dark: #343a40;
+  --red-dark: #c14848;
+  --delete:#cb3747;
   --primary: #007bff;
   --secondary: #6c757d;
   --success: #28a745;
