@@ -40,8 +40,8 @@ function App() {
           </Route>
           <Route path='login' element={<AdminLogin />} />
           <Route path='admin' element={<AdminIndex />}>
-            <Route path='orders' element={<Orders />} />
             <Route path='products' element={<Products />} />
+            <Route path='orders' element={<Orders />} />
           </Route>
         </Routes>
       </BrowserRouter>
