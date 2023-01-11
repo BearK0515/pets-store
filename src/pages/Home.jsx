@@ -5,11 +5,44 @@ import productsLink from "../assets/images/home2.png";
 import SGS from "../assets/images/home3.png";
 import tips from "../assets/images/home4.jpg";
 
+const StyledContainer = styled.div`
+  margin: 0 15px;
+`
 const StyledLinkWrapper = styled.div`
   width: 100%;
   padding: 15px 0;
+  position: relative;
   img {
     width: 100%;
+  }
+  .light {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    position: absolute;
+    left: 0;
+    top: 0;
+  }
+  .light:hover::before {
+    content: "";
+    width: 200px;
+    height: 1000px;
+    background: #ffffff;
+    opacity: 0.3;
+    transform: rotate(30deg);
+    position: absolute;
+    top: -200px;
+    left: -400px;
+    animation: lightMove 0.65s;
+  }
+  @keyframes lightMove {
+    0% {
+      left: -400px;
+    }
+
+    100% {
+      left: 1400px;
+    }
   }
 `;
 const StyledProductsContainer = styled.div`
@@ -45,10 +78,14 @@ const ProductsListWrapper = styled.div`
 const Home = () => {
   return (
     <>
+    <StyledContainer>
+
       <StyledLinkWrapper style={{ padding: "0px" }}>
+        <div className='light'></div>
         <img className='line-link' src={lineLink} alt='' />
       </StyledLinkWrapper>
       <StyledLinkWrapper>
+        <div className='light'></div>
         <img className='produts-link' src={productsLink} alt='' />
       </StyledLinkWrapper>
       <StyledLinkWrapper>
@@ -57,6 +94,7 @@ const Home = () => {
       <StyledLinkWrapper>
         <img className='tips-img' src={tips} alt='' />
       </StyledLinkWrapper>
+    </StyledContainer>
       <StyledProductsContainer>
         <ul className='sort-nav'>
           <li className='active'>熱銷排行</li>
