@@ -1,10 +1,11 @@
-import React,{ forwardRef } from "react";
+import React from "react";
 import styled from "styled-components";
 import { BiArrowToTop } from "react-icons/bi";
+import ScrollToTop from "react-scroll-to-top";
 
 
 const GoTopStyled = styled.ul`
-  .goTop {
+  .top-icon {
     height: 50px;
     width: 50px;
     border-width: 1px;
@@ -15,9 +16,6 @@ const GoTopStyled = styled.ul`
     bottom: 20px;
     opacity: .8;
     background-color: var(--gray-dark);
-  }
-  .top-icon {
-    color: var(--white);
     font-size: 3em;
     animation: move 0.5s ease-in infinite alternate;
   }
@@ -27,15 +25,12 @@ const GoTopStyled = styled.ul`
   }
 `;
 
-const GoTop = forwardRef(({goTopFunc}, ref) => {
-
+export default function GoTop () {
   return (
     <GoTopStyled>
-      <button className="goTop" onClick={goTopFunc} >
-        <BiArrowToTop className="top-icon" />
+      <button>
+        <ScrollToTop smooth className="top-icon" component={<BiArrowToTop style={{ color: "white" }}/>} />
       </button>
     </GoTopStyled>
   );
-})
-
-export default GoTop;
+};
