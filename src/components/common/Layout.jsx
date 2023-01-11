@@ -3,6 +3,8 @@ import { Outlet } from "react-router-dom";
 import styled from "styled-components";
 import Footer from "./Footer";
 import Header from "./Header";
+import GoTop from "./GoTop";
+
 
 const StyledContainer = styled.div`
   display: flex;
@@ -21,7 +23,7 @@ const Layout = () => {
       <div>搜尋商品</div>
       <div>瀏覽紀錄</div>
       <div>聊天機器人</div>
-      <div>回到頂部</div>
+      <GoTop />
     </StyledContainer>
   );
 };
