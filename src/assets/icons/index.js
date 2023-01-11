@@ -3,10 +3,11 @@ import { ReactComponent as LineIcon } from "./img_line.svg";
 import { ReactComponent as TwitterIcon } from "./icon_Twitter.svg";
 import { ReactComponent as FacebookIcon } from "./img_facebook.svg";
 import { ReactComponent as InstagramIcon } from "./img_instagram.svg";
+import { ReactComponent as PowerByIcon } from "./powerby.svg";
 import { TbReportSearch } from "react-icons/tb";
 import {
   AiOutlineInfoCircle,
-  AiOutlineShop,
+  AiTwotoneShop,
   AiOutlinePlus,
   AiOutlineMinus,
   AiOutlineClockCircle,
@@ -44,7 +45,7 @@ const AccountIcon = styled(BiUserCircle)`
   color: var(--white);
   font-size: 20px;
 `;
-const HomeIcon = styled(AiOutlineShop)`
+const HomeIcon = styled(AiTwotoneShop)`
   color: var(--white);
   font-size: 20px;
 `;
@@ -86,7 +87,7 @@ const MinusIcon = styled(AiOutlineMinus)`
 `;
 const BackTopIcon = styled(GrLinkTop)`
   color: var(--white);
-  font-size: 30px;
+  font-size: 26px;
 `;
 const BackHomeIcon = styled(BsArrowReturnRight)`
   transform: rotate(180deg);
@@ -126,6 +127,7 @@ export {
   TwitterIcon,
   FacebookIcon,
   InstagramIcon,
+  PowerByIcon,
   OrderIcon,
   FaqIcon,
   AccountIcon,

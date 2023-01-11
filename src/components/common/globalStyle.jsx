@@ -100,6 +100,9 @@ export const GlobalStyle = createGlobalStyle`
   --light: #f8f9fa;
   --dark: #343a40;
   --text-hover:#c14848;
+  --button:#B5E4D6;
+  --button-hover:#6bafa0;
+  --button-active:#479c89;
   --power-by:#469189;
   --footer-background:#4EAD99;
   --breakpoint-xs: 0;
