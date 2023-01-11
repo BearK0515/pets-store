@@ -1,4 +1,4 @@
-import React from "react";
+import React,{ forwardRef } from "react";
 import styled from "styled-components";
 import { BiArrowToTop } from "react-icons/bi";
 
@@ -9,6 +9,7 @@ const GoTopStyled = styled.ul`
     width: 50px;
     border-width: 1px;
     border-radius: 10%;
+    cursor: pointer;
     position: fixed;
     right: 20px;
     bottom: 20px;
@@ -26,12 +27,15 @@ const GoTopStyled = styled.ul`
   }
 `;
 
-export default function GoTop() {
+const GoTop = forwardRef(({goTopFunc}, ref) => {
+
   return (
     <GoTopStyled>
-      <button className="goTop" >
+      <button className="goTop" onClick={goTopFunc} >
         <BiArrowToTop className="top-icon" />
       </button>
     </GoTopStyled>
   );
-}
+})
+
+export default GoTop;
