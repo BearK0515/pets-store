@@ -1,4 +1,4 @@
-import React from "react";
+import React,{ useRef } from "react";
 import { Outlet } from "react-router-dom";
 import styled from "styled-components";
 import Footer from "./Footer";
@@ -14,8 +14,12 @@ const StyledContainer = styled.div`
 `;
 
 const Layout = () => {
+  const containerRef = useRef(null);
+  const goTopFunc = () => {
+    containerRef.current.scrollTop = 0;
+  };
   return (
-    <StyledContainer>
+    <StyledContainer ref={containerRef}>
       <Header/>
       <Outlet />
       <Footer/>
@@ -23,7 +27,7 @@ const Layout = () => {
       <div>搜尋商品</div>
       <div>瀏覽紀錄</div>
       <div>聊天機器人</div>
-      <GoTop />
+      <GoTop goTopFunc={goTopFunc} />
     </StyledContainer>
   );
 };
