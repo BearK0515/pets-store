@@ -6,7 +6,7 @@ import { ReactComponent as InstagramIcon } from "./img_instagram.svg";
 import { TbReportSearch } from "react-icons/tb";
 import {
   AiOutlineInfoCircle,
-  AiOutlineShop,
+  AiTwotoneShop,
   AiOutlinePlus,
   AiOutlineMinus,
   AiOutlineClockCircle,
@@ -44,7 +44,7 @@ const AccountIcon = styled(BiUserCircle)`
   color: var(--white);
   font-size: 20px;
 `;
-const HomeIcon = styled(AiOutlineShop)`
+const HomeIcon = styled(AiTwotoneShop)`
   color: var(--white);
   font-size: 20px;
 `;

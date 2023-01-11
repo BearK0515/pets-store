@@ -8,6 +8,7 @@ import {
   OrderIcon,
   FaqIcon,
   AccountIcon,
+  HomeIcon,
 } from "../../assets/icons";
 import bigLogo from "../../assets/icons/logo.png";
 
@@ -23,7 +24,7 @@ const HeaderStyled = styled.header`
 
     .tool-box-left {
       display: flex;
-      gap:5px;
+      gap: 5px;
       .icon {
         display: flex;
         justify-content: center;
@@ -45,7 +46,7 @@ const HeaderStyled = styled.header`
         background-color: var(--gray-dark);
         line-height: 30px;
         font-size: 12px;
-        color:var(--white)
+        color: var(--white);
       }
     }
 
@@ -59,6 +60,16 @@ const HeaderStyled = styled.header`
     .icon {
       width: 30px;
       height: 30px;
+    }
+    .homepage {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background-color: var(--gray-dark);
+      line-height: 30px;
     }
   }
   .banner {
@@ -98,8 +109,6 @@ const BigLogo = styled.img`
   height: 121px;
 `;
 
-
-
 export default function Header() {
   return (
     <HeaderStyled>
@@ -112,7 +121,7 @@ export default function Header() {
             <FaqIcon />
           </div>
           <div className='login'>
-            <AccountIcon/>
+            <AccountIcon />
             登入
           </div>
           <NavLink to='login'>管login</NavLink>
@@ -121,7 +130,9 @@ export default function Header() {
           <FacebookIcon className='icon facebook' />
           <InstagramIcon className='icon instagram' />
           <LineIcon className='icon line' />
-          <div className='icon homepage'></div>
+          <div className='icon homepage'>
+            <HomeIcon />
+          </div>
         </nav>
       </div>
 
