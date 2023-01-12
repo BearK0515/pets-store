@@ -89,7 +89,7 @@ const AdminLogin = () => {
         onChange={(passwordInputValue) => setPassword(passwordInputValue)}
         // error={passwordError}
       />
-      <StyledButton onClick={() => navigate("/admin/products")}>
+      <StyledButton onClick={() => navigate("/admin/products/all")}>
         登入
       </StyledButton>
       <StyledLinkText onClick={() => navigate("/home")}>首頁</StyledLinkText>

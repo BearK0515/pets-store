@@ -9,13 +9,11 @@ const StyledContainer = styled.div`
   display: grid;
   grid-template-columns: 180px 1fr;
   margin: 0 auto;
-  border: 1px solid #000;
 `;
 const StyledSidebar = styled.div`
   display: flex;
   flex-flow: column;
   justify-content: space-between;
-  border-right: 1px solid var(--gray);
   padding-right: 15px;
   .button-wrapper {
     display: flex;
@@ -66,15 +64,15 @@ const AdminIndex = () => {
     <StyledContainer>
       <StyledSidebar>
         <div className='button-wrapper'>
-          {page === "/admin/products" ? (
-            <NavLink active>商品清單</NavLink>
+          {page.includes("products") ? (
+            <NavLink active>商品列表</NavLink>
           ) : (
-            <NavLink to='products'>商品清單</NavLink>
+            <NavLink to='products/all'>商品列表</NavLink>
           )}
-          {page === "/admin/orders" ? (
-            <NavLink active>訂單清單</NavLink>
+          {page.includes("orders") ? (
+            <NavLink active>訂單列表</NavLink>
           ) : (
-            <NavLink to='orders'>訂單清單</NavLink>
+            <NavLink to='orders'>訂單列表</NavLink>
           )}
           <NavLink>新增商品</NavLink>
         </div>
