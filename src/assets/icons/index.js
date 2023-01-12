@@ -100,13 +100,13 @@ const ProductsIcon = styled(BiCube)`
   font-size: 14px;
 `;
 const OpenHourIcon = styled(CiCalendarDate)`
-  font-size: 18px;
+  font-size: 20px;
 `;
 const PhoneIcon = styled(FiPhoneCall)`
-  font-size: 18px;
+  font-size: 20px;
 `;
 const LocationIcon = styled(GrLocation)`
-  font-size: 18px;
+  font-size: 20px;
 `;
 const ClockIcon = styled(AiOutlineClockCircle)`
   font-size: 18px;
