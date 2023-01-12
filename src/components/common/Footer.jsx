@@ -102,9 +102,9 @@ export default function Footer() {
       <div className='footer down'>
         <div className='customer-service'>
           <div>客服專線:</div>
-          <div>02-3322-5628</div>
+          <div>01-23345678</div>
           <div>地址:</div>
-          <div>台北市中正區南昌路二段81號七樓之一</div>
+          <div>台北市中正區承德路一段2號</div>
           <div>服務時段：</div>
           <div>週一 ~ 週五</div>
           <div>09:00~12:30 ; 13:30~18:00</div>

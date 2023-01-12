@@ -30,6 +30,10 @@ article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, 
 html {
   text-size-adjust: 100%;
   box-sizing: border-box;
+  -webkit-user-select:none;
+  -moz-user-select:none;
+  -o-user-select:none;
+  user-select:none
 }
 body {
     line-height: 1;
@@ -100,9 +104,12 @@ export const GlobalStyle = createGlobalStyle`
   --light: #f8f9fa;
   --dark: #343a40;
   --text-hover:#c14848;
+  --text-header:#212529;
+  --text-red:#cb3747;
   --button:#B5E4D6;
   --button-hover:#6bafa0;
   --button-active:#479c89;
+  --border-hr:#d9d9d9;
   --power-by:#469189;
   --footer-background:#4EAD99;
   --breakpoint-xs: 0;
