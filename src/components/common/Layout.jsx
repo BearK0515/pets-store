@@ -5,7 +5,6 @@ import Footer from "./Footer";
 import Header from "./Header";
 import GoTop from "./GoTop";
 
-
 const StyledContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -15,6 +14,7 @@ const StyledContainer = styled.div`
 
 const Layout = () => {
   return (
+  <>
     <StyledContainer>
       <Header/>
       <Outlet />
@@ -25,6 +25,8 @@ const Layout = () => {
       <div>聊天機器人</div>
       <GoTop/>
     </StyledContainer>
+    <Footer />
+    </>
   );
 };
 

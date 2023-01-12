@@ -1,7 +1,15 @@
 import React from "react";
 import { NavLink as Link } from "react-router-dom";
 import styled from "styled-components";
-import { FacebookIcon, LineIcon } from "../../assets/icons";
+import {
+  InstagramIcon,
+  FacebookIcon,
+  LineIcon,
+  OrderIcon,
+  FaqIcon,
+  AccountIcon,
+  HomeIcon,
+} from "../../assets/icons";
 import bigLogo from "../../assets/icons/logo.png";
 
 const HeaderStyled = styled.header`
@@ -16,10 +24,11 @@ const HeaderStyled = styled.header`
 
     .tool-box-left {
       display: flex;
-      * {
-        margin: 0 5px;
-      }
+      gap: 5px;
       .icon {
+        display: flex;
+        justify-content: center;
+        align-items: center;
         width: 30px;
         height: 30px;
         border-radius: 50%;
@@ -28,11 +37,16 @@ const HeaderStyled = styled.header`
       }
 
       .login {
+        display: flex;
+        justify-content: center;
+        align-items: center;
         width: 62px;
         height: 30px;
         border-radius: 20px;
         background-color: var(--gray-dark);
         line-height: 30px;
+        font-size: 12px;
+        color: var(--white);
       }
     }
 
@@ -47,16 +61,27 @@ const HeaderStyled = styled.header`
       width: 30px;
       height: 30px;
     }
+    .homepage {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background-color: var(--gray-dark);
+      line-height: 30px;
+    }
   }
   .banner {
-    height: 300px;
+    height: 293px;
     width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     ul {
-      margin-top: 50px;
+      height: 72px;
+      padding: 20px;
       display: flex;
     }
   }
@@ -82,8 +107,6 @@ const NavLink = styled(Link)`
 const BigLogo = styled.img`
   width: 380px;
   height: 121px;
-  background-image: url(${bigLogo});
-  background-size: cover;
 `;
 
 export default function Header() {
@@ -91,24 +114,30 @@ export default function Header() {
     <HeaderStyled>
       <div className='nav'>
         <nav className='tool-box-left'>
-          <div className='icon order'>訂</div>
-          <div className='icon info'>買</div>
+          <div className='icon order'>
+            <OrderIcon />
+          </div>
+          <div className='icon info'>
+            <FaqIcon />
+          </div>
           <div className='login'>
-            <img src='' alt='' />
+            <AccountIcon />
             登入
           </div>
+          <NavLink to='login'>管login</NavLink>
         </nav>
         <nav className='tool-box-right'>
           <FacebookIcon className='icon facebook' />
-          {/* <div className="icon instagram"></div> */}
+          <InstagramIcon className='icon instagram' />
           <LineIcon className='icon line' />
-          <div className='icon homepage'></div>
+          <div className='icon homepage'>
+            <HomeIcon />
+          </div>
         </nav>
       </div>
 
       <div className='banner'>
-        {/* <img src='https://picsum.photos/380/121' alt='' className='brand-img' /> */}
-        <BigLogo />
+        <BigLogo src={bigLogo} alt='logo-big' />
         <ul>
           <NavLink to='home'>首頁</NavLink>
           <NavLink to='about'>關於</NavLink>
