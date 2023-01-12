@@ -20,7 +20,7 @@ const Layout = () => {
       <Outlet />
       <Footer/>
       <div>購物車</div>
-      <div>搜尋商品</div>
+      <div>搜尋商品</div> 
       <div>瀏覽紀錄</div>
       <div>聊天機器人</div>
       <GoTop/>

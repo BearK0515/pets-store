@@ -28,9 +28,7 @@ const GoTopStyled = styled.ul`
 export default function GoTop () {
   return (
     <GoTopStyled>
-      <button>
-        <ScrollToTop smooth className="top-icon" component={<BiArrowToTop style={{ color: "white" }}/>} />
-      </button>
+      <ScrollToTop smooth className="top-icon" component={<BiArrowToTop style={{ color: "white" }}/>} />
     </GoTopStyled>
   );
 };
