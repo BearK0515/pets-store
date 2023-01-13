@@ -4,10 +4,11 @@ import lineLink from "../assets/images/home1.png";
 import productsLink from "../assets/images/home2.png";
 import SGS from "../assets/images/home3.png";
 import tips from "../assets/images/home4.jpg";
+import AllProducts from "../components/sectionAdmin/products/AllProducts";
 
 const StyledContainer = styled.div`
   margin: 0 15px;
-`
+`;
 const StyledLinkWrapper = styled.div`
   width: 100%;
   padding: 15px 0;
@@ -71,37 +72,41 @@ const StyledProductsContainer = styled.div`
 `;
 const ProductsListWrapper = styled.div`
   width: 100%;
-  background-color: var(--teal);
-  color: var(--white);
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 3vmin;
+  padding: 10px;
 `;
 
 const Home = () => {
   return (
     <>
-    <StyledContainer>
-
-      <StyledLinkWrapper style={{ padding: "0px" }}>
-        <div className='light'></div>
-        <img className='line-link' src={lineLink} alt='' />
-      </StyledLinkWrapper>
-      <StyledLinkWrapper>
-        <div className='light'></div>
-        <img className='produts-link' src={productsLink} alt='' />
-      </StyledLinkWrapper>
-      <StyledLinkWrapper>
-        <img className='SGS-img' src={SGS} alt='' />
-      </StyledLinkWrapper>
-      <StyledLinkWrapper>
-        <img className='tips-img' src={tips} alt='' />
-      </StyledLinkWrapper>
-    </StyledContainer>
+      <StyledContainer>
+        <StyledLinkWrapper style={{ padding: "0px" }}>
+          <div className='light'></div>
+          <img className='line-link' src={lineLink} alt='' />
+        </StyledLinkWrapper>
+        <StyledLinkWrapper>
+          <div className='light'></div>
+          <img className='produts-link' src={productsLink} alt='' />
+        </StyledLinkWrapper>
+        <StyledLinkWrapper>
+          <img className='SGS-img' src={SGS} alt='' />
+        </StyledLinkWrapper>
+        <StyledLinkWrapper>
+          <img className='tips-img' src={tips} alt='' />
+        </StyledLinkWrapper>
+      </StyledContainer>
       <StyledProductsContainer>
         <ul className='sort-nav'>
           <li className='active'>熱銷排行</li>
           <li>最新上架</li>
           <li>價格</li>
         </ul>
-        <ProductsListWrapper>商品清單</ProductsListWrapper>
+        <ProductsListWrapper>
+          {/* 之後要換成全部商品的原件 */}
+          <AllProducts />
+        </ProductsListWrapper>
       </StyledProductsContainer>
     </>
   );

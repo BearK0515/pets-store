@@ -122,6 +122,9 @@ const StyledImage = styled.div`
   img {
     width: 100%;
   }
+  &.order {
+    cursor: pointer;
+  }
 `;
 
 const About = () => {
@@ -202,7 +205,10 @@ const About = () => {
           <StyledImage>
             <img src={SGScertificate} alt='' />
           </StyledImage>
-          <StyledImage onClick={() => navigate("/product/all")}>
+          <StyledImage
+            className='order'
+            onClick={() => navigate("/product/all")}
+          >
             <img src={order} alt='' />
           </StyledImage>
         </div>

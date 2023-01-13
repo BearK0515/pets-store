@@ -84,7 +84,7 @@ const AdminLogin = () => {
       <AuthInput
         type='password'
         label='密碼'
-        placeholder='請設定密碼'
+        placeholder='請輸入密碼'
         value={password}
         onChange={(passwordInputValue) => setPassword(passwordInputValue)}
         // error={passwordError}
