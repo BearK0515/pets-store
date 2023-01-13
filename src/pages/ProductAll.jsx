@@ -5,34 +5,32 @@ import {BackHomeIcon, AboutIcon, ProductsIcon, HomeIcon} from "../assets/icons/i
 
 
 const ProductStyled = styled.div`
+  box-sizing: border-box;
   width: 100%;
   display: grid;
   grid-gap: 0 15px;
-  grid-template-columns: 1fr 750px;
+  grid-template-columns: minmax(150px, 1fr) 750px;
   max-width: 930px;
   margin: 30px auto;
 `
 const Aside = styled.div`
-    box-sizing: border-box;
-    background-color: var(--footer-background);
-    font-size: 10px;
-    color:#FF6600;
-    padding-left: 20px;
     display: block;
+    background-color: var(--footer-background);
     border: 2px solid;
+    color:#FF6600;
+    font-size: 10px;
+    padding-left: 20px;
 
   .aside-content {
     position: relative;
     display: flex;
     flex-direction: column;
     align-items: left;
-    box-sizing: border-box;
   }
 `
-const NavLink = styled.li`
+const NavLink = styled.div`
   display: flex;
   align-items: center;
-  box-sizing: border-box;
   font-size: 0.9rem;
   line-height: 2;
   color: var(--dark);
@@ -48,10 +46,11 @@ const NavLink = styled.li`
 
 const ProductWrapper = styled.div`
   background-color: var(--footer-background);
-  font-size: 30px;
   color:#FF6600;
-  text-align: center;
   border: 2px solid;
+  font-size: 30px;
+  text-align: center;
+  
 `
 
 const GoToHome = styled.div`
@@ -71,10 +70,11 @@ const Breadcrumb = styled.div`
   position: relative;
 `
 
-const StyledProductsContainer = styled.div`
+const ProductsSort = styled.div`
   width: 100%;
   display: flex;
   flex-flow: column;
+  margin-bottom: 3vmin;
   ul {
     display: grid;
     grid-template-columns: repeat(4, 80px);
@@ -97,13 +97,70 @@ const StyledProductsContainer = styled.div`
   }
 `;
 
+const ProductList = styled.div`
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 3vmin;
+  background-color: var(--teal);
+  color:#FF6600;
+  border: 2px solid;
+  height: calc(150vh - 150px);
+`
+
+const StyledCard = styled.div`
+  position: relative;
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+  aspect-ratio: 3/4;
+  &:hover {
+    cursor: pointer;
+  }
+  .product {
+    width: 100%;
+    aspect-ratio: 1/1;
+    background-size: cover;
+    background-image: url("https://picsum.photos/id/20/400");
+  }
+  .wrapper {
+    display: flex;
+    flex-flow: column;
+    align-items: left;
+    gap: 5px 0;
+    padding: 10px;
+  }
+  .title {
+    text-align: left;
+    font-size: 0.5em;
+    height: 48px;
+    line-height: 24px;
+    color: #333;
+  }
+  .price {
+    text-align: left;
+    font-family: Roboto, sans-serif;
+    font-size: 0.2em;
+    font-weight: 700;
+    text-decoration: line-through;
+    color: var(--gray-dark);
+  }
+  .discount-price {
+    text-align: left;
+    font-family: Roboto, sans-serif;
+    font-size: 0.8em;
+    font-weight: 700;
+    color: var(--text-red);
+  }
+`;
+
 const ProductAll = () => {
   const navigate = useNavigate();
   const page = useLocation().pathname
   return (
     <ProductStyled>
       <Aside>
-        <ul className='aside-content'>
+        <div className='aside-content'>
             <NavLink onClick={() => navigate("/home")}>
               <BackHomeIcon style={{ position: "absolute", left: "-18px" }}/>
               首頁
@@ -131,22 +188,49 @@ const ProductAll = () => {
           {page.includes("blogs") ? 
             (<NavLink active onClick={() => navigate("/blogs")}>部落格</NavLink>) : (<NavLink onClick={() => navigate("/blogs")}>部落格</NavLink>
           )}
-        </ul>
+        </div>
       </Aside>
       <ProductWrapper>
         <GoToHome><HomeIcon onClick={() => navigate("/home")} style={{ color:'var(--dark)',cursor: "pointer" }} />＞全部商品</GoToHome>
-        <Breadcrumb></Breadcrumb>
-        <StyledProductsContainer>
+        <Breadcrumb />
+        <ProductsSort>
           <ul className='sort-nav'>
             <li className='active'>熱銷排行</li>
             <li>最新上架</li>
             <li>價格</li>
           </ul>
-        </StyledProductsContainer>
-          <div>商品列表</div>
+        </ProductsSort>
+        <ProductList>
+          <StyledCard>
+            <div className='product'></div>
+            <div className='wrapper'>
+              <h4 className='title'> 【毛孩時代】腎臟專科保健粉(30包/盒)</h4>
+              <div className='price'>$750</div>
+              <div className='discount-price'>$690</div>
+            </div>
+          </StyledCard>
+          <StyledCard>
+            <div className='product'></div>
+            <div className='wrapper'>
+              <h4 className='title'> 【毛孩時代】腎臟專科保健粉(30包/盒)</h4>
+              <div className='price'>$750</div>
+              <div className='discount-price'>$690</div>
+            </div>
+          </StyledCard>
+          <StyledCard>
+            <div className='product'></div>
+            <div className='wrapper'>
+              <h4 className='title'> 【毛孩時代】腎臟專科保健粉(30包/盒)</h4>
+              <div className='price'>$750</div>
+              <div className='discount-price'>$690</div>
+            </div>
+          </StyledCard>
+        </ProductList>
+
+          
       </ProductWrapper>
     </ProductStyled>
-  )
-}
+  );
+};
 
 export default ProductAll
