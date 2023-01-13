@@ -148,7 +148,7 @@ const StyledCard = styled.div`
   .discount-price {
     text-align: left;
     font-family: Roboto, sans-serif;
-    font-size: 0.8em;
+    font-size: 0.7em;
     font-weight: 700;
     color: var(--text-red);
   }
