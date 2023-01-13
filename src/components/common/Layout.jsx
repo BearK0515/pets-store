@@ -4,6 +4,8 @@ import styled from "styled-components";
 import Footer from "./Footer";
 import Header from "./Header";
 import GoTop from "./GoTop";
+import { CartIcon, SearchIcon } from "../../assets/icons";
+import chatRobot from "../../assets/icons/icon_FB_chat.png";
 
 const StyledContainer = styled.div`
   display: flex;
@@ -12,20 +14,134 @@ const StyledContainer = styled.div`
   margin: 0 auto;
 `;
 
+const StyledButtonWrapper = styled.div`
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  display: flex;
+  flex-flow: column;
+  gap: 10px 0;
+  .cart-button,
+  .search {
+    width: 50px;
+    height: 50px;
+    border-radius: 4px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--button-background);
+  }
+  .cart-button {
+    position: relative;
+  }
+  .count {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 28px;
+    height: 28px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 100%;
+    background-color: var(--red-dark);
+    color: var(--white);
+    transform: translate(50%, -50%);
+  }
+`;
+
+const StyledSearchWrapper = styled.div`
+  width: 72px;
+  display: flex;
+  flex-flow: column;
+  justify-content: space-between;
+  position: fixed;
+  right: 20px;
+  top: 50%;
+  transform: translate(0, -50%);
+  margin: auto;
+  background-color: var(--button-background);
+  border-radius: 4px;
+  h6,
+  span {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 12px;
+    line-height: 24px;
+    color: var(--white);
+  }
+  h6 {
+    border-bottom: 1px solid var(--gray);
+  }
+  span {
+    cursor: pointer;
+  }
+  .product-wrapper {
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+    gap: 5px 0;
+    padding: 5px;
+  }
+  .product {
+    width: 60px;
+    height: 60px;
+    background-size: cover;
+    background-image: url("https://picsum.photos/id/1020/600/400");
+    cursor: pointer;
+  }
+`;
+
+const StyledChatRobot = styled.div`
+  width: 50px;
+  height: 50px;
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--white);
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  .chat-robot {
+    width: 36px;
+    height: 36px;
+  }
+`;
+
 const Layout = () => {
   return (
-  <>
-    <StyledContainer>
-      <Header/>
-      <Outlet />
-      <Footer/>
-      <div>購物車</div>
-      <div>搜尋商品</div>
-      <div>瀏覽紀錄</div>
-      <div>聊天機器人</div>
-      <GoTop/>
-    </StyledContainer>
-    <Footer />
+    <>
+      <StyledContainer>
+        <Header />
+        <Outlet />
+        <StyledButtonWrapper>
+          <button className='cart-button'>
+            <CartIcon />
+          </button>
+          <div className='count'>0</div>
+          <label className='search' for='search-input'>
+            <SearchIcon />
+          </label>
+          <input type='checkbox' id='search-input' />
+        </StyledButtonWrapper>
+        <StyledSearchWrapper>
+          <h6>瀏覽紀錄</h6>
+          <div className='product-wrapper'>
+            <div className='product'></div>
+            <div className='product'></div>
+            <div className='product'></div>
+          </div>
+          <span>清除全部</span>
+        </StyledSearchWrapper>
+        <StyledChatRobot>
+          <img className='chat-robot' src={chatRobot} alt='logo-big' />
+        </StyledChatRobot>
+        <GoTop />
+      </StyledContainer>
+      <Footer />
     </>
   );
 };

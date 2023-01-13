@@ -109,6 +109,7 @@ export const GlobalStyle = createGlobalStyle`
   --button:#B5E4D6;
   --button-hover:#6bafa0;
   --button-active:#479c89;
+  --button-background:#32373A;
   --border-hr:#d9d9d9;
   --power-by:#469189;
   --footer-background:#4EAD99;
