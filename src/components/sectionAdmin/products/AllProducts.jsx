@@ -140,6 +140,17 @@ const AllProducts = () => {
           <CancelIcon />
         </button>
       </StyledCard>
+      <StyledCard>
+        <div className='product'></div>
+        <div className='wrapper'>
+          <h4 className='title'> 【毛孩時代】腎臟專科保健粉(30包/盒)</h4>
+          <div className='price'>$750</div>
+          <div className='discount-price'>$690</div>
+        </div>
+        <button className='delete'>
+          <CancelIcon />
+        </button>
+      </StyledCard>
     </>
   );
 };
