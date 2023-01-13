@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from "styled-components";
 import { useNavigate, useLocation } from "react-router-dom";
-import {BackHomeIcon, AboutIcon, ProductsIcon, HomeIcon} from "../assets/icons/index"
+import {BackHomeIcon, AboutIcon, ProductsIcon, HomeIcon, CartIcon} from "../assets/icons/index"
 
 
 const ProductStyled = styled.div`
@@ -114,14 +114,27 @@ const StyledCard = styled.div`
   flex-flow: column;
   align-items: center;
   aspect-ratio: 3/4;
-  &:hover {
-    cursor: pointer;
-  }
   .product {
+    position: relative;
     width: 100%;
     aspect-ratio: 1/1;
     background-size: cover;
     background-image: url("https://picsum.photos/id/20/400");
+  }
+
+  .addCart {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    width: 30px;
+    height: 30px;
+    background-color: var(--red);
+    text-align: center;
+    border-width: 1px;
+    border-radius: 10%;
   }
   .wrapper {
     display: flex;
@@ -202,7 +215,11 @@ const ProductDog = () => {
         </ProductsSort>
         <ProductList>
           <StyledCard>
-            <div className='product'></div>
+            <div className='product'>
+              <button className='addCart'>
+                <CartIcon style={{ fontSize: "20px", cursor: "pointer"}}/>
+              </button>
+            </div>
             <div className='wrapper'>
               <h4 className='title'> 【毛孩時代】腎臟專科保健粉(30包/盒)</h4>
               <div className='price'>$750</div>
@@ -210,7 +227,10 @@ const ProductDog = () => {
             </div>
           </StyledCard>
           <StyledCard>
-            <div className='product'></div>
+            <div className='product'>
+              <button className='addCart'>
+                <CartIcon style={{ fontSize: "20px", cursor: "pointer"}}/>
+              </button></div>
             <div className='wrapper'>
               <h4 className='title'> 【毛孩時代】腎臟專科保健粉(30包/盒)</h4>
               <div className='price'>$750</div>
@@ -218,7 +238,11 @@ const ProductDog = () => {
             </div>
           </StyledCard>
           <StyledCard>
-            <div className='product'></div>
+            <div className='product'>
+              <button className='addCart'>
+                <CartIcon style={{ fontSize: "20px", cursor: "pointer"}}/>
+              </button>
+            </div>
             <div className='wrapper'>
               <h4 className='title'> 【毛孩時代】腎臟專科保健粉(30包/盒)</h4>
               <div className='price'>$750</div>
