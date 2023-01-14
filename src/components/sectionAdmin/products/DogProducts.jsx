@@ -60,10 +60,12 @@ const StyledCard = styled.div`
   }
 `;
 
-const DogProducts = () => {
+const DogProducts = ({
+  handleTogglePriceModal,
+}) => {
   return (
     <>
-      <StyledCard>
+      <StyledCard onClick={handleTogglePriceModal}>
         <div className='product'></div>
         <div className='wrapper'>
           <h4 className='title'> 【毛孩時代】腎臟專科保健粉(30包/盒)</h4>
@@ -74,7 +76,7 @@ const DogProducts = () => {
           <CancelIcon />
         </button>
       </StyledCard>
-      <StyledCard>
+      <StyledCard onClick={handleTogglePriceModal}>
         <div className='product'></div>
         <div className='wrapper'>
           <h4 className='title'> 【毛孩時代】腎臟專科保健粉(30包/盒)</h4>
@@ -85,7 +87,7 @@ const DogProducts = () => {
           <CancelIcon />
         </button>
       </StyledCard>
-      <StyledCard>
+      <StyledCard onClick={handleTogglePriceModal}>
         <div className='product'></div>
         <div className='wrapper'>
           <h4 className='title'> 【毛孩時代】腎臟專科保健粉(30包/盒)</h4>
@@ -98,6 +100,6 @@ const DogProducts = () => {
       </StyledCard>
     </>
   );
-}
+};
 
 export default DogProducts

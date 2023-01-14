@@ -20,6 +20,7 @@ import {
   ProductDog,
   ProductPage,
 } from "./pages";
+import SingleOrder from "./pages/SingleOrder";
 
 function App() {
   return (
@@ -39,6 +40,7 @@ function App() {
             <Route path='blogs' element={<Blogs />} />
             <Route path='cart' element={<Cart />} />
             <Route path='order/query' element={<Order />} />
+            <Route path='orderId' element={<SingleOrder />} />
             <Route path='faq' element={<Faq />} />
           </Route>
           <Route path='login' element={<AdminLogin />} />
@@ -49,6 +51,7 @@ function App() {
               <Route path='cat' element={<CatProducts />} />
             </Route>
             <Route path='orders' element={<Orders />} />
+            <Route path='orderId' element={<SingleOrder />} />
           </Route>
         </Routes>
       </BrowserRouter>

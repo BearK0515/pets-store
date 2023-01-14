@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 
 const StyledContainer = styled.div`
@@ -6,9 +7,6 @@ const StyledContainer = styled.div`
   display: flex;
   flex-flow: column;
   border: 1px solid #ddd;
-  .order-list {
-    width: 100%;
-  }
 `;
 
 const StyledTitle = styled.div`
@@ -47,13 +45,14 @@ const StyledOrderList = styled.div`
   }
 `;
 
-const StyledOrder = styled.div`
+const StyledOrder = styled(Link)`
   height: 40px;
   display: flex;
   flex-flow: row;
   justify-content: space-between;
   align-items: center;
   padding: 10px;
+  color: var(--gray-dark);
   &:hover {
     cursor: pointer;
     transform: scale(1.01, 1.1);
@@ -64,34 +63,22 @@ const Orders = () => {
   return (
     <StyledContainer>
       <StyledTitle>
-        <h2>清單列表</h2>
+        <h2>訂單列表</h2>
       </StyledTitle>
       <StyledOrderList>
         <div className='title'>
           <p>訂單編號</p>
           <p style={{ paddingRight: "20px" }}>時間</p>
         </div>
-        <StyledOrder className='order'>
+        <StyledOrder className='order' to="orderId">
           <p>3345678</p>
           <p>2023/1/12</p>
         </StyledOrder>
-        <StyledOrder className='order'>
+        <StyledOrder className='order' to="orderId">
           <p>3345678</p>
           <p>2023/1/12</p>
         </StyledOrder>
-        <StyledOrder className='order'>
-          <p>3345678</p>
-          <p>2023/1/12</p>
-        </StyledOrder>
-        <StyledOrder className='order'>
-          <p>3345678</p>
-          <p>2023/1/12</p>
-        </StyledOrder>
-        <StyledOrder className='order'>
-          <p>3345678</p>
-          <p>2023/1/12</p>
-        </StyledOrder>
-        <StyledOrder className='order'>
+        <StyledOrder className='order' to="orderId">
           <p>3345678</p>
           <p>2023/1/12</p>
         </StyledOrder>
