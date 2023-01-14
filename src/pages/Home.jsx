@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import lineLink from "../assets/images/home1.png";
 import productsLink from "../assets/images/home2.png";
@@ -13,6 +14,10 @@ const StyledLinkWrapper = styled.div`
   width: 100%;
   padding: 15px 0;
   position: relative;
+  &.produts-link,
+  &.line-link {
+    cursor: pointer;
+  }
   img {
     width: 100%;
   }
@@ -79,22 +84,26 @@ const ProductsListWrapper = styled.div`
 `;
 
 const Home = () => {
+  const navigate = useNavigate();
   return (
     <>
       <StyledContainer>
-        <StyledLinkWrapper style={{ padding: "0px" }}>
+        <StyledLinkWrapper className='line-link' style={{ padding: "0px" }}>
           <div className='light'></div>
-          <img className='line-link' src={lineLink} alt='' />
+          <img src={lineLink} alt='' />
         </StyledLinkWrapper>
-        <StyledLinkWrapper>
+        <StyledLinkWrapper
+          className='produts-link'
+          onClick={() => navigate("/product/all")}
+        >
           <div className='light'></div>
-          <img className='produts-link' src={productsLink} alt='' />
+          <img src={productsLink} alt='' />
         </StyledLinkWrapper>
-        <StyledLinkWrapper>
-          <img className='SGS-img' src={SGS} alt='' />
+        <StyledLinkWrapper className='SGS-img'>
+          <img src={SGS} alt='' />
         </StyledLinkWrapper>
-        <StyledLinkWrapper>
-          <img className='tips-img' src={tips} alt='' />
+        <StyledLinkWrapper className='tips-img'>
+          <img src={tips} alt='' />
         </StyledLinkWrapper>
       </StyledContainer>
       <StyledProductsContainer>

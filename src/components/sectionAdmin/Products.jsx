@@ -1,6 +1,7 @@
 import React from "react";
-import { Link, Outlet, useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import styled from "styled-components";
+import { AllProducts, DogProducts, CatProducts } from "./products/index";
 
 const StyledContainer = styled.div`
   width: 100%;
@@ -66,27 +67,29 @@ const StyledProdutsContainer = styled.div`
     background-color: var(--gray);
   }
 `;
-const Products = () => {
+const Products = ({
+  handleTogglePriceModal,
+}) => {
   const page = useLocation().pathname;
   return (
     <StyledContainer>
       <StyledTitle>商品列表</StyledTitle>
       <StyledButtonWrapper>
-        <Link to='all'>
+        <Link to='/admin/products/all'>
           {page.includes("all") ? (
             <StyledButton active>全部商品</StyledButton>
           ) : (
             <StyledButton>全部商品</StyledButton>
           )}
         </Link>
-        <Link to='dog'>
+        <Link to='/admin/products/dog'>
           {page.includes("dog") ? (
             <StyledButton active>狗狗專區</StyledButton>
           ) : (
             <StyledButton>狗狗專區</StyledButton>
           )}
         </Link>
-        <Link to='cat'>
+        <Link to='/admin/products/cat'>
           {page.includes("cat") ? (
             <StyledButton active>貓咪專區</StyledButton>
           ) : (
@@ -95,7 +98,15 @@ const Products = () => {
         </Link>
       </StyledButtonWrapper>
       <StyledProdutsContainer>
-        <Outlet />
+        {page.includes("all") && (
+          <AllProducts handleTogglePriceModal={handleTogglePriceModal} />
+        )}
+        {page.includes("dog") && (
+          <DogProducts handleTogglePriceModal={handleTogglePriceModal} />
+        )}
+        {page.includes("cat") && (
+          <CatProducts handleTogglePriceModal={handleTogglePriceModal} />
+        )}
       </StyledProdutsContainer>
     </StyledContainer>
   );
