@@ -60,10 +60,12 @@ const StyledCard = styled.div`
   }
 `;
 
-const AllProducts = () => {
+const AllProducts = ({
+  handleTogglePriceModal,
+}) => {
   return (
     <>
-      <StyledCard>
+      <StyledCard onClick={handleTogglePriceModal}>
         <div className='product'></div>
         <div className='wrapper'>
           <h4 className='title'> 【毛孩時代】腎臟專科保健粉(30包/盒)</h4>
@@ -74,7 +76,7 @@ const AllProducts = () => {
           <CancelIcon />
         </button>
       </StyledCard>
-      <StyledCard>
+      <StyledCard onClick={handleTogglePriceModal}>
         <div className='product'></div>
         <div className='wrapper'>
           <h4 className='title'> 【毛孩時代】腎臟專科保健粉(30包/盒)</h4>
@@ -85,7 +87,7 @@ const AllProducts = () => {
           <CancelIcon />
         </button>
       </StyledCard>
-      <StyledCard>
+      <StyledCard onClick={handleTogglePriceModal}>
         <div className='product'></div>
         <div className='wrapper'>
           <h4 className='title'> 【毛孩時代】腎臟專科保健粉(30包/盒)</h4>
@@ -96,7 +98,7 @@ const AllProducts = () => {
           <CancelIcon />
         </button>
       </StyledCard>
-      <StyledCard>
+      <StyledCard onClick={handleTogglePriceModal}>
         <div className='product'></div>
         <div className='wrapper'>
           <h4 className='title'> 【毛孩時代】腎臟專科保健粉(30包/盒)</h4>
@@ -107,7 +109,7 @@ const AllProducts = () => {
           <CancelIcon />
         </button>
       </StyledCard>
-      <StyledCard>
+      <StyledCard onClick={handleTogglePriceModal}>
         <div className='product'></div>
         <div className='wrapper'>
           <h4 className='title'> 【毛孩時代】腎臟專科保健粉(30包/盒)</h4>
@@ -118,7 +120,7 @@ const AllProducts = () => {
           <CancelIcon />
         </button>
       </StyledCard>
-      <StyledCard>
+      <StyledCard onClick={handleTogglePriceModal}>
         <div className='product'></div>
         <div className='wrapper'>
           <h4 className='title'> 【毛孩時代】腎臟專科保健粉(30包/盒)</h4>

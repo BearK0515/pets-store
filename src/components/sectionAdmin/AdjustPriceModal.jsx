@@ -111,13 +111,13 @@ const StyledCard = styled.div`
   }
 `;
 
-const AdjustPriceModal = () => {
+const AdjustPriceModal = ({ handleTogglePriceModal }) => {
   return (
     <StyledModalContainer>
-      <div className='overlay'></div>
+      <div className='overlay' onClick={handleTogglePriceModal}></div>
       <div className='content'>
         <StyledCard>
-          <button className='cancel'>
+          <button className='cancel' onClick={handleTogglePriceModal}>
             <CancelIcon />
           </button>
           <div className='product'></div>
