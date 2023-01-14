@@ -131,7 +131,7 @@ const Layout = () => {
     <>
       <StyledContainer
         onClick={() => {
-          console.log(searchBarRef.current.className)
+          setSearchBarActive(false)
         }}
       >
         <Header />
