@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef, useState } from "react";
 import { Outlet } from "react-router-dom";
 import styled from "styled-components";
 import Footer from "./Footer";
@@ -20,7 +20,20 @@ const StyledButtonWrapper = styled.div`
   right: 20px;
   display: flex;
   flex-flow: column;
+  align-items: flex-end;
   gap: 10px 0;
+
+  .search-bar {
+    display: flex;
+    flex-direction: row-reverse;
+
+    .none {
+      display: none;
+    }
+    .active {
+      display: unset;
+    }
+  }
   .cart-button,
   .search {
     width: 50px;
@@ -112,32 +125,58 @@ const StyledChatRobot = styled.div`
 `;
 
 const Layout = () => {
+  const [searchBarActive, setSearchBarActive] = useState(false);
+  const searchBarRef = useRef();
   return (
     <>
-      <StyledContainer>
+      <StyledContainer
+        onClick={() => {
+          setSearchBarActive(false)
+        }}
+      >
         <Header />
         <Outlet />
         <StyledButtonWrapper>
-          <button className='cart-button'>
+          <button className="cart-button">
             <CartIcon />
           </button>
-          <div className='count'>0</div>
-          <label className='search' for='search-input'>
-            <SearchIcon />
-          </label>
-          <input type='checkbox' id='search-input' />
+          <div className="count">0</div>
+          <span className="search-bar">
+            <label
+              className="search"
+              for="search-input"
+              onClick={(e) => {
+                setSearchBarActive(!searchBarActive);
+                e.stopPropagation();
+              }}
+            >
+              <SearchIcon />
+            </label>
+            <input
+              type="text"
+              id="search-input"
+              className={searchBarActive ? "active" : "none"}
+              ref={searchBarRef}
+            />
+          </span>
+          <ul className="popular-items">
+            <li className="popular-item">1</li>
+            <li className="popular-item">2</li>
+            <li className="popular-item">3</li>
+            <li className="popular-item">4</li>
+          </ul>
         </StyledButtonWrapper>
         <StyledSearchWrapper>
           <h6>瀏覽紀錄</h6>
-          <div className='product-wrapper'>
-            <div className='product'></div>
-            <div className='product'></div>
-            <div className='product'></div>
+          <div className="product-wrapper">
+            <div className="product"></div>
+            <div className="product"></div>
+            <div className="product"></div>
           </div>
           <span>清除全部</span>
         </StyledSearchWrapper>
         <StyledChatRobot>
-          <img className='chat-robot' src={chatRobot} alt='logo-big' />
+          <img className="chat-robot" src={chatRobot} alt="logo-big" />
         </StyledChatRobot>
         <GoTop />
       </StyledContainer>
