@@ -1,8 +1,13 @@
-import React from 'react'
+import React from "react";
 import styled from "styled-components";
 import { useNavigate, useLocation } from "react-router-dom";
-import { BackHomeIcon, AboutIcon, ProductsIcon, HomeIcon, CartIcon } from "../assets/icons/index"
-
+import {
+  BackHomeIcon,
+  AboutIcon,
+  ProductsIcon,
+  HomeIcon,
+  CartIcon,
+} from "../assets/icons/index";
 
 const ProductStyled = styled.div`
   box-sizing: border-box;
@@ -12,12 +17,11 @@ const ProductStyled = styled.div`
   grid-template-columns: minmax(150px, 1fr) 750px;
   max-width: 930px;
   margin: 30px auto;
-  
-`
+`;
 const Aside = styled.div`
-    display: block;
-    font-size: 10px;
-    padding-left: 20px;
+  display: block;
+  font-size: 10px;
+  padding-left: 20px;
 
   .aside-content {
     position: relative;
@@ -25,7 +29,7 @@ const Aside = styled.div`
     flex-direction: column;
     align-items: left;
   }
-`
+`;
 const NavLink = styled.div`
   display: flex;
   align-items: center;
@@ -34,12 +38,10 @@ const NavLink = styled.div`
   color: var(--dark);
   font-weight: bolder;
   cursor: pointer;
-  color: ${(props) =>
-      props.active ? "var(--text-hover)" : "var(--dark);"};
+  color: ${(props) => (props.active ? "var(--text-hover)" : "var(--dark);")};
   &:hover {
-    color: var(--text-hover)
+    color: var(--text-hover);
   }
-
 `;
 
 const ProductWrapper = styled.div`
@@ -48,25 +50,24 @@ const ProductWrapper = styled.div`
   flex-flow: column;
   font-size: 30px;
   text-align: center;
-  
-`
+`;
 
 const GoToHome = styled.div`
   display: flex;
   justify-content: flex-end;
-  align-contents: center;
+  align-items: center;
   width: 100%;
   text-align: right;
   font-size: 1rem;
   font-weight: 400;
   line-height: 1.5;
   color: var(--dark);
-`
+`;
 
 const Breadcrumb = styled.div`
   margin-bottom: 20px;
   position: relative;
-`
+`;
 
 const ProductsSort = styled.div`
   width: 100%;
@@ -100,7 +101,7 @@ const ProductList = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   gap: 3vmin;
-`
+`;
 
 const StyledCard = styled.div`
   position: relative;
@@ -163,42 +164,61 @@ const StyledCard = styled.div`
 
 const ProductCat = () => {
   const navigate = useNavigate();
-  const page = useLocation().pathname
+  const page = useLocation().pathname;
   return (
     <ProductStyled>
       <Aside>
         <div className='aside-content'>
-            <NavLink onClick={() => navigate("/home")}>
-              <BackHomeIcon style={{ position: "absolute", left: "-18px" }}/>
-              首頁
-            </NavLink>
-            <NavLink  onClick={() => navigate("/about")}>
-              <AboutIcon style={{ position: "absolute", left: "-18px" }}/>
-              關於
-            </NavLink>
-          {page.includes("all") ? 
-            (<NavLink active onClick={() => navigate("/product/all")}>
-              <ProductsIcon style={{ position: "absolute", left: "-18px" }}/>
+          <NavLink onClick={() => navigate("/home")}>
+            <BackHomeIcon style={{ position: "absolute", left: "-18px" }} />
+            首頁
+          </NavLink>
+          <NavLink onClick={() => navigate("/about")}>
+            <AboutIcon style={{ position: "absolute", left: "-18px" }} />
+            關於
+          </NavLink>
+          {page.includes("all") ? (
+            <NavLink active onClick={() => navigate("/product/all")}>
+              <ProductsIcon style={{ position: "absolute", left: "-18px" }} />
               全部商品
-            </NavLink>) :
-            (<NavLink  onClick={() => navigate("/product/all")}>
-              <ProductsIcon style={{ position: "absolute", left: "-18px" }}/>
+            </NavLink>
+          ) : (
+            <NavLink onClick={() => navigate("/product/all")}>
+              <ProductsIcon style={{ position: "absolute", left: "-18px" }} />
               全部商品
             </NavLink>
           )}
-          {page.includes("dog") ? 
-            (<NavLink active onClick={() => navigate("/product/dog")}>狗狗專區</NavLink>) : (<NavLink onClick={() => navigate("/product/dog")}>狗狗專區</NavLink>
+          {page.includes("dog") ? (
+            <NavLink active onClick={() => navigate("/product/dog")}>
+              狗狗專區
+            </NavLink>
+          ) : (
+            <NavLink onClick={() => navigate("/product/dog")}>狗狗專區</NavLink>
           )}
-          {page.includes("cat") ? 
-            (<NavLink active  onClick={() => navigate("/product/cat")}>貓咪專區</NavLink>) : (<NavLink onClick={() => navigate("/product/cat")}>貓咪專區</NavLink>
-            )}
-          {page.includes("blogs") ? 
-            (<NavLink active onClick={() => navigate("/blogs")}>部落格</NavLink>) : (<NavLink onClick={() => navigate("/blogs")}>部落格</NavLink>
+          {page.includes("cat") ? (
+            <NavLink active onClick={() => navigate("/product/cat")}>
+              貓咪專區
+            </NavLink>
+          ) : (
+            <NavLink onClick={() => navigate("/product/cat")}>貓咪專區</NavLink>
+          )}
+          {page.includes("blogs") ? (
+            <NavLink active onClick={() => navigate("/blogs")}>
+              部落格
+            </NavLink>
+          ) : (
+            <NavLink onClick={() => navigate("/blogs")}>部落格</NavLink>
           )}
         </div>
       </Aside>
       <ProductWrapper>
-        <GoToHome><HomeIcon onClick={() => navigate("/home")} style={{ color:'var(--dark)',cursor: "pointer" }} />＞全部商品</GoToHome>
+        <GoToHome>
+          <HomeIcon
+            onClick={() => navigate("/home")}
+            style={{ color: "var(--dark)", cursor: "pointer" }}
+          />
+          ＞全部商品
+        </GoToHome>
         <Breadcrumb />
         <ProductsSort>
           <ul className='sort-nav'>
@@ -211,7 +231,7 @@ const ProductCat = () => {
           <StyledCard>
             <div className='product'>
               <button className='addCart'>
-                <CartIcon style={{ fontSize: "20px", cursor: "pointer"}}/>
+                <CartIcon style={{ fontSize: "20px", cursor: "pointer" }} />
               </button>
             </div>
             <div className='wrapper'>
@@ -223,18 +243,7 @@ const ProductCat = () => {
           <StyledCard>
             <div className='product'>
               <button className='addCart'>
-                <CartIcon style={{ fontSize: "20px", cursor: "pointer"}}/>
-              </button></div>
-            <div className='wrapper'>
-              <h4 className='title'> 【毛孩時代】腎臟專科保健粉(30包/盒)</h4>
-              <div className='price'>$750</div>
-              <div className='discount-price'>$690</div>
-            </div>
-          </StyledCard>
-          <StyledCard>
-            <div className='product'>
-              <button className='addCart'>
-                <CartIcon style={{ fontSize: "20px", cursor: "pointer"}}/>
+                <CartIcon style={{ fontSize: "20px", cursor: "pointer" }} />
               </button>
             </div>
             <div className='wrapper'>
@@ -246,7 +255,7 @@ const ProductCat = () => {
           <StyledCard>
             <div className='product'>
               <button className='addCart'>
-                <CartIcon style={{ fontSize: "20px", cursor: "pointer"}}/>
+                <CartIcon style={{ fontSize: "20px", cursor: "pointer" }} />
               </button>
             </div>
             <div className='wrapper'>
@@ -258,7 +267,7 @@ const ProductCat = () => {
           <StyledCard>
             <div className='product'>
               <button className='addCart'>
-                <CartIcon style={{ fontSize: "20px", cursor: "pointer"}}/>
+                <CartIcon style={{ fontSize: "20px", cursor: "pointer" }} />
               </button>
             </div>
             <div className='wrapper'>
@@ -270,7 +279,7 @@ const ProductCat = () => {
           <StyledCard>
             <div className='product'>
               <button className='addCart'>
-                <CartIcon style={{ fontSize: "20px", cursor: "pointer"}}/>
+                <CartIcon style={{ fontSize: "20px", cursor: "pointer" }} />
               </button>
             </div>
             <div className='wrapper'>
@@ -282,7 +291,7 @@ const ProductCat = () => {
           <StyledCard>
             <div className='product'>
               <button className='addCart'>
-                <CartIcon style={{ fontSize: "20px", cursor: "pointer"}}/>
+                <CartIcon style={{ fontSize: "20px", cursor: "pointer" }} />
               </button>
             </div>
             <div className='wrapper'>
@@ -294,7 +303,7 @@ const ProductCat = () => {
           <StyledCard>
             <div className='product'>
               <button className='addCart'>
-                <CartIcon style={{ fontSize: "20px", cursor: "pointer"}}/>
+                <CartIcon style={{ fontSize: "20px", cursor: "pointer" }} />
               </button>
             </div>
             <div className='wrapper'>
@@ -306,7 +315,7 @@ const ProductCat = () => {
           <StyledCard>
             <div className='product'>
               <button className='addCart'>
-                <CartIcon style={{ fontSize: "20px", cursor: "pointer"}}/>
+                <CartIcon style={{ fontSize: "20px", cursor: "pointer" }} />
               </button>
             </div>
             <div className='wrapper'>
@@ -318,7 +327,7 @@ const ProductCat = () => {
           <StyledCard>
             <div className='product'>
               <button className='addCart'>
-                <CartIcon style={{ fontSize: "20px", cursor: "pointer"}}/>
+                <CartIcon style={{ fontSize: "20px", cursor: "pointer" }} />
               </button>
             </div>
             <div className='wrapper'>
@@ -330,7 +339,7 @@ const ProductCat = () => {
           <StyledCard>
             <div className='product'>
               <button className='addCart'>
-                <CartIcon style={{ fontSize: "20px", cursor: "pointer"}}/>
+                <CartIcon style={{ fontSize: "20px", cursor: "pointer" }} />
               </button>
             </div>
             <div className='wrapper'>
@@ -342,7 +351,19 @@ const ProductCat = () => {
           <StyledCard>
             <div className='product'>
               <button className='addCart'>
-                <CartIcon style={{ fontSize: "20px", cursor: "pointer"}}/>
+                <CartIcon style={{ fontSize: "20px", cursor: "pointer" }} />
+              </button>
+            </div>
+            <div className='wrapper'>
+              <h4 className='title'> 【毛孩時代】腎臟專科保健粉(30包/盒)</h4>
+              <div className='price'>$750</div>
+              <div className='discount-price'>$690</div>
+            </div>
+          </StyledCard>
+          <StyledCard>
+            <div className='product'>
+              <button className='addCart'>
+                <CartIcon style={{ fontSize: "20px", cursor: "pointer" }} />
               </button>
             </div>
             <div className='wrapper'>
@@ -357,4 +378,4 @@ const ProductCat = () => {
   );
 };
 
-export default ProductCat
+export default ProductCat;

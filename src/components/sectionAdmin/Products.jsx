@@ -8,6 +8,7 @@ const StyledContainer = styled.div`
   display: flex;
   flex-flow: column;
   border: 1px solid #ddd;
+  overflow: hidden;
   .order-list {
     width: 100%;
   }
@@ -47,11 +48,12 @@ const StyledButton = styled.div`
   }
 `;
 const StyledProdutsContainer = styled.div`
+  box-sizing: border-box;
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
   gap: 3vmin;
   padding: 10px;
-  height: calc(100vh - 120px);
+  height: calc(100vh - 110px);
   overflow-y: auto;
   //scroll底色
   &::-webkit-scrollbar-track {
@@ -67,9 +69,7 @@ const StyledProdutsContainer = styled.div`
     background-color: var(--gray);
   }
 `;
-const Products = ({
-  handleTogglePriceModal,
-}) => {
+const Products = ({ handleTogglePriceModal }) => {
   const page = useLocation().pathname;
   return (
     <StyledContainer>
