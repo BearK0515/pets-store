@@ -17,10 +17,10 @@ const HomeLinkWrapper = styled.div`
     height: 8px;
     border: solid var(--dark);
     border-width: 0 1px 1px 0;
-    transform: translate(-50%, -50%) rotate(-45deg);
+    transform: translate(0, -50%) rotate(-45deg);
     position: absolute;
-    left: -35%;
     top: 50%;
+    left:-13px;
   }
 `;
 

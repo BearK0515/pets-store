@@ -54,7 +54,7 @@ const ProductWrapper = styled.div`
 const GoToHome = styled.div`
   display: flex;
   justify-content: flex-end;
-  align-contents: center;
+  align-items: center;
   width: 100%;
   text-align: right;
   font-size: 1rem;

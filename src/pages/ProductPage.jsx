@@ -9,7 +9,6 @@ const ProductPage = () => {
   const page = location.pathname;
   return (
     <>
-      <div>ProductPage</div>
       {page === "/product/all" && <ProductAll />}
       {page === "/product/dog" && <ProductDog />}
       {page === "/product/cat" && <ProductCat />}

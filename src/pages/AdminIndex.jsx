@@ -76,7 +76,7 @@ const AdminIndex = () => {
   const handleToggleProductModal = () => {
     setIsOpenProductModal(!isOpenProductModal);
   };
-console.log(page);
+
   return (
     <>
       <StyledContainer>
