@@ -30,6 +30,10 @@ article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, 
 html {
   text-size-adjust: 100%;
   box-sizing: border-box;
+  -webkit-user-select:none;
+  -moz-user-select:none;
+  -o-user-select:none;
+  user-select:none
 }
 body {
     line-height: 1;
@@ -84,10 +88,13 @@ export const GlobalStyle = createGlobalStyle`
   --yellow: #ffc107;
   --green: #28a745;
   --teal: #20c997;
+  --tiffany: #6fc38b;
   --cyan: #17a2b8;
   --white: #fff;
   --gray: #6c757d;
   --gray-dark: #343a40;
+  --red-dark: #c14848;
+  --delete:#cb3747;
   --primary: #007bff;
   --secondary: #6c757d;
   --success: #28a745;
@@ -97,6 +104,13 @@ export const GlobalStyle = createGlobalStyle`
   --light: #f8f9fa;
   --dark: #343a40;
   --text-hover:#c14848;
+  --text-header:#212529;
+  --text-red:#cb3747;
+  --button:#B5E4D6;
+  --button-hover:#6bafa0;
+  --button-active:#479c89;
+  --button-background:#32373A;
+  --border-hr:#d9d9d9;
   --power-by:#469189;
   --footer-background:#4EAD99;
   --breakpoint-xs: 0;
