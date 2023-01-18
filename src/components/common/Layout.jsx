@@ -7,6 +7,7 @@ import GoTop from "./GoTop";
 import { CartIcon, SearchIcon } from "../../assets/icons";
 import chatRobot from "../../assets/icons/icon_FB_chat.png";
 import LoginModal from "./LoginModal";
+import CartModal from "./CartModal";
 
 const StyledContainer = styled.div`
   display: flex;
@@ -67,6 +68,12 @@ const StyledButtonWrapper = styled.div`
       padding: 4px 10px;
       font-size: 14px;
       line-height: 16px;
+      cursor: pointer;
+
+      &:hover {
+        background-color: var(--button-background);
+        color: var(--white);
+      }
     }
 
     &::after {
@@ -177,10 +184,11 @@ const StyledChatRobot = styled.div`
 const Layout = () => {
   const [searchBarActive, setSearchBarActive] = useState(false);
   const [isOpenLoginModal, setIsOpenLoginModal] = useState(false);
-  
-const handleToggleLoginModal = () => {
-  setIsOpenLoginModal(!isOpenLoginModal);
-}
+  const [isCartOpen, setIsCartOpen] = useState(false);
+
+  const handleToggleLoginModal = () => {
+    setIsOpenLoginModal(!isOpenLoginModal);
+  };
 
   return (
     <>
@@ -188,17 +196,18 @@ const handleToggleLoginModal = () => {
         <Header handleToggleLoginModal={handleToggleLoginModal} />
         <Outlet />
         <StyledButtonWrapper>
-          <button className='cart-button'>
+          <button
+            className="cart-button"
+            onClick={() => setIsCartOpen(!isCartOpen)}
+          >
             <CartIcon />
           </button>
-          <div className='count'>0</div>
-          <span className='search-bar'>
+          <div className="count">0</div>
+          <span className="search-bar">
             <label
-              className='search'
-              for='search-input'
+              className="search"
+              for="search-input"
               onClick={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
                 e.stopPropagation();
                 // e.nativeEvent.stopImmediatePropagation(); 不知道為什麼不用也沒差
                 e.preventDefault();
@@ -208,10 +217,9 @@ const handleToggleLoginModal = () => {
               <SearchIcon />
             </label>
             <input
-              type='text'
-              id='search-input'
+              type="text"
+              id="search-input"
               className={searchBarActive ? "active" : "none"}
-              ref={searchBarRef}
               placeholder="商品搜尋"
               onClick={(e) => {
                 e.stopPropagation();
@@ -220,12 +228,6 @@ const handleToggleLoginModal = () => {
               }}
             />
           </span>
-          <ul className='popular-items'>
-            <li className='popular-item'>1</li>
-            <li className='popular-item'>2</li>
-            <li className='popular-item'>3</li>
-            <li className='popular-item'>4</li>
-          </ul>
           {searchBarActive && (
             <ul className="popular-items">
               <li className="popular-item">156565</li>
@@ -239,19 +241,22 @@ const handleToggleLoginModal = () => {
         </StyledButtonWrapper>
         <StyledSearchWrapper>
           <h6>瀏覽紀錄</h6>
-          <div className='product-wrapper'>
-            <div className='product'></div>
-            <div className='product'></div>
-            <div className='product'></div>
+          <div className="product-wrapper">
+            <div className="product"></div>
+            <div className="product"></div>
+            <div className="product"></div>
           </div>
           <span>清除全部</span>
         </StyledSearchWrapper>
         <StyledChatRobot>
-          <img className='chat-robot' src={chatRobot} alt='logo-big' />
+          <img className="chat-robot" src={chatRobot} alt="logo-big" />
         </StyledChatRobot>
         <GoTop />
       </StyledContainer>
       <Footer />
+      {isCartOpen && (
+        <CartModal isCartOpen={isCartOpen} setIsCartOpen={setIsCartOpen} />
+      )}
       {isOpenLoginModal && (
         <LoginModal
           isOpenLoginModal={isOpenLoginModal}
