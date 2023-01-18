@@ -371,11 +371,6 @@ const Blogs = () => {
                       <h6>貓貓健康知識庫</h6>
                     </div>
                   </li>
-                  <li>
-                    <div className='toFlex'>
-                      <h6>貓貓健康知識庫</h6>
-                    </div>
-                  </li>
               </BlogCategoryList>
             </BlogCategoryArea>
           </div>
