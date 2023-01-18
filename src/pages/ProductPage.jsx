@@ -6,6 +6,7 @@ import ProductAll from "./ProductAll";
 import ProductCat from "./ProductCat";
 import ProductDog from "./ProductDog";
 import { HomeIcon } from "../assets/icons/index"
+import { HomeLinkWrapper } from "../components/common/HomeLinkWrapper";
 
 const ProductPageStyled = styled.div`
   box-sizing: border-box;
@@ -13,7 +14,7 @@ const ProductPageStyled = styled.div`
   display: grid;
   grid-gap: 0 15px;
   grid-template-columns: 150px 1fr;
-  max-width: 930px;
+  max-width: 1140px;
   margin: 30px auto;
   padding: 0 30px;
 `
@@ -72,11 +73,23 @@ const ProductPage = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const page = location.pathname;
+  let NowPage = '';
+
+  if (page === "/product/all") {
+    NowPage = "全部商品"
+  } else if (page === "/product/dog") {
+    NowPage = "狗狗專區"
+  } else {
+    NowPage = "貓貓專區"
+  }
+  
   return (
     <ProductPageStyled>
       <ProductAside />
        <ProductWrapper>
-        <GoToHome><HomeIcon onClick={() => navigate("/home")} style={{ color:'var(--dark)',cursor: "pointer" }} />＞全部商品</GoToHome>
+        <HomeLinkWrapper>
+          <GoToHome><HomeIcon onClick={() => navigate("/home")} style={{ color:'var(--dark)',cursor: "pointer" }} /><p className='text'>{NowPage}</p></GoToHome>
+        </HomeLinkWrapper>
         <Breadcrumb />
         <ProductsSort>
           <ul className='sort-nav'>
