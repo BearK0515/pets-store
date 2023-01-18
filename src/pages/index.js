@@ -11,7 +11,6 @@ import Cart from "./Cart";
 import Order from "./Order";
 import Faq from "./Faq";
 
-
 export {
   Home,
   About,

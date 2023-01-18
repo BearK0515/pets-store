@@ -26,12 +26,60 @@ const StyledButtonWrapper = styled.div`
   .search-bar {
     display: flex;
     flex-direction: row-reverse;
+    position: relative;
+
+    #search-input {
+      box-sizing: border-box;
+      width: 300px;
+      height: 50px;
+      padding-left: 10px;
+      padding-right: 60px;
+      position: absolute;
+      z-index: -1;
+      background-color: var(--button-background);
+      border: none;
+      border-radius: 4px;
+      color: var(--white);
+    }
 
     .none {
       display: none;
     }
     .active {
       display: unset;
+    }
+  }
+
+  .popular-items {
+    position: relative;
+    background-color: var(--white);
+    width: 300px;
+    border-radius: 4px;
+    box-shadow: 0 3px 8px #00000026;
+    padding: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+
+    .popular-item {
+      background-color: #f1f1f1;
+      border-radius: 4px;
+      padding: 4px 10px;
+      font-size: 14px;
+      line-height: 16px;
+    }
+
+    &::after {
+      content: "";
+      position: absolute;
+      top: -16px;
+      width: 0;
+      height: 0;
+      border: 8px solid;
+      border-top-color: transparent;
+      border-right-color: transparent;
+      border-bottom-color: var(--white);
+      border-left-color: transparent;
     }
   }
   .cart-button,
@@ -127,17 +175,18 @@ const StyledChatRobot = styled.div`
 const Layout = () => {
   const [searchBarActive, setSearchBarActive] = useState(false);
   const searchBarRef = useRef();
+  
   return (
     <>
       <StyledContainer
         onClick={() => {
-          setSearchBarActive(false)
+          setSearchBarActive(false);
         }}
       >
         <Header />
         <Outlet />
         <StyledButtonWrapper>
-          <button className="cart-button">
+          <button className="cart-button" >
             <CartIcon />
           </button>
           <div className="count">0</div>
@@ -146,8 +195,10 @@ const Layout = () => {
               className="search"
               for="search-input"
               onClick={(e) => {
-                setSearchBarActive(!searchBarActive);
                 e.stopPropagation();
+                // e.nativeEvent.stopImmediatePropagation(); 不知道為什麼不用也沒差
+                e.preventDefault();
+                setSearchBarActive(!searchBarActive);
               }}
             >
               <SearchIcon />
@@ -157,14 +208,24 @@ const Layout = () => {
               id="search-input"
               className={searchBarActive ? "active" : "none"}
               ref={searchBarRef}
+              placeholder="商品搜尋"
+              onClick={(e) => {
+                e.stopPropagation();
+                // e.nativeEvent.stopImmediatePropagation(); 不知道為什麼不用也沒差
+                e.preventDefault();
+              }}
             />
           </span>
-          <ul className="popular-items">
-            <li className="popular-item">1</li>
-            <li className="popular-item">2</li>
-            <li className="popular-item">3</li>
-            <li className="popular-item">4</li>
-          </ul>
+          {searchBarActive && (
+            <ul className="popular-items">
+              <li className="popular-item">156565</li>
+              <li className="popular-item">256555565</li>
+              <li className="popular-item">356565</li>
+              <li className="popular-item">456565</li>
+              <li className="popular-item">456565</li>
+              <li className="popular-item">4555555555556565</li>
+            </ul>
+          )}
         </StyledButtonWrapper>
         <StyledSearchWrapper>
           <h6>瀏覽紀錄</h6>
