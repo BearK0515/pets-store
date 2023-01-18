@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 
 const StyledModalContainer = styled.div`
@@ -9,6 +9,7 @@ const StyledModalContainer = styled.div`
   right: 0;
   bottom: 0;
   position: fixed;
+
   .overlay {
     width: 100vw;
     height: 100vh;
@@ -40,15 +41,31 @@ const StyledSectionUp = styled.div`
   gap: 10px;
   margin-bottom: 10px;
   .left {
-    width: 50%;
+    width: 40%;
     display: flex;
     flex-flow: column;
     align-items: center;
+    gap: 10px;
     .preview {
       width: 100%;
       aspect-ratio: 3/4;
       background-size: cover;
       background-image: url("https://picsum.photos/id/6/300/400");
+    }
+    .picture-wrapper {
+      width: 100%;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      .picture-1,
+      .picture-2,
+      .picture-3 {
+        width: 100%;
+        aspect-ratio: 3/4;
+        background-size: cover;
+        background-image: url("https://picsum.photos/id/6/300/400");
+        cursor: pointer;
+      }
     }
     .wrapper {
       width: 100%;
@@ -83,34 +100,21 @@ const StyledSectionUp = styled.div`
   .right {
     display: flex;
     flex-flow: column;
-    width: 50%;
-    gap: 30px 0;
-    .picture-wrapper {
-      width: 100%;
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
-      margin-top: 10px;
-      .picture-1,
-      .picture-2,
-      .picture-3 {
-        width: 100%;
-        aspect-ratio: 3/4;
-        background-size: cover;
-        background-image: url("https://picsum.photos/id/6/300/400");
-      }
-    }
+    width: 60%;
+    gap: 10px 0;
+
     .wrapper {
       display: flex;
       flex-flow: column;
-      gap: 5px 0;
+      gap: 10px 0;
     }
     label {
       font-size: 14px;
       font-weight: 700;
       color: var(--footer-background);
     }
-    input {
+    input,
+    select {
       outline: none;
       border: none;
       border-bottom: 2px solid var(--gray-dark);
@@ -181,6 +185,7 @@ const StyledSectionDown = styled.div`
         aspect-ratio: 3/4;
         background-size: cover;
         background-image: url("https://picsum.photos/id/7/300/400");
+        cursor: pointer;
       }
     }
   }
@@ -202,25 +207,40 @@ const StyledButton = styled.button`
 `;
 
 const AddProductModal = ({ handleToggleProductModal }) => {
+  const [value, setValue] = useState("default");
+
   return (
     <StyledModalContainer>
       <div className="overlay" onClick={handleToggleProductModal}></div>
       <div className="content">
         <StyledSectionUp>
-          <div className="left">
-            <div className="preview"></div>
-
-            <div className="wrapper">
+          <div className='left'>
+            <div className='preview'></div>
+            <div className='picture-wrapper'>
+              <div className='picture-1'></div>
+              <div className='picture-2'></div>
+              <div className='picture-3'></div>
+            </div>
+            <div className='wrapper'>
               <p>商品圖片：</p>
               <label for="add-product-picture">新增商品圖片</label>
               <input type="file" id="add-product-picture" />
             </div>
           </div>
-          <div className="right">
-            <div className="picture-wrapper">
-              <div className="picture-1"></div>
-              <div className="picture-2"></div>
-              <div className="picture-3"></div>
+          <div className='right'>
+            
+            <div className='wrapper'>
+              <label>商品分類：</label>
+              <select
+                defaultValue={value}
+                onChange={(e) => setValue(e.target.value)}
+              >
+                <option disabled value='default'>
+                  商品分類
+                </option>
+                <option value='dog'>狗狗專區</option>
+                <option value='cat'>貓咪專區</option>
+              </select>
             </div>
             <div className="wrapper">
               <label>商品名稱：</label>
@@ -233,7 +253,10 @@ const AddProductModal = ({ handleToggleProductModal }) => {
             <div className="wrapper">
               {/* 新增option array */}
               <label>商品規格：</label>
-              <input type="text" placeholder="請輸入商品規格" />
+              <input type='text' placeholder='請輸入商品規格' />
+              <input type='text' placeholder='請輸入商品規格' />
+              <input type='text' placeholder='請輸入商品規格' />
+              <input type='text' placeholder='請輸入商品規格' />
             </div>
           </div>
         </StyledSectionUp>

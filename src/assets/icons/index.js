@@ -1,7 +1,9 @@
 import { ReactComponent as GoogleIcon } from "./icon_google.svg";
 import { ReactComponent as LineIcon } from "./img_line.svg";
+import { ReactComponent as LineWhiteIcon } from "./icon_LINE_white.svg";
 import { ReactComponent as TwitterIcon } from "./icon_Twitter.svg";
 import { ReactComponent as FacebookIcon } from "./img_facebook.svg";
+import { ReactComponent as FacebookWhiteIcon } from "./img_facebook-white.svg";
 import { ReactComponent as InstagramIcon } from "./img_instagram.svg";
 import { ReactComponent as PowerByIcon } from "./powerby.svg";
 import { TbReportSearch } from "react-icons/tb";
@@ -26,7 +28,10 @@ import {
   BsArrowReturnRight,
   BsFillShareFill,
 } from "react-icons/bs";
-import { HiOutlineLockClosed } from "react-icons/hi";
+import {
+  HiOutlineLockClosed,
+  HiOutlineExclamationCircle,
+} from "react-icons/hi";
 import { RxCross2 } from "react-icons/rx";
 import { GrLinkTop, GrLocation } from "react-icons/gr";
 import { CiCalendarDate } from "react-icons/ci";
@@ -120,12 +125,18 @@ const ShareIcon = styled(BsFillShareFill)`
   font-size: 18px;
   color: #aaa;
 `;
+const AlertIcon = styled(HiOutlineExclamationCircle)`
+  font-size: 16px;
+  line-height: 16px;
+`;
 
 export {
   GoogleIcon,
   LineIcon,
+  LineWhiteIcon,
   TwitterIcon,
   FacebookIcon,
+  FacebookWhiteIcon,
   InstagramIcon,
   PowerByIcon,
   OrderIcon,
@@ -151,4 +162,5 @@ export {
   ClockIcon,
   BookMarkIcon,
   ShareIcon,
+  AlertIcon,
 };

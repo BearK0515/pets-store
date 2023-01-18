@@ -174,12 +174,10 @@ const SingleOrder = () => {
           <div className='wrapper-title addressee'>
             <p>姓名</p>
             <p>電話</p>
-            <p>備註</p>
           </div>
           <div className='wrapper-content addressee'>
-            <p>蕭光輝</p>
+            <p>林阿強</p>
             <p>01-998765432</p>
-            <p>門口停汽車顏色消光黑</p>
           </div>
         </StyledWrapper>
       </StyledOrderList>

@@ -1,99 +1,6 @@
 import React from 'react'
 import styled from "styled-components";
-import { useNavigate, useLocation } from "react-router-dom";
-import { BackHomeIcon, AboutIcon, ProductsIcon, HomeIcon, CartIcon } from "../assets/icons/index"
-
-
-const ProductStyled = styled.div`
-  box-sizing: border-box;
-  width: 100%;
-  display: grid;
-  grid-gap: 0 15px;
-  grid-template-columns: minmax(150px, 1fr) 750px;
-  max-width: 930px;
-  margin: 30px auto;
-  
-`
-const Aside = styled.div`
-    display: block;
-    font-size: 10px;
-    padding-left: 20px;
-
-  .aside-content {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    align-items: left;
-  }
-`
-const NavLink = styled.div`
-  display: flex;
-  align-items: center;
-  font-size: 0.9rem;
-  line-height: 2;
-  color: var(--dark);
-  font-weight: bolder;
-  cursor: pointer;
-  color: ${(props) =>
-      props.active ? "var(--text-hover)" : "var(--dark);"};
-  &:hover {
-    color: var(--text-hover)
-  }
-
-`;
-
-const ProductWrapper = styled.div`
-  width: 100%;
-  display: flex;
-  flex-flow: column;
-  font-size: 30px;
-  text-align: center;
-  
-`
-
-const GoToHome = styled.div`
-  display: flex;
-  justify-content: flex-end;
-  align-contents: center;
-  width: 100%;
-  text-align: right;
-  font-size: 1rem;
-  font-weight: 400;
-  line-height: 1.5;
-  color: var(--dark);
-`
-
-const Breadcrumb = styled.div`
-  margin-bottom: 20px;
-  position: relative;
-`
-
-const ProductsSort = styled.div`
-  width: 100%;
-  display: flex;
-  flex-flow: column;
-  margin-bottom: 3vmin;
-  ul {
-    display: grid;
-    grid-template-columns: repeat(4, 80px);
-    li {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      background-color: var(--gray);
-      color: var(--white);
-      font-size: 14px;
-      line-height: 32px;
-      &:hover {
-        background-color: #9e9e9e;
-        cursor: pointer;
-      }
-      &.active {
-        background-color: var(--gray-dark);
-      }
-    }
-  }
-`;
+import { CartIcon } from "../assets/icons/index"
 
 const ProductList = styled.div`
   width: 100%;
@@ -162,51 +69,7 @@ const StyledCard = styled.div`
 `;
 
 const ProductAll = () => {
-  const navigate = useNavigate();
-  const page = useLocation().pathname
   return (
-    <ProductStyled>
-      <Aside>
-        <div className='aside-content'>
-            <NavLink onClick={() => navigate("/home")}>
-              <BackHomeIcon style={{ position: "absolute", left: "-18px" }}/>
-              首頁
-            </NavLink>
-            <NavLink  onClick={() => navigate("/about")}>
-              <AboutIcon style={{ position: "absolute", left: "-18px" }}/>
-              關於
-            </NavLink>
-          {page.includes("all") ? 
-            (<NavLink active onClick={() => navigate("/product/all")}>
-              <ProductsIcon style={{ position: "absolute", left: "-18px" }}/>
-              全部商品
-            </NavLink>) :
-            (<NavLink  onClick={() => navigate("/product/all")}>
-              <ProductsIcon style={{ position: "absolute", left: "-18px" }}/>
-              全部商品
-            </NavLink>
-          )}
-          {page.includes("dog") ? 
-            (<NavLink active onClick={() => navigate("/product/dog")}>狗狗專區</NavLink>) : (<NavLink onClick={() => navigate("/product/dog")}>狗狗專區</NavLink>
-          )}
-          {page.includes("cat") ? 
-            (<NavLink active  onClick={() => navigate("/product/cat")}>貓咪專區</NavLink>) : (<NavLink onClick={() => navigate("/product/cat")}>貓咪專區</NavLink>
-            )}
-          {page.includes("blogs") ? 
-            (<NavLink active onClick={() => navigate("/blogs")}>部落格</NavLink>) : (<NavLink onClick={() => navigate("/blogs")}>部落格</NavLink>
-          )}
-        </div>
-      </Aside>
-      <ProductWrapper>
-        <GoToHome><HomeIcon onClick={() => navigate("/home")} style={{ color:'var(--dark)',cursor: "pointer" }} />＞全部商品</GoToHome>
-        <Breadcrumb />
-        <ProductsSort>
-          <ul className='sort-nav'>
-            <li className='active'>熱銷排行</li>
-            <li>最新上架</li>
-            <li>價格</li>
-          </ul>
-        </ProductsSort>
         <ProductList>
           <StyledCard>
             <div className='product'>
@@ -352,8 +215,6 @@ const ProductAll = () => {
             </div>
           </StyledCard>
         </ProductList>
-      </ProductWrapper>
-    </ProductStyled>
   );
 };
 

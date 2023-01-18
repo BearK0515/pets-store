@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 import { Outlet } from "react-router-dom";
 import styled from "styled-components";
 import Footer from "./Footer";
@@ -6,6 +6,7 @@ import Header from "./Header";
 import GoTop from "./GoTop";
 import { CartIcon, SearchIcon } from "../../assets/icons";
 import chatRobot from "../../assets/icons/icon_FB_chat.png";
+import LoginModal from "./LoginModal";
 
 const StyledContainer = styled.div`
   display: flex;
@@ -22,7 +23,6 @@ const StyledButtonWrapper = styled.div`
   flex-flow: column;
   align-items: flex-end;
   gap: 10px 0;
-
   .search-bar {
     display: flex;
     flex-direction: row-reverse;
@@ -91,6 +91,7 @@ const StyledButtonWrapper = styled.div`
     justify-content: center;
     align-items: center;
     background-color: var(--button-background);
+    cursor: pointer;
   }
   .cart-button {
     position: relative;
@@ -166,6 +167,7 @@ const StyledChatRobot = styled.div`
   background-color: var(--white);
   border: 1px solid #ddd;
   border-radius: 4px;
+  cursor: pointer;
   .chat-robot {
     width: 36px;
     height: 36px;
@@ -174,27 +176,29 @@ const StyledChatRobot = styled.div`
 
 const Layout = () => {
   const [searchBarActive, setSearchBarActive] = useState(false);
-  const searchBarRef = useRef();
+  const [isOpenLoginModal, setIsOpenLoginModal] = useState(false);
   
+const handleToggleLoginModal = () => {
+  setIsOpenLoginModal(!isOpenLoginModal);
+}
+
   return (
     <>
-      <StyledContainer
-        onClick={() => {
-          setSearchBarActive(false);
-        }}
-      >
-        <Header />
+      <StyledContainer onClick={() => setSearchBarActive(false)}>
+        <Header handleToggleLoginModal={handleToggleLoginModal} />
         <Outlet />
         <StyledButtonWrapper>
-          <button className="cart-button" >
+          <button className='cart-button'>
             <CartIcon />
           </button>
-          <div className="count">0</div>
-          <span className="search-bar">
+          <div className='count'>0</div>
+          <span className='search-bar'>
             <label
-              className="search"
-              for="search-input"
+              className='search'
+              for='search-input'
               onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
                 e.stopPropagation();
                 // e.nativeEvent.stopImmediatePropagation(); 不知道為什麼不用也沒差
                 e.preventDefault();
@@ -204,8 +208,8 @@ const Layout = () => {
               <SearchIcon />
             </label>
             <input
-              type="text"
-              id="search-input"
+              type='text'
+              id='search-input'
               className={searchBarActive ? "active" : "none"}
               ref={searchBarRef}
               placeholder="商品搜尋"
@@ -216,6 +220,12 @@ const Layout = () => {
               }}
             />
           </span>
+          <ul className='popular-items'>
+            <li className='popular-item'>1</li>
+            <li className='popular-item'>2</li>
+            <li className='popular-item'>3</li>
+            <li className='popular-item'>4</li>
+          </ul>
           {searchBarActive && (
             <ul className="popular-items">
               <li className="popular-item">156565</li>
@@ -229,19 +239,26 @@ const Layout = () => {
         </StyledButtonWrapper>
         <StyledSearchWrapper>
           <h6>瀏覽紀錄</h6>
-          <div className="product-wrapper">
-            <div className="product"></div>
-            <div className="product"></div>
-            <div className="product"></div>
+          <div className='product-wrapper'>
+            <div className='product'></div>
+            <div className='product'></div>
+            <div className='product'></div>
           </div>
           <span>清除全部</span>
         </StyledSearchWrapper>
         <StyledChatRobot>
-          <img className="chat-robot" src={chatRobot} alt="logo-big" />
+          <img className='chat-robot' src={chatRobot} alt='logo-big' />
         </StyledChatRobot>
         <GoTop />
       </StyledContainer>
       <Footer />
+      {isOpenLoginModal && (
+        <LoginModal
+          isOpenLoginModal={isOpenLoginModal}
+          setIsOpenLoginModal={setIsOpenLoginModal}
+          handleToggleLoginModal={handleToggleLoginModal}
+        />
+      )}
     </>
   );
 };

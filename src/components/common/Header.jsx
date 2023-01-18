@@ -25,25 +25,79 @@ const HeaderStyled = styled.header`
     .tool-box-left {
       display: flex;
       gap: 5px;
-      .icon {
+      .icon-wrapper {
         display: flex;
-        justify-content: center;
-        align-items: center;
-        width: 30px;
-        height: 30px;
-        border-radius: 50%;
-        background-color: var(--gray-dark);
-        line-height: 30px;
+        flex-flow: column;
+        position: relative;
+        .icon {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          width: 30px;
+          height: 30px;
+          border-radius: 50%;
+          background-color: var(--gray-dark);
+          line-height: 30px;
+          cursor: pointer;
+        }
+        .tips {
+          position: absolute;
+          transform: scale(0);
+        }
+        &.icon-wrapper:hover {
+          .tips {
+            transform: scale(1);
+            position: absolute;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 60px;
+            padding: 4px 5px 5px;
+            top: 45px;
+            left: 0;
+            transform: translatex(-25%);
+            font-size: 12px;
+            line-height: 1;
+            background-color: rgba(50, 55, 58, 0.85);
+            color: var(--white);
+            &.tips::after {
+              content: "";
+              position: absolute;
+              top: -12px;
+              width: 0;
+              height: 0;
+              border: 6px solid;
+              border-top-color: transparent;
+              border-right-color: transparent;
+              border-bottom-color: rgba(50, 55, 58, 0.85);
+              border-left-color: transparent;
+            }
+          }
+          .login + .tips {
+            transform: translatex(0);
+          }
+        }
+        .login {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          width: 62px;
+          height: 30px;
+          border-radius: 20px;
+          background-color: var(--gray-dark);
+          line-height: 30px;
+          font-size: 12px;
+          color: var(--white);
+        }
       }
-
-      .login {
+      .logout {
         display: flex;
         justify-content: center;
         align-items: center;
         width: 62px;
         height: 30px;
         border-radius: 20px;
-        background-color: var(--gray-dark);
+        background-color: var(--text-hover);
         line-height: 30px;
         font-size: 12px;
         color: var(--white);
@@ -60,6 +114,7 @@ const HeaderStyled = styled.header`
     .icon {
       width: 30px;
       height: 30px;
+      cursor: pointer;
     }
     .homepage {
       display: flex;
@@ -105,39 +160,59 @@ const NavLink = styled(Link)`
 `;
 
 const BigLogo = styled.img`
+  cursor: pointer;
   width: 380px;
   height: 121px;
 `;
 
-export default function Header() {
+export default function Header({ handleToggleLoginModal }) {
   return (
     <HeaderStyled>
       <div className='nav'>
         <nav className='tool-box-left'>
-          <div className='icon order'>
-            <OrderIcon />
+          <div className='icon-wrapper'>
+            <Link to='orderId'>
+              <div className='icon order'>
+                <OrderIcon />
+              </div>
+            </Link>
+            <div className='tips'>訂單查詢</div>
           </div>
-          <div className='icon info'>
-            <FaqIcon />
+          <div className='icon-wrapper'>
+            <Link to='faq'>
+              <div className='icon info'>
+                <FaqIcon />
+              </div>
+            </Link>
+            <div className='tips'>購物說明</div>
           </div>
-          <div className='login'>
-            <AccountIcon />
-            登入
+          <div className='icon-wrapper'>
+            <div className='icon login' onClick={handleToggleLoginModal}>
+              <AccountIcon />
+              登入
+            </div>
+            <div className='tips'>會員登入</div>
           </div>
-          <NavLink to='login'>管login</NavLink>
+          <Link to='login'>
+            <div className='icon logout'>登出</div>
+          </Link>
         </nav>
         <nav className='tool-box-right'>
           <FacebookIcon className='icon facebook' />
           <InstagramIcon className='icon instagram' />
           <LineIcon className='icon line' />
-          <div className='icon homepage'>
-            <HomeIcon />
-          </div>
+          <Link to='home'>
+            <div className='icon homepage'>
+              <HomeIcon />
+            </div>
+          </Link>
         </nav>
       </div>
 
       <div className='banner'>
-        <BigLogo src={bigLogo} alt='logo-big' />
+        <Link to='home'>
+          <BigLogo src={bigLogo} alt='logo-big' />
+        </Link>
         <ul>
           <NavLink to='home'>首頁</NavLink>
           <NavLink to='about'>關於</NavLink>
