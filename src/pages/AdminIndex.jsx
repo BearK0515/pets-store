@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router";
 import styled from "styled-components";
 import { NavLink as Link } from "react-router-dom";
@@ -9,6 +9,7 @@ import {
   Orders,
 } from "../components/sectionAdmin";
 import SingleOrder from "./SingleOrder";
+import { productsHot } from "../api/products";
 
 const StyledContainer = styled.div`
   max-width: 1140px;
@@ -69,6 +70,7 @@ const AdminIndex = () => {
   const navigate = useNavigate();
   const [isOpenPriceModal, setIsOpenPriceModal] = useState(false);
   const [isOpenProductModal, setIsOpenProductModal] = useState(false);
+  const [productsAll, setProductsAll] = useState(null);
 
   const handleTogglePriceModal = () => {
     setIsOpenPriceModal(!isOpenPriceModal);
@@ -76,6 +78,19 @@ const AdminIndex = () => {
   const handleToggleProductModal = () => {
     setIsOpenProductModal(!isOpenProductModal);
   };
+
+  useEffect(() => {
+    const getProductsHotAsync = async () => {
+      try {
+        const resProductsAll = await productsHot();
+        setProductsAll(resProductsAll);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    getProductsHotAsync();
+    return;
+  }, [setProductsAll]);
 
   return (
     <>
@@ -100,8 +115,7 @@ const AdminIndex = () => {
         </StyledSidebar>
         {page.includes("products") && (
           <Products
-            isOpenPriceModal={isOpenPriceModal}
-            setIsOpenPriceModal={setIsOpenPriceModal}
+            productsAll={productsAll}
             handleTogglePriceModal={handleTogglePriceModal}
           />
         )}

@@ -171,7 +171,7 @@ export default function Header({ handleToggleLoginModal }) {
       <div className='nav'>
         <nav className='tool-box-left'>
           <div className='icon-wrapper'>
-            <Link to='orderId'>
+            <Link to='order/query'>
               <div className='icon order'>
                 <OrderIcon />
               </div>
@@ -194,7 +194,7 @@ export default function Header({ handleToggleLoginModal }) {
             <div className='tips'>會員登入</div>
           </div>
           <Link to='login'>
-            <div className='icon logout'>登出</div>
+            <div className='icon logout'>管理員</div>
           </Link>
         </nav>
         <nav className='tool-box-right'>

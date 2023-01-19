@@ -60,88 +60,27 @@ const StyledCard = styled.div`
   }
 `;
 
-const AllProducts = ({
-  handleTogglePriceModal,
-}) => {
+const AllProducts = ({ productsAll, handleTogglePriceModal }) => {
   return (
     <>
-      <StyledCard onClick={handleTogglePriceModal}>
-        <div className='product'></div>
-        <div className='wrapper'>
-          <h4 className='title'> 【毛孩時代】腎臟專科保健粉(30包/盒)</h4>
-          <div className='price'>$750</div>
-          <div className='discount-price'>$690</div>
-        </div>
-        <button className='delete'>
-          <CancelIcon />
-        </button>
-      </StyledCard>
-      <StyledCard onClick={handleTogglePriceModal}>
-        <div className='product'></div>
-        <div className='wrapper'>
-          <h4 className='title'> 【毛孩時代】腎臟專科保健粉(30包/盒)</h4>
-          <div className='price'>$750</div>
-          <div className='discount-price'>$690</div>
-        </div>
-        <button className='delete'>
-          <CancelIcon />
-        </button>
-      </StyledCard>
-      <StyledCard onClick={handleTogglePriceModal}>
-        <div className='product'></div>
-        <div className='wrapper'>
-          <h4 className='title'> 【毛孩時代】腎臟專科保健粉(30包/盒)</h4>
-          <div className='price'>$750</div>
-          <div className='discount-price'>$690</div>
-        </div>
-        <button className='delete'>
-          <CancelIcon />
-        </button>
-      </StyledCard>
-      <StyledCard onClick={handleTogglePriceModal}>
-        <div className='product'></div>
-        <div className='wrapper'>
-          <h4 className='title'> 【毛孩時代】腎臟專科保健粉(30包/盒)</h4>
-          <div className='price'>$750</div>
-          <div className='discount-price'>$690</div>
-        </div>
-        <button className='delete'>
-          <CancelIcon />
-        </button>
-      </StyledCard>
-      <StyledCard onClick={handleTogglePriceModal}>
-        <div className='product'></div>
-        <div className='wrapper'>
-          <h4 className='title'> 【毛孩時代】腎臟專科保健粉(30包/盒)</h4>
-          <div className='price'>$750</div>
-          <div className='discount-price'>$690</div>
-        </div>
-        <button className='delete'>
-          <CancelIcon />
-        </button>
-      </StyledCard>
-      <StyledCard onClick={handleTogglePriceModal}>
-        <div className='product'></div>
-        <div className='wrapper'>
-          <h4 className='title'> 【毛孩時代】腎臟專科保健粉(30包/盒)</h4>
-          <div className='price'>$750</div>
-          <div className='discount-price'>$690</div>
-        </div>
-        <button className='delete'>
-          <CancelIcon />
-        </button>
-      </StyledCard>
-      <StyledCard>
-        <div className='product'></div>
-        <div className='wrapper'>
-          <h4 className='title'> 【毛孩時代】腎臟專科保健粉(30包/盒)</h4>
-          <div className='price'>$750</div>
-          <div className='discount-price'>$690</div>
-        </div>
-        <button className='delete'>
-          <CancelIcon />
-        </button>
-      </StyledCard>
+      {productsAll?.map((product) => {
+        return (
+          <StyledCard onClick={handleTogglePriceModal}>
+            <div
+              className='product'
+              style={{ backgroundImage: `url('${product.Images.url}')` }}
+            ></div>
+            <div className='wrapper'>
+              <h4 className='title'>{product.name}</h4>
+              <div className='price'>${product.price}</div>
+              <div className='discount-price'>${product.price * 0.8}</div>
+            </div>
+            <button className='delete'>
+              <CancelIcon />
+            </button>
+          </StyledCard>
+        );
+      })}
     </>
   );
 };
