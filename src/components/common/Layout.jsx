@@ -8,6 +8,7 @@ import ChatRobot from "./ChatRobot";
 
 import { CartIcon, SearchIcon } from "../../assets/icons";
 import LoginModal from "./LoginModal";
+import CartModal from "./CartModal";
 
 const StyledContainer = styled.div`
   display: flex;
@@ -27,12 +28,66 @@ const StyledButtonWrapper = styled.div`
   .search-bar {
     display: flex;
     flex-direction: row-reverse;
+    position: relative;
+
+    #search-input {
+      box-sizing: border-box;
+      width: 300px;
+      height: 50px;
+      padding-left: 10px;
+      padding-right: 60px;
+      position: absolute;
+      z-index: -1;
+      background-color: var(--button-background);
+      border: none;
+      border-radius: 4px;
+      color: var(--white);
+    }
 
     .none {
       display: none;
     }
     .active {
       display: unset;
+    }
+  }
+
+  .popular-items {
+    position: relative;
+    background-color: var(--white);
+    width: 300px;
+    border-radius: 4px;
+    box-shadow: 0 3px 8px #00000026;
+    padding: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+
+    .popular-item {
+      background-color: #f1f1f1;
+      border-radius: 4px;
+      padding: 4px 10px;
+      font-size: 14px;
+      line-height: 16px;
+      cursor: pointer;
+
+      &:hover {
+        background-color: var(--button-background);
+        color: var(--white);
+      }
+    }
+
+    &::after {
+      content: "";
+      position: absolute;
+      top: -16px;
+      width: 0;
+      height: 0;
+      border: 8px solid;
+      border-top-color: transparent;
+      border-right-color: transparent;
+      border-bottom-color: var(--white);
+      border-left-color: transparent;
     }
   }
   .cart-button,
@@ -112,10 +167,11 @@ const StyledSearchWrapper = styled.div`
 const Layout = () => {
   const [searchBarActive, setSearchBarActive] = useState(false);
   const [isOpenLoginModal, setIsOpenLoginModal] = useState(false);
-  
-const handleToggleLoginModal = () => {
-  setIsOpenLoginModal(!isOpenLoginModal);
-}
+  const [isCartOpen, setIsCartOpen] = useState(false);
+
+  const handleToggleLoginModal = () => {
+    setIsOpenLoginModal(!isOpenLoginModal);
+  };
 
   return (
     <>
@@ -123,41 +179,55 @@ const handleToggleLoginModal = () => {
         <Header handleToggleLoginModal={handleToggleLoginModal} />
         <Outlet />
         <StyledButtonWrapper>
-          <button className='cart-button'>
+          <button
+            className="cart-button"
+            onClick={() => setIsCartOpen(!isCartOpen)}
+          >
             <CartIcon />
           </button>
-          <div className='count'>0</div>
-          <span className='search-bar'>
+          <div className="count">0</div>
+          <span className="search-bar">
             <label
-              className='search'
-              for='search-input'
+              className="search"
+              for="search-input"
               onClick={(e) => {
-                e.preventDefault();
                 e.stopPropagation();
+                // e.nativeEvent.stopImmediatePropagation(); 不知道為什麼不用也沒差
+                e.preventDefault();
                 setSearchBarActive(!searchBarActive);
               }}
             >
               <SearchIcon />
             </label>
             <input
-              type='text'
-              id='search-input'
+              type="text"
+              id="search-input"
               className={searchBarActive ? "active" : "none"}
+              placeholder="商品搜尋"
+              onClick={(e) => {
+                e.stopPropagation();
+                // e.nativeEvent.stopImmediatePropagation(); 不知道為什麼不用也沒差
+                e.preventDefault();
+              }}
             />
           </span>
-          <ul className='popular-items'>
-            <li className='popular-item'>1</li>
-            <li className='popular-item'>2</li>
-            <li className='popular-item'>3</li>
-            <li className='popular-item'>4</li>
-          </ul>
+          {searchBarActive && (
+            <ul className="popular-items">
+              <li className="popular-item">156565</li>
+              <li className="popular-item">256555565</li>
+              <li className="popular-item">356565</li>
+              <li className="popular-item">456565</li>
+              <li className="popular-item">456565</li>
+              <li className="popular-item">4555555555556565</li>
+            </ul>
+          )}
         </StyledButtonWrapper>
         <StyledSearchWrapper>
           <h6>瀏覽紀錄</h6>
-          <div className='product-wrapper'>
-            <div className='product'></div>
-            <div className='product'></div>
-            <div className='product'></div>
+          <div className="product-wrapper">
+            <div className="product"></div>
+            <div className="product"></div>
+            <div className="product"></div>
           </div>
           <span>清除全部</span>
         </StyledSearchWrapper>
@@ -165,6 +235,9 @@ const handleToggleLoginModal = () => {
         <GoTop />
       </StyledContainer>
       <Footer />
+      {isCartOpen && (
+        <CartModal isCartOpen={isCartOpen} setIsCartOpen={setIsCartOpen} />
+      )}
       {isOpenLoginModal && (
         <LoginModal
           isOpenLoginModal={isOpenLoginModal}

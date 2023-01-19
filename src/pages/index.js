@@ -13,7 +13,6 @@ import Faq from "./Faq";
 import SingleOrder from "./SingleOrder";
 import SingleProduct from "./SingleProduct";
 
-
 export {
   Home,
   About,

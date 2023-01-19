@@ -211,8 +211,8 @@ const AddProductModal = ({ handleToggleProductModal }) => {
 
   return (
     <StyledModalContainer>
-      <div className='overlay' onClick={handleToggleProductModal}></div>
-      <div className='content'>
+      <div className="overlay" onClick={handleToggleProductModal}></div>
+      <div className="content">
         <StyledSectionUp>
           <div className='left'>
             <div className='preview'></div>
@@ -223,8 +223,8 @@ const AddProductModal = ({ handleToggleProductModal }) => {
             </div>
             <div className='wrapper'>
               <p>商品圖片：</p>
-              <label for='add-product-picture'>新增商品圖片</label>
-              <input type='file' id='add-product-picture' />
+              <label for="add-product-picture">新增商品圖片</label>
+              <input type="file" id="add-product-picture" />
             </div>
           </div>
           <div className='right'>
@@ -242,15 +242,15 @@ const AddProductModal = ({ handleToggleProductModal }) => {
                 <option value='cat'>貓咪專區</option>
               </select>
             </div>
-            <div className='wrapper'>
+            <div className="wrapper">
               <label>商品名稱：</label>
-              <input type='text' placeholder='請輸入商品名稱' />
+              <input type="text" placeholder="請輸入商品名稱" />
             </div>
-            <div className='wrapper'>
+            <div className="wrapper">
               <label>商品單價：</label>
-              <input type='text' placeholder='請輸入商品價格' />
+              <input type="text" placeholder="請輸入商品價格" />
             </div>
-            <div className='wrapper'>
+            <div className="wrapper">
               {/* 新增option array */}
               <label>商品規格：</label>
               <input type='text' placeholder='請輸入商品規格' />
@@ -258,19 +258,19 @@ const AddProductModal = ({ handleToggleProductModal }) => {
           </div>
         </StyledSectionUp>
         <StyledSectionDown>
-          <div className='left'>
-            <div className='wrapper'>
+          <div className="left">
+            <div className="wrapper">
               <p>商品詳情：</p>
-              <label for='add-product-picture'>新增商品詳情圖片</label>
-              <input type='file' id='add-product-picture' />
-              <div className='preview'></div>
+              <label for="add-product-picture">新增商品詳情圖片</label>
+              <input type="file" id="add-product-picture" />
+              <div className="preview"></div>
             </div>
           </div>
-          <div className='right'>
-            <div className='picture-wrapper'>
-              <div className='picture-1'></div>
-              <div className='picture-2'></div>
-              <div className='picture-3'></div>
+          <div className="right">
+            <div className="picture-wrapper">
+              <div className="picture-1"></div>
+              <div className="picture-2"></div>
+              <div className="picture-3"></div>
             </div>
           </div>
         </StyledSectionDown>
