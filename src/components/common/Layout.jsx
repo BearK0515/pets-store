@@ -4,8 +4,9 @@ import styled from "styled-components";
 import Footer from "./Footer";
 import Header from "./Header";
 import GoTop from "./GoTop";
+import ChatRobot from "./ChatRobot";
+
 import { CartIcon, SearchIcon } from "../../assets/icons";
-import chatRobot from "../../assets/icons/icon_FB_chat.png";
 import LoginModal from "./LoginModal";
 import CartModal from "./CartModal";
 
@@ -162,24 +163,6 @@ const StyledSearchWrapper = styled.div`
   }
 `;
 
-const StyledChatRobot = styled.div`
-  width: 50px;
-  height: 50px;
-  position: fixed;
-  right: 20px;
-  bottom: 20px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: var(--white);
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  cursor: pointer;
-  .chat-robot {
-    width: 36px;
-    height: 36px;
-  }
-`;
 
 const Layout = () => {
   const [searchBarActive, setSearchBarActive] = useState(false);
@@ -248,9 +231,7 @@ const Layout = () => {
           </div>
           <span>清除全部</span>
         </StyledSearchWrapper>
-        <StyledChatRobot>
-          <img className="chat-robot" src={chatRobot} alt="logo-big" />
-        </StyledChatRobot>
+        <ChatRobot/>
         <GoTop />
       </StyledContainer>
       <Footer />

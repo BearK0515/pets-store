@@ -1,6 +1,8 @@
-import React, { useState } from "react";
+import React, { useRef } from "react";
 import { useNavigate } from "react-router";
 import styled from "styled-components";
+import Swal from "sweetalert2";
+import { adminLogin } from "../api/adminAuth";
 import smallLogo from "../assets/icons/logo-small.jpg";
 import AuthInput from "../components/common/AuthInput";
 
@@ -49,46 +51,49 @@ const StyledLinkText = styled.div`
 `;
 
 const AdminLogin = () => {
-  const [account, setAccount] = useState("");
-  const [password, setPassword] = useState("");
-  // const [accountError, setAccountError] = useState(false);
-  // const [passwordError, setPasswordError] = useState(false);
+  const emailRef = useRef("");
+  const passwordRef = useRef("");
+  const email = emailRef?.current.value;
+  const password = passwordRef?.current.value;
   const navigate = useNavigate();
 
-  // const handleSubmit = () => {
-  //   if (account?.length === 0) {
-  //     setAccountError(true);
-  //     setTimeout(() => {
-  //       setAccountError(false);
-  //     }, 3000);
-  //   }
-  //   if (password?.length === 0) {
-  //     setPasswordError(true);
-  //     setTimeout(() => {
-  //       setPasswordError(false);
-  //     }, 3000);
-  //   }
-  // };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    console.log(email);
+    console.log(password);
+    const success = await adminLogin({ email, password });
+    if (success) {
+      Swal.fire({
+        title: "登入成功",
+        icon: "success",
+        showConfirmButton: false,
+        timer: 1000,
+        position: "top",
+      });
+      return;
+    }
+    Swal.fire({
+      title: "登入失敗",
+      icon: "error",
+      showConfirmButton: false,
+      timer: 1000,
+      position: "top",
+    });
+  };
+
   return (
-    <StyledContainer>
+    <StyledContainer onSubmit={handleSubmit}>
       <div className='logo'>
         <img src={smallLogo} alt='' />
       </div>
-      <AuthInput
-        label='帳號'
-        placeholder='請輸入帳號'
-        value={account}
-        onChange={(accountInputValue) => setAccount(accountInputValue)}
-        // error={accountError}
-      />
+      <AuthInput label='信箱' placeholder='請輸入信箱' forwardref={emailRef} />
       <AuthInput
         type='password'
         label='密碼'
         placeholder='請輸入密碼'
-        value={password}
-        onChange={(passwordInputValue) => setPassword(passwordInputValue)}
-        // error={passwordError}
+        forwardref={passwordRef}
       />
+      <StyledButton onSubmit={handleSubmit}>送出</StyledButton>
       <StyledButton onClick={() => navigate("/admin/products/all")}>
         登入
       </StyledButton>

@@ -10,6 +10,8 @@ import ProductDog from "./ProductDog";
 import Cart from "./Cart";
 import Order from "./Order";
 import Faq from "./Faq";
+import SingleOrder from "./SingleOrder";
+import SingleProduct from "./SingleProduct";
 
 export {
   Home,
@@ -24,4 +26,6 @@ export {
   Cart,
   Order,
   Faq,
+  SingleOrder,
+  SingleProduct,
 };

@@ -254,9 +254,6 @@ const AddProductModal = ({ handleToggleProductModal }) => {
               {/* 新增option array */}
               <label>商品規格：</label>
               <input type='text' placeholder='請輸入商品規格' />
-              <input type='text' placeholder='請輸入商品規格' />
-              <input type='text' placeholder='請輸入商品規格' />
-              <input type='text' placeholder='請輸入商品規格' />
             </div>
           </div>
         </StyledSectionUp>

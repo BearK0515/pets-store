@@ -39,6 +39,7 @@ export default function GoTop() {
       <button className='top-button'>
         <ScrollToTop
           smooth
+          top={100}
           className='top-icon'
           component={<BiArrowToTop style={{ color: "white" }} />}
         />

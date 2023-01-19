@@ -19,8 +19,9 @@ import {
   ProductCat,
   ProductDog,
   ProductPage,
+  SingleOrder,
+  SingleProduct,
 } from "./pages";
-import SingleOrder from "./pages/SingleOrder";
 
 function App() {
   return (
@@ -36,6 +37,7 @@ function App() {
               <Route path='all' element={<ProductAll />} />
               <Route path='dog' element={<ProductDog />} />
               <Route path='cat' element={<ProductCat />} />
+              <Route path='detail/:productId' element={<SingleProduct />} />
             </Route>
             <Route path='blogs' element={<Blogs />} />
             <Route path='cart' element={<Cart />} />
