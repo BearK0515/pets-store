@@ -6,7 +6,7 @@ import { CartIcon } from "../assets/icons/index"
 const ProductList = styled.div`
   width: 100%;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
   gap: 3vmin;
 `;
 

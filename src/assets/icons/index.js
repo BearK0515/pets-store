@@ -14,13 +14,14 @@ import {
   AiOutlineMinus,
   AiOutlineClockCircle,
 } from "react-icons/ai";
-import { BiUserCircle, BiCube } from "react-icons/bi";
+import { BiUserCircle, BiCube, BiCaretRight } from "react-icons/bi";
 import {
   FiShoppingCart,
   FiSearch,
   FiTrash2,
   FiHome,
   FiPhoneCall,
+  FiAlertTriangle,
 } from "react-icons/fi";
 import {
   BsList,
@@ -129,6 +130,13 @@ const AlertIcon = styled(HiOutlineExclamationCircle)`
   font-size: 16px;
   line-height: 16px;
 `;
+const AlertTriangleIcon = styled(FiAlertTriangle)`
+  font-size: 20px;
+  line-height: 1;
+`;
+const ArrowRightIcon = styled(BiCaretRight)`
+  font-size: 14px;
+`;
 
 export {
   GoogleIcon,
@@ -163,4 +171,6 @@ export {
   BookMarkIcon,
   ShareIcon,
   AlertIcon,
+  AlertTriangleIcon,
+  ArrowRightIcon,
 };

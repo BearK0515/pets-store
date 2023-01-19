@@ -1,5 +1,5 @@
-import React from 'react'
-import styled from 'styled-components'
+import React from "react";
+import styled from "styled-components";
 
 const StyledContainer = styled.div`
   position: relative;
@@ -41,42 +41,18 @@ const StyledContainer = styled.div`
     }
   }
 `;
-const StyledAlertContainer = styled.div`
-  position: absolute;
-  top: 54px;
-  display: flex;
-  justify-content: end;
-  width: 100%;
-  `
 
-  const StyledError = styled.div`
-    position: absolute;
-    left: 0;
-    margin-top: 4px;
-    height: 20px;
-    line-height: 20px;
-    font-size: 12px;
-    font-weight: 500;
-    color: var(--danger);
-  `;
-const AuthInput = ({ type, label, value, placeholder, onChange, error }) => {
+const AuthInput = ({ type, label, placeholder, forwardref }) => {
   return (
     <StyledContainer>
-      <label htmlFor=''>{label}</label>
+      <label>{label}</label>
       <input
-        className={value?.length === 50 ? "active" : ""}
         type={type || "text"}
-        value={value || ""}
         placeholder={placeholder || ""}
-        onChange={(event) => onChange?.(event.target.value)}
-        maxLength={50}
+        ref={forwardref}
       />
-      <StyledAlertContainer>
-      {value.length === 50 ? <StyledError>超過字數上限！</StyledError>:null}
-      {error ? <StyledError>內容不可空白！</StyledError>:null}
-      </StyledAlertContainer>
     </StyledContainer>
   );
 };
 
-export default AuthInput
+export default AuthInput;

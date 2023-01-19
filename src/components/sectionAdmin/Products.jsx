@@ -69,7 +69,7 @@ const StyledProdutsContainer = styled.div`
     background-color: var(--gray);
   }
 `;
-const Products = ({ handleTogglePriceModal }) => {
+const Products = ({ productsAll, handleTogglePriceModal }) => {
   const page = useLocation().pathname;
   return (
     <StyledContainer>
@@ -99,13 +99,22 @@ const Products = ({ handleTogglePriceModal }) => {
       </StyledButtonWrapper>
       <StyledProdutsContainer>
         {page.includes("all") && (
-          <AllProducts handleTogglePriceModal={handleTogglePriceModal} />
+          <AllProducts
+            productsAll={productsAll}
+            handleTogglePriceModal={handleTogglePriceModal}
+          />
         )}
         {page.includes("dog") && (
-          <DogProducts handleTogglePriceModal={handleTogglePriceModal} />
+          <DogProducts
+            productsAll={productsAll}
+            handleTogglePriceModal={handleTogglePriceModal}
+          />
         )}
         {page.includes("cat") && (
-          <CatProducts handleTogglePriceModal={handleTogglePriceModal} />
+          <CatProducts
+            productsAll={productsAll}
+            handleTogglePriceModal={handleTogglePriceModal}
+          />
         )}
       </StyledProdutsContainer>
     </StyledContainer>
