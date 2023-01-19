@@ -76,11 +76,11 @@ const ProductPage = () => {
   const page = location.pathname;
   let NowPage = "";
 
-  if (page === "/product/all") {
+  if (page.includes("all")) {
     NowPage = "全部商品";
-  } else if (page === "/product/dog") {
+  } else if (page.includes("dog")) {
     NowPage = "狗狗專區";
-  } else {
+  } else if (page.includes("cat")) {
     NowPage = "貓貓專區";
   }
 

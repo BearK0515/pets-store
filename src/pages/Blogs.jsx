@@ -49,15 +49,17 @@ const BlogListWrapper = styled.div`
 
 const BlogCard = styled.li`
   margin-bottom: 50px;
-
   .BlogCardInner {
+    z-index: 10;
     padding: 20px 0;
-    outline: 1px solid #c7cbd0;
-    outline-offset: 20px;
+    border-right: 1px solid #c7cbd0;
+    border-bottom: 1px solid #c7cbd0;
+    border-left: 1px solid #c7cbd0;
   }
   .BlogCardIntro {
     display: grid;
     grid-gap: 10px 0;
+    padding: 20px;
   }
   .BlogTitle {
     display: flex;
