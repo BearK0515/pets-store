@@ -43,32 +43,6 @@ const Breadcrumb = styled.div`
   margin-bottom: 20px;
   position: relative;
 `;
-const ProductsSort = styled.div`
-  width: 100%;
-  display: flex;
-  flex-flow: column;
-  margin-bottom: 3vmin;
-  ul {
-    display: grid;
-    grid-template-columns: repeat(4, 80px);
-    li {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      background-color: var(--gray);
-      color: var(--white);
-      font-size: 14px;
-      line-height: 32px;
-      &:hover {
-        background-color: #9e9e9e;
-        cursor: pointer;
-      }
-      &.active {
-        background-color: var(--gray-dark);
-      }
-    }
-  }
-`;
 
 const ProductPage = () => {
   const navigate = useNavigate();
@@ -98,13 +72,6 @@ const ProductPage = () => {
           </GoToHome>
         </HomeLinkWrapper>
         <Breadcrumb />
-        <ProductsSort>
-          <ul className='sort-nav'>
-            <li className='active'>熱銷排行</li>
-            <li>最新上架</li>
-            <li>價格</li>
-          </ul>
-        </ProductsSort>
         {page === "/product/all" && <ProductAll />}
         {page === "/product/dog" && <ProductDog />}
         {page === "/product/cat" && <ProductCat />}

@@ -1,13 +1,13 @@
-import React from 'react'
+import React from "react";
 import styled from "styled-components";
-import { CartIcon } from "../assets/icons/index"
+import { CartIcon } from "../assets/icons/index";
 
 const ProductList = styled.div`
   width: 100%;
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
   gap: 3vmin;
-`
+`;
 
 const StyledCard = styled.div`
   position: relative;
@@ -68,154 +68,190 @@ const StyledCard = styled.div`
   }
 `;
 
+const ProductsSort = styled.div`
+  width: 100%;
+  display: flex;
+  flex-flow: column;
+  margin-bottom: 3vmin;
+  ul {
+    display: grid;
+    grid-template-columns: repeat(4, 80px);
+    li {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: var(--gray);
+      color: var(--white);
+      font-size: 14px;
+      line-height: 32px;
+      &:hover {
+        background-color: #9e9e9e;
+        cursor: pointer;
+      }
+      &.active {
+        background-color: var(--gray-dark);
+      }
+    }
+  }
+`;
 const ProductDog = () => {
   return (
-        <ProductList>
-          <StyledCard>
-            <div className='product'>
-              <button className='addCart'>
-                <CartIcon style={{ fontSize: "20px", cursor: "pointer"}}/>
-              </button>
-            </div>
-            <div className='wrapper'>
-              <h4 className='title'> 【毛孩時代】腎臟專科保健粉(30包/盒)</h4>
-              <div className='price'>$750</div>
-              <div className='discount-price'>$690</div>
-            </div>
-          </StyledCard>
-          <StyledCard>
-            <div className='product'>
-              <button className='addCart'>
-                <CartIcon style={{ fontSize: "20px", cursor: "pointer"}}/>
-              </button></div>
-            <div className='wrapper'>
-              <h4 className='title'> 【毛孩時代】腎臟專科保健粉(30包/盒)</h4>
-              <div className='price'>$750</div>
-              <div className='discount-price'>$690</div>
-            </div>
-          </StyledCard>
-          <StyledCard>
-            <div className='product'>
-              <button className='addCart'>
-                <CartIcon style={{ fontSize: "20px", cursor: "pointer"}}/>
-              </button>
-            </div>
-            <div className='wrapper'>
-              <h4 className='title'> 【毛孩時代】腎臟專科保健粉(30包/盒)</h4>
-              <div className='price'>$750</div>
-              <div className='discount-price'>$690</div>
-            </div>
-          </StyledCard>
-          <StyledCard>
-            <div className='product'>
-              <button className='addCart'>
-                <CartIcon style={{ fontSize: "20px", cursor: "pointer"}}/>
-              </button>
-            </div>
-            <div className='wrapper'>
-              <h4 className='title'> 【毛孩時代】腎臟專科保健粉(30包/盒)</h4>
-              <div className='price'>$750</div>
-              <div className='discount-price'>$690</div>
-            </div>
-          </StyledCard>
-          <StyledCard>
-            <div className='product'>
-              <button className='addCart'>
-                <CartIcon style={{ fontSize: "20px", cursor: "pointer"}}/>
-              </button>
-            </div>
-            <div className='wrapper'>
-              <h4 className='title'> 【毛孩時代】腎臟專科保健粉(30包/盒)</h4>
-              <div className='price'>$750</div>
-              <div className='discount-price'>$690</div>
-            </div>
-          </StyledCard>
-          <StyledCard>
-            <div className='product'>
-              <button className='addCart'>
-                <CartIcon style={{ fontSize: "20px", cursor: "pointer"}}/>
-              </button>
-            </div>
-            <div className='wrapper'>
-              <h4 className='title'> 【毛孩時代】腎臟專科保健粉(30包/盒)</h4>
-              <div className='price'>$750</div>
-              <div className='discount-price'>$690</div>
-            </div>
-          </StyledCard>
-          <StyledCard>
-            <div className='product'>
-              <button className='addCart'>
-                <CartIcon style={{ fontSize: "20px", cursor: "pointer"}}/>
-              </button>
-            </div>
-            <div className='wrapper'>
-              <h4 className='title'> 【毛孩時代】腎臟專科保健粉(30包/盒)</h4>
-              <div className='price'>$750</div>
-              <div className='discount-price'>$690</div>
-            </div>
-          </StyledCard>
-          <StyledCard>
-            <div className='product'>
-              <button className='addCart'>
-                <CartIcon style={{ fontSize: "20px", cursor: "pointer"}}/>
-              </button>
-            </div>
-            <div className='wrapper'>
-              <h4 className='title'> 【毛孩時代】腎臟專科保健粉(30包/盒)</h4>
-              <div className='price'>$750</div>
-              <div className='discount-price'>$690</div>
-            </div>
-          </StyledCard>
-          <StyledCard>
-            <div className='product'>
-              <button className='addCart'>
-                <CartIcon style={{ fontSize: "20px", cursor: "pointer"}}/>
-              </button>
-            </div>
-            <div className='wrapper'>
-              <h4 className='title'> 【毛孩時代】腎臟專科保健粉(30包/盒)</h4>
-              <div className='price'>$750</div>
-              <div className='discount-price'>$690</div>
-            </div>
-          </StyledCard>
-          <StyledCard>
-            <div className='product'>
-              <button className='addCart'>
-                <CartIcon style={{ fontSize: "20px", cursor: "pointer"}}/>
-              </button>
-            </div>
-            <div className='wrapper'>
-              <h4 className='title'> 【毛孩時代】腎臟專科保健粉(30包/盒)</h4>
-              <div className='price'>$750</div>
-              <div className='discount-price'>$690</div>
-            </div>
-          </StyledCard>
-          <StyledCard>
-            <div className='product'>
-              <button className='addCart'>
-                <CartIcon style={{ fontSize: "20px", cursor: "pointer"}}/>
-              </button>
-            </div>
-            <div className='wrapper'>
-              <h4 className='title'> 【毛孩時代】腎臟專科保健粉(30包/盒)</h4>
-              <div className='price'>$750</div>
-              <div className='discount-price'>$690</div>
-            </div>
-          </StyledCard>
-          <StyledCard>
-            <div className='product'>
-              <button className='addCart'>
-                <CartIcon style={{ fontSize: "20px", cursor: "pointer"}}/>
-              </button>
-            </div>
-            <div className='wrapper'>
-              <h4 className='title'> 【毛孩時代】腎臟專科保健粉(30包/盒)</h4>
-              <div className='price'>$750</div>
-              <div className='discount-price'>$690</div>
-            </div>
-          </StyledCard>
-        </ProductList>
+    <>
+      <ProductsSort>
+        <ul className='sort-nav'>
+          <li className='active'>熱銷排行</li>
+          <li>最新上架</li>
+          <li>價格</li>
+        </ul>
+      </ProductsSort>
+      <ProductList>
+        <StyledCard>
+          <div className='product'>
+            <button className='addCart'>
+              <CartIcon style={{ fontSize: "20px", cursor: "pointer" }} />
+            </button>
+          </div>
+          <div className='wrapper'>
+            <h4 className='title'> 【毛孩時代】腎臟專科保健粉(30包/盒)</h4>
+            <div className='price'>$750</div>
+            <div className='discount-price'>$690</div>
+          </div>
+        </StyledCard>
+        <StyledCard>
+          <div className='product'>
+            <button className='addCart'>
+              <CartIcon style={{ fontSize: "20px", cursor: "pointer" }} />
+            </button>
+          </div>
+          <div className='wrapper'>
+            <h4 className='title'> 【毛孩時代】腎臟專科保健粉(30包/盒)</h4>
+            <div className='price'>$750</div>
+            <div className='discount-price'>$690</div>
+          </div>
+        </StyledCard>
+        <StyledCard>
+          <div className='product'>
+            <button className='addCart'>
+              <CartIcon style={{ fontSize: "20px", cursor: "pointer" }} />
+            </button>
+          </div>
+          <div className='wrapper'>
+            <h4 className='title'> 【毛孩時代】腎臟專科保健粉(30包/盒)</h4>
+            <div className='price'>$750</div>
+            <div className='discount-price'>$690</div>
+          </div>
+        </StyledCard>
+        <StyledCard>
+          <div className='product'>
+            <button className='addCart'>
+              <CartIcon style={{ fontSize: "20px", cursor: "pointer" }} />
+            </button>
+          </div>
+          <div className='wrapper'>
+            <h4 className='title'> 【毛孩時代】腎臟專科保健粉(30包/盒)</h4>
+            <div className='price'>$750</div>
+            <div className='discount-price'>$690</div>
+          </div>
+        </StyledCard>
+        <StyledCard>
+          <div className='product'>
+            <button className='addCart'>
+              <CartIcon style={{ fontSize: "20px", cursor: "pointer" }} />
+            </button>
+          </div>
+          <div className='wrapper'>
+            <h4 className='title'> 【毛孩時代】腎臟專科保健粉(30包/盒)</h4>
+            <div className='price'>$750</div>
+            <div className='discount-price'>$690</div>
+          </div>
+        </StyledCard>
+        <StyledCard>
+          <div className='product'>
+            <button className='addCart'>
+              <CartIcon style={{ fontSize: "20px", cursor: "pointer" }} />
+            </button>
+          </div>
+          <div className='wrapper'>
+            <h4 className='title'> 【毛孩時代】腎臟專科保健粉(30包/盒)</h4>
+            <div className='price'>$750</div>
+            <div className='discount-price'>$690</div>
+          </div>
+        </StyledCard>
+        <StyledCard>
+          <div className='product'>
+            <button className='addCart'>
+              <CartIcon style={{ fontSize: "20px", cursor: "pointer" }} />
+            </button>
+          </div>
+          <div className='wrapper'>
+            <h4 className='title'> 【毛孩時代】腎臟專科保健粉(30包/盒)</h4>
+            <div className='price'>$750</div>
+            <div className='discount-price'>$690</div>
+          </div>
+        </StyledCard>
+        <StyledCard>
+          <div className='product'>
+            <button className='addCart'>
+              <CartIcon style={{ fontSize: "20px", cursor: "pointer" }} />
+            </button>
+          </div>
+          <div className='wrapper'>
+            <h4 className='title'> 【毛孩時代】腎臟專科保健粉(30包/盒)</h4>
+            <div className='price'>$750</div>
+            <div className='discount-price'>$690</div>
+          </div>
+        </StyledCard>
+        <StyledCard>
+          <div className='product'>
+            <button className='addCart'>
+              <CartIcon style={{ fontSize: "20px", cursor: "pointer" }} />
+            </button>
+          </div>
+          <div className='wrapper'>
+            <h4 className='title'> 【毛孩時代】腎臟專科保健粉(30包/盒)</h4>
+            <div className='price'>$750</div>
+            <div className='discount-price'>$690</div>
+          </div>
+        </StyledCard>
+        <StyledCard>
+          <div className='product'>
+            <button className='addCart'>
+              <CartIcon style={{ fontSize: "20px", cursor: "pointer" }} />
+            </button>
+          </div>
+          <div className='wrapper'>
+            <h4 className='title'> 【毛孩時代】腎臟專科保健粉(30包/盒)</h4>
+            <div className='price'>$750</div>
+            <div className='discount-price'>$690</div>
+          </div>
+        </StyledCard>
+        <StyledCard>
+          <div className='product'>
+            <button className='addCart'>
+              <CartIcon style={{ fontSize: "20px", cursor: "pointer" }} />
+            </button>
+          </div>
+          <div className='wrapper'>
+            <h4 className='title'> 【毛孩時代】腎臟專科保健粉(30包/盒)</h4>
+            <div className='price'>$750</div>
+            <div className='discount-price'>$690</div>
+          </div>
+        </StyledCard>
+        <StyledCard>
+          <div className='product'>
+            <button className='addCart'>
+              <CartIcon style={{ fontSize: "20px", cursor: "pointer" }} />
+            </button>
+          </div>
+          <div className='wrapper'>
+            <h4 className='title'> 【毛孩時代】腎臟專科保健粉(30包/盒)</h4>
+            <div className='price'>$750</div>
+            <div className='discount-price'>$690</div>
+          </div>
+        </StyledCard>
+      </ProductList>
+    </>
   );
 };
 
-export default ProductDog
+export default ProductDog;

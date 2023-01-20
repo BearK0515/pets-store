@@ -22,6 +22,7 @@ import {
   FiHome,
   FiPhoneCall,
   FiAlertTriangle,
+  FiCheck,
 } from "react-icons/fi";
 import {
   BsList,
@@ -137,6 +138,9 @@ const AlertTriangleIcon = styled(FiAlertTriangle)`
 const ArrowRightIcon = styled(BiCaretRight)`
   font-size: 14px;
 `;
+const CheckedIcon = styled(FiCheck)`
+  font-size: 18px;
+`;
 
 export {
   GoogleIcon,
@@ -173,4 +177,5 @@ export {
   AlertIcon,
   AlertTriangleIcon,
   ArrowRightIcon,
+  CheckedIcon,
 };

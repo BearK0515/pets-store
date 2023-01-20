@@ -223,12 +223,11 @@ const AddProductModal = ({ handleToggleProductModal }) => {
             </div>
             <div className='wrapper'>
               <p>商品圖片：</p>
-              <label for='add-product-picture'>新增商品圖片</label>
+              <label htmlFor='add-product-picture'>新增商品圖片</label>
               <input type='file' id='add-product-picture' />
             </div>
           </div>
           <div className='right'>
-            
             <div className='wrapper'>
               <label>商品分類：</label>
               <select
@@ -261,7 +260,7 @@ const AddProductModal = ({ handleToggleProductModal }) => {
           <div className='left'>
             <div className='wrapper'>
               <p>商品詳情：</p>
-              <label for='add-product-picture'>新增商品詳情圖片</label>
+              <label htmlFor='add-product-picture'>新增商品詳情圖片</label>
               <input type='file' id='add-product-picture' />
               <div className='preview'></div>
             </div>
