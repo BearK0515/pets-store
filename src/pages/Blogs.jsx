@@ -90,12 +90,14 @@ const BlogCard = styled.li`
     align-items: baseline;
     gap: 0 10px;
     color: var(--gray);
+   
+    
   }
   .BlogDate {
     display: flex;
     align-items: center;
     gap: 0 3px;
-    font-size: 14px;
+    font-size: 16px;
   }
   .BlogCategory {
     display: flex;
@@ -186,8 +188,9 @@ const BlogArticalList = styled.ul`
     justify-content: end;
     align-items: center;
     gap: 0 3px;
-    font-size: 14px;
+    font-size: 16px;
     color: var(--gray);
+    margin-top: 5px;
   }
   .BlogCategory {
     display: flex;
@@ -318,7 +321,7 @@ const Blogs = () => {
                       <b>{ artical.title }</b>
                     </h2>
                     <ul className='DateCategory'>
-                      <li className='BlogDate'><ClockIcon/>{ artical.createdAt }</li>
+                      <li className='BlogDate'><ClockIcon/>{new Date(artical.createdAt).toLocaleDateString()}</li>
                       <li className='BlogCategory'><BookMarkIcon/>
                       { artical["category"].includes("dog") && "狗狗健康知識庫" } 
                       { artical["category"].includes("cat") && "貓貓健康知識庫" }</li>
@@ -353,7 +356,7 @@ const Blogs = () => {
                       <li className='articalContent'>
                         <h6>{artical.title}</h6>
                         <ul className='DateCategory'>
-                          <li className='BlogDate'><ClockIcon/>{artical.updatedAt}</li>
+                          <li className='BlogDate'><ClockIcon/>{new Date(artical.updatedAt).toLocaleDateString()}</li>
                         </ul>
                       </li>
                     )
