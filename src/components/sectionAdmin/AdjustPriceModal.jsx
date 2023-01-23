@@ -15,10 +15,9 @@ const StyledModalContainer = styled.div`
     height: 100vh;
     top: 0;
     left: 0;
-    right: 0;
-    bottom: 0;
     position: fixed;
     background: rgba(60, 60, 60, 0.6);
+    z-index: 50;
   }
   .content {
     position: absolute;
@@ -29,6 +28,7 @@ const StyledModalContainer = styled.div`
     border-radius: 4px;
     max-width: 250px;
     min-width: 250px;
+    z-index: 99;
   }
 `;
 
@@ -114,27 +114,28 @@ const StyledCard = styled.div`
 const AdjustPriceModal = ({ handleTogglePriceModal }) => {
   return (
     <StyledModalContainer>
-      <div className='overlay' onClick={handleTogglePriceModal}></div>
-      <div className='content'>
-        <StyledCard>
-          <button className='cancel' onClick={handleTogglePriceModal}>
-            <CancelIcon />
-          </button>
-          <div className='product'></div>
-          <div className='wrapper'>
-            <h4 className='title'> 【毛孩時代】腎臟專科保健粉(30包/盒)</h4>
-            <div className='price'>$750</div>
-            <div className='discount-price'>$690</div>
-            <div className='adjust-price-wrapper'>
-              <p>$</p>
-              <input
-                className='adjust-price'
-                type='text'
-                placeholder='請輸入價格'
-              />
+      <div className="overlay" onClick={handleTogglePriceModal}>
+        <div className="content">
+          <StyledCard>
+            <button className="cancel" onClick={handleTogglePriceModal}>
+              <CancelIcon />
+            </button>
+            <div className="product"></div>
+            <div className="wrapper">
+              <h4 className="title"> 【毛孩時代】腎臟專科保健粉(30包/盒)</h4>
+              <div className="price">$750</div>
+              <div className="discount-price">$690</div>
+              <div className="adjust-price-wrapper">
+                <p>$</p>
+                <input
+                  className="adjust-price"
+                  type="text"
+                  placeholder="請輸入價格"
+                />
+              </div>
             </div>
-          </div>
-        </StyledCard>
+          </StyledCard>
+        </div>
       </div>
     </StyledModalContainer>
   );
