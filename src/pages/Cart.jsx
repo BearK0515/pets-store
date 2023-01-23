@@ -11,7 +11,6 @@ import {
   VisaIcon,
 } from "../assets/icons";
 import { taiwan } from "../components/common/country";
-import jcb from "../assets/icons/img_jcb.svg";
 
 //Layout樣式
 const StyledContainer = styled.div`
@@ -600,10 +599,12 @@ const Cart = () => {
                 </label>
               </div>
             </div>
-            <div className="total">
-              <div>實付金額(TWD)<span>$1170</span></div>
+            <div className='total'>
+              <div>
+                實付金額(TWD)<span>$1170</span>
+              </div>
             </div>
-            <div className="button">
+            <div className='button'>
               <button>確認送出</button>
             </div>
           </div>
