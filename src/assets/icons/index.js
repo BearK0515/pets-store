@@ -6,6 +6,9 @@ import { ReactComponent as FacebookIcon } from "./img_facebook.svg";
 import { ReactComponent as FacebookWhiteIcon } from "./img_facebook-white.svg";
 import { ReactComponent as InstagramIcon } from "./img_instagram.svg";
 import { ReactComponent as PowerByIcon } from "./powerby.svg";
+import { ReactComponent as JCBIcon } from "./img_jcb.svg";
+import { ReactComponent as MasterIcon } from "./img_master.svg";
+import { ReactComponent as VisaIcon } from "./img_visa.svg";
 import { TbReportSearch } from "react-icons/tb";
 import {
   AiOutlineInfoCircle,
@@ -38,6 +41,7 @@ import { RxCross2 } from "react-icons/rx";
 import { GrLinkTop, GrLocation } from "react-icons/gr";
 import { CiCalendarDate } from "react-icons/ci";
 import { FaRegBookmark } from "react-icons/fa";
+import { IoMdCheckmarkCircleOutline } from "react-icons/io";
 import styled from "styled-components";
 
 const OrderIcon = styled(TbReportSearch)`
@@ -141,6 +145,9 @@ const ArrowRightIcon = styled(BiCaretRight)`
 const CheckedIcon = styled(FiCheck)`
   font-size: 18px;
 `;
+const CheckCircleIcon = styled(IoMdCheckmarkCircleOutline)`
+  font-size: 18px;
+`;
 
 export {
   GoogleIcon,
@@ -178,4 +185,8 @@ export {
   AlertTriangleIcon,
   ArrowRightIcon,
   CheckedIcon,
+  CheckCircleIcon,
+  JCBIcon,
+  MasterIcon,
+  VisaIcon,
 };
