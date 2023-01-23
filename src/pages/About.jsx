@@ -32,6 +32,9 @@ const StyledContainer = styled.div`
     padding: 30px;
     outline: 1px solid rgba(0, 0, 0, 0.1);
   }
+  .img-area{
+    margin-top: 30px;
+  }
 `;
 
 const StyledTitle = styled.div`
@@ -191,26 +194,26 @@ const About = () => {
               </StyledContactInfoBlock>
             </div>
           </StyledAboutMedia>
-        </div>
-        <div className='img-area'>
-          <StyledImage>
-            <img src={brandStory} alt='' />
-          </StyledImage>
-          <StyledImage>
-            <img src={belief} alt='' />
-          </StyledImage>
-          <StyledImage>
-            <img src={certificate} alt='' />
-          </StyledImage>
-          <StyledImage>
-            <img src={SGScertificate} alt='' />
-          </StyledImage>
-          <StyledImage
-            className='order'
-            onClick={() => navigate("/product/all")}
-          >
-            <img src={order} alt='' />
-          </StyledImage>
+          <div className='img-area'>
+            <StyledImage>
+              <img src={brandStory} alt='' />
+            </StyledImage>
+            <StyledImage>
+              <img src={belief} alt='' />
+            </StyledImage>
+            <StyledImage>
+              <img src={certificate} alt='' />
+            </StyledImage>
+            <StyledImage>
+              <img src={SGScertificate} alt='' />
+            </StyledImage>
+            <StyledImage
+              className='order'
+              onClick={() => navigate("/product/all")}
+            >
+              <img src={order} alt='' />
+            </StyledImage>
+          </div>
         </div>
       </div>
     </StyledContainer>
@@ -218,4 +221,4 @@ const About = () => {
 };
 
 export default About;
-export { StyledContainer};
+export { StyledContainer };

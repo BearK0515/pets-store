@@ -12,7 +12,7 @@ export const productsHot = async () => {
     });
     return rep.data
   } catch (error) {
-    console.error("[Get Hot Products failed]:");
+    console.error("[Get Hot Products failed]:", error);
   }
 }
 //取得所有商品(最新)
@@ -24,7 +24,7 @@ export const productsNew = async () => {
     });
     return rep.data
   } catch (error) {
-    console.error("[Get New Products failed]:");
+    console.error("[Get New Products failed]:", error);
   }
 }
 //取得所有商品(價格)
@@ -36,6 +36,6 @@ export const productsPrice = async () => {
     });
     return rep.data
   } catch (error) {
-    console.error("[Get PriceSort Products failed]:");
+    console.error("[Get PriceSort Products failed]:", error);
   }
 }
