@@ -1,4 +1,4 @@
-const taiwan = [
+export const taiwan = [
   { city: "縣市", towns: [] },
   {
     city: "基隆市",
@@ -453,5 +453,3 @@ const taiwan = [
     towns: ["南竿鄉", "北竿鄉", "莒光鄉", "東引鄉"],
   },
 ];
-
-export { taiwan };
