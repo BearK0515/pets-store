@@ -1,0 +1,38 @@
+{
+  "files": {
+    "main.css": "/pets-store/static/css/main.31d6cfe0.css",
+    "main.js": "/pets-store/static/js/main.33c1c76b.js",
+    "static/js/787.4aaff206.chunk.js": "/pets-store/static/js/787.4aaff206.chunk.js",
+    "static/media/home2.png": "/pets-store/static/media/home2.10ecd2f0d66f1926b91c.png",
+    "static/media/home1.png": "/pets-store/static/media/home1.f61e98efee5f494b5806.png",
+    "static/media/about2.png": "/pets-store/static/media/about2.b482a6972472d98fead8.png",
+    "static/media/about4.png": "/pets-store/static/media/about4.72dad0f60f1e725753d3.png",
+    "static/media/about3.jpg": "/pets-store/static/media/about3.be24452a07a7585d0221.jpg",
+    "static/media/home3.png": "/pets-store/static/media/home3.1dd7588414f2a8b205d6.png",
+    "static/media/home4.jpg": "/pets-store/static/media/home4.d5c4d3203856086a7945.jpg",
+    "static/media/about1.jpg": "/pets-store/static/media/about1.7537cb610d64be3bc3c1.jpg",
+    "static/media/icon_FB_chat.png": "/pets-store/static/media/icon_FB_chat.678d99fc7c8ff2a9c534.png",
+    "static/media/logo.png": "/pets-store/static/media/logo.deea533bd46988ac0b05.png",
+    "static/media/order.png": "/pets-store/static/media/order.c6c1b4abe838095d277f.png",
+    "static/media/logo-small.jpg": "/pets-store/static/media/logo-small.ee5238581f9a89697f43.jpg",
+    "static/media/logo-white.png": "/pets-store/static/media/logo-white.2c04985abd0dd6de66c8.png",
+    "static/media/powerby.svg": "/pets-store/static/media/powerby.388117e772a25d6e79c18aabeb57aa39.svg",
+    "static/media/img_line.svg": "/pets-store/static/media/img_line.1c7952008dd58a9667fa229570d14648.svg",
+    "static/media/icon_LINE_white.svg": "/pets-store/static/media/icon_LINE_white.9235416ccde0c500584ee2c212db702d.svg",
+    "static/media/img_instagram.svg": "/pets-store/static/media/img_instagram.35899bd182462a04aa263b216b256d56.svg",
+    "static/media/img_visa.svg": "/pets-store/static/media/img_visa.aaed229dd7e7bcdb68f3d375ad6bd533.svg",
+    "static/media/img_master.svg": "/pets-store/static/media/img_master.f1ebf89a70b7889010e786e09b21a7c7.svg",
+    "static/media/img_jcb.svg": "/pets-store/static/media/img_jcb.4f57ab836de976f32e0e45a051368c6d.svg",
+    "static/media/icon_Twitter.svg": "/pets-store/static/media/icon_Twitter.abe25430f026dbaa0d2cf71ba9f61d46.svg",
+    "static/media/img_facebook-white.svg": "/pets-store/static/media/img_facebook-white.fc14aac1551b710b4edce1ea836f1ebf.svg",
+    "static/media/img_facebook.svg": "/pets-store/static/media/img_facebook.e8176365db8c7995c7a048901ac021e4.svg",
+    "static/media/icon_google.svg": "/pets-store/static/media/icon_google.1d2804f5bd03f831fed855eca61c2c61.svg",
+    "index.html": "/pets-store/index.html",
+    "main.33c1c76b.js.map": "/pets-store/static/js/main.33c1c76b.js.map",
+    "787.4aaff206.chunk.js.map": "/pets-store/static/js/787.4aaff206.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.31d6cfe0.css",
+    "static/js/main.33c1c76b.js"
+  ]
+}
