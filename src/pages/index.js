@@ -9,7 +9,9 @@ import ProductCat from "./ProductCat";
 import ProductDog from "./ProductDog";
 import Cart from "./Cart";
 import Order from "./Order";
-
+import Faq from "./Faq";
+import SingleOrder from "./SingleOrder";
+import SingleProduct from "./SingleProduct";
 
 export {
   Home,
@@ -23,4 +25,7 @@ export {
   ProductDog,
   Cart,
   Order,
+  Faq,
+  SingleOrder,
+  SingleProduct,
 };
