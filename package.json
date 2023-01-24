@@ -1,6 +1,7 @@
 {
   "name": "pets-store",
   "version": "0.1.0",
+  "homepage": "https://BearK0515.github.io/pets-store",
   "private": true,
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.2.1",
@@ -10,6 +11,7 @@
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
     "axios": "^1.2.2",
+    "gh-pages": "^5.0.0",
     "install": "^0.13.0",
     "jwt-decode": "^3.1.2",
     "react": "^18.2.0",
@@ -26,7 +28,9 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "predeploy":"npm run build",
+    "deploy":"gh-pages -d build"
   },
   "eslintConfig": {
     "extends": [

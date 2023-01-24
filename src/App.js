@@ -23,12 +23,14 @@ import {
   SingleProduct,
 } from "./pages";
 
+const basename= process.env.PUBLIC_URL
+
 function App() {
   return (
     <>
       <ResetStyle />
       <GlobalStyle />
-      <BrowserRouter>
+      <BrowserRouter basename={basename}>
         <Routes>
           <Route path='/' element={<Layout />}>
             <Route path='home' element={<Home />} />
