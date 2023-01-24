@@ -1,9 +1,10 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from 'react'
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { HomeIcon, ClockIcon, BookMarkIcon } from "../assets/icons/index";
 import { HomeLinkWrapper } from "../components/common/HomeLinkWrapper";
-import { articles } from "../api/blogs";
+import { artical } from "../api/blogs";
+
 
 const BlogStyled = styled.div`
   box-sizing: border-box;
@@ -48,18 +49,21 @@ const BlogListWrapper = styled.div`
 
 const BlogCard = styled.li`
   margin-bottom: 50px;
-
   .BlogCardInner {
+    z-index: 10;
     padding: 20px 0;
-    outline: 1px solid #c7cbd0;
-    outline-offset: 20px;
+    border-right: 1px solid #c7cbd0;
+    border-bottom: 1px solid #c7cbd0;
+    border-left: 1px solid #c7cbd0;
   }
   .BlogCardIntro {
     display: grid;
     grid-gap: 10px 0;
+    padding: 20px;
   }
   .BlogTitle {
     display: flex;
+    gap: 10px;
     justify-content: start;
     align-items: center;
     overflow-wrap: break-all;
@@ -82,14 +86,17 @@ const BlogCard = styled.li`
   }
   .DateCategory {
     display: flex;
+    align-items: baseline;
     gap: 0 10px;
     color: var(--gray);
+   
+    
   }
   .BlogDate {
     display: flex;
     align-items: center;
     gap: 0 3px;
-    font-size: 14px;
+    font-size: 16px;
   }
   .BlogCategory {
     display: flex;
@@ -179,8 +186,9 @@ const BlogArticalList = styled.ul`
     justify-content: end;
     align-items: center;
     gap: 0 3px;
-    font-size: 14px;
+    font-size: 16px;
     color: var(--gray);
+    margin-top: 5px;
   }
   .BlogCategory {
     display: flex;
@@ -210,6 +218,7 @@ const BlogCategoryList = styled.ul`
   margin-top: 15px;
   font-size: 14px;
   color: var(--gray);
+  cursor: pointer;
   li {
     margin-bottom: 10px;
     padding-bottom: 10px;
@@ -239,19 +248,57 @@ const BlogCategoryList = styled.ul`
 
 const Blogs = () => {
   const navigate = useNavigate();
+  const [articalAll, setArticalAll] = useState(null);
+  const [articalNew, setArticalNew] = useState(null);
+  const [articalCatgory, setArticalCategory] = useState(null);
 
+
+  //抓文章api
   useEffect(() => {
-    const getArticlesAsync = async () => {
+    const getBlogsArticalAsync = async () => {
       try {
-        const repArticles = await articles();
-        console.log(repArticles.data);
-      } catch (error) {
-        console.error(error);
+        const resArticalAll = await artical();
+        setArticalAll(resArticalAll);
+      } catch (err) {
+        console.error(err);
       }
     };
-    getArticlesAsync();
+    getBlogsArticalAsync();
     return;
-  }, []);
+  },[setArticalAll]);
+
+  //抓文章api(最新文章)
+  useEffect(() => {
+    const getBlogsArticalAsync = async () => {
+      try {
+        const resArticalAll = await artical();
+        setArticalNew(resArticalAll);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    getBlogsArticalAsync();
+    return;
+  },[setArticalNew]);
+
+  //抓文章api最新
+  useEffect(() => {
+    const getBlogsArticalAsync = async () => {
+      try {
+        const resArticalAll = await artical();
+        setArticalCategory(resArticalAll);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    getBlogsArticalAsync();
+    return;
+  },[setArticalCategory]);
+
+  const handleFilterDog = () => {
+    setArticalAll(articalCatgory.filter(artical => artical.category === 'dog'))
+  }
+
 
   return (
     <BlogStyled>
@@ -268,118 +315,30 @@ const Blogs = () => {
       <BlogContent>
         <BlogListWrapper>
           <ul>
-            <BlogCard>
-              <BlogCardImg />
-              <div className='BlogCardInner'>
-                <div className='BlogCardIntro'>
-                  <h2 className='BlogTitle'>
-                    <div className='topHighLight'>置頂</div>
-                    <b>【10種貓不能吃的食物】主人們你的同情害到他了！</b>
-                  </h2>
-                  <ul className='DateCategory'>
-                    <li className='BlogDate'>
-                      <ClockIcon />
-                      01 Jan, 2021
-                    </li>
-                    <li className='BlogCategory'>
-                      <BookMarkIcon />
-                      貓咪健康知識庫
-                    </li>
-                  </ul>
-                  <article>
-                    <p>
-                      貓不能吃什麼？主人們你的同情害到他了！
-                      Joe常常在吃飯的時候，我家那隻貓皇上就在旁邊喵喵叫，不給他吃好像對不起我的主子但我都堅持不把人類的食物給他，因為人類食物對毛孩的身體健康，藏著很多隱形危機（當然有些還是可以的，請詳見內文）
-                      今天我們就來討論家裡的<span>...閱讀更多</span>
-                    </p>
-                  </article>
+            { articalAll?.map((artical) => {
+              return (
+               <BlogCard>
+                <BlogCardImg style={{ backgroundImage: `url("${artical.image}")`}}/>
+                <div className='BlogCardInner'>
+                  <div className='BlogCardIntro'>
+                    <h2 className='BlogTitle'>
+                      { artical.isTop && <div className='topHighLight'>置頂</div> }
+                      <b>{ artical.title }</b>
+                    </h2>
+                    <ul className='DateCategory'>
+                      <li className='BlogDate'><ClockIcon/>{new Date(artical.createdAt).toLocaleDateString()}</li>
+                      <li className='BlogCategory'><BookMarkIcon/>
+                      { artical["category"].includes("dog") && "狗狗健康知識庫" } 
+                      { artical["category"].includes("cat") && "貓貓健康知識庫" }</li>
+                    </ul>
+                    <article>
+                      <p>{ artical.content }<span>...閱讀更多</span></p>
+                    </article>
+                  </div>
                 </div>
-              </div>
-            </BlogCard>
-            <BlogCard>
-              <BlogCardImg />
-              <div className='BlogCardInner'>
-                <div className='BlogCardIntro'>
-                  <h2 className='BlogTitle'>
-                    <div className='topHighLight'>置頂</div>
-                    <b>【10種貓不能吃的食物】主人們你的同情害到他了！</b>
-                  </h2>
-                  <ul className='DateCategory'>
-                    <li className='BlogDate'>
-                      <ClockIcon />
-                      01 Jan, 2021
-                    </li>
-                    <li className='BlogCategory'>
-                      <BookMarkIcon />
-                      貓咪健康知識庫
-                    </li>
-                  </ul>
-                  <article>
-                    <p>
-                      貓不能吃什麼？主人們你的同情害到他了！
-                      Joe常常在吃飯的時候，我家那隻貓皇上就在旁邊喵喵叫，不給他吃好像對不起我的主子但我都堅持不把人類的食物給他，因為人類食物對毛孩的身體健康，藏著很多隱形危機（當然有些還是可以的，請詳見內文）
-                      今天我們就來討論家裡的<span>...閱讀更多</span>
-                    </p>
-                  </article>
-                </div>
-              </div>
-            </BlogCard>
-            <BlogCard>
-              <BlogCardImg />
-              <div className='BlogCardInner'>
-                <div className='BlogCardIntro'>
-                  <h2 className='BlogTitle'>
-                    <div className='topHighLight'>置頂</div>
-                    <b>【10種貓不能吃的食物】主人們你的同情害到他了！</b>
-                  </h2>
-                  <ul className='DateCategory'>
-                    <li className='BlogDate'>
-                      <ClockIcon />
-                      01 Jan, 2021
-                    </li>
-                    <li className='BlogCategory'>
-                      <BookMarkIcon />
-                      貓咪健康知識庫
-                    </li>
-                  </ul>
-                  <article>
-                    <p>
-                      貓不能吃什麼？主人們你的同情害到他了！
-                      Joe常常在吃飯的時候，我家那隻貓皇上就在旁邊喵喵叫，不給他吃好像對不起我的主子但我都堅持不把人類的食物給他，因為人類食物對毛孩的身體健康，藏著很多隱形危機（當然有些還是可以的，請詳見內文）
-                      今天我們就來討論家裡的<span>...閱讀更多</span>
-                    </p>
-                  </article>
-                </div>
-              </div>
-            </BlogCard>
-            <BlogCard>
-              <BlogCardImg />
-              <div className='BlogCardInner'>
-                <div className='BlogCardIntro'>
-                  <h2 className='BlogTitle'>
-                    <div className='topHighLight'>置頂</div>
-                    <b>【10種貓不能吃的食物】主人們你的同情害到他了！</b>
-                  </h2>
-                  <ul className='DateCategory'>
-                    <li className='BlogDate'>
-                      <ClockIcon />
-                      01 Jan, 2021
-                    </li>
-                    <li className='BlogCategory'>
-                      <BookMarkIcon />
-                      貓咪健康知識庫
-                    </li>
-                  </ul>
-                  <article>
-                    <p>
-                      貓不能吃什麼？主人們你的同情害到他了！
-                      Joe常常在吃飯的時候，我家那隻貓皇上就在旁邊喵喵叫，不給他吃好像對不起我的主子但我都堅持不把人類的食物給他，因為人類食物對毛孩的身體健康，藏著很多隱形危機（當然有些還是可以的，請詳見內文）
-                      今天我們就來討論家裡的<span>...閱讀更多</span>
-                    </p>
-                  </article>
-                </div>
-              </div>
-            </BlogCard>
+                </BlogCard>
+              );
+            })}
           </ul>
         </BlogListWrapper>
         <BlogAside>
@@ -400,57 +359,35 @@ const Blogs = () => {
               <h4>
                 <b>最新文章</b>
               </h4>
-              <BlogArticalList>
-                <li className='articalContent'>
-                  <h6>
-                    貓咪大便很臭怎麼辦？一篇瞭解貓便便臭原因以及毛球症對貓咪的影響
-                  </h6>
-                  <ul className='DateCategory'>
-                    <li className='BlogDate'>
-                      <ClockIcon />
-                      01 Jan, 2021
-                    </li>
-                  </ul>
-                </li>
-                <li className='articalContent'>
-                  <h6>
-                    【化毛粉怎麼吃總整理】食用頻率、餵食方法等常見問題一次解答
-                  </h6>
-                  <ul className='DateCategory'>
-                    <li className='BlogDate'>
-                      <ClockIcon />
-                      06 Jan, 2023
-                    </li>
-                  </ul>
-                </li>
-                <li className='articalContent'>
-                  <h6>
-                    狗狗突然禿一塊毛怎麼辦？狗狗掉毛原因與改善日常掉毛的4個方法分享
-                  </h6>
-                  <ul className='DateCategory'>
-                    <li className='BlogDate'>
-                      <ClockIcon />
-                      15 Sep, 2022
-                    </li>
-                  </ul>
-                </li>
-              </BlogArticalList>
+                <BlogArticalList>
+                  { articalNew?.map((artical) => {
+                    return (
+                      <li className='articalContent'>
+                        <h6>{artical.title}</h6>
+                        <ul className='DateCategory'>
+                          <li className='BlogDate'><ClockIcon/>{new Date(artical.updatedAt).toLocaleDateString()}</li>
+                        </ul>
+                      </li>
+                    )
+                  })}
+                  
+                </BlogArticalList>
             </BlogNews>
             <BlogCategoryArea>
               <h4>
                 <b>文章分類</b>
               </h4>
               <BlogCategoryList>
-                <li>
-                  <div className='toFlex'>
-                    <h6>狗狗健康知識庫</h6>
-                  </div>
-                </li>
-                <li>
-                  <div className='toFlex'>
-                    <h6>貓貓健康知識庫</h6>
-                  </div>
-                </li>
+                  <li onClick={handleFilterDog}>
+                    <div className='toFlex'>
+                      <h6>狗狗健康知識庫</h6>
+                    </div>
+                  </li>
+                  <li>
+                    <div className='toFlex'>
+                      <h6>貓貓健康知識庫</h6>
+                    </div>
+                  </li>
               </BlogCategoryList>
             </BlogCategoryArea>
           </div>
