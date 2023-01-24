@@ -89,12 +89,14 @@ const BlogCard = styled.li`
     align-items: baseline;
     gap: 0 10px;
     color: var(--gray);
+   
+    
   }
   .BlogDate {
     display: flex;
     align-items: center;
     gap: 0 3px;
-    font-size: 14px;
+    font-size: 16px;
   }
   .BlogCategory {
     display: flex;
@@ -184,8 +186,9 @@ const BlogArticalList = styled.ul`
     justify-content: end;
     align-items: center;
     gap: 0 3px;
-    font-size: 14px;
+    font-size: 16px;
     color: var(--gray);
+    margin-top: 5px;
   }
   .BlogCategory {
     display: flex;
@@ -215,6 +218,7 @@ const BlogCategoryList = styled.ul`
   margin-top: 15px;
   font-size: 14px;
   color: var(--gray);
+  cursor: pointer;
   li {
     margin-bottom: 10px;
     padding-bottom: 10px;
@@ -245,6 +249,9 @@ const BlogCategoryList = styled.ul`
 const Blogs = () => {
   const navigate = useNavigate();
   const [articalAll, setArticalAll] = useState(null);
+  const [articalNew, setArticalNew] = useState(null);
+  const [articalCatgory, setArticalCategory] = useState(null);
+
 
   //抓文章api
   useEffect(() => {
@@ -259,6 +266,38 @@ const Blogs = () => {
     getBlogsArticalAsync();
     return;
   },[setArticalAll]);
+
+  //抓文章api(最新文章)
+  useEffect(() => {
+    const getBlogsArticalAsync = async () => {
+      try {
+        const resArticalAll = await artical();
+        setArticalNew(resArticalAll);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    getBlogsArticalAsync();
+    return;
+  },[setArticalNew]);
+
+  //抓文章api最新
+  useEffect(() => {
+    const getBlogsArticalAsync = async () => {
+      try {
+        const resArticalAll = await artical();
+        setArticalCategory(resArticalAll);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    getBlogsArticalAsync();
+    return;
+  },[setArticalCategory]);
+
+  const handleFilterDog = () => {
+    setArticalAll(articalCatgory.filter(artical => artical.category === 'dog'))
+  }
 
 
   return (
@@ -287,7 +326,7 @@ const Blogs = () => {
                       <b>{ artical.title }</b>
                     </h2>
                     <ul className='DateCategory'>
-                      <li className='BlogDate'><ClockIcon/>{ artical.createdAt }</li>
+                      <li className='BlogDate'><ClockIcon/>{new Date(artical.createdAt).toLocaleDateString()}</li>
                       <li className='BlogCategory'><BookMarkIcon/>
                       { artical["category"].includes("dog") && "狗狗健康知識庫" } 
                       { artical["category"].includes("cat") && "貓貓健康知識庫" }</li>
@@ -320,57 +359,35 @@ const Blogs = () => {
               <h4>
                 <b>最新文章</b>
               </h4>
-              <BlogArticalList>
-                <li className='articalContent'>
-                  <h6>
-                    貓咪大便很臭怎麼辦？一篇瞭解貓便便臭原因以及毛球症對貓咪的影響
-                  </h6>
-                  <ul className='DateCategory'>
-                    <li className='BlogDate'>
-                      <ClockIcon />
-                      01 Jan, 2021
-                    </li>
-                  </ul>
-                </li>
-                <li className='articalContent'>
-                  <h6>
-                    【化毛粉怎麼吃總整理】食用頻率、餵食方法等常見問題一次解答
-                  </h6>
-                  <ul className='DateCategory'>
-                    <li className='BlogDate'>
-                      <ClockIcon />
-                      06 Jan, 2023
-                    </li>
-                  </ul>
-                </li>
-                <li className='articalContent'>
-                  <h6>
-                    狗狗突然禿一塊毛怎麼辦？狗狗掉毛原因與改善日常掉毛的4個方法分享
-                  </h6>
-                  <ul className='DateCategory'>
-                    <li className='BlogDate'>
-                      <ClockIcon />
-                      15 Sep, 2022
-                    </li>
-                  </ul>
-                </li>
-              </BlogArticalList>
+                <BlogArticalList>
+                  { articalNew?.map((artical) => {
+                    return (
+                      <li className='articalContent'>
+                        <h6>{artical.title}</h6>
+                        <ul className='DateCategory'>
+                          <li className='BlogDate'><ClockIcon/>{new Date(artical.updatedAt).toLocaleDateString()}</li>
+                        </ul>
+                      </li>
+                    )
+                  })}
+                  
+                </BlogArticalList>
             </BlogNews>
             <BlogCategoryArea>
               <h4>
                 <b>文章分類</b>
               </h4>
               <BlogCategoryList>
-                <li>
-                  <div className='toFlex'>
-                    <h6>狗狗健康知識庫</h6>
-                  </div>
-                </li>
-                <li>
-                  <div className='toFlex'>
-                    <h6>貓貓健康知識庫</h6>
-                  </div>
-                </li>
+                  <li onClick={handleFilterDog}>
+                    <div className='toFlex'>
+                      <h6>狗狗健康知識庫</h6>
+                    </div>
+                  </li>
+                  <li>
+                    <div className='toFlex'>
+                      <h6>貓貓健康知識庫</h6>
+                    </div>
+                  </li>
               </BlogCategoryList>
             </BlogCategoryArea>
           </div>
