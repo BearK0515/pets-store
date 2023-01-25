@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const baseURL = "http://eshop-env.eba-bv3rpum8.ap-northeast-1.elasticbeanstalk.com";
+const baseURL = "https://private-anon-04ecff6c15-bee3048.apiary-mock.com";
 
 // const baseURL = "http://polls.apiblueprint.org/api/blogs";
 
@@ -11,6 +11,7 @@ export const artical = async() => {
       method: "GET",
       url: `${baseURL}/api/blogs`,
     })
+    console.log(res.data)
     return res.data
   } catch (err) {
     console.err("[Get Blogs artical failed]:")
