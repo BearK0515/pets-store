@@ -250,7 +250,7 @@ const Blogs = () => {
   const navigate = useNavigate();
   const [articalAll, setArticalAll] = useState(null);
   const [articalNew, setArticalNew] = useState(null);
-  const [articalCatgory, setArticalCategory] = useState(null);
+  const [articalCategory, setArticalCategory] = useState(null);
 
 
   //抓文章api
@@ -281,7 +281,7 @@ const Blogs = () => {
     return;
   },[setArticalNew]);
 
-  //抓文章api最新
+  //抓文章api(分類)
   useEffect(() => {
     const getBlogsArticalAsync = async () => {
       try {
@@ -296,9 +296,12 @@ const Blogs = () => {
   },[setArticalCategory]);
 
   const handleFilterDog = () => {
-    setArticalAll(articalCatgory.filter(artical => artical.category === 'dog'))
+    setArticalAll(articalCategory.filter(artical => artical.category === 'dog'))
   }
 
+   const handleFilterCat = () => {
+    setArticalAll(articalCategory.filter(artical => artical.category === 'cat'))
+  }
 
   return (
     <BlogStyled>
@@ -316,8 +319,7 @@ const Blogs = () => {
         <BlogListWrapper>
           <ul>
             { articalAll?.map((artical) => {
-              return (
-               <BlogCard>
+              return ( artical.isTop && (<BlogCard>
                 <BlogCardImg style={{ backgroundImage: `url("${artical.image}")`}}/>
                 <div className='BlogCardInner'>
                   <div className='BlogCardIntro'>
@@ -336,8 +338,28 @@ const Blogs = () => {
                     </article>
                   </div>
                 </div>
-                </BlogCard>
-              );
+                </BlogCard>));
+            })}
+            { articalAll?.map((artical) => {
+              return (!artical.isTop && (<BlogCard>
+                <BlogCardImg style={{ backgroundImage: `url("${artical.image}")`}}/>
+                <div className='BlogCardInner'>
+                  <div className='BlogCardIntro'>
+                    <h2 className='BlogTitle'>
+                      <b>{ artical.title }</b>
+                    </h2>
+                    <ul className='DateCategory'>
+                      <li className='BlogDate'><ClockIcon/>{new Date(artical.createdAt).toLocaleDateString()}</li>
+                      <li className='BlogCategory'><BookMarkIcon/>
+                      { artical["category"].includes("dog") && "狗狗健康知識庫" } 
+                      { artical["category"].includes("cat") && "貓貓健康知識庫" }</li>
+                    </ul>
+                    <article>
+                      <p>{ artical.content }<span>...閱讀更多</span></p>
+                    </article>
+                  </div>
+                </div>
+                </BlogCard>));
             })}
           </ul>
         </BlogListWrapper>
@@ -383,7 +405,7 @@ const Blogs = () => {
                       <h6>狗狗健康知識庫</h6>
                     </div>
                   </li>
-                  <li>
+                  <li onClick={handleFilterCat}>
                     <div className='toFlex'>
                       <h6>貓貓健康知識庫</h6>
                     </div>

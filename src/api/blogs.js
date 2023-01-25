@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const baseURL = "https://private-anon-04ecff6c15-bee3048.apiary-mock.com";
+const baseURL = "http://eshop-env.eba-bv3rpum8.ap-northeast-1.elasticbeanstalk.com";
 
 // const baseURL = "http://polls.apiblueprint.org/api/blogs";
 
