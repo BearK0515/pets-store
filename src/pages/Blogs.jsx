@@ -308,7 +308,7 @@ const Blogs = () => {
       <HomeLinkWrapper>
         <GoToHome>
           <HomeIcon
-            onClick={() => navigate("/home")}
+            onClick={() => navigate("/")}
             style={{ color: "var(--dark)", cursor: "pointer" }}
           />
           <p className='text'>部落格</p>

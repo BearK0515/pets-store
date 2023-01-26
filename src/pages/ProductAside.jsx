@@ -36,7 +36,7 @@ const ProductAside = () => {
   return ( 
     <Aside>
         <div className='aside-content'>
-            <NavLink onClick={() => navigate("/home")}>
+            <NavLink onClick={() => navigate("/")}>
               <BackHomeIcon style={{ position: "absolute", left: "-18px" }}/>
               首頁
             </NavLink>

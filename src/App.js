@@ -33,7 +33,7 @@ function App() {
       <BrowserRouter basename={basename}>
         <Routes>
           <Route path='/' element={<Layout />}>
-            <Route path='home' element={<Home />} />
+            <Route path='/' element={<Home />} />
             <Route path='about' element={<About />} />
             <Route path='product' element={<ProductPage />}>
               <Route path='all' element={<ProductAll />} />

@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { Outlet, useNavigate } from "react-router-dom";
+import React, { useState } from "react";
+import { Outlet } from "react-router-dom";
 import styled from "styled-components";
 import Footer from "./Footer";
 import Header from "./Header";
@@ -170,17 +170,11 @@ const Layout = () => {
   const [searchBarActive, setSearchBarActive] = useState(false);
   const [isOpenLoginModal, setIsOpenLoginModal] = useState(false);
   const [isCartOpen, setIsCartOpen] = useState(false);
-  const navigate = useNavigate()
   
   
   const handleToggleLoginModal = () => {
     setIsOpenLoginModal(!isOpenLoginModal);
   };
-  
-  useEffect(() => {
-    navigate("/home");
-  }, []);
-
   return (
     <>
       <StyledContainer onClick={() => setSearchBarActive(false)}>

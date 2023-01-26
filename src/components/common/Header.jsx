@@ -201,7 +201,7 @@ export default function Header({ handleToggleLoginModal }) {
           <FacebookIcon className='icon facebook' />
           <InstagramIcon className='icon instagram' />
           <LineIcon className='icon line' />
-          <Link to='home'>
+          <Link to='/'>
             <div className='icon homepage'>
               <HomeIcon />
             </div>
@@ -210,11 +210,11 @@ export default function Header({ handleToggleLoginModal }) {
       </div>
 
       <div className='banner'>
-        <Link to='home'>
+        <Link to='/'>
           <BigLogo src={bigLogo} alt='logo-big' />
         </Link>
         <ul>
-          <NavLink to='home'>首頁</NavLink>
+          <NavLink to='/'>首頁</NavLink>
           <NavLink to='about'>關於</NavLink>
           <NavLink to='product/all'>全部商品</NavLink>
           <NavLink to='product/dog'>狗狗專區</NavLink>
