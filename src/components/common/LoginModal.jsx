@@ -1,6 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import { facebookLogin } from "../../api/userLogin";
 import {
   AlertIcon,
   CancelIcon,
@@ -37,7 +38,6 @@ const StyledModalContainer = styled.div`
     min-width: 400px;
   }
 `;
-
 const StyledWrapper = styled.div`
   display: flex;
   flex-flow: column;
@@ -175,7 +175,7 @@ const LoginModal = ({ setIsOpenLoginModal, handleToggleLoginModal }) => {
                 </div>
                 <p>登入</p>
               </div>
-              <div className='icon facebook'>
+              <div className='icon facebook' onClick={()=>facebookLogin()}>
                 <div>
                   <FacebookWhiteIcon />
                 </div>

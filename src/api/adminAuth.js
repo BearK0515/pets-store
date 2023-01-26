@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const baseURL = "https://private-anon-04ecff6c15-bee3048.apiary-mock.com/";
+const baseURL = "https://private-anon-04ecff6c15-bee3048.apiary-mock.com";
 
 //管理員登入
 export const adminLogin = async ({ email, password }) => {
@@ -13,7 +13,6 @@ export const adminLogin = async ({ email, password }) => {
         password: password,
       },
     });
-    console.log(data);
     const {token,user} = data
     if(token) {
       localStorage.setItem("authToken", token)
