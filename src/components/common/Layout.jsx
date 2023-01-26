@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Outlet } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Outlet, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import Footer from "./Footer";
 import Header from "./Header";
@@ -15,6 +15,9 @@ const StyledContainer = styled.div`
   flex-direction: column;
   max-width: 1140px;
   margin: 0 auto;
+  @media screen and (max-width: 1300px) {
+    max-width: 80%;
+  }
 `;
 
 const StyledButtonWrapper = styled.div`
@@ -163,15 +166,20 @@ const StyledSearchWrapper = styled.div`
   }
 `;
 
-
 const Layout = () => {
   const [searchBarActive, setSearchBarActive] = useState(false);
   const [isOpenLoginModal, setIsOpenLoginModal] = useState(false);
   const [isCartOpen, setIsCartOpen] = useState(false);
-
+  const navigate = useNavigate()
+  
+  
   const handleToggleLoginModal = () => {
     setIsOpenLoginModal(!isOpenLoginModal);
   };
+  
+  useEffect(() => {
+    navigate("/home");
+  }, []);
 
   return (
     <>
@@ -180,16 +188,16 @@ const Layout = () => {
         <Outlet />
         <StyledButtonWrapper>
           <button
-            className="cart-button"
+            className='cart-button'
             onClick={() => setIsCartOpen(!isCartOpen)}
           >
             <CartIcon />
           </button>
-          <div className="count">0</div>
-          <span className="search-bar">
+          <div className='count'>0</div>
+          <span className='search-bar'>
             <label
-              className="search"
-              for="search-input"
+              className='search'
+              for='search-input'
               onClick={(e) => {
                 e.stopPropagation();
                 // e.nativeEvent.stopImmediatePropagation(); 不知道為什麼不用也沒差
@@ -200,10 +208,10 @@ const Layout = () => {
               <SearchIcon />
             </label>
             <input
-              type="text"
-              id="search-input"
+              type='text'
+              id='search-input'
               className={searchBarActive ? "active" : "none"}
-              placeholder="商品搜尋"
+              placeholder='商品搜尋'
               onClick={(e) => {
                 e.stopPropagation();
                 // e.nativeEvent.stopImmediatePropagation(); 不知道為什麼不用也沒差
@@ -212,26 +220,26 @@ const Layout = () => {
             />
           </span>
           {searchBarActive && (
-            <ul className="popular-items">
-              <li className="popular-item">156565</li>
-              <li className="popular-item">256555565</li>
-              <li className="popular-item">356565</li>
-              <li className="popular-item">456565</li>
-              <li className="popular-item">456565</li>
-              <li className="popular-item">4555555555556565</li>
+            <ul className='popular-items'>
+              <li className='popular-item'>156565</li>
+              <li className='popular-item'>256555565</li>
+              <li className='popular-item'>356565</li>
+              <li className='popular-item'>456565</li>
+              <li className='popular-item'>456565</li>
+              <li className='popular-item'>4555555555556565</li>
             </ul>
           )}
         </StyledButtonWrapper>
         <StyledSearchWrapper>
           <h6>瀏覽紀錄</h6>
-          <div className="product-wrapper">
-            <div className="product"></div>
-            <div className="product"></div>
-            <div className="product"></div>
+          <div className='product-wrapper'>
+            <div className='product'></div>
+            <div className='product'></div>
+            <div className='product'></div>
           </div>
           <span>清除全部</span>
         </StyledSearchWrapper>
-        <ChatRobot/>
+        <ChatRobot />
         <GoTop />
       </StyledContainer>
       <Footer />
