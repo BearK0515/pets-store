@@ -248,9 +248,8 @@ const BlogCategoryList = styled.ul`
 
 const Blogs = () => {
   const navigate = useNavigate();
-  const [articalAll, setArticalAll] = useState(null);
-  const [articalNew, setArticalNew] = useState(null);
-  const [articalCategory, setArticalCategory] = useState(null);
+  const [articalOrigin, setArticalOrigin] = useState([]);
+  const [articalAll, setArticalAll] = useState([]);
   const [query, setQuery] = useState("");
 
 
@@ -259,50 +258,23 @@ const Blogs = () => {
     const getBlogsArticalAsync = async () => {
       try {
         const resArticalAll = await artical();
+        setArticalOrigin(resArticalAll);
         setArticalAll(resArticalAll);
-        console.log(setArticalAll)
       } catch (err) {
         console.error(err);
       }
     };
     getBlogsArticalAsync();
     return;
-  },[setArticalAll]);
+  },[setArticalOrigin]);
 
-  //抓文章api(最新文章)
-  useEffect(() => {
-    const getBlogsArticalAsync = async () => {
-      try {
-        const resArticalAll = await artical();
-        setArticalNew(resArticalAll);
-      } catch (err) {
-        console.error(err);
-      }
-    };
-    getBlogsArticalAsync();
-    return;
-  },[setArticalNew]);
-
-  //抓文章api(分類)
-  useEffect(() => {
-    const getBlogsArticalAsync = async () => {
-      try {
-        const resArticalAll = await artical();
-        setArticalCategory(resArticalAll);
-      } catch (err) {
-        console.error(err);
-      }
-    };
-    getBlogsArticalAsync();
-    return;
-  },[setArticalCategory]);
 
   const handleFilterDog = () => {
-    setArticalAll(articalCategory.filter(artical => artical.category === 'dog'))
+    setArticalAll(articalOrigin.filter(artical => artical.category === 'dog'))
   }
 
   const handleFilterCat = () => {
-    setArticalAll(articalCategory.filter(artical => artical.category === 'cat'))
+    setArticalAll(articalOrigin.filter(artical => artical.category === 'cat'))
   }
 
   const handleChange = (e) => {
@@ -317,9 +289,8 @@ const Blogs = () => {
       return;
     }
     if (e.key === 'Enter') {
-      setArticalAll(articalAll.filter(artical => artical['title'].includes(e.target.value)))
-      console.log(articalAll)
-      e.preventDefault(); //瀏覽器預設行為中斷(需放在if內)
+      setArticalAll(articalOrigin.filter(artical => artical['title'].includes(e.target.value)))
+      e.preventDefault(); //瀏覽器預設行為中斷(需放在if)
     }
   }
 
@@ -338,7 +309,28 @@ const Blogs = () => {
       <BlogContent>
         <BlogListWrapper>
           <ul>
-            { !articalAll?.length && <>無文章內容</> }
+            { articalAll.length === 0 && (articalOrigin?.map((artical) => {
+              return ( artical.isTop && (<BlogCard>
+                <BlogCardImg style={{ backgroundImage: `url("${artical.image}")`}}/>
+                <div className='BlogCardInner'>
+                  <div className='BlogCardIntro'>
+                    <h2 className='BlogTitle'>
+                      { artical.isTop && <div className='topHighLight'>置頂</div> }
+                      <b>{ artical.title }</b>
+                    </h2>
+                    <ul className='DateCategory'>
+                      <li className='BlogDate'><ClockIcon/>{new Date(artical.createdAt).toLocaleDateString()}</li>
+                      <li className='BlogCategory'><BookMarkIcon/>
+                      { artical["category"].includes("dog") && "狗狗健康知識庫" } 
+                      { artical["category"].includes("cat") && "貓貓健康知識庫" }</li>
+                    </ul>
+                    <article>
+                      <p>{ artical.content }<span>...閱讀更多</span></p>
+                    </article>
+                  </div>
+                </div>
+                </BlogCard>));
+            }))  }
             { articalAll?.map((artical) => {
               return ( artical.isTop && (<BlogCard>
                 <BlogCardImg style={{ backgroundImage: `url("${artical.image}")`}}/>
@@ -406,7 +398,7 @@ const Blogs = () => {
                 <b>最新文章</b>
               </h4>
                 <BlogArticalList>
-                  { articalNew?.map((artical) => {
+                  { articalOrigin?.map((artical) => {
                     return (
                       <li className='articalContent'>
                         <h6>{artical.title}</h6>
