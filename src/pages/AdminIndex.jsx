@@ -109,7 +109,7 @@ const AdminIndex = () => {
             )}
             <NavLink onClick={handleToggleProductModal}>新增商品</NavLink>
           </div>
-          <div className='logout' onClick={() => navigate("/home")}>
+          <div className='logout' onClick={() => navigate("/")}>
             登出
           </div>
         </StyledSidebar>

@@ -65,7 +65,7 @@ const ProductPage = () => {
         <HomeLinkWrapper>
           <GoToHome>
             <HomeIcon
-              onClick={() => navigate("/home")}
+              onClick={() => navigate("/")}
               style={{ color: "var(--dark)", cursor: "pointer" }}
             />
             <p className='text'>{NowPage}</p>

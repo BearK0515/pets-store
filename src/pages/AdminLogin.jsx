@@ -97,7 +97,7 @@ const AdminLogin = () => {
       <StyledButton onClick={() => navigate("/admin/products/all")}>
         登入
       </StyledButton>
-      <StyledLinkText onClick={() => navigate("/home")}>首頁</StyledLinkText>
+      <StyledLinkText onClick={() => navigate("/")}>首頁</StyledLinkText>
     </StyledContainer>
   );
 };
