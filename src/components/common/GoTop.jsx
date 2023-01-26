@@ -36,14 +36,12 @@ const GoTopStyled = styled.ul`
 export default function GoTop() {
   return (
     <GoTopStyled>
-      <button className='top-button'>
         <ScrollToTop
           smooth
           top={100}
           className='top-icon'
           component={<BiArrowToTop style={{ color: "white" }} />}
         />
-      </button>
     </GoTopStyled>
   );
 }

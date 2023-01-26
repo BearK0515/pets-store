@@ -251,6 +251,7 @@ const Blogs = () => {
   const [articalAll, setArticalAll] = useState(null);
   const [articalNew, setArticalNew] = useState(null);
   const [articalCategory, setArticalCategory] = useState(null);
+  const [query, setQuery] = useState("");
 
 
   //抓文章api
@@ -259,6 +260,7 @@ const Blogs = () => {
       try {
         const resArticalAll = await artical();
         setArticalAll(resArticalAll);
+        console.log(setArticalAll)
       } catch (err) {
         console.error(err);
       }
@@ -299,8 +301,26 @@ const Blogs = () => {
     setArticalAll(articalCategory.filter(artical => artical.category === 'dog'))
   }
 
-   const handleFilterCat = () => {
+  const handleFilterCat = () => {
     setArticalAll(articalCategory.filter(artical => artical.category === 'cat'))
+  }
+
+  const handleChange = (e) => {
+    if (e.target.value === 0) {
+      return;
+    }
+    setQuery(e.target.value)
+  }
+
+  const handleSearchArtical = (e) => {
+    if (e.target.value === 0) {
+      return;
+    }
+    if (e.key === 'Enter') {
+      setArticalAll(articalAll.filter(artical => artical['title'].includes(e.target.value)))
+      console.log(articalAll)
+      e.preventDefault(); //瀏覽器預設行為中斷(需放在if內)
+    }
   }
 
   return (
@@ -318,6 +338,7 @@ const Blogs = () => {
       <BlogContent>
         <BlogListWrapper>
           <ul>
+            { !articalAll?.length && <>無文章內容</> }
             { articalAll?.map((artical) => {
               return ( artical.isTop && (<BlogCard>
                 <BlogCardImg style={{ backgroundImage: `url("${artical.image}")`}}/>
@@ -374,6 +395,9 @@ const Blogs = () => {
                   className='formStyled'
                   type='text'
                   placeholder='搜尋文章'
+                  value={query}
+                  onChange={handleChange}
+                  onKeyDown={handleSearchArtical}
                 />
               </form>
             </BlogSearch>

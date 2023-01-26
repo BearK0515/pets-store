@@ -11,7 +11,6 @@ export const artical = async() => {
       method: "GET",
       url: `${baseURL}/api/blogs`,
     })
-    console.log(res.data)
     return res.data
   } catch (err) {
     console.err("[Get Blogs artical failed]:")
