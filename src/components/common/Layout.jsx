@@ -191,7 +191,7 @@ const Layout = () => {
           <span className='search-bar'>
             <label
               className='search'
-              for='search-input'
+              htmlFor='search-input'
               onClick={(e) => {
                 e.stopPropagation();
                 // e.nativeEvent.stopImmediatePropagation(); 不知道為什麼不用也沒差
