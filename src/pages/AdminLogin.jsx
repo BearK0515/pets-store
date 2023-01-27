@@ -59,8 +59,6 @@ const AdminLogin = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(email);
-    console.log(password);
     const success = await adminLogin({ email, password });
     if (success) {
       Swal.fire({

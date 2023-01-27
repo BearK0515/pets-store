@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { HomeIcon, ClockIcon, BookMarkIcon } from "../assets/icons/index";
 import { HomeLinkWrapper } from "../components/common/HomeLinkWrapper";
 import { artical } from "../api/blogs";
-
 
 const BlogStyled = styled.div`
   box-sizing: border-box;
@@ -89,8 +88,6 @@ const BlogCard = styled.li`
     align-items: baseline;
     gap: 0 10px;
     color: var(--gray);
-   
-    
   }
   .BlogDate {
     display: flex;
@@ -252,7 +249,6 @@ const Blogs = () => {
   const [articalAll, setArticalAll] = useState([]);
   const [query, setQuery] = useState("");
 
-
   //抓文章api
   useEffect(() => {
     const getBlogsArticalAsync = async () => {
@@ -353,26 +349,42 @@ const Blogs = () => {
                 </div>
                 </BlogCard>));
             })}
-            { articalAll?.map((artical) => {
-              return (!artical.isTop && (<BlogCard>
-                <BlogCardImg style={{ backgroundImage: `url("${artical.image}")`}}/>
-                <div className='BlogCardInner'>
-                  <div className='BlogCardIntro'>
-                    <h2 className='BlogTitle'>
-                      <b>{ artical.title }</b>
-                    </h2>
-                    <ul className='DateCategory'>
-                      <li className='BlogDate'><ClockIcon/>{new Date(artical.createdAt).toLocaleDateString()}</li>
-                      <li className='BlogCategory'><BookMarkIcon/>
-                      { artical["category"].includes("dog") && "狗狗健康知識庫" } 
-                      { artical["category"].includes("cat") && "貓貓健康知識庫" }</li>
-                    </ul>
-                    <article>
-                      <p>{ artical.content }<span>...閱讀更多</span></p>
-                    </article>
-                  </div>
-                </div>
-                </BlogCard>));
+            {articalAll?.map((artical) => {
+              return (
+                !artical.isTop && (
+                  <BlogCard>
+                    <BlogCardImg
+                      style={{ backgroundImage: `url("${artical.image}")` }}
+                    />
+                    <div className='BlogCardInner'>
+                      <div className='BlogCardIntro'>
+                        <h2 className='BlogTitle'>
+                          <b>{artical.title}</b>
+                        </h2>
+                        <ul className='DateCategory'>
+                          <li className='BlogDate'>
+                            <ClockIcon />
+                            {new Date(artical.createdAt).toLocaleDateString()}
+                          </li>
+                          <li className='BlogCategory'>
+                            <BookMarkIcon />
+                            {artical["category"].includes("dog") &&
+                              "狗狗健康知識庫"}
+                            {artical["category"].includes("cat") &&
+                              "貓貓健康知識庫"}
+                          </li>
+                        </ul>
+                        <article>
+                          <p>
+                            {artical.content}
+                            <span>...閱讀更多</span>
+                          </p>
+                        </article>
+                      </div>
+                    </div>
+                  </BlogCard>
+                )
+              );
             })}
           </ul>
         </BlogListWrapper>
@@ -416,16 +428,16 @@ const Blogs = () => {
                 <b>文章分類</b>
               </h4>
               <BlogCategoryList>
-                  <li onClick={handleFilterDog}>
-                    <div className='toFlex'>
-                      <h6>狗狗健康知識庫</h6>
-                    </div>
-                  </li>
-                  <li onClick={handleFilterCat}>
-                    <div className='toFlex'>
-                      <h6>貓貓健康知識庫</h6>
-                    </div>
-                  </li>
+                <li onClick={handleFilterDog}>
+                  <div className='toFlex'>
+                    <h6>狗狗健康知識庫</h6>
+                  </div>
+                </li>
+                <li onClick={handleFilterCat}>
+                  <div className='toFlex'>
+                    <h6>貓貓健康知識庫</h6>
+                  </div>
+                </li>
               </BlogCategoryList>
             </BlogCategoryArea>
           </div>

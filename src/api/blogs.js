@@ -13,6 +13,6 @@ export const artical = async() => {
     })
     return res.data
   } catch (err) {
-    console.err("[Get Blogs artical failed]:")
+    console.err(`[Get Blogs artical failed]:${err}`)
   }
 }

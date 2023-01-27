@@ -1,7 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { facebookLogin } from "../../api/userLogin";
+import { facebookLogin, googleLogin } from "../../api/userLogin";
 import {
   AlertIcon,
   CancelIcon,
@@ -181,7 +181,7 @@ const LoginModal = ({ setIsOpenLoginModal, handleToggleLoginModal }) => {
                 </div>
                 <p>登入</p>
               </div>
-              <div className='icon google'>
+              <div className='icon google' onClick={()=>googleLogin()}>
                 <div>
                   <GoogleIcon />
                 </div>
