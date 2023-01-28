@@ -1,4 +1,4 @@
-import React from "react";
+import React,{ useState } from "react";
 import styled from "styled-components";
 import { CartIcon } from "../assets/icons/index";
 
@@ -75,7 +75,7 @@ const ProductsSort = styled.div`
   ul {
     display: grid;
     grid-template-columns: repeat(4, 80px);
-    li {
+    .sort {
       display: flex;
       justify-content: center;
       align-items: center;
@@ -87,20 +87,39 @@ const ProductsSort = styled.div`
         background-color: #9e9e9e;
         cursor: pointer;
       }
-      &.active {
+    }
+    .active {
+      background-color: var(--gray-dark);
+      &:hover {
         background-color: var(--gray-dark);
+        cursor: pointer;
       }
     }
   }
 `;
 const ProductAll = () => {
+
+  const [sortSelect, setSortSelect] = useState({
+    top: true
+  })
+  
+  // 點擊時，其他二個會變成 undefine 為 false，當為 true 時不改變
+  const sortSelectToggle = (e, id) => {
+    if ( sortSelect[e.target.value] === true ) {
+      return
+    } else {
+      setSortSelect(() => ({
+        [e.target.value]: !sortSelect[e.target.value]
+      }))
+    }
+  }
   return (
     <>
       <ProductsSort>
         <ul className='sort-nav'>
-          <li className='active'>熱銷排行</li>
-          <li>最新上架</li>
-          <li>價格</li>
+          <button className={sortSelect['top'] ? 'sort active' : 'sort'} onClick={sortSelectToggle} value="top">熱銷排行</button>
+          <button className={sortSelect['new'] ? 'sort active' : 'sort'} onClick={sortSelectToggle} value="new">最新上架</button>
+          <button className={sortSelect['price'] ? 'sort active' : 'sort'} onClick={sortSelectToggle} value="price">價格</button>
         </ul>
       </ProductsSort>
       <ProductList>
