@@ -1,6 +1,9 @@
-import React,{ useState } from "react";
+import React,{ useState, useEffect } from "react";
 import styled from "styled-components";
 import { CartIcon } from "../assets/icons/index";
+import ProductPopCart from "./ProductPopCart";
+import {productsHot, productsNew, productsPrice} from "../api/products"
+import { NavLink as Link } from "react-router-dom";
 
 const ProductList = styled.div`
   width: 100%;
@@ -43,6 +46,7 @@ const StyledCard = styled.div`
     align-items: left;
     gap: 5px 0;
     padding: 10px;
+    width: 100%;
   }
   .title {
     text-align: left;
@@ -98,13 +102,78 @@ const ProductsSort = styled.div`
     }
   }
 `;
-const ProductDog = () => {
 
+const NavLink = styled(Link)`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 0 auto;
+  height: 40px;
+  background-color: ${(props) =>
+    props.active ? "var(--white)" : "var(--footer-background)"};
+  color: ${(props) =>
+    props.active ? " var(--footer-background)" : "var(--white)"};
+  border: ${(props) =>
+    props.active ? "2px solid var(--footer-background)" : ""};
+  font-size: 20px;
+  font-weight: 400;
+  border-radius: 30px;
+  &:hover {
+    cursor: pointer;
+  }
+`;
+const ProductDog = () => {
+  const [productHot, setProductHot] = useState([])
+  const [productNew, setProductNew] = useState([])
+  const [productPrice, setProductPrice] = useState([])
   const [sortSelect, setSortSelect] = useState({
     top: true
   })
-  
-  const sortSelectToggle = (e, id) => {
+  const [addCartPop, setAddCartPop] = useState(false)
+
+   //抓熱銷排行
+  useEffect(() => {
+    const getProductHotAsync = async () => {
+      try {
+        const resProductlHot = await productsHot();
+        setProductHot(resProductlHot);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    getProductHotAsync();
+    return;
+  },[setProductHot]);
+
+  //抓最新商品
+  useEffect(() => {
+    const getProductNewAsync = async () => {
+      try {
+        const resProductNew = await productsNew();
+        setProductNew(resProductNew);
+      } catch (err) {
+        console.error(err);
+      }
+    }
+    getProductNewAsync();
+    return;
+  },[setProductNew])
+
+  //抓價格排序
+  useEffect(() => {
+    const getProductPriceAsync = async () => {
+      try {
+        const resProductPrice = await productsPrice();
+        setProductPrice(resProductPrice);
+      } catch (err) {
+        console.error(err);
+      }
+    }
+    getProductPriceAsync();
+    return;
+  },[setProductPrice])
+
+  const sortSelectToggle = (e) => {
     if ( sortSelect[e.target.value] === true ) {
       return
     } else {
@@ -114,161 +183,62 @@ const ProductDog = () => {
     }
   }
 
+  const handleToggleCartModal = () => {
+    setAddCartPop(!addCartPop)
+  }
+
   return (
     <>
       <ProductsSort>
         <ul className='sort-nav'>
-          <button className={sortSelect['top'] ? 'sort active' : 'sort'} onClick={sortSelectToggle} value="top">熱銷排行</button>
-          <button className={sortSelect['new'] ? 'sort active' : 'sort'} onClick={sortSelectToggle} value="new">最新上架</button>
-          <button className={sortSelect['price'] ? 'sort active' : 'sort'} onClick={sortSelectToggle} value="price">價格</button>
+          <button key={1} className={sortSelect['top'] ? 'sort active' : 'sort'} onClick={sortSelectToggle} value="top">熱銷排行</button>
+          <button key={2} className={sortSelect['new'] ? 'sort active' : 'sort'} onClick={sortSelectToggle} value="new">最新上架</button>
+          <button key={3} className={sortSelect['price'] ? 'sort active' : 'sort'} onClick={sortSelectToggle} value="price">價格</button>
         </ul>
       </ProductsSort>
       <ProductList>
-        <StyledCard>
-          <div className='product'>
-            <button className='addCart'>
+        {sortSelect['top'] && (productHot?.map((product) => { return (<StyledCard key={product.id}>
+          <div className='product' style={{ backgroundImage: `url('${product.Images.url}')` }}>
+            <NavLink className='addCart' onClick={handleToggleCartModal}>
               <CartIcon style={{ fontSize: "20px", cursor: "pointer" }} />
-            </button>
+            </NavLink>
           </div>
           <div className='wrapper'>
-            <h4 className='title'> 【毛孩時代】腎臟專科保健粉(30包/盒)</h4>
-            <div className='price'>$750</div>
-            <div className='discount-price'>$690</div>
+            <h4 className='title'>{product.name}</h4>
+            <div className='price'>${product.price}</div>
+            <div className='discount-price'>${product.price * 0.8}</div>
           </div>
         </StyledCard>
-        <StyledCard>
-          <div className='product'>
-            <button className='addCart'>
+        )}))}
+        {sortSelect['new'] && (productNew?.map((product) => { return (<StyledCard key={product.id}>
+          <div className='product' style={{ backgroundImage: `url('${product.Images.url}')` }}>
+            <NavLink className='addCart' onClick={handleToggleCartModal}>
               <CartIcon style={{ fontSize: "20px", cursor: "pointer" }} />
-            </button>
+            </NavLink>
           </div>
           <div className='wrapper'>
-            <h4 className='title'> 【毛孩時代】腎臟專科保健粉(30包/盒)</h4>
-            <div className='price'>$750</div>
-            <div className='discount-price'>$690</div>
+            <h4 className='title'>{product.name}</h4>
+            <div className='price'>${product.price}</div>
+            <div className='discount-price'>${Math.floor(product.price * 0.8)}</div>
           </div>
-        </StyledCard>
-        <StyledCard>
-          <div className='product'>
-            <button className='addCart'>
+        </StyledCard>)}))}
+        {sortSelect['price'] && (productPrice?.map((product) => { return (<StyledCard key={product.id}>
+          <div className='product' style={{ backgroundImage: `url('${product.Images.url}')` }}>
+            <NavLink className='addCart' onClick={handleToggleCartModal}>
               <CartIcon style={{ fontSize: "20px", cursor: "pointer" }} />
-            </button>
+            </NavLink>
           </div>
           <div className='wrapper'>
-            <h4 className='title'> 【毛孩時代】腎臟專科保健粉(30包/盒)</h4>
-            <div className='price'>$750</div>
-            <div className='discount-price'>$690</div>
+            <h4 className='title'>{product.name}</h4>
+            <div className='price'>${product.price}</div>
+            <div className='discount-price'>${Math.floor(product.price * 0.8)}</div>
           </div>
-        </StyledCard>
-        <StyledCard>
-          <div className='product'>
-            <button className='addCart'>
-              <CartIcon style={{ fontSize: "20px", cursor: "pointer" }} />
-            </button>
-          </div>
-          <div className='wrapper'>
-            <h4 className='title'> 【毛孩時代】腎臟專科保健粉(30包/盒)</h4>
-            <div className='price'>$750</div>
-            <div className='discount-price'>$690</div>
-          </div>
-        </StyledCard>
-        <StyledCard>
-          <div className='product'>
-            <button className='addCart'>
-              <CartIcon style={{ fontSize: "20px", cursor: "pointer" }} />
-            </button>
-          </div>
-          <div className='wrapper'>
-            <h4 className='title'> 【毛孩時代】腎臟專科保健粉(30包/盒)</h4>
-            <div className='price'>$750</div>
-            <div className='discount-price'>$690</div>
-          </div>
-        </StyledCard>
-        <StyledCard>
-          <div className='product'>
-            <button className='addCart'>
-              <CartIcon style={{ fontSize: "20px", cursor: "pointer" }} />
-            </button>
-          </div>
-          <div className='wrapper'>
-            <h4 className='title'> 【毛孩時代】腎臟專科保健粉(30包/盒)</h4>
-            <div className='price'>$750</div>
-            <div className='discount-price'>$690</div>
-          </div>
-        </StyledCard>
-        <StyledCard>
-          <div className='product'>
-            <button className='addCart'>
-              <CartIcon style={{ fontSize: "20px", cursor: "pointer" }} />
-            </button>
-          </div>
-          <div className='wrapper'>
-            <h4 className='title'> 【毛孩時代】腎臟專科保健粉(30包/盒)</h4>
-            <div className='price'>$750</div>
-            <div className='discount-price'>$690</div>
-          </div>
-        </StyledCard>
-        <StyledCard>
-          <div className='product'>
-            <button className='addCart'>
-              <CartIcon style={{ fontSize: "20px", cursor: "pointer" }} />
-            </button>
-          </div>
-          <div className='wrapper'>
-            <h4 className='title'> 【毛孩時代】腎臟專科保健粉(30包/盒)</h4>
-            <div className='price'>$750</div>
-            <div className='discount-price'>$690</div>
-          </div>
-        </StyledCard>
-        <StyledCard>
-          <div className='product'>
-            <button className='addCart'>
-              <CartIcon style={{ fontSize: "20px", cursor: "pointer" }} />
-            </button>
-          </div>
-          <div className='wrapper'>
-            <h4 className='title'> 【毛孩時代】腎臟專科保健粉(30包/盒)</h4>
-            <div className='price'>$750</div>
-            <div className='discount-price'>$690</div>
-          </div>
-        </StyledCard>
-        <StyledCard>
-          <div className='product'>
-            <button className='addCart'>
-              <CartIcon style={{ fontSize: "20px", cursor: "pointer" }} />
-            </button>
-          </div>
-          <div className='wrapper'>
-            <h4 className='title'> 【毛孩時代】腎臟專科保健粉(30包/盒)</h4>
-            <div className='price'>$750</div>
-            <div className='discount-price'>$690</div>
-          </div>
-        </StyledCard>
-        <StyledCard>
-          <div className='product'>
-            <button className='addCart'>
-              <CartIcon style={{ fontSize: "20px", cursor: "pointer" }} />
-            </button>
-          </div>
-          <div className='wrapper'>
-            <h4 className='title'> 【毛孩時代】腎臟專科保健粉(30包/盒)</h4>
-            <div className='price'>$750</div>
-            <div className='discount-price'>$690</div>
-          </div>
-        </StyledCard>
-        <StyledCard>
-          <div className='product'>
-            <button className='addCart'>
-              <CartIcon style={{ fontSize: "20px", cursor: "pointer" }} />
-            </button>
-          </div>
-          <div className='wrapper'>
-            <h4 className='title'> 【毛孩時代】腎臟專科保健粉(30包/盒)</h4>
-            <div className='price'>$750</div>
-            <div className='discount-price'>$690</div>
-          </div>
-        </StyledCard>
+        </StyledCard>)}))}
       </ProductList>
+      {/* Modal-跳出購物車 */}
+      {addCartPop && (
+        <ProductPopCart handleToggleCartModal={handleToggleCartModal} />
+      )}
     </>
   );
 };
