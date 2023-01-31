@@ -9,19 +9,77 @@ import {
   FaqIcon,
   AccountIcon,
   HomeIcon,
+  MenuIcon,
+  LoginIcon,
+  SearchIcon,
+  CartIcon,
 } from "../../assets/icons";
 import bigLogo from "../../assets/icons/logo.png";
 
 const HeaderStyled = styled.header`
   display: flex;
   flex-direction: column;
-
+  .nav-mobile {
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: rgba(50, 55, 58, 0.85);
+    width: 100%;
+    z-index: 3;
+    ul {
+      display: none;
+      @media screen and (max-width: 992px) {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        li {
+          display: flex;
+          flex-flow: column;
+          justify-content: center;
+          align-items: center;
+          padding: 4px;
+          cursor: pointer;
+          .icon {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 30px;
+            width: 30px;
+            margin-bottom: 2px;
+            padding: 2px;
+            .count {
+              position: absolute;
+              top: 0;
+              right: 0;
+              transform: translate(50%, -10%);
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              width: 20px;
+              height: 20px;
+              padding: 3px;
+              font-size: 80%;
+              color: var(--white);
+              background: #c14848;
+              border-radius: 50%;
+            }
+          }
+          .text {
+            font-size: 12px;
+            color: var(--white);
+          }
+        }
+      }
+    }
+  }
   .nav {
     display: flex;
     justify-content: space-between;
     align-items: center;
     height: 70px;
-
+    @media screen and (max-width: 992px) {
+      display: none;
+    }
     .tool-box-left {
       display: flex;
       gap: 5px;
@@ -140,6 +198,20 @@ const HeaderStyled = styled.header`
       display: flex;
     }
   }
+  @media screen and (max-width: 992px) {
+    .banner {
+      margin-top: 38px;
+      height: 200px;
+      img {
+        margin: 0 auto;
+        width: 250px;
+        height: 90px;
+      }
+      ul {
+        display: none;
+      }
+    }
+  }
 `;
 
 const NavLink = styled(Link)`
@@ -165,9 +237,50 @@ const BigLogo = styled.img`
   height: 121px;
 `;
 
-export default function Header({ handleToggleLoginModal }) {
+export default function Header({
+  handleToggleLoginModal,
+  handleToggleCartModal,
+  handleToggleSidebar,
+}) {
   return (
     <HeaderStyled>
+      <div className='nav-mobile'>
+        <ul>
+          <li onClick={handleToggleSidebar}>
+            <div className='icon'>
+              <MenuIcon />
+            </div>
+            <div className='text'>選單</div>
+          </li>
+          <li>
+            <Link to='order/query'>
+              <div className='icon'>
+                <OrderIcon size='30px' />
+              </div>
+              <div className='text'>查訂單</div>
+            </Link>
+          </li>
+          <li onClick={handleToggleLoginModal}>
+            <div className='icon'>
+              <LoginIcon />
+            </div>
+            <div className='text'>登入</div>
+          </li>
+          <li>
+            <div className='icon'>
+              <SearchIcon />
+            </div>
+            <div className='text'>搜尋</div>
+          </li>
+          <li onClick={handleToggleCartModal}>
+            <div className='icon'>
+              <CartIcon />
+              <div className='count'>0</div>
+            </div>
+            <div className='text'>購物車</div>
+          </li>
+        </ul>
+      </div>
       <div className='nav'>
         <nav className='tool-box-left'>
           <div className='icon-wrapper'>

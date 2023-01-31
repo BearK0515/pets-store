@@ -157,7 +157,10 @@ const About = () => {
                   <FacebookIcon className='icon facebook' />
                   <InstagramIcon className='icon instagram' />
                   <LineIcon className='icon line' />
-                  <div className='icon homepage'>
+                  <div
+                    className='icon homepage'
+                    onClick={() => navigate("/")}
+                  >
                     <HomeIcon />
                   </div>
                 </ul>
