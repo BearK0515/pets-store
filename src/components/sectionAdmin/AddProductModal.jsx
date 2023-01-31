@@ -211,15 +211,15 @@ const StyledButton = styled.button`
 
 const AddProductModal = ({ handleToggleProductModal }) => {
   const [categoryValue, setCategoryValue] = useState("default");
-  const [productPicture, setProductPicture] = useState([]);
-  const [previewProductPicture, setPreviewProductPicture] = useState("");
-  const [describePicture, setDescribePicture] = useState([]);
-  const [preViewDescribePicture, setPreViewDescribePicture] = useState("");
+  // const [productPicture, setProductPicture] = useState([]);
+  // const [previewProductPicture, setPreviewProductPicture] = useState("");
+  // const [describePicture, setDescribePicture] = useState([]);
+  // const [preViewDescribePicture, setPreViewDescribePicture] = useState("");
   const dispatch = useDispatch();
   const nameRef = useRef();
   const priceRef = useRef();
   const styleRef = useRef();
-  
+
   const handleSubmit = () => {
     const nameValue = nameRef.current?.value;
     const priceValue = priceRef.current?.value;
@@ -230,10 +230,10 @@ const AddProductModal = ({ handleToggleProductModal }) => {
         price: priceValue,
         style: styleValue,
         category: categoryValue,
-        image: productPicture,
+        // image: productPicture,
       })
     );
-    handleToggleProductModal()
+    handleToggleProductModal();
   };
 
   return (
