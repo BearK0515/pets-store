@@ -258,6 +258,10 @@ const Blogs = () => {
     const getBlogsArticalAsync = async () => {
       try {
         const resArticalAll = await artical();
+        resArticalAll.sort((a,b) => {
+          return b.isTop - a.isTop //正數-負數排序(true[1]-false[0])
+        })
+        
         setArticalOrigin(resArticalAll);
         setArticalAll(resArticalAll);
       } catch (err) {
@@ -310,7 +314,7 @@ const Blogs = () => {
         <BlogListWrapper>
           <ul>
             { articalAll.length === 0 && (articalOrigin?.map((artical) => {
-              return ( artical.isTop && (<BlogCard>
+              return (<BlogCard>
                 <BlogCardImg style={{ backgroundImage: `url("${artical.image}")`}}/>
                 <div className='BlogCardInner'>
                   <div className='BlogCardIntro'>
@@ -329,10 +333,10 @@ const Blogs = () => {
                     </article>
                   </div>
                 </div>
-                </BlogCard>));
+                </BlogCard>);
             }))  }
             { articalAll?.map((artical) => {
-              return ( artical.isTop && (<BlogCard>
+              return (<BlogCard>
                 <BlogCardImg style={{ backgroundImage: `url("${artical.image}")`}}/>
                 <div className='BlogCardInner'>
                   <div className='BlogCardIntro'>
@@ -351,28 +355,7 @@ const Blogs = () => {
                     </article>
                   </div>
                 </div>
-                </BlogCard>));
-            })}
-            { articalAll?.map((artical) => {
-              return (!artical.isTop && (<BlogCard>
-                <BlogCardImg style={{ backgroundImage: `url("${artical.image}")`}}/>
-                <div className='BlogCardInner'>
-                  <div className='BlogCardIntro'>
-                    <h2 className='BlogTitle'>
-                      <b>{ artical.title }</b>
-                    </h2>
-                    <ul className='DateCategory'>
-                      <li className='BlogDate'><ClockIcon/>{new Date(artical.createdAt).toLocaleDateString()}</li>
-                      <li className='BlogCategory'><BookMarkIcon/>
-                      { artical["category"].includes("dog") && "狗狗健康知識庫" } 
-                      { artical["category"].includes("cat") && "貓貓健康知識庫" }</li>
-                    </ul>
-                    <article>
-                      <p>{ artical.content }<span>...閱讀更多</span></p>
-                    </article>
-                  </div>
-                </div>
-                </BlogCard>));
+                </BlogCard>);
             })}
           </ul>
         </BlogListWrapper>
