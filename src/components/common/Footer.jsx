@@ -61,6 +61,7 @@ const FooterStyled = styled.footer`
       .icon {
         width: 30px;
         height: 30px;
+        cursor: pointer;
       }
       .homepage {
         display: flex;
@@ -153,7 +154,7 @@ export default function Footer() {
         <div className='social-network rigth'>
           <FacebookIcon className='icon' />
           <LineIcon className='icon' />
-          <div className='icon homepage'>
+          <div className='icon homepage' onClick={()=>navigate("/")}>
             <HomeIcon />
           </div>
         </div>

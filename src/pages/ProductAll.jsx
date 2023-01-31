@@ -134,6 +134,7 @@ const ProductAll = () => {
       try {
         const resProductlHot = await productsHot();
         setProductHot(resProductlHot);
+        console.log(resProductlHot);
       } catch (err) {
         console.error(err);
       }

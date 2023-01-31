@@ -1,5 +1,8 @@
 import React, { useState } from "react";
+import { useRef } from "react";
+import { useDispatch } from "react-redux";
 import styled from "styled-components";
+import { setProduct } from "../../store/productSlice";
 
 const StyledModalContainer = styled.div`
   width: 100vw;
@@ -207,12 +210,36 @@ const StyledButton = styled.button`
 `;
 
 const AddProductModal = ({ handleToggleProductModal }) => {
-  const [value, setValue] = useState("default");
+  const [categoryValue, setCategoryValue] = useState("default");
+  const [productPicture, setProductPicture] = useState([]);
+  const [previewProductPicture, setPreviewProductPicture] = useState("");
+  const [describePicture, setDescribePicture] = useState([]);
+  const [preViewDescribePicture, setPreViewDescribePicture] = useState("");
+  const dispatch = useDispatch();
+  const nameRef = useRef();
+  const priceRef = useRef();
+  const styleRef = useRef();
+  
+  const handleSubmit = () => {
+    const nameValue = nameRef.current?.value;
+    const priceValue = priceRef.current?.value;
+    const styleValue = styleRef.current?.value;
+    dispatch(
+      setProduct({
+        name: nameValue,
+        price: priceValue,
+        style: styleValue,
+        category: categoryValue,
+        image: productPicture,
+      })
+    );
+    handleToggleProductModal()
+  };
 
   return (
     <StyledModalContainer>
-      <div className="overlay" onClick={handleToggleProductModal}></div>
-      <div className="content">
+      <div className='overlay' onClick={handleToggleProductModal}></div>
+      <div className='content'>
         <StyledSectionUp>
           <div className='left'>
             <div className='preview'></div>
@@ -231,8 +258,8 @@ const AddProductModal = ({ handleToggleProductModal }) => {
             <div className='wrapper'>
               <label>商品分類：</label>
               <select
-                defaultValue={value}
-                onChange={(e) => setValue(e.target.value)}
+                defaultValue={categoryValue}
+                onChange={(e) => setCategoryValue(e.target.value)}
               >
                 <option disabled value='default'>
                   商品分類
@@ -241,39 +268,38 @@ const AddProductModal = ({ handleToggleProductModal }) => {
                 <option value='cat'>貓咪專區</option>
               </select>
             </div>
-            <div className="wrapper">
+            <div className='wrapper'>
               <label>商品名稱：</label>
-              <input type="text" placeholder="請輸入商品名稱" />
+              <input type='text' placeholder='請輸入商品名稱' ref={nameRef} />
             </div>
-            <div className="wrapper">
+            <div className='wrapper'>
               <label>商品單價：</label>
-              <input type="text" placeholder="請輸入商品價格" />
+              <input type='text' placeholder='請輸入商品價格' ref={priceRef} />
             </div>
-            <div className="wrapper">
-              {/* 新增option array */}
+            <div className='wrapper'>
               <label>商品規格：</label>
-              <input type='text' placeholder='請輸入商品規格' />
+              <input type='text' placeholder='請輸入商品規格' ref={styleRef} />
             </div>
           </div>
         </StyledSectionUp>
         <StyledSectionDown>
-          <div className="left">
-            <div className="wrapper">
+          <div className='left'>
+            <div className='wrapper'>
               <p>商品詳情：</p>
               <label htmlFor='add-product-picture'>新增商品詳情圖片</label>
               <input type='file' id='add-product-picture' />
               <div className='preview'></div>
             </div>
           </div>
-          <div className="right">
-            <div className="picture-wrapper">
-              <div className="picture-1"></div>
-              <div className="picture-2"></div>
-              <div className="picture-3"></div>
+          <div className='right'>
+            <div className='picture-wrapper'>
+              <div className='picture-1'></div>
+              <div className='picture-2'></div>
+              <div className='picture-3'></div>
             </div>
           </div>
         </StyledSectionDown>
-        <StyledButton>新增商品</StyledButton>
+        <StyledButton onClick={handleSubmit}>新增商品</StyledButton>
       </div>
     </StyledModalContainer>
   );

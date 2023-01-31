@@ -70,11 +70,11 @@ const SearchIcon = styled(FiSearch)`
 `;
 const MenuIcon = styled(BsList)`
   color: var(--white);
-  font-size: 20px;
+  font-size: 30px;
 `;
 const LoginIcon = styled(HiOutlineLockClosed)`
   color: var(--white);
-  font-size: 20px;
+  font-size: 30px;
 `;
 const CartNoneIcon = styled(BsCartX)`
   color: var(--white);

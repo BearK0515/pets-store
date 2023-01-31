@@ -9,6 +9,7 @@ import ChatRobot from "./ChatRobot";
 import { CartIcon, SearchIcon } from "../../assets/icons";
 import LoginModal from "./LoginModal";
 import CartModal from "./CartModal";
+import SidebarModal from "./SidebarModal";
 
 const StyledContainer = styled.div`
   display: flex;
@@ -170,15 +171,28 @@ const Layout = () => {
   const [searchBarActive, setSearchBarActive] = useState(false);
   const [isOpenLoginModal, setIsOpenLoginModal] = useState(false);
   const [isCartOpen, setIsCartOpen] = useState(false);
+  const [isSideabrOpen, setIsSideabrOpen] = useState(false);
   
   
   const handleToggleLoginModal = () => {
     setIsOpenLoginModal(!isOpenLoginModal);
   };
+  const handleToggleCartModal = () => {
+    setIsCartOpen(!isCartOpen);
+  };
+  const handleToggleSidebar = () => {
+    setIsSideabrOpen(!isSideabrOpen);
+  };
+
+
   return (
     <>
       <StyledContainer onClick={() => setSearchBarActive(false)}>
-        <Header handleToggleLoginModal={handleToggleLoginModal} />
+        <Header
+          handleToggleLoginModal={handleToggleLoginModal}
+          handleToggleCartModal={handleToggleCartModal}
+          handleToggleSidebar={handleToggleSidebar}
+        />
         <Outlet />
         <StyledButtonWrapper>
           <button
@@ -237,14 +251,17 @@ const Layout = () => {
         <GoTop />
       </StyledContainer>
       <Footer />
-      {isCartOpen && (
-        <CartModal isCartOpen={isCartOpen} setIsCartOpen={setIsCartOpen} />
-      )}
+      {isCartOpen && <CartModal setIsCartOpen={setIsCartOpen} />}
       {isOpenLoginModal && (
         <LoginModal
-          isOpenLoginModal={isOpenLoginModal}
           setIsOpenLoginModal={setIsOpenLoginModal}
           handleToggleLoginModal={handleToggleLoginModal}
+        />
+      )}
+      {isSideabrOpen && (
+        <SidebarModal
+          setIsSideabrOpen={setIsSideabrOpen}
+          handleToggleSidebar={handleToggleSidebar}
         />
       )}
     </>
