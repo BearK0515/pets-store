@@ -68,6 +68,12 @@ const StyledProdutsContainer = styled.div`
   &::-webkit-scrollbar-thumb {
     background-color: var(--gray);
   }
+  @media screen and (max-width:1012px) {
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  }
+  @media screen and (max-width:768px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
 `;
 const Products = ({ productsAll, handleTogglePriceModal }) => {
   const page = useLocation().pathname;

@@ -1,9 +1,9 @@
-import React,{ useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { CartIcon } from "../assets/icons/index";
 import ProductPopCart from "./ProductPopCart";
 import { NavLink as Link } from "react-router-dom";
-import {productsHot, productsNew, productsPrice} from "../api/products"
+import { productsHot, productsNew, productsPrice } from "../api/products";
 
 const ProductList = styled.div`
   width: 100%;
@@ -120,15 +120,15 @@ const NavLink = styled(Link)`
   }
 `;
 const ProductAll = () => {
-  const [productHot, setProductHot] = useState([])
-  const [productNew, setProductNew] = useState([])
-  const [productPrice, setProductPrice] = useState([])
+  const [productHot, setProductHot] = useState([]);
+  const [productNew, setProductNew] = useState([]);
+  const [productPrice, setProductPrice] = useState([]);
   const [sortSelect, setSortSelect] = useState({
-    top: true
-  })
-  const [addCartPop, setAddCartPop] = useState(false)
+    top: true,
+  });
+  const [addCartPop, setAddCartPop] = useState(false);
 
-   //抓熱銷排行
+  //抓熱銷排行
   useEffect(() => {
     const getProductHotAsync = async () => {
       try {
@@ -141,7 +141,7 @@ const ProductAll = () => {
     };
     getProductHotAsync();
     return;
-  },[setProductHot]);
+  }, [setProductHot]);
 
   //抓最新商品
   useEffect(() => {
@@ -152,10 +152,10 @@ const ProductAll = () => {
       } catch (err) {
         console.error(err);
       }
-    }
+    };
     getProductNewAsync();
     return;
-  },[setProductNew])
+  }, [setProductNew]);
 
   //抓價格排序
   useEffect(() => {
@@ -166,73 +166,121 @@ const ProductAll = () => {
       } catch (err) {
         console.error(err);
       }
-    }
+    };
     getProductPriceAsync();
     return;
-  },[setProductPrice])
-  
+  }, [setProductPrice]);
+
   // 點擊時，其他二個會變成 undefine 為 false，當為 true 時不改變
   const sortSelectToggle = (e) => {
-    if ( sortSelect[e.target.value] === true ) {
-      return
+    if (sortSelect[e.target.value] === true) {
+      return;
     } else {
       setSortSelect(() => ({
-        [e.target.value]: !sortSelect[e.target.value]
-      }))
+        [e.target.value]: !sortSelect[e.target.value],
+      }));
     }
-  }
+  };
 
   const handleToggleCartModal = () => {
-    setAddCartPop(!addCartPop)
-  }
+    setAddCartPop(!addCartPop);
+  };
 
   return (
     <>
       <ProductsSort>
         <ul className='sort-nav'>
-          <button key={1} className={sortSelect['top'] ? 'sort active' : 'sort'} onClick={sortSelectToggle} value="top">熱銷排行</button>
-          <button key={2} className={sortSelect['new'] ? 'sort active' : 'sort'} onClick={sortSelectToggle} value="new">最新上架</button>
-          <button key={3} className={sortSelect['price'] ? 'sort active' : 'sort'} onClick={sortSelectToggle} value="price">價格</button>
+          <button
+            key={1}
+            className={sortSelect["top"] ? "sort active" : "sort"}
+            onClick={sortSelectToggle}
+            value='top'
+          >
+            熱銷排行
+          </button>
+          <button
+            key={2}
+            className={sortSelect["new"] ? "sort active" : "sort"}
+            onClick={sortSelectToggle}
+            value='new'
+          >
+            最新上架
+          </button>
+          <button
+            key={3}
+            className={sortSelect["price"] ? "sort active" : "sort"}
+            onClick={sortSelectToggle}
+            value='price'
+          >
+            價格
+          </button>
         </ul>
       </ProductsSort>
       <ProductList>
-        {sortSelect['top'] && (productHot?.map((product) => { return (<StyledCard key={product.id}>
-          <div className='product' style={{ backgroundImage: `url('${product.Images.url}')` }}>
-            <NavLink className='addCart' onClick={handleToggleCartModal}>
-              <CartIcon style={{ fontSize: "20px", cursor: "pointer" }} />
-            </NavLink>
-          </div>
-          <div className='wrapper'>
-            <h4 className='title'>{product.name}</h4>
-            <div className='price'>${product.price}</div>
-            <div className='discount-price'>${product.price * 0.8}</div>
-          </div>
-        </StyledCard>
-        )}))}
-        {sortSelect['new'] && (productNew?.map((product) => { return (<StyledCard key={product.id}>
-          <div className='product' style={{ backgroundImage: `url('${product.Images.url}')` }}>
-            <NavLink className='addCart' onClick={handleToggleCartModal}>
-              <CartIcon style={{ fontSize: "20px", cursor: "pointer" }} />
-            </NavLink>
-          </div>
-          <div className='wrapper'>
-            <h4 className='title'>{product.name}</h4>
-            <div className='price'>${product.price}</div>
-            <div className='discount-price'>${Math.floor(product.price * 0.8)}</div>
-          </div>
-        </StyledCard>)}))}
-        {sortSelect['price'] && (productPrice?.map((product) => { return (<StyledCard key={product.id}>
-          <div className='product' style={{ backgroundImage: `url('${product.Images.url}')` }}>
-            <NavLink className='addCart' onClick={handleToggleCartModal}>
-              <CartIcon style={{ fontSize: "20px", cursor: "pointer" }} />
-            </NavLink>
-          </div>
-          <div className='wrapper'>
-            <h4 className='title'>{product.name}</h4>
-            <div className='price'>${product.price}</div>
-            <div className='discount-price'>${Math.floor(product.price * 0.8)}</div>
-          </div>
-        </StyledCard>)}))}
+        {sortSelect["top"] &&
+          productHot?.map((product) => {
+            return (
+              <StyledCard key={product.id}>
+                <div
+                  className='product'
+                  style={{ backgroundImage: `url('${product.Images.url}')` }}
+                >
+                  <NavLink className='addCart' onClick={handleToggleCartModal}>
+                    <CartIcon style={{ fontSize: "20px", cursor: "pointer" }} />
+                  </NavLink>
+                </div>
+                <div className='wrapper'>
+                  <h4 className='title'>{product.name}</h4>
+                  <div className='price'>${product.price}</div>
+                  <div className='discount-price'>${product.price * 0.8}</div>
+                </div>
+              </StyledCard>
+            );
+          })}
+        {sortSelect["new"] &&
+          productNew?.map((product) => {
+            return (
+              <StyledCard key={product.id}>
+                <div
+                  className='product'
+                  style={{ backgroundImage: `url('${product.Images.url}')` }}
+                >
+                  <NavLink className='addCart' onClick={handleToggleCartModal}>
+                    <CartIcon style={{ fontSize: "20px", cursor: "pointer" }} />
+                  </NavLink>
+                </div>
+                <div className='wrapper'>
+                  <h4 className='title'>{product.name}</h4>
+                  <div className='price'>${product.price}</div>
+                  <div className='discount-price'>
+                    ${Math.floor(product.price * 0.8)}
+                  </div>
+                </div>
+              </StyledCard>
+            );
+          })}
+        {sortSelect["price"] &&
+          productPrice?.map((product) => {
+            return (
+              <StyledCard key={product.id}>
+                <div
+                  className='product'
+                  style={{ backgroundImage: `url('${product.Images.url}')` }}
+                >
+                  <NavLink className='addCart' onClick={handleToggleCartModal}>
+                    <CartIcon style={{ fontSize: "20px", cursor: "pointer" }} />
+                  </NavLink>
+                </div>
+                <div className='wrapper'>
+                  <h4 className='title'>{product.name}</h4>
+                  <div className='price'>${product.price}</div>
+                  <div className='discount-price'>
+                    ${Math.floor(product.price * 0.8)}
+                  </div>
+                </div>
+              </StyledCard>
+            );
+          })}
       </ProductList>
       {/* Modal-跳出購物車 */}
       {addCartPop && (

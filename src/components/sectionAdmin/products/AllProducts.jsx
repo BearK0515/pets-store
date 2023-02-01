@@ -58,6 +58,20 @@ const StyledCard = styled.div`
       cursor: pointer;
     }
   }
+  @media screen and (max-width: 992px) {
+    .title {
+      font-size: 16px;
+      height: 30px;
+      line-height: 16px;
+    }
+  }
+  @media screen and (max-width: 577px) {
+    .title {
+      font-size: 12px;
+      height: 28px;
+      line-height: 12px;
+    }
+  }
 `;
 
 const AllProducts = ({ productsAll, handleTogglePriceModal }) => {
@@ -65,7 +79,7 @@ const AllProducts = ({ productsAll, handleTogglePriceModal }) => {
     <>
       {productsAll?.map((product) => {
         return (
-          <StyledCard onClick={handleTogglePriceModal}>
+          <StyledCard key={product.id} onClick={handleTogglePriceModal}>
             <div
               className='product'
               style={{ backgroundImage: `url('${product.Images.url}')` }}
@@ -73,7 +87,9 @@ const AllProducts = ({ productsAll, handleTogglePriceModal }) => {
             <div className='wrapper'>
               <h4 className='title'>{product.name}</h4>
               <div className='price'>${product.price}</div>
-              <div className='discount-price'>${product.price * 0.8}</div>
+              <div className='discount-price'>
+                ${Math.floor(product.price * 0.8)}
+              </div>
             </div>
             <button className='delete'>
               <CancelIcon />

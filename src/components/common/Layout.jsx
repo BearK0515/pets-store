@@ -122,6 +122,9 @@ const StyledButtonWrapper = styled.div`
     color: var(--white);
     transform: translate(50%, -50%);
   }
+  @media screen and (max-width: 992px){
+    display: none;
+  }
 `;
 
 const StyledSearchWrapper = styled.div`
@@ -164,6 +167,9 @@ const StyledSearchWrapper = styled.div`
     background-size: cover;
     background-image: url("https://picsum.photos/id/1020/600/400");
     cursor: pointer;
+  }
+  @media screen and (max-width: 992px) {
+    display: none;
   }
 `;
 
