@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import styled from 'styled-components';
 import { CancelIcon } from '../../../assets/icons';
 
@@ -58,46 +58,52 @@ const StyledCard = styled.div`
       cursor: pointer;
     }
   }
+  @media screen and (max-width: 992px) {
+    .title {
+      font-size: 16px;
+      height: 30px;
+      line-height: 16px;
+    }
+  }
+  @media screen and (max-width: 577px) {
+    .title {
+      font-size: 12px;
+      height: 28px;
+      line-height: 12px;
+    }
+  }
 `;
 
-const DogProducts = ({
-  handleTogglePriceModal,
-}) => {
+const DogProducts = ({ handleTogglePriceModal, productsAll }) => {
+  const [productsDog, setProductsDog] = useState([]);
+  useEffect(() => {
+    setProductsDog(
+      productsAll?.filter((newProducts) => newProducts.Category.name === "dog")
+    );
+  }, [productsAll]);
+
   return (
     <>
-      <StyledCard onClick={handleTogglePriceModal}>
-        <div className='product'></div>
-        <div className='wrapper'>
-          <h4 className='title'> 【毛孩時代】腎臟專科保健粉(30包/盒)</h4>
-          <div className='price'>$750</div>
-          <div className='discount-price'>$690</div>
-        </div>
-        <button className='delete'>
-          <CancelIcon />
-        </button>
-      </StyledCard>
-      <StyledCard onClick={handleTogglePriceModal}>
-        <div className='product'></div>
-        <div className='wrapper'>
-          <h4 className='title'> 【毛孩時代】腎臟專科保健粉(30包/盒)</h4>
-          <div className='price'>$750</div>
-          <div className='discount-price'>$690</div>
-        </div>
-        <button className='delete'>
-          <CancelIcon />
-        </button>
-      </StyledCard>
-      <StyledCard onClick={handleTogglePriceModal}>
-        <div className='product'></div>
-        <div className='wrapper'>
-          <h4 className='title'> 【毛孩時代】腎臟專科保健粉(30包/盒)</h4>
-          <div className='price'>$750</div>
-          <div className='discount-price'>$690</div>
-        </div>
-        <button className='delete'>
-          <CancelIcon />
-        </button>
-      </StyledCard>
+      {productsDog?.map((product) => {
+        return (
+          <StyledCard key={product.id} onClick={handleTogglePriceModal}>
+            <div
+              className='product'
+              style={{ backgroundImage: `url('${product.Images.url}')` }}
+            ></div>
+            <div className='wrapper'>
+              <h4 className='title'>{product.name}</h4>
+              <div className='price'>${product.price}</div>
+              <div className='discount-price'>
+                ${Math.floor(product.price * 0.8)}
+              </div>
+            </div>
+            <button className='delete'>
+              <CancelIcon />
+            </button>
+          </StyledCard>
+        );
+      })}
     </>
   );
 };
