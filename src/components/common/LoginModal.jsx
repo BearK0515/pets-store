@@ -1,4 +1,5 @@
 import React from "react";
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { facebookLogin, googleLogin } from "../../api/userLogin";
@@ -155,6 +156,10 @@ const LoginModal = ({ setIsOpenLoginModal, handleToggleLoginModal }) => {
     navigate(location);
   };
 
+useEffect(()=>{
+  facebookLogin()
+},[])
+
   return (
     <StyledModalContainer>
       <div className='overlay'></div>
@@ -175,13 +180,15 @@ const LoginModal = ({ setIsOpenLoginModal, handleToggleLoginModal }) => {
                 </div>
                 <p>登入</p>
               </div>
-              <div className='icon facebook' onClick={()=>facebookLogin()}>
+              <div className='icon facebook' onClick={() => facebookLogin()}>
                 <div>
-                  <FacebookWhiteIcon />
+                  <a href='https://www.waylins.com/api/auth/facebook'>
+                    <FacebookWhiteIcon />
+                  </a>
                 </div>
                 <p>登入</p>
               </div>
-              <div className='icon google' onClick={()=>googleLogin()}>
+              <div className='icon google' onClick={() => googleLogin()}>
                 <div>
                   <GoogleIcon />
                 </div>
