@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { CartNoneIcon } from "../../assets/icons";
 
@@ -42,25 +43,40 @@ const CartStyled = styled.div`
         margin-bottom: 10px;
       }
     }
+    button {
+      margin: 15px;
+      font-size: 18px;
+      font-weight: 500;
+      color: var(--white);
+      background: var(--text-red);
+      border-radius: 5px;
+      cursor: pointer;
+    }
   }
 `;
 
 export default function CartModal({ setIsCartOpen, cartItem }) {
+  const navigate = useNavigate();
+  function goToCart(){
+    navigate("/cart");
+    setIsCartOpen(false);
+  }
   return (
     <CartStyled>
-      <div className="back-drop" onClick={() => setIsCartOpen(false)}></div>
-      <div className="cart-container">
-        <div className="cart-title">我的購物車</div>
+      <div className='back-drop' onClick={() => setIsCartOpen(false)}></div>
+      <div className='cart-container'>
+        <div className='cart-title'>我的購物車</div>
         {cartItem ? (
-          <div className="cart-items">
-            <div className="cart-item"></div>
+          <div className='cart-items'>
+            <div className='cart-item'></div>
           </div>
         ) : (
-          <div className="no-item">
-            <CartNoneIcon className="icon" />
+          <div className='no-item'>
+            <CartNoneIcon className='icon' />
             <span>購物車內無任何商品</span>
           </div>
         )}
+        <button onClick={goToCart}>前往購物車</button>
       </div>
     </CartStyled>
   );
