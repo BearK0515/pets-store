@@ -1,6 +1,7 @@
 import axios from "axios";
 
-const baseURL = "http://private-anon-fd7124088f-bee3048.apiary-mock.com";
+const baseURL = "https://www.waylins.com";
+// const baseURL = "http://private-anon-fd7124088f-bee3048.apiary-mock.com";
 
 //管理員登入
 export const adminLogin = async ({ email, password }) => {
