@@ -19,6 +19,18 @@ const StyledContainer = styled.div`
   @media screen and (max-width: 1300px) {
     max-width: 80%;
   }
+  @media screen and (max-width: 1200px) {
+    max-width: 90%;
+  }
+  @media screen and (max-width: 992px) {
+    max-width: 95%;
+  }
+  @media screen and (max-width: 768px) {
+    max-width: 99%;
+  }
+  @media screen and (max-width: 577px) {
+    max-width: 100%;
+  }
 `;
 
 const StyledButtonWrapper = styled.div`

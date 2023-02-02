@@ -58,7 +58,8 @@ const StyledAboutMedia = styled.div`
       width: 80px;
       height: 80px;
       img {
-        width: 100%;
+        width: 80px;
+        height: 80px;
       }
     }
     .wrapper {
@@ -96,6 +97,29 @@ const StyledAboutMedia = styled.div`
     flex-flow: column;
     gap: 10px 0;
   }
+@media screen and (max-width:768px){
+  display: grid;
+  grid-template-columns: 1fr;
+  .left{
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+    width: 100%;
+    gap: 15px;
+    padding: 0;
+    .logo{
+      width: 100%;
+      display: flex;
+      justify-content: center;
+    }
+    .wrapper{
+      gap: 20px;
+    }
+  }
+  .right{
+    padding: 20px;
+  }
+}
 `;
 const StyledContactInfoBlock = styled.div`
   display: flex;

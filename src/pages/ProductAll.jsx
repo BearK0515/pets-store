@@ -8,8 +8,11 @@ import { productsHot, productsNew, productsPrice } from "../api/products";
 const ProductList = styled.div`
   width: 100%;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  grid-template-columns: repeat(3, 1fr);
   gap: 3vmin;
+  @media screen and (max-width: 768px){
+    grid-template-columns: repeat(2, 1fr);
+  }
 `;
 
 const StyledCard = styled.div`
@@ -232,7 +235,9 @@ const ProductAll = () => {
                 <div className='wrapper'>
                   <h4 className='title'>{product.name}</h4>
                   <div className='price'>${product.price}</div>
-                  <div className='discount-price'>${product.price * 0.8}</div>
+                  <div className='discount-price'>
+                    ${Math.floor(product.price * 0.8)}
+                  </div>
                 </div>
               </StyledCard>
             );
