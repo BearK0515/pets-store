@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/pets-store/static/css/main.31d6cfe0.css",
-    "main.js": "/pets-store/static/js/main.f4db5cf6.js",
+    "main.js": "/pets-store/static/js/main.20fcc916.js",
     "static/js/787.4aaff206.chunk.js": "/pets-store/static/js/787.4aaff206.chunk.js",
     "static/media/home2.png": "/pets-store/static/media/home2.10ecd2f0d66f1926b91c.png",
     "static/media/home1.png": "/pets-store/static/media/home1.f61e98efee5f494b5806.png",
@@ -28,11 +28,11 @@
     "static/media/img_facebook.svg": "/pets-store/static/media/img_facebook.e8176365db8c7995c7a048901ac021e4.svg",
     "static/media/icon_google.svg": "/pets-store/static/media/icon_google.1d2804f5bd03f831fed855eca61c2c61.svg",
     "index.html": "/pets-store/index.html",
-    "main.f4db5cf6.js.map": "/pets-store/static/js/main.f4db5cf6.js.map",
+    "main.20fcc916.js.map": "/pets-store/static/js/main.20fcc916.js.map",
     "787.4aaff206.chunk.js.map": "/pets-store/static/js/787.4aaff206.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.31d6cfe0.css",
-    "static/js/main.f4db5cf6.js"
+    "static/js/main.20fcc916.js"
   ]
 }
