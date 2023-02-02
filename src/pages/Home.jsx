@@ -5,7 +5,7 @@ import lineLink from "../assets/images/home1.png";
 import productsLink from "../assets/images/home2.png";
 import SGS from "../assets/images/home3.png";
 import tips from "../assets/images/home4.jpg";
-import AllProducts from "../components/sectionAdmin/products/AllProducts";
+import ProductAll from "./ProductAll";
 
 const StyledContainer = styled.div`
   margin: 0 15px;
@@ -55,32 +55,6 @@ const StyledProductsContainer = styled.div`
   width: 100%;
   display: flex;
   flex-flow: column;
-  ul {
-    display: grid;
-    grid-template-columns: repeat(4, 80px);
-    li {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      background-color: var(--button);
-      color: var(--white);
-      font-size: 14px;
-      line-height: 32px;
-      &:hover {
-        background-color: var(--button-hover);
-      }
-      &.active {
-        background-color: var(--button-active);
-      }
-    }
-  }
-`;
-const ProductsListWrapper = styled.div`
-  width: 100%;
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 3vmin;
-  padding: 10px;
 `;
 
 const Home = () => {
@@ -107,15 +81,7 @@ const Home = () => {
         </StyledLinkWrapper>
       </StyledContainer>
       <StyledProductsContainer>
-        <ul className='sort-nav'>
-          <li className='active'>熱銷排行</li>
-          <li>最新上架</li>
-          <li>價格</li>
-        </ul>
-        <ProductsListWrapper>
-          {/* 之後要換成全部商品的原件 */}
-          <AllProducts />
-        </ProductsListWrapper>
+        <ProductAll />
       </StyledProductsContainer>
     </>
   );

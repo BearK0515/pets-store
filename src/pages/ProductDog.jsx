@@ -8,8 +8,11 @@ import { NavLink as Link } from "react-router-dom";
 const ProductList = styled.div`
   width: 100%;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  grid-template-columns: repeat(3, 1fr);
   gap: 3vmin;
+  @media screen and (max-width: 768px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
 `;
 
 const StyledCard = styled.div`
@@ -197,19 +200,25 @@ const ProductDog = () => {
         </ul>
       </ProductsSort>
       <ProductList>
-        {sortSelect['top'] && (productHot?.map((product) => { return (<StyledCard key={product.id}>
-          <div className='product' style={{ backgroundImage: `url('${product.Images.url}')` }}>
-            <NavLink className='addCart' onClick={handleToggleCartModal}>
-              <CartIcon style={{ fontSize: "20px", cursor: "pointer" }} />
-            </NavLink>
-          </div>
-          <div className='wrapper'>
-            <h4 className='title'>{product.name}</h4>
-            <div className='price'>${product.price}</div>
-            <div className='discount-price'>${product.price * 0.8}</div>
-          </div>
-        </StyledCard>
-        )}))}
+        {sortSelect['top'] && (productHot?.map((product) => { return (
+          <StyledCard key={product.id}>
+            <div
+              className='product'
+              style={{ backgroundImage: `url('${product.Images.url}')` }}
+            >
+              <NavLink className='addCart' onClick={handleToggleCartModal}>
+                <CartIcon style={{ fontSize: "20px", cursor: "pointer" }} />
+              </NavLink>
+            </div>
+            <div className='wrapper'>
+              <h4 className='title'>{product.name}</h4>
+              <div className='price'>${product.price}</div>
+              <div className='discount-price'>
+                ${Math.floor(product.price * 0.8)}
+              </div>
+            </div>
+          </StyledCard>
+        );}))}
         {sortSelect['new'] && (productNew?.map((product) => { return (<StyledCard key={product.id}>
           <div className='product' style={{ backgroundImage: `url('${product.Images.url}')` }}>
             <NavLink className='addCart' onClick={handleToggleCartModal}>

@@ -18,6 +18,9 @@ const ProductPageStyled = styled.div`
   max-width: 1140px;
   margin: 30px auto;
   padding: 0 30px;
+  @media screen and (max-width: 992px){
+    grid-template-columns: 1fr;
+  }
 `;
 const ProductWrapper = styled.div`
   box-sizing: border-box;
