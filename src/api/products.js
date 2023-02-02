@@ -1,7 +1,8 @@
 import axios from 'axios'
 
-const baseURL =
-  "http://eshop-env.eba-bv3rpum8.ap-northeast-1.elasticbeanstalk.com";
+const baseURL = "https://www.waylins.com";
+// const baseURL =
+//   "http://eshop-env.eba-bv3rpum8.ap-northeast-1.elasticbeanstalk.com";
 // const baseURL = "http://polls.apiblueprint.org";
 
 //取得所有商品(熱銷)
