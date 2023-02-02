@@ -257,7 +257,7 @@ const Blogs = () => {
         resArticalAll.sort((a,b) => {
           return b.isTop - a.isTop //正數-負數排序(true[1]-false[0])
         })
-        
+        console.log(resArticalAll);
         setArticalOrigin(resArticalAll);
         setArticalAll(resArticalAll);
       } catch (err) {
