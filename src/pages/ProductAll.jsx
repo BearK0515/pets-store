@@ -10,7 +10,7 @@ const ProductList = styled.div`
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 3vmin;
-  @media screen and (max-width: 768px){
+  @media screen and (max-width: 768px) {
     grid-template-columns: repeat(2, 1fr);
   }
 `;
@@ -137,7 +137,6 @@ const ProductAll = () => {
       try {
         const resProductlHot = await productsHot();
         setProductHot(resProductlHot);
-        console.log(resProductlHot);
       } catch (err) {
         console.error(err);
       }

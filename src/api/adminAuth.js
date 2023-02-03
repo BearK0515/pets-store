@@ -1,12 +1,13 @@
 import axios from "axios";
 
 const baseURL = "https://www.waylins.com";
-// const baseURL = "http://private-anon-fd7124088f-bee3048.apiary-mock.com";
+// const baseURL =
+//   "https://eshop-env.eba-bv3rpum8.ap-northeast-1.elasticbeanstalk.com";
 
 //管理員登入
 export const adminLogin = async ({ email, password }) => {
   try {
-    const data = await axios({
+    const { data } = await axios({
       method: "POST",
       url: `${baseURL}/api/admin/login`,
       data: {
@@ -14,8 +15,7 @@ export const adminLogin = async ({ email, password }) => {
         password: password,
       },
     });
-    console.log(data.data);
-    console.log(JSON.parse(data.data))
+    console.log(data);
     const { token, user } = data;
     if (token) {
       localStorage.setItem("authToken", token);

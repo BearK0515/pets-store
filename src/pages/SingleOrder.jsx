@@ -57,6 +57,9 @@ const StyledWrapper = styled.div`
     .wrapper {
       display: grid;
       grid-template-columns: 3fr 6fr 1fr;
+      @media screen and (max-width: 577px) {
+        grid-template-columns: 3fr 3fr 2fr;
+      }
       p {
         display: flex;
         justify-content: center;
@@ -68,6 +71,13 @@ const StyledWrapper = styled.div`
     width: 100%;
     display: grid;
     grid-template-columns: 100px repeat(2, 200px) 1fr;
+    @media screen and (max-width: 768px) {
+      grid-template-columns: 100px repeat(2, 1fr);
+      gap: 10px;
+      .remark {
+        display: none;
+      }
+    }
     & p ~ p {
       display: flex;
       justify-content: center;
@@ -79,6 +89,9 @@ const StyledWrapper = styled.div`
   }
   .addressee {
     grid-template-columns: 100px 200px 1fr;
+    @media screen and (max-width: 768px) {
+      grid-template-columns: 60px 110px 1fr;
+    }
   }
   .count {
     display: flex;
@@ -87,6 +100,17 @@ const StyledWrapper = styled.div`
     p {
       font-size: 16px;
       font-weight: 700;
+    }
+  }
+  .remark-md {
+    display: none;
+  }
+  @media screen and (max-width: 768px) {
+    .remark-md {
+      display: flex;
+      flex-flow: column;
+      gap: 10px;
+      padding-top: 15px;
     }
   }
 `;
@@ -144,7 +168,7 @@ const SingleOrder = () => {
               <p>$1350</p>
             </div>
           </div>
-          <div className="count">
+          <div className='count'>
             <p>總計</p>
             <p>$3380</p>
           </div>
@@ -156,16 +180,20 @@ const SingleOrder = () => {
             <p>姓名</p>
             <p>電話</p>
             <p>email</p>
-            <p>備註</p>
+            <p className='remark'>備註</p>
           </div>
           <div className='wrapper-content sender'>
             <p>王大明</p>
             <p>01-23345678</p>
             <p>abcac@abcabc.com</p>
-            <p>
+            <p className='remark'>
               {/* 英打字母太長沒辦法自動換行 */}
               英打字母太長沒辦法自動換行
             </p>
+          </div>
+          <div className='remark-md'>
+            <p className='wrapper-title'>備註</p>
+            <p className='wrapper-content'>英打字母太長沒辦法自動換行</p>
           </div>
         </StyledWrapper>
         <StyledWrapper>

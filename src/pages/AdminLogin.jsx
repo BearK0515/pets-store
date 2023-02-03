@@ -53,12 +53,12 @@ const StyledLinkText = styled.div`
 const AdminLogin = () => {
   const emailRef = useRef("");
   const passwordRef = useRef("");
-  const email = emailRef?.current.value;
-  const password = passwordRef?.current.value;
   const navigate = useNavigate();
-
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const email = emailRef?.current.value;
+    const password = passwordRef?.current.value;
     const success = await adminLogin({ email, password });
     if (success) {
       Swal.fire({
@@ -93,7 +93,7 @@ const AdminLogin = () => {
       />
       <StyledButton onSubmit={handleSubmit}>送出</StyledButton>
       <StyledButton onClick={() => navigate("/admin/products/all")}>
-        登入
+        跳轉管理員頁面
       </StyledButton>
       <StyledLinkText onClick={() => navigate("/")}>首頁</StyledLinkText>
     </StyledContainer>
