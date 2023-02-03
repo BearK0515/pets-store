@@ -46,10 +46,11 @@ const CartStyled = styled.div`
     button {
       margin: 15px;
       font-size: 18px;
-      font-weight: 500;
+      font-weight: 400;
       color: var(--white);
-      background: var(--text-red);
+      background: #c14848;
       border-radius: 5px;
+      padding: 15px 30px;
       cursor: pointer;
     }
   }
@@ -76,7 +77,7 @@ export default function CartModal({ setIsCartOpen, cartItem }) {
             <span>購物車內無任何商品</span>
           </div>
         )}
-        <button onClick={goToCart}>前往購物車</button>
+        <button onClick={goToCart}>前往結帳</button>
       </div>
     </CartStyled>
   );

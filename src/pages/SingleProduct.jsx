@@ -11,8 +11,10 @@ import {
   TwitterIcon,
 } from "../assets/icons";
 import order from "../assets/images/order.png";
+import ProductPopCart from "./ProductPopCart";
 
 const StyledContainer = styled.div`
+  position: relative;
   font-family: Arial, Helvetica, sans-serif;
   margin: 30px 0;
   .cont {
@@ -31,6 +33,9 @@ const StyledProdutWrapper = styled.div`
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 30px;
+  @media screen and (max-width: 768px) {
+    grid-template-columns: 1fr;
+  }
   .picture {
     display: flex;
     flex-flow: column;
@@ -83,6 +88,9 @@ const StyledProdutWrapper = styled.div`
       .icon {
         width: 30px;
         height: 30px;
+      }
+      @media screen and (max-width: 768px) {
+        display: none;
       }
     }
   }
@@ -170,11 +178,22 @@ const StyledProdutWrapper = styled.div`
       }
       & + .count-wrapper {
         margin-bottom: 10px;
+        @media screen and (max-width: 768px) {
+          display: none;
+        }
       }
       & + .button-group {
         display: grid;
         grid-template-columns: 1fr 1fr;
         gap: 10px;
+        height: auto;
+        @media screen and (max-width: 1200px) {
+          grid-template-columns: 1fr;
+        }
+        @media screen and (max-width: 768px) {
+          display: none;
+        }
+
         .button {
           display: flex;
           justify-content: center;
@@ -207,25 +226,45 @@ const StyledProdutWrapper = styled.div`
       border-left: 2px solid #32373a;
     }
     .content {
+      width: 100%;
       padding: 10px;
       background-color: #f9f9f9;
       font-size: 14px;
       font-weight: 400;
       line-height: 1.5;
       color: #212529;
-      word-break: break-all;
+      display: flex;
+      flex-flow: column;
       label {
         width: 100%;
-        display: flex;
-        justify-content: start;
         font-weight: 700;
         color: #333;
+        text-align: left;
       }
       .info {
         width: 100%;
-        display: flex;
-        justify-content: start;
         margin: 5px 0 15px;
+        text-align: left;
+      }
+    }
+  }
+  .share-md {
+    display: none;
+  }
+  @media screen and (max-width: 768px) {
+    .share-md {
+      margin-top: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      height: auto;
+      div {
+        font-size: 14px;
+        line-height: 20px;
+      }
+      .icon {
+        width: 30px;
+        height: 30px;
       }
     }
   }
@@ -274,6 +313,9 @@ const StyleProductsWrapper = styled.div`
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 15px;
+    @media screen and (max-width: 577px){
+      grid-template-columns: 1fr;
+    }
     .card {
       display: flex;
       flex-flow: column;
@@ -370,6 +412,9 @@ const StyledCart = styled.div`
   flex-flow: column;
   align-items: start;
   width: 100%;
+  @media screen and (max-width: 768px) {
+    display: none;
+  }
   hr {
     width: 100%;
     margin: 10px 0;
@@ -416,6 +461,10 @@ const StyledCart = styled.div`
     width: 100%;
     display: grid;
     grid-template-columns: 1fr 1fr;
+    @media screen and (max-width: 1200px) {
+      grid-template-columns: 1fr;
+      gap: 10px;
+    }
     .style-count-wrapper {
       display: flex;
       align-items: center;
@@ -479,14 +528,36 @@ const StyledCart = styled.div`
     }
   }
 `;
-
+const StyledBuyButton = styled.div`
+display: none;
+@media screen and (max-width: 768px){
+  position: fixed;
+  display: flex;
+  justify-content: center;
+  bottom: 0;
+  width: 100%;
+  padding: 15px 30px;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: var(--white);
+  background: #c14848;
+  transform: translateX(-40px);
+  z-index: 50;
+  cursor: pointer;
+}
+`;
 const SingleProduct = () => {
   const [count, setCount] = useState(1);
+  const [addCartPop, setAddCartPop] = useState(false);
   const handledecrease = () => {
     if (count === 1) {
       return;
     }
     setCount(count - 1);
+  };
+  const handleToggleCartModal = () => {
+    setAddCartPop(!addCartPop);
   };
 
   return (
@@ -565,6 +636,12 @@ const SingleProduct = () => {
                     轉帳匯款、宅配代收、7-11取貨付款、全家取貨付款、信用卡
                   </div>
                 </div>
+              </div>
+              <div className='share-md'>
+                <div>分享商品到</div>
+                <FacebookIcon className='icon' />
+                <TwitterIcon className='icon' />
+                <LineIcon className='icon' />
               </div>
             </StyledProdutWrapper>
           </div>
@@ -646,6 +723,12 @@ const SingleProduct = () => {
           </div>
         </div>
       </StyledContainer>
+      <StyledBuyButton onClick={handleToggleCartModal}>
+        我要購買
+      </StyledBuyButton>
+      {addCartPop && (
+        <ProductPopCart handleToggleCartModal={handleToggleCartModal} />
+      )}
     </>
   );
 };

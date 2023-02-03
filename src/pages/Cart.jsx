@@ -57,9 +57,63 @@ const StyledCartContainter = styled.section`
     align-items: center;
     font-size: 85%;
     padding: 15px 10px;
+    @media screen and (max-width: 992px) {
+      grid-template-columns: 3fr 1fr minmax(80px, auto) 100px 100px 80px;
+    }
+    @media screen and (max-width: 768px) {
+      grid-template-columns: 1fr;
+      &.title {
+        .style,
+        .count,
+        .price,
+        .subtotal,
+        .delete {
+          display: none;
+        }
+      }
+      &.product {
+        width: 100%;
+        display: grid;
+        grid-template-columns: 2fr 1fr auto;
+        grid-template-areas:
+          "name name delete"
+          "style count count"
+          "price . subtotal";
+        .name {
+          grid-area: name;
+        }
+        .style {
+          grid-area: style;
+        }
+        .count {
+          grid-area: count;
+        }
+        .price-md {
+          display: inline;
+          grid-area: price;
+        }
+        .subtotal-md {
+          display: inline;
+          grid-area: subtotal;
+        }
+        .delete {
+          grid-area: delete;
+        }
+        .price {
+          display: none;
+        }
+        .subtotal {
+          display: none;
+        }
+      }
+    }
     li {
       text-align: center;
       color: #fff;
+    }
+    .price-md,
+    .subtotal-md {
+      display: none;
     }
   }
   .product {
@@ -77,6 +131,7 @@ const StyledCartContainter = styled.section`
     .name {
       display: flex;
       gap: 10px;
+      font-size: 14px;
       img {
         height: 50px;
         width: 50px;
@@ -101,18 +156,21 @@ const StyledCartContainter = styled.section`
         cursor: pointer;
       }
     }
-    .price {
+    .price,
+    .price-md {
       color: #212529;
       font-weight: 400;
       line-height: 1.5;
     }
-    .subtotal {
+    .subtotal,
+    .subtotal-md {
       color: #212529;
       font-weight: 700;
       line-height: 1.5;
     }
     .delete {
       color: #32373a;
+      cursor: pointer;
     }
   }
 `;
@@ -128,6 +186,10 @@ const StyledTextWrapper = styled.div`
   line-height: 1.5;
   color: #212529;
   text-align: right;
+  @media screen and (max-width: 768px) {
+    display: flex;
+    justify-content: space-between;
+  }
   .text {
     font-size: 14px;
     line-height: 20px;
@@ -151,6 +213,10 @@ const StyledTotal = styled.div`
   gap: 10px;
   align-items: center;
   text-align: right;
+  @media screen and (max-width: 768px) {
+    display: flex;
+    justify-content: space-between;
+  }
   .text-wrapper {
     font-size: 14px;
     line-height: 20px;
@@ -181,6 +247,9 @@ const StyledOrderContainer = styled.div`
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 30px;
+      @media screen and (max-width: 768px) {
+        grid-template-columns: 1fr;
+      }
     }
   }
   //購買資訊
@@ -307,6 +376,9 @@ const StyledOrderContainer = styled.div`
     display: flex;
     justify-content: end;
     width: 100%;
+    @media screen and (max-width: 768px) {
+      justify-content: start;
+    }
     .check {
       margin-bottom: 10px;
       display: flex;
@@ -352,6 +424,13 @@ const StyledOrderContainer = styled.div`
     display: grid;
     grid-template-columns: 5fr 1fr;
     grid-template-areas: ". button";
+    @media screen and (max-width: 768px) {
+      grid-template-columns: 2fr 1fr;
+    }
+    @media screen and (max-width: 577px) {
+      grid-template-columns: 1fr;
+      grid-template-areas: "button";
+    }
     button {
       grid-area: button;
       background-color: #c14848;
@@ -460,12 +539,12 @@ const Cart = () => {
             </StyledTitle>
             <StyledCartContainter>
               <ul className='title'>
-                <li className='name'>品名</li>
-                <li className='style'>規格</li>
-                <li className='count'>數量</li>
-                <li className='price'>單價</li>
-                <li className='subtotal'>小計</li>
-                <li className='delete'>刪除</li>
+                <li className='title name'>品名</li>
+                <li className='title style'>規格</li>
+                <li className='title count'>數量</li>
+                <li className='title price'>單價</li>
+                <li className='title subtotal'>小計</li>
+                <li className='title delete'>刪除</li>
               </ul>
               <div className='product-wrapper'>
                 {/* 商品清單 */}
@@ -638,7 +717,9 @@ const Product = () => {
         </select>
       </li>
       <li className='price'>$520</li>
+      <li className='price-md'>每盒$520元</li>
       <li className='subtotal'>$520</li>
+      <li className='subtotal-md'>小計：$520</li>
       <li className='delete'>
         <DeleteProductIcon size='18px' color='#32373a' />
       </li>
