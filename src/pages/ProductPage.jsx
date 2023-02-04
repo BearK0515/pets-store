@@ -32,15 +32,26 @@ const ProductWrapper = styled.div`
   margin: 5px;
 `;
 const GoToHome = styled.div`
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  width: 100%;
-  text-align: right;
-  font-size: 1rem;
-  font-weight: 400;
-  line-height: 1.5;
-  color: var(--dark);
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    position: relative;
+    width: 100%;
+    text-align: left;
+    font-size: 1.2rem;
+    font-weight: 400;
+
+  @media only screen and (min-width: 992px) {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    width: 100%;
+    text-align: right;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: var(--dark);
+  }
 `;
 const Breadcrumb = styled.div`
   margin-bottom: 20px;
