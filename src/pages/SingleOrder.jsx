@@ -1,5 +1,7 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useLocation, useParams } from "react-router-dom";
 import styled from "styled-components";
+import { singleOrder } from "../api/adminAuth";
 
 const StyledContainer = styled.div`
   width: 100%;
@@ -116,11 +118,31 @@ const StyledWrapper = styled.div`
 `;
 
 const SingleOrder = () => {
+  const [order, setOrder] = useState({});
+  const params = useParams()
+  let total = order?.products?.reduce(
+    (total, item) => total + Number(item.subTotal),
+    0
+  );
+  
+  useEffect(() => {
+    const getOrdersAllAsync = async () => {
+      try {
+        const resOrder = await singleOrder(params.orderId);
+        setOrder(resOrder.data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    getOrdersAllAsync();
+    return;
+  }, [params.orderId,setOrder]);
+
   return (
     <StyledContainer>
       <StyledTitle>
         <h2>訂單編號：</h2>
-        <p>3345678</p>
+        <p>{order?.orderNumber}</p>
       </StyledTitle>
       <StyledOrderList>
         <StyledWrapper>
@@ -131,8 +153,8 @@ const SingleOrder = () => {
             <p>處理狀態</p>
           </div>
           <div className='wrapper-content buying-information'>
-            <p>貨到付款</p>
-            <p>7-11到店取貨</p>
+            <p>{order?.Payment?.type}</p>
+            <p>{order?.Delivery?.type}</p>
             <p>撿貨中</p>
           </div>
           <hr />
@@ -144,33 +166,21 @@ const SingleOrder = () => {
               <p>小計</p>
             </div>
           </div>
-          <div className='wrapper-content products'>
-            <p>毛孩時代腎臟專科保健營養品(30包/盒)</p>
-            <div className='wrapper'>
-              <p>2</p>
-              <p>$690</p>
-              <p>$1380</p>
-            </div>
-          </div>
-          <div className='wrapper-content products'>
-            <p>毛孩時代皮膚專科保健營養品(30包/盒)</p>
-            <div className='wrapper'>
-              <p>1</p>
-              <p>$650</p>
-              <p>$650</p>
-            </div>
-          </div>
-          <div className='wrapper-content products'>
-            <p>毛孩時代關節專科保健營養品(30包/盒)</p>
-            <div className='wrapper'>
-              <p>3</p>
-              <p>$450</p>
-              <p>$1350</p>
-            </div>
-          </div>
+          {order?.products?.map((product) => {
+            return (
+              <div key={product.id} className='wrapper-content products'>
+                <p>{product.Product.name}</p>
+                <div className='wrapper'>
+                  <p>{product.orderQuantity}</p>
+                  <p>${product.Product.price}</p>
+                  <p>${product.subTotal}</p>
+                </div>
+              </div>
+            );
+          })}
           <div className='count'>
             <p>總計</p>
-            <p>$3380</p>
+            <p>${total}</p>
           </div>
         </StyledWrapper>
         <StyledWrapper>
@@ -183,17 +193,14 @@ const SingleOrder = () => {
             <p className='remark'>備註</p>
           </div>
           <div className='wrapper-content sender'>
-            <p>王大明</p>
-            <p>01-23345678</p>
-            <p>abcac@abcabc.com</p>
-            <p className='remark'>
-              {/* 英打字母太長沒辦法自動換行 */}
-              英打字母太長沒辦法自動換行
-            </p>
+            <p>{order.purchaserName}</p>
+            <p>{order.purchaserPhone}</p>
+            <p>{order.purchaserEmail}</p>
+            <p className='remark'>{order.comment}</p>
           </div>
           <div className='remark-md'>
             <p className='wrapper-title'>備註</p>
-            <p className='wrapper-content'>英打字母太長沒辦法自動換行</p>
+            <p className='wrapper-content'>{order.comment}</p>
           </div>
         </StyledWrapper>
         <StyledWrapper>
@@ -202,10 +209,12 @@ const SingleOrder = () => {
           <div className='wrapper-title addressee'>
             <p>姓名</p>
             <p>電話</p>
+            <p>地址</p>
           </div>
           <div className='wrapper-content addressee'>
-            <p>林阿強</p>
-            <p>01-998765432</p>
+            <p>{order.receiverName}</p>
+            <p>{order.receiverPhone}</p>
+            <p>{order.receiverAddress}</p>
           </div>
         </StyledWrapper>
       </StyledOrderList>

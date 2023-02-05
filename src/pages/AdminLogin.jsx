@@ -54,12 +54,12 @@ const AdminLogin = () => {
   const emailRef = useRef("");
   const passwordRef = useRef("");
   const navigate = useNavigate();
-  
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     const email = emailRef?.current.value;
     const password = passwordRef?.current.value;
-    const success = await adminLogin({ email, password });
+    const { success } = await adminLogin({ email, password });
     if (success) {
       Swal.fire({
         title: "登入成功",
@@ -68,15 +68,9 @@ const AdminLogin = () => {
         timer: 1000,
         position: "top",
       });
+      navigate("/admin/products/all");
       return;
     }
-    Swal.fire({
-      title: "登入失敗",
-      icon: "error",
-      showConfirmButton: false,
-      timer: 1000,
-      position: "top",
-    });
   };
 
   return (
@@ -91,10 +85,7 @@ const AdminLogin = () => {
         placeholder='請輸入密碼'
         forwardref={passwordRef}
       />
-      <StyledButton onSubmit={handleSubmit}>送出</StyledButton>
-      <StyledButton onClick={() => navigate("/admin/products/all")}>
-        跳轉管理員頁面
-      </StyledButton>
+      <StyledButton onSubmit={handleSubmit}>登入</StyledButton>
       <StyledLinkText onClick={() => navigate("/")}>首頁</StyledLinkText>
     </StyledContainer>
   );

@@ -76,32 +76,49 @@ const StyledCard = styled.div`
   }
 `;
 
-const CatProducts = ({ handleTogglePriceModal, productsAll }) => {
-  const [productsCat,setProductsCat] = useState([])
+const CatProducts = ({
+  handleTogglePriceModal,
+  productsAll,
+  deleteProduct,
+}) => {
+  const [productsCat, setProductsCat] = useState([]);
   useEffect(() => {
-    setProductsCat(productsAll?.filter(
-      (newProducts) => newProducts.Category.name === "cat"
-    ));
+    setProductsCat(
+      productsAll?.filter((newProducts) => newProducts.Category.name === "cat")
+    );
   }, [productsAll]);
 
   return (
     <>
       {productsCat?.map((product) => {
         return (
-          <StyledCard key={product.id} onClick={handleTogglePriceModal}>
+          <StyledCard
+            className='card'
+            key={product.id}
+            onClick={handleTogglePriceModal}
+            id={product.id}
+          >
             <div
               className='product'
               style={{ backgroundImage: `url('${product.Images.url}')` }}
+              id={product.id}
             ></div>
-            <div className='wrapper'>
-              <h4 className='title'>{product.name}</h4>
-              <div className='price'>${product.price}</div>
-              <div className='discount-price'>
+            <div className='wrapper' id={product.id}>
+              <h4 className='title' id={product.id}>
+                {product.name}
+              </h4>
+              <div className='price' id={product.id}>
+                ${product.price}
+              </div>
+              <div className='discount-price' id={product.id}>
                 ${Math.floor(product.price * 0.8)}
               </div>
             </div>
-            <button className='delete'>
-              <CancelIcon />
+            <button
+              className='delete btn'
+              onClick={() => deleteProduct?.(product.id)}
+            >
+              <CancelIcon className='btn' />
             </button>
           </StyledCard>
         );
