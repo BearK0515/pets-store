@@ -75,7 +75,7 @@ const StyledProdutsContainer = styled.div`
     grid-template-columns: repeat(2, 1fr);
   }
 `;
-const Products = ({ productsAll, handleTogglePriceModal }) => {
+const Products = ({ productsAll, handleTogglePriceModal, deleteProduct }) => {
   const page = useLocation().pathname;
   return (
     <StyledContainer>
@@ -108,18 +108,21 @@ const Products = ({ productsAll, handleTogglePriceModal }) => {
           <AllProducts
             productsAll={productsAll}
             handleTogglePriceModal={handleTogglePriceModal}
+            deleteProduct={deleteProduct}
           />
         )}
         {page.includes("dog") && (
           <DogProducts
             productsAll={productsAll}
             handleTogglePriceModal={handleTogglePriceModal}
+            deleteProduct={deleteProduct}
           />
         )}
         {page.includes("cat") && (
           <CatProducts
             productsAll={productsAll}
             handleTogglePriceModal={handleTogglePriceModal}
+            deleteProduct={deleteProduct}
           />
         )}
       </StyledProdutsContainer>

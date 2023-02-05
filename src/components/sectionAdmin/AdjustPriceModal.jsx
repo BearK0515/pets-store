@@ -1,5 +1,7 @@
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
+import { adjustProduct } from "../../api/adminAuth";
+import { productDetail } from "../../api/products";
 import { CancelIcon } from "../../assets/icons";
 
 const StyledModalContainer = styled.div`
@@ -38,9 +40,6 @@ const StyledCard = styled.div`
   flex-flow: column;
   align-items: center;
   aspect-ratio: 3/4;
-  &:hover {
-    cursor: pointer;
-  }
   .product {
     width: 100%;
     aspect-ratio: 1/1;
@@ -109,30 +108,82 @@ const StyledCard = styled.div`
     display: flex;
     justify-content: center;
   }
+  .button {
+    width: 100%;
+    background: #c14848;
+    color: var(--white);
+    margin: 5px;
+    padding: 5px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
 `;
 
-const AdjustPriceModal = ({ handleTogglePriceModal }) => {
+const AdjustPriceModal = ({
+  setIsOpenPriceModal,
+  handleTogglePriceModal,
+  productId,
+}) => {
+  const priceRef = useRef(null);
+  const [singleProduct, setSingleProduct] = useState(null);
+  //PUT修改價錢
+  async function handleSubmit(id) {
+    const adjustPrice = priceRef.current?.value;
+    console.log("修改價錢>>",adjustPrice);
+    setIsOpenPriceModal(false);
+    try {
+      await adjustProduct({id})
+    } catch (error) {
+      console.error(error);
+    }
+  }
+  //GET單一商品
+  useEffect(() => {
+    const getSingleProduct = async () => {
+      try {
+        const resSingleProduct = await productDetail(productId);
+        setSingleProduct(resSingleProduct);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    getSingleProduct();
+  }, [productId,setSingleProduct]);
   return (
     <StyledModalContainer>
-      <div className="overlay" onClick={handleTogglePriceModal}>
-        <div className="content">
+      <div className='overlay'>
+        <div className='content'>
           <StyledCard>
-            <button className="cancel" onClick={handleTogglePriceModal}>
+            <button className='cancel' onClick={handleTogglePriceModal}>
               <CancelIcon />
             </button>
-            <div className="product"></div>
-            <div className="wrapper">
-              <h4 className="title"> 【毛孩時代】腎臟專科保健粉(30包/盒)</h4>
-              <div className="price">$750</div>
-              <div className="discount-price">$690</div>
-              <div className="adjust-price-wrapper">
+            <div
+              className='product'
+              style={{
+                backgroundImage: `url('${singleProduct?.Image[0]?.url}')`,
+              }}
+            ></div>
+            <div className='wrapper'>
+              <h4 className='title'>{singleProduct?.name}</h4>
+              <div className='price'>${singleProduct?.price}</div>
+              <div className='discount-price'>
+                ${Math.floor(singleProduct?.price * 0.8)}
+              </div>
+              <div className='adjust-price-wrapper'>
                 <p>$</p>
                 <input
-                  className="adjust-price"
-                  type="text"
-                  placeholder="請輸入價格"
+                  className='adjust-price'
+                  type='text'
+                  placeholder='請輸入價格'
+                  ref={priceRef}
                 />
               </div>
+              <button
+                className='button'
+                onClick={()=>handleSubmit(singleProduct?.id)}
+              >
+                送出
+              </button>
             </div>
           </StyledCard>
         </div>

@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 const StyledContainer = styled.div`
@@ -45,7 +45,7 @@ const StyledOrderList = styled.div`
   }
 `;
 
-const StyledOrder = styled(Link)`
+const StyledOrder = styled.div`
   height: 40px;
   display: flex;
   flex-flow: row;
@@ -59,7 +59,8 @@ const StyledOrder = styled(Link)`
   }
 `;
 
-const Orders = () => {
+const Orders = ({ orders }) => {
+  const navigate = useNavigate();
   return (
     <StyledContainer>
       <StyledTitle>
@@ -70,18 +71,18 @@ const Orders = () => {
           <p>訂單編號</p>
           <p style={{ paddingRight: "20px" }}>時間</p>
         </div>
-        <StyledOrder className='order' to="orderId">
-          <p>3345678</p>
-          <p>2023/1/12</p>
-        </StyledOrder>
-        <StyledOrder className='order' to="orderId">
-          <p>3345678</p>
-          <p>2023/1/12</p>
-        </StyledOrder>
-        <StyledOrder className='order' to="orderId">
-          <p>3345678</p>
-          <p>2023/1/12</p>
-        </StyledOrder>
+        {orders?.map((order) => {
+          return (
+            <StyledOrder
+              key={order.id}
+              className='order'
+              onClick={() => navigate(`single-order/${order.orderNumber}`)}
+            >
+              <p>{order.orderNumber}</p>
+              <p>{new Date(order.createdAt).toLocaleDateString()}</p>
+            </StyledOrder>
+          );
+        })}
       </StyledOrderList>
     </StyledContainer>
   );

@@ -2,7 +2,6 @@ import axios from 'axios';
 
 const baseURL = "https://www.waylins.com";
 // const baseURL = "http://eshop-env.eba-bv3rpum8.ap-northeast-1.elasticbeanstalk.com";
-// const baseURL = "http://polls.apiblueprint.org/api/blogs";
 
 //取得所有文章
 export const artical = async() => {
