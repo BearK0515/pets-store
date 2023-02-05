@@ -1,6 +1,6 @@
 import React,{ useState, useEffect } from "react";
 import styled from "styled-components";
-import { CartIcon } from "../assets/icons/index";
+import { CartIcon, PriceUpIcon, PriceDownIcon } from "../assets/icons/index";
 import ProductPopCart from "./ProductPopCart";
 import {productsHot, productsNew, productsPrice} from "../api/products"
 import { NavLink as Link } from "react-router-dom";
@@ -129,9 +129,11 @@ const ProductDog = () => {
   const [productHot, setProductHot] = useState([])
   const [productNew, setProductNew] = useState([])
   const [productPrice, setProductPrice] = useState([])
+  const [productPriceOrigin, setProductPriceOrigin] = useState([]);
   const [sortSelect, setSortSelect] = useState({
     top: true
   })
+  const [priceToggle, setPriceToggle] = useState('desc')
   const [addCartPop, setAddCartPop] = useState(false)
 
    //抓熱銷排行
@@ -167,24 +169,46 @@ const ProductDog = () => {
     const getProductPriceAsync = async () => {
       try {
         const resProductPrice = await productsPrice();
+        setProductPriceOrigin(resProductPrice);
         setProductPrice(resProductPrice);
       } catch (err) {
         console.error(err);
       }
-    }
+    };
     getProductPriceAsync();
     return;
-  },[setProductPrice])
+  }, [setProductPriceOrigin]);
 
+  // 點擊時，其他二個會變成 undefine 為 false，當為 true 時不改變
   const sortSelectToggle = (e) => {
-    if ( sortSelect[e.target.value] === true ) {
-      return
+    if (e.target.value === 'price') {
+      if (priceToggle === 'asc') {
+        setProductPrice(productPriceOrigin.sort((a,b) => {
+          return a.price - b.price
+        }))
+        const priceSortOrder = priceToggle === 'asc' ? 'desc' : 'asc' 
+        setPriceToggle(priceSortOrder)
+      } else if (priceToggle === 'desc') {
+        setProductPrice(productPriceOrigin.sort((a,b) => {
+        return b.price - a.price 
+        }))
+        const priceSortOrder = priceToggle === 'asc' ? 'desc' : 'asc'
+        setPriceToggle(priceSortOrder)
+      }
+    } else {
+      setPriceToggle('desc')
+      setProductPrice(productPriceOrigin.sort((a,b) => {
+        return b.price - a.price
+      }))
+    }
+    if (sortSelect[e.target.value] === true) {
+      return;
     } else {
       setSortSelect(() => ({
         [e.target.value]: !sortSelect[e.target.value]
-      }))
+      }));
     }
-  }
+  };
 
   const handleToggleCartModal = () => {
     setAddCartPop(!addCartPop)
@@ -196,7 +220,10 @@ const ProductDog = () => {
         <ul className='sort-nav'>
           <button key={1} className={sortSelect['top'] ? 'sort active' : 'sort'} onClick={sortSelectToggle} value="top">熱銷排行</button>
           <button key={2} className={sortSelect['new'] ? 'sort active' : 'sort'} onClick={sortSelectToggle} value="new">最新上架</button>
-          <button key={3} className={sortSelect['price'] ? 'sort active' : 'sort'} onClick={sortSelectToggle} value="price">價格</button>
+          <button key={3} className={sortSelect['price'] ? 'sort active' : 'sort'} onClick={sortSelectToggle} value="price">
+            價格
+            { sortSelect["price"] && ( priceToggle === 'asc' ? <PriceUpIcon style={{fontSize: "14px", pointerEvents: "none"}}/> : <PriceDownIcon style={{fontSize: "14px", pointerEvents: "none"}}/> ) }
+            </button>
         </ul>
       </ProductsSort>
       <ProductList>

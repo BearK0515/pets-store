@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import { CartIcon } from "../assets/icons/index";
+import { CartIcon, PriceUpIcon, PriceDownIcon } from "../assets/icons/index";
 import ProductPopCart from "./ProductPopCart";
 import { NavLink as Link } from "react-router-dom";
 import { productsHot, productsNew, productsPrice } from "../api/products";
@@ -126,9 +126,11 @@ const ProductAll = () => {
   const [productHot, setProductHot] = useState([]);
   const [productNew, setProductNew] = useState([]);
   const [productPrice, setProductPrice] = useState([]);
+  const [productPriceOrigin, setProductPriceOrigin] = useState([]);
   const [sortSelect, setSortSelect] = useState({
     top: true,
   });
+  const [priceToggle, setPriceToggle] = useState('desc')
   const [addCartPop, setAddCartPop] = useState(false);
 
   //抓熱銷排行
@@ -164,6 +166,7 @@ const ProductAll = () => {
     const getProductPriceAsync = async () => {
       try {
         const resProductPrice = await productsPrice();
+        setProductPriceOrigin(resProductPrice);
         setProductPrice(resProductPrice);
       } catch (err) {
         console.error(err);
@@ -171,15 +174,35 @@ const ProductAll = () => {
     };
     getProductPriceAsync();
     return;
-  }, [setProductPrice]);
+  }, [setProductPriceOrigin]);
 
   // 點擊時，其他二個會變成 undefine 為 false，當為 true 時不改變
   const sortSelectToggle = (e) => {
+    if (e.target.value === 'price') {
+      if (priceToggle === 'asc') {
+        setProductPrice(productPriceOrigin.sort((a,b) => {
+          return a.price - b.price
+        }))
+        const priceSortOrder = priceToggle === 'asc' ? 'desc' : 'asc' 
+        setPriceToggle(priceSortOrder)
+      } else if (priceToggle === 'desc') {
+        setProductPrice(productPriceOrigin.sort((a,b) => {
+        return b.price - a.price 
+        }))
+        const priceSortOrder = priceToggle === 'asc' ? 'desc' : 'asc'
+        setPriceToggle(priceSortOrder)
+      }
+    } else {
+      setPriceToggle('desc')
+      setProductPrice(productPriceOrigin.sort((a,b) => {
+        return b.price - a.price
+      }))
+    }
     if (sortSelect[e.target.value] === true) {
       return;
     } else {
       setSortSelect(() => ({
-        [e.target.value]: !sortSelect[e.target.value],
+        [e.target.value]: !sortSelect[e.target.value]
       }));
     }
   };
@@ -215,6 +238,7 @@ const ProductAll = () => {
             value='price'
           >
             價格
+            { sortSelect["price"] && ( priceToggle === 'asc' ? <PriceUpIcon style={{fontSize: "14px", pointerEvents: "none"}}/> : <PriceDownIcon style={{fontSize: "14px", pointerEvents: "none"}}/> ) }
           </button>
         </ul>
       </ProductsSort>
