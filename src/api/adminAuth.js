@@ -82,20 +82,20 @@ export const addProduct = async (orderId) => {
     console.error("[GET OrdersAll Failed]:", error);
   }
 };
-//PUT管理員修改商品 製作中
-export const adjustProduct = async ({ product }) => {
+//PUT管理員修改商品
+export const adjustProduct = async ({ productId, adjustPrice }) => {
   try {
     const authToken = localStorage.getItem("authToken");
     const rep = await axios({
       method: "PUT",
-      // url: `${baseURL}/api/admin/products/edit/20`,
-      url: `${baseURL}/api/admin/products/edit/${product?.id}`,
-      data:{product},
+      url: `${baseURL}/api/admin/products/edit/${productId}`,
+      data: {
+        price: adjustPrice,
+      },
       headers: {
         Authorization: `Bearer ${authToken}`,
       },
     });
-    console.log(rep);
     return rep;
   } catch (error) {
     console.error("[PUT adjust the price Failed]:", error);

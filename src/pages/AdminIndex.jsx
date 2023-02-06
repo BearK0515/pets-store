@@ -11,6 +11,7 @@ import {
 import SingleOrder from "./SingleOrder";
 import { productsHot } from "../api/products";
 import { admindeleteProduct, ordersAll } from "../api/adminAuth";
+import Swal from "sweetalert2";
 
 const StyledContainer = styled.div`
   max-width: 1140px;
@@ -78,8 +79,10 @@ const AdminIndex = () => {
   //修改商品價錢彈窗開關
   const handleTogglePriceModal = (e) => {
     if (e.target.matches(".btn")) {
-      return
+      return;
     }
+    e.preventDefault();
+    e.stopPropagation();
     setProductId(e.target.id);
     setIsOpenPriceModal(!isOpenPriceModal);
   };
@@ -100,7 +103,21 @@ const AdminIndex = () => {
     try {
       const deleteProduct = await admindeleteProduct(productId);
       if (deleteProduct) {
-        setProductsAll(newProductAll);
+        Swal.fire({
+          title: "移除商品",
+          text: "是否確定移除商品？",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#3085d6",
+          cancelButtonColor: "#d33",
+          confirmButtonText: "移除",
+        }).then((result) => {
+          if (result.isConfirmed) {
+            Swal.fire("移除商品", "已移除", "success");
+            setProductsAll(newProductAll);
+          }
+          return;
+        });
       }
     } catch (error) {
       console.error("delete product error:", error);
@@ -118,7 +135,7 @@ const AdminIndex = () => {
     };
     getProductsHotAsync();
     return;
-  }, [setProductsAll]);
+  }, [isOpenPriceModal,setProductsAll]);
   //GET所有訂單
   useEffect(() => {
     const getOrdersAllAsync = async () => {
@@ -132,7 +149,6 @@ const AdminIndex = () => {
     getOrdersAllAsync();
     return;
   }, [setOrders]);
-
   return (
     <>
       <StyledContainer>

@@ -114,12 +114,16 @@ const CatProducts = ({
                 ${Math.floor(product.price * 0.8)}
               </div>
             </div>
-            <button
+            <div
               className='delete btn'
-              onClick={() => deleteProduct?.(product.id)}
+              onClick={(e) => {
+                deleteProduct?.(product.id);
+                e.preventDefault();
+                e.stopPropagation();
+              }}
             >
               <CancelIcon className='btn' />
-            </button>
+            </div>
           </StyledCard>
         );
       })}

@@ -127,12 +127,12 @@ const AdjustPriceModal = ({
   const priceRef = useRef(null);
   const [singleProduct, setSingleProduct] = useState(null);
   //PUT修改價錢
-  async function handleSubmit(id) {
-    const adjustPrice = priceRef.current?.value;
-    console.log("修改價錢>>",adjustPrice);
-    setIsOpenPriceModal(false);
+  async function handleSubmit() {
+    const adjustPrice = priceRef?.current?.value;
     try {
-      await adjustProduct({id})
+      await adjustProduct({ productId, adjustPrice });
+      console.log(adjustPrice);
+      setIsOpenPriceModal(false);
     } catch (error) {
       console.error(error);
     }
@@ -148,7 +148,7 @@ const AdjustPriceModal = ({
       }
     };
     getSingleProduct();
-  }, [productId,setSingleProduct]);
+  }, [productId, setSingleProduct]);
   return (
     <StyledModalContainer>
       <div className='overlay'>
@@ -180,7 +180,7 @@ const AdjustPriceModal = ({
               </div>
               <button
                 className='button'
-                onClick={()=>handleSubmit(singleProduct?.id)}
+                onClick={() => handleSubmit(singleProduct?.id)}
               >
                 送出
               </button>
