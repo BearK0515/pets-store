@@ -75,7 +75,11 @@ const StyledProdutsContainer = styled.div`
     grid-template-columns: repeat(2, 1fr);
   }
 `;
-const Products = ({ productsAll, handleTogglePriceModal, deleteProduct }) => {
+const Products = ({
+  productsAll,
+  handleTogglePriceModal,
+  deleteProduct,
+}) => {
   const page = useLocation().pathname;
   return (
     <StyledContainer>

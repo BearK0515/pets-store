@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { useRef } from "react";
-import { useDispatch } from "react-redux";
+// import { useDispatch } from "react-redux";
 import styled from "styled-components";
-import { setProduct } from "../../store/productSlice";
+// import { setProduct } from "../../store/productSlice";
 
 const StyledModalContainer = styled.div`
   width: 100vw;
@@ -215,27 +215,40 @@ const AddProductModal = ({ handleToggleProductModal }) => {
   // const [previewProductPicture, setPreviewProductPicture] = useState("");
   // const [describePicture, setDescribePicture] = useState([]);
   // const [preViewDescribePicture, setPreViewDescribePicture] = useState("");
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
   const nameRef = useRef();
   const priceRef = useRef();
   const styleRef = useRef();
 
   const handleSubmit = () => {
-    const nameValue = nameRef.current?.value;
-    const priceValue = priceRef.current?.value;
-    const styleValue = styleRef.current?.value;
-    dispatch(
-      setProduct({
-        name: nameValue,
-        price: priceValue,
-        style: styleValue,
-        category: categoryValue,
-        // image: productPicture,
-      })
-    );
-    handleToggleProductModal();
-  };
+    const nameValue = nameRef?.current?.value;
+    const priceValue = priceRef?.current?.value;
+    const styleValue = styleRef?.current?.value;
 
+    const formData = new FormData();
+    formData.append("name", nameValue);
+    formData.append("price", priceValue);
+    formData.append("description", styleValue);
+    formData.append("CategoryId", categoryValue);
+    // formData.append("url", productPicture);
+
+    // dispatch(
+    //   setProduct({
+    //     name: nameValue,
+    //     price: priceValue,
+    //     style: styleValue,
+    //     category: categoryValue,
+    //     // image: productPicture,
+    //   })
+    // );
+    handleToggleProductModal();
+    console.log(formData);
+    console.log(nameValue);
+    console.log(priceValue);
+    console.log(styleValue);
+    console.log(categoryValue);
+  };
+  
   return (
     <StyledModalContainer>
       <div className='overlay' onClick={handleToggleProductModal}></div>
@@ -264,8 +277,8 @@ const AddProductModal = ({ handleToggleProductModal }) => {
                 <option disabled value='default'>
                   商品分類
                 </option>
-                <option value='dog'>狗狗專區</option>
-                <option value='cat'>貓咪專區</option>
+                <option value='1'>狗狗專區</option>
+                <option value='2'>貓咪專區</option>
               </select>
             </div>
             <div className='wrapper'>
