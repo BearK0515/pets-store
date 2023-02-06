@@ -3,7 +3,6 @@ import axios from 'axios'
 const baseURL = "https://www.waylins.com";
 // const baseURL =
 //   "http://eshop-env.eba-bv3rpum8.ap-northeast-1.elasticbeanstalk.com";
-// const baseURL = "http://polls.apiblueprint.org";
 
 //取得所有商品(熱銷)
 export const productsHot = async () => {
@@ -14,7 +13,7 @@ export const productsHot = async () => {
     });
     return rep.data
   } catch (error) {
-    console.error("[Get Hot Products failed]:");
+    console.error("[Get Hot Products failed]:", error);
   }
 }
 //取得所有商品(最新)
@@ -26,7 +25,7 @@ export const productsNew = async () => {
     });
     return rep.data
   } catch (error) {
-    console.error("[Get New Products failed]:");
+    console.error("[Get New Products failed]:", error);
   }
 }
 //取得所有商品(價格)
@@ -38,6 +37,19 @@ export const productsPrice = async () => {
     });
     return rep.data
   } catch (error) {
-    console.error("[Get PriceSort Products failed]:");
+    console.error("[Get PriceSort Products failed]:", error);
   }
 }
+
+//取得指定商品詳細資料
+export const productDetail = async (productId) => {
+  try {
+    const rep = await axios({
+      method: "GET",
+      url: `${baseURL}/api/products/detail/${productId}`,
+    });
+    return rep.data;
+  } catch (error) {
+    console.error("[Get Product Detail failed]:", error);
+  }
+};

@@ -94,7 +94,7 @@ const StyledWrapper = styled.div`
         height: 40px;
         border-radius: 4px;
         cursor: pointer;
-        div {
+        div,a {
           width: 22px;
           height: 21px;
           display: flex;

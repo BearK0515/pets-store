@@ -14,26 +14,69 @@ const BlogStyled = styled.div`
   max-width: 1140px;
 `;
 const GoToHome = styled.div`
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  width: 100%;
-  text-align: right;
-  font-size: 1rem;
-  font-weight: 400;
-  line-height: 1.5;
-  color: var(--dark);
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    position: relative;
+    width: 100%;
+    text-align: left;
+    font-size: 1.2rem;
+    font-weight: 400;
+
+  @media only screen and (min-width: 992px) {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    width: 100%;
+    text-align: right;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: var(--dark);
+  }
 `;
 
+const BlogSearchTop = styled.div`
+  @media only screen and (min-width: 992px) {
+      display: none;
+  }
+  @media only screen and (max-width: 992px) {
+    outline: 1px solid #c7cbd0;
+    outline-offset: -1px;
+    width: 100%;
+    margin-bottom: 15px;
+    padding: 15px;
+    h4 {
+      font-size: 18px;
+      line-height: 1;
+      margin-top: 0px;
+    }
+    b {
+      font-weight: bolder;
+    }
+    .formStyled {
+      width: 100%;
+      height: 36px;
+      margin: 5px 0;
+      padding: 10px;
+      border: 1px solid #d9d9d9;
+      color: var(--gray);
+    }
+  }
+`;
+
+
 const Breadcrumb = styled.div`
-  margin-bottom: 20px;
-  position: relative;
+  display: flex;
+  align-items: center;
 `;
 
 const BlogContent = styled.div`
-  display: grid;
-  grid-template-columns: 1fr 230px;
-  grid-gap: 0 15px;
+  @media only screen and (min-width: 992px) {
+    display: grid;
+    grid-template-columns: 1fr 230px;
+    gap: 0 15px;
+  }
 `;
 
 const BlogListWrapper = styled.div`
@@ -119,27 +162,32 @@ const BlogCardImg = styled.div`
 `;
 
 const BlogAside = styled.div`
-  // border: 2px solid red;
+ //
 `;
 
 const BlogSearch = styled.div`
-  outline: 1px solid #c7cbd0;
-  outline-offset: -1px;
-  margin-bottom: 15px;
-  padding: 15px;
-  h4 {
-    font-size: 18px;
-    line-height: 1;
-    margin-top: 0px;
+  @media only screen and (max-width: 992px) {
+      display: none;
   }
-  b {
-    font-weight: bolder;
-  }
-  .formStyled {
-    height: 36px;
-    margin-top: 10px;
-    padding: 10px;
-    border: 1px solid #d9d9d9;
+  @media only screen and (min-width: 992px) {
+    outline: 1px solid #c7cbd0;
+    outline-offset: -1px;
+    margin-bottom: 15px;
+    padding: 15px;
+    h4 {
+      font-size: 18px;
+      line-height: 1;
+      margin-top: 0px;
+    }
+    b {
+      font-weight: bolder;
+    }
+    .formStyled {
+      height: 36px;
+      margin-top: 10px;
+      padding: 10px;
+      border: 1px solid #d9d9d9;
+    }
   }
 `;
 
@@ -248,6 +296,7 @@ const Blogs = () => {
   const [articalOrigin, setArticalOrigin] = useState([]);
   const [articalAll, setArticalAll] = useState([]);
   const [query, setQuery] = useState("");
+  const [optionsState, setOptionsState] = useState("")
 
   //抓文章api
   useEffect(() => {
@@ -257,7 +306,6 @@ const Blogs = () => {
         resArticalAll.sort((a,b) => {
           return b.isTop - a.isTop //正數-負數排序(true[1]-false[0])
         })
-        console.log(resArticalAll);
         setArticalOrigin(resArticalAll);
         setArticalAll(resArticalAll);
       } catch (err) {
@@ -284,6 +332,19 @@ const Blogs = () => {
     setQuery(e.target.value)
   }
 
+  const handleChangeSelect = (e) => {
+    if (e.target.value === 'default') {
+      return;
+    }
+    if(e.target.value === 'dog') {
+      setArticalAll(articalOrigin.filter(artical => artical.category === 'dog'))
+    }
+    if(e.target.value === 'cat') {
+      setArticalAll(articalOrigin.filter(artical => artical.category === 'cat'))
+    }
+    setOptionsState(e.target.value)
+  }
+
   const handleSearchArtical = (e) => {
     if (e.target.value === 0) {
       return;
@@ -307,6 +368,25 @@ const Blogs = () => {
       </HomeLinkWrapper>
       <Breadcrumb />
       <BlogContent>
+        <BlogSearchTop>
+              <form>
+                <input
+                  className='formStyled'
+                  type='text'
+                  placeholder='請輸入搜尋關鍵字'
+                  value={query}
+                  onChange={handleChange}
+                  onKeyDown={handleSearchArtical}
+                />
+              </form>
+              <form>
+                <select className='formStyled' value={optionsState} onChange={handleChangeSelect}>
+                  <option value="default">- 請選擇文章分類 -</option>
+                  <option value="dog">狗狗健康知識庫</option>
+                  <option value="cat">貓咪健康知識庫</option>
+                </select>
+              </form>
+            </BlogSearchTop>
         <BlogListWrapper>
           <ul>
             { articalAll.length === 0 && (articalOrigin?.map((artical) => {
@@ -357,7 +437,7 @@ const Blogs = () => {
         </BlogListWrapper>
         <BlogAside>
           <div className='BlogArticalInner'>
-            <BlogSearch>
+              <BlogSearch>
               <h4>
                 <b>搜尋文章</b>
               </h4>
@@ -387,7 +467,6 @@ const Blogs = () => {
                       </li>
                     )
                   })}
-                  
                 </BlogArticalList>
             </BlogNews>
             <BlogCategoryArea>

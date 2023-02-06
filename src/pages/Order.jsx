@@ -30,6 +30,10 @@ const StyledWrapper = styled.div`
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 30px;
+  @media screen and (max-width: 992px) {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
   .form-group {
     width: 100%;
     padding: 0;
@@ -102,6 +106,9 @@ const StyledButtonWrapper = styled.div`
   display: grid;
   align-items: center;
   grid-template-columns: 5fr 1fr;
+  @media screen and (max-width: 768px){
+    grid-template-columns: 2fr 1fr;
+  }
   button {
     background-color: #c14848;
     border: 1px solid #c14848;
