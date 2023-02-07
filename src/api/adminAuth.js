@@ -66,36 +66,39 @@ export const singleOrder = async (orderId) => {
     console.error("[GET single order Failed]:", error);
   }
 };
-//POST管理員新增商品 內容還沒改
-export const addProduct = async (orderId) => {
+//POST管理員新增商品 製作中
+export const addProduct = async ({ formData }) => {
   try {
     const authToken = localStorage.getItem("authToken");
     const rep = await axios({
       method: "POST",
-      url: `${baseURL}/api/admin/detail/${orderId}`,
+      url: `${baseURL}/api/admin/products`,
+      data: formData,
       headers: {
         Authorization: `Bearer ${authToken}`,
+        "Content-Type": "multipart/form-data",
       },
     });
-    return rep.data.orders;
+    console.log("新增商品api", rep);
+    return rep;
   } catch (error) {
-    console.error("[GET OrdersAll Failed]:", error);
+    console.error("[POST add Product Failed]:", error);
   }
 };
-//PUT管理員修改商品 製作中
-export const adjustProduct = async ({ product }) => {
+//PUT管理員修改商品
+export const adjustProduct = async ({ productId, adjustPrice }) => {
   try {
     const authToken = localStorage.getItem("authToken");
     const rep = await axios({
       method: "PUT",
-      // url: `${baseURL}/api/admin/products/edit/20`,
-      url: `${baseURL}/api/admin/products/edit/${product?.id}`,
-      data:{product},
+      url: `${baseURL}/api/admin/products/edit/${productId}`,
+      data: {
+        price: adjustPrice,
+      },
       headers: {
         Authorization: `Bearer ${authToken}`,
       },
     });
-    console.log(rep);
     return rep;
   } catch (error) {
     console.error("[PUT adjust the price Failed]:", error);
