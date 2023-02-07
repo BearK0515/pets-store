@@ -135,7 +135,7 @@ const AdminIndex = () => {
     };
     getProductsHotAsync();
     return;
-  }, [isOpenPriceModal,setProductsAll]);
+  }, [isOpenPriceModal, isOpenProductModal,setProductsAll]);
   //GET所有訂單
   useEffect(() => {
     const getOrdersAllAsync = async () => {
