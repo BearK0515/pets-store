@@ -69,6 +69,7 @@ export const singleOrder = async (orderId) => {
 //POST管理員新增商品 製作中
 export const addProduct = async ({ formData }) => {
   try {
+    // console.log("API formData", formData);
     const authToken = localStorage.getItem("authToken");
     const rep = await axios({
       method: "POST",
