@@ -94,7 +94,8 @@ const StyledWrapper = styled.div`
         height: 40px;
         border-radius: 4px;
         cursor: pointer;
-        div,a {
+        div,
+        a {
           width: 22px;
           height: 21px;
           display: flex;
@@ -162,7 +163,7 @@ const LoginModal = ({ setIsOpenLoginModal, handleToggleLoginModal }) => {
 
   useEffect(() => {
     const getUserInfo = async () => {
-      console.log(token)
+      console.log(token);
       const data = await facebookLogin({ token });
       console.log(data);
     };
@@ -194,10 +195,11 @@ const LoginModal = ({ setIsOpenLoginModal, handleToggleLoginModal }) => {
                 <div>
                   {/* <FacebookWhiteIcon /> */}
                   <LoginSocialFacebook
+                    isOnlyGetToken
                     appId="1699530640464382"
                     onResolve={(res) => {
+                      console.log(res.data);
                       setToken(res.data.accessToken);
-                      console.log(res.data.accessToken);
                     }}
                     onReject={(err) => {
                       console.log(err);

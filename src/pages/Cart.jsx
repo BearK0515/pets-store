@@ -1019,7 +1019,7 @@ const SevenElevenPickUp = () => {
   const [selectedOption, setSelectedOption] = useState("default");
   return (
     <>
-      <a href="https://emap.presco.com.tw/c2cemap.ashx?eshopid=870&&servicetype=1&url=https://localhost:3000/cvs_callback">
+      <a href="https://emap.presco.com.tw/c2cemap.ashx?eshopid=870&&servicetype=1&url=https://localhost:3000">
         <button className="button">選擇取件超商門市</button>
       </a>
       <div className="content-wrapper">

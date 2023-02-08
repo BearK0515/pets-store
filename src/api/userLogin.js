@@ -19,11 +19,15 @@ const baseURL = "https://www.waylins.com";
 // }
 export const facebookLogin = async ({ token }) => {
   try {
+    console.log(token)
     const rep = await axios({
-      method: "POST",
+      method: "GET",
       url: `${baseURL}/api/auth/facebook/token`,
+      // data: {
+      //   access_token: token,
+      // },
       headers: {
-        Authorization: 'Bearer ' + token,
+        Authorization: 'Bearer ' + 'EAAKJvyTYxPYBAOdb4WSy2NOzZBU5AKlRlLtw3BaThvhXJw9UsrlSZAgoDvGmv278dKFZBrvEvCeZB5sPXXmfIUwdZAmLLmLVTWp1SkUsIXOVGb19gZAopdZAVT4NAlazYuX4qOEZBk5ZBCaw3ZA6ZBNWrCVMwBIM9k0vb9GJJE4gZCImBMCN5lL02zsKMEhUGSLSESjoxhOypjdrwhsoZADYg4kQX77NuVqji4dkZBXlKgvd52vwZDZD'
       },
     });
     console.log("get FB reponse", rep);
