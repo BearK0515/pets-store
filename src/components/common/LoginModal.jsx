@@ -9,7 +9,6 @@ import { facebookLogin, googleLogin } from "../../api/userLogin";
 import {
   AlertIcon,
   CancelIcon,
-  FacebookWhiteIcon,
   GoogleIcon,
   LineWhiteIcon,
 } from "../../assets/icons";
