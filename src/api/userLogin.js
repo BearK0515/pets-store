@@ -27,7 +27,7 @@ export const facebookLogin = async ({ token }) => {
       //   access_token: token,
       // },
       headers: {
-        Authorization: 'Bearer ' + 'EAAKJvyTYxPYBAOdb4WSy2NOzZBU5AKlRlLtw3BaThvhXJw9UsrlSZAgoDvGmv278dKFZBrvEvCeZB5sPXXmfIUwdZAmLLmLVTWp1SkUsIXOVGb19gZAopdZAVT4NAlazYuX4qOEZBk5ZBCaw3ZA6ZBNWrCVMwBIM9k0vb9GJJE4gZCImBMCN5lL02zsKMEhUGSLSESjoxhOypjdrwhsoZADYg4kQX77NuVqji4dkZBXlKgvd52vwZDZD'
+        Authorization: 'Bearer ' + token
       },
     });
     console.log("get FB reponse", rep);
