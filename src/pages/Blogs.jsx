@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from "react";
-import styled from "styled-components";
-import { useNavigate } from "react-router-dom";
-import { HomeIcon, ClockIcon, BookMarkIcon } from "../assets/icons/index";
-import { HomeLinkWrapper } from "../components/common/HomeLinkWrapper";
-import { artical } from "../api/blogs";
+import React, { useEffect, useState } from 'react';
+import styled from 'styled-components';
+import { useNavigate } from 'react-router-dom';
+import { HomeIcon, ClockIcon, BookMarkIcon } from '../assets/icons/index';
+import { HomeLinkWrapper } from '../components/common/HomeLinkWrapper';
+import { artical } from '../api/blogs';
 
 const BlogStyled = styled.div`
   box-sizing: border-box;
@@ -14,14 +14,14 @@ const BlogStyled = styled.div`
   max-width: 1140px;
 `;
 const GoToHome = styled.div`
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    position: relative;
-    width: 100%;
-    text-align: left;
-    font-size: 1.2rem;
-    font-weight: 400;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  position: relative;
+  width: 100%;
+  text-align: left;
+  font-size: 1.2rem;
+  font-weight: 400;
 
   @media only screen and (min-width: 992px) {
     display: flex;
@@ -38,7 +38,7 @@ const GoToHome = styled.div`
 
 const BlogSearchTop = styled.div`
   @media only screen and (min-width: 992px) {
-      display: none;
+    display: none;
   }
   @media only screen and (max-width: 992px) {
     outline: 1px solid #c7cbd0;
@@ -64,7 +64,6 @@ const BlogSearchTop = styled.div`
     }
   }
 `;
-
 
 const Breadcrumb = styled.div`
   display: flex;
@@ -158,16 +157,16 @@ const BlogCardImg = styled.div`
   aspect-ratio: 4/2;
   background-size: cover;
   background-position: center center;
-  background-image: url("https://i.imgur.com/KZ2rS8G.jpg");
+  background-image: url('https://i.imgur.com/KZ2rS8G.jpg');
 `;
 
 const BlogAside = styled.div`
- //
+  //
 `;
 
 const BlogSearch = styled.div`
   @media only screen and (max-width: 992px) {
-      display: none;
+    display: none;
   }
   @media only screen and (min-width: 992px) {
     outline: 1px solid #c7cbd0;
@@ -282,7 +281,7 @@ const BlogCategoryList = styled.ul`
       display: block;
       background-color: #c8c8c8;
       border-radius: 50%;
-      content: "";
+      content: '';
       margin-right: 10px;
       height: 5px;
       width: 5px;
@@ -295,17 +294,17 @@ const Blogs = () => {
   const navigate = useNavigate();
   const [articalOrigin, setArticalOrigin] = useState([]);
   const [articalAll, setArticalAll] = useState([]);
-  const [query, setQuery] = useState("");
-  const [optionsState, setOptionsState] = useState("")
+  const [query, setQuery] = useState('');
+  const [optionsState, setOptionsState] = useState('');
 
   //抓文章api
   useEffect(() => {
     const getBlogsArticalAsync = async () => {
       try {
         const resArticalAll = await artical();
-        resArticalAll.sort((a,b) => {
-          return b.isTop - a.isTop //正數-負數排序(true[1]-false[0])
-        })
+        resArticalAll.sort((a, b) => {
+          return b.isTop - a.isTop; //正數-負數排序(true[1]-false[0])
+        });
         setArticalOrigin(resArticalAll);
         setArticalAll(resArticalAll);
       } catch (err) {
@@ -314,54 +313,65 @@ const Blogs = () => {
     };
     getBlogsArticalAsync();
     return;
-  },[setArticalOrigin]);
-
+  }, [setArticalOrigin]);
 
   const handleFilterDog = () => {
-    setArticalAll(articalOrigin.filter(artical => artical.category === 'dog'))
-  }
+    setArticalAll(
+      articalOrigin.filter((artical) => artical.category === 'dog')
+    );
+  };
 
   const handleFilterCat = () => {
-    setArticalAll(articalOrigin.filter(artical => artical.category === 'cat'))
-  }
+    setArticalAll(
+      articalOrigin.filter((artical) => artical.category === 'cat')
+    );
+  };
 
   const handleChange = (e) => {
     if (e.target.value === 0) {
       return;
     }
-    setQuery(e.target.value)
-  }
+    setQuery(e.target.value);
+  };
 
   const handleChangeSelect = (e) => {
     if (e.target.value === 'default') {
       return;
     }
-    if(e.target.value === 'dog') {
-      setArticalAll(articalOrigin.filter(artical => artical.category === 'dog'))
+    if (e.target.value === 'dog') {
+      setArticalAll(
+        articalOrigin.filter((artical) => artical.category === 'dog')
+      );
     }
-    if(e.target.value === 'cat') {
-      setArticalAll(articalOrigin.filter(artical => artical.category === 'cat'))
+    if (e.target.value === 'cat') {
+      setArticalAll(
+        articalOrigin.filter((artical) => artical.category === 'cat')
+      );
     }
-    setOptionsState(e.target.value)
-  }
+    setOptionsState(e.target.value);
+  };
 
   const handleSearchArtical = (e) => {
     if (e.target.value === 0) {
       return;
     }
     if (e.key === 'Enter') {
-      setArticalAll(articalOrigin.filter(artical => artical['title'].includes(e.target.value)))
+      setArticalAll(
+        articalOrigin.filter((artical) =>
+          artical['title'].includes(e.target.value)
+        )
+      );
       e.preventDefault(); //瀏覽器預設行為中斷(需放在if)
     }
-  }
+  };
 
   return (
     <BlogStyled>
       <HomeLinkWrapper>
         <GoToHome>
           <HomeIcon
-            onClick={() => navigate("/")}
-            style={{ color: "var(--dark)", cursor: "pointer" }}
+            onClick={() => navigate('/')}
+            style={{ color: 'var(--dark)', cursor: 'pointer' }}
           />
           <p className='text'>部落格</p>
         </GoToHome>
@@ -369,75 +379,112 @@ const Blogs = () => {
       <Breadcrumb />
       <BlogContent>
         <BlogSearchTop>
-              <form>
-                <input
-                  className='formStyled'
-                  type='text'
-                  placeholder='請輸入搜尋關鍵字'
-                  value={query}
-                  onChange={handleChange}
-                  onKeyDown={handleSearchArtical}
-                />
-              </form>
-              <form>
-                <select className='formStyled' value={optionsState} onChange={handleChangeSelect}>
-                  <option value="default">- 請選擇文章分類 -</option>
-                  <option value="dog">狗狗健康知識庫</option>
-                  <option value="cat">貓咪健康知識庫</option>
-                </select>
-              </form>
-            </BlogSearchTop>
+          <form>
+            <input
+              className='formStyled'
+              type='text'
+              placeholder='請輸入搜尋關鍵字'
+              value={query}
+              onChange={handleChange}
+              onKeyDown={handleSearchArtical}
+            />
+          </form>
+          <form>
+            <select
+              className='formStyled'
+              value={optionsState}
+              onChange={handleChangeSelect}
+            >
+              <option value='default'>- 請選擇文章分類 -</option>
+              <option value='dog'>狗狗健康知識庫</option>
+              <option value='cat'>貓咪健康知識庫</option>
+            </select>
+          </form>
+        </BlogSearchTop>
         <BlogListWrapper>
           <ul>
-            { articalAll.length === 0 && (articalOrigin?.map((artical) => {
-              return (<BlogCard>
-                <BlogCardImg style={{ backgroundImage: `url("${artical.image}")`}}/>
-                <div className='BlogCardInner'>
-                  <div className='BlogCardIntro'>
-                    <h2 className='BlogTitle'>
-                      { artical.isTop && <div className='topHighLight'>置頂</div> }
-                      <b>{ artical.title }</b>
-                    </h2>
-                    <ul className='DateCategory'>
-                      <li className='BlogDate'><ClockIcon/>{new Date(artical.createdAt).toLocaleDateString()}</li>
-                      <li className='BlogCategory'><BookMarkIcon/>
-                      { artical["category"].includes("dog") && "狗狗健康知識庫" } 
-                      { artical["category"].includes("cat") && "貓貓健康知識庫" }</li>
-                    </ul>
-                    <article>
-                      <p>{ artical.content }<span>...閱讀更多</span></p>
-                    </article>
+            {articalAll.length === 0 &&
+              articalOrigin?.map((artical) => {
+                return (
+                  <BlogCard>
+                    <BlogCardImg
+                      style={{ backgroundImage: `url("${artical.image}")` }}
+                    />
+                    <div className='BlogCardInner'>
+                      <div className='BlogCardIntro'>
+                        <h2 className='BlogTitle'>
+                          {artical.isTop && (
+                            <div className='topHighLight'>置頂</div>
+                          )}
+                          <b>{artical.title}</b>
+                        </h2>
+                        <ul className='DateCategory'>
+                          <li className='BlogDate'>
+                            <ClockIcon />
+                            {new Date(artical.createdAt).toLocaleDateString()}
+                          </li>
+                          <li className='BlogCategory'>
+                            <BookMarkIcon />
+                            {artical['category'].includes('dog') &&
+                              '狗狗健康知識庫'}
+                            {artical['category'].includes('cat') &&
+                              '貓貓健康知識庫'}
+                          </li>
+                        </ul>
+                        <article>
+                          <p>
+                            {artical.content}
+                            <span>...閱讀更多</span>
+                          </p>
+                        </article>
+                      </div>
+                    </div>
+                  </BlogCard>
+                );
+              })}
+            {articalAll?.map((artical) => {
+              return (
+                <BlogCard>
+                  <BlogCardImg
+                    style={{ backgroundImage: `url("${artical.image}")` }}
+                  />
+                  <div className='BlogCardInner'>
+                    <div className='BlogCardIntro'>
+                      <h2 className='BlogTitle'>
+                        {artical.isTop && (
+                          <div className='topHighLight'>置頂</div>
+                        )}
+                        <b>{artical.title}</b>
+                      </h2>
+                      <ul className='DateCategory'>
+                        <li className='BlogDate'>
+                          <ClockIcon />
+                          {new Date(artical.createdAt).toLocaleDateString()}
+                        </li>
+                        <li className='BlogCategory'>
+                          <BookMarkIcon />
+                          {artical['category'].includes('dog') &&
+                            '狗狗健康知識庫'}
+                          {artical['category'].includes('cat') &&
+                            '貓貓健康知識庫'}
+                        </li>
+                      </ul>
+                      <article>
+                        <p>
+                          {artical.content}
+                          <span>...閱讀更多</span>
+                        </p>
+                      </article>
+                    </div>
                   </div>
-                </div>
-                </BlogCard>);
-            }))  }
-            { articalAll?.map((artical) => {
-              return (<BlogCard>
-                <BlogCardImg style={{ backgroundImage: `url("${artical.image}")`}}/>
-                <div className='BlogCardInner'>
-                  <div className='BlogCardIntro'>
-                    <h2 className='BlogTitle'>
-                      { artical.isTop && <div className='topHighLight'>置頂</div> }
-                      <b>{ artical.title }</b>
-                    </h2>
-                    <ul className='DateCategory'>
-                      <li className='BlogDate'><ClockIcon/>{new Date(artical.createdAt).toLocaleDateString()}</li>
-                      <li className='BlogCategory'><BookMarkIcon/>
-                      { artical["category"].includes("dog") && "狗狗健康知識庫" } 
-                      { artical["category"].includes("cat") && "貓貓健康知識庫" }</li>
-                    </ul>
-                    <article>
-                      <p>{ artical.content }<span>...閱讀更多</span></p>
-                    </article>
-                  </div>
-                </div>
-                </BlogCard>);
+                </BlogCard>
+              );
             })}
           </ul>
         </BlogListWrapper>
         <BlogAside>
           <div className='BlogArticalInner'>
-              <BlogSearch>
+            <BlogSearch>
               <h4>
                 <b>搜尋文章</b>
               </h4>
@@ -456,18 +503,21 @@ const Blogs = () => {
               <h4>
                 <b>最新文章</b>
               </h4>
-                <BlogArticalList>
-                  { articalOrigin?.map((artical) => {
-                    return (
-                      <li className='articalContent'>
-                        <h6>{artical.title}</h6>
-                        <ul className='DateCategory'>
-                          <li className='BlogDate'><ClockIcon/>{new Date(artical.updatedAt).toLocaleDateString()}</li>
-                        </ul>
-                      </li>
-                    )
-                  })}
-                </BlogArticalList>
+              <BlogArticalList>
+                {articalOrigin?.map((artical) => {
+                  return (
+                    <li className='articalContent'>
+                      <h6>{artical.title}</h6>
+                      <ul className='DateCategory'>
+                        <li className='BlogDate'>
+                          <ClockIcon />
+                          {new Date(artical.updatedAt).toLocaleDateString()}
+                        </li>
+                      </ul>
+                    </li>
+                  );
+                })}
+              </BlogArticalList>
             </BlogNews>
             <BlogCategoryArea>
               <h4>
