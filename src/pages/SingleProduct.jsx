@@ -12,7 +12,7 @@ import {
 } from '../assets/icons';
 import order from '../assets/images/order.png';
 import ProductPopCart from './ProductPopCart';
-import { getSingleProduct } from '../api/products';
+import { productDetail } from '../api/products';
 
 const StyledContainer = styled.div`
   position: relative;
@@ -558,7 +558,7 @@ const SingleProduct = () => {
   useEffect(() => {
     const getSingleProductAsync = async () => {
       try {
-        const resSingleProduct = await getSingleProduct(productId);
+        const resSingleProduct = await productDetail(productId);
         setProduct(resSingleProduct);
       } catch (err) {
         console.error(err);
