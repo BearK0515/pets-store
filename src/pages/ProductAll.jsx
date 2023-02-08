@@ -47,9 +47,7 @@ const ProductsSort = styled.div`
 
 const ProductAll = () => {
   const [productHot, setProductHot] = useState([]);
-  const [productHotOrigin, setProductHotOrigin] = useState([]);
   const [productNew, setProductNew] = useState([]);
-  const [productNewOrigin, setProductNewOrigin] = useState([]);
   const [productPrice, setProductPrice] = useState([]);
   const [productPriceOrigin, setProductPriceOrigin] = useState([]);
   const [sortSelect, setSortSelect] = useState({
@@ -63,7 +61,6 @@ const ProductAll = () => {
       try {
         const resProductlHot = await productsHot();
         setProductHot(resProductlHot);
-        setProductHotOrigin(resProductlHot);
       } catch (err) {
         console.error(err);
       }
@@ -78,7 +75,6 @@ const ProductAll = () => {
       try {
         const resProductNew = await productsNew();
         setProductNew(resProductNew);
-        setProductNewOrigin(resProductNew);
       } catch (err) {
         console.error(err);
       }
@@ -138,7 +134,6 @@ const ProductAll = () => {
       }));
     }
   };
-
 
   return (
     <>

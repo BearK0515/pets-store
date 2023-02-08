@@ -82,9 +82,10 @@ const NavLink = styled(Link)`
   &:hover {
     cursor: pointer;
   }
+  z-index: 1;
 `;
 
-export const ProductItem = ({id, price, image, name}) => {
+export const ProductItem = ({ id, price, image, name }) => {
   const [addCartPop, setAddCartPop] = useState(false);
 
   const handleToggleCartModal = () => {
@@ -93,20 +94,28 @@ export const ProductItem = ({id, price, image, name}) => {
 
   return (
     <>
-      <StyledCard id={id}>
-        <div className='product' style={{ backgroundImage: `url('${image}')` }}>
-          <NavLink className='addCart' onClick={handleToggleCartModal}>
-            <CartIcon style={{ fontSize: '20px', cursor: 'pointer' }} />
-          </NavLink>
-        </div>
-        <div className='wrapper'>
-          <h4 className='title'>{name}</h4>
-          <div className='price'>${price}</div>
-          <div className='discount-price'>${Math.floor(price * 0.8)}</div>
-        </div>
-      </StyledCard>
+      <Link to={`/product/detail/${id}`}>
+        <StyledCard id={id}>
+          <div
+            className='product'
+            style={{ backgroundImage: `url('${image}')` }}
+          >
+            <NavLink className='addCart' onClick={handleToggleCartModal}>
+              <CartIcon style={{ fontSize: '20px', cursor: 'pointer' }} />
+            </NavLink>
+          </div>
+          <div className='wrapper'>
+            <h4 className='title'>{name}</h4>
+            <div className='price'>${price}</div>
+            <div className='discount-price'>${Math.floor(price * 0.8)}</div>
+          </div>
+        </StyledCard>
+      </Link>
       {addCartPop && (
-        <ProductPopCart id={id} name={name} price={price}
+        <ProductPopCart
+          id={id}
+          name={name}
+          price={price}
           handleToggleCartModal={handleToggleCartModal}
         />
       )}

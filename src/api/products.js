@@ -41,3 +41,17 @@ export const productsPrice = async () => {
     console.error('[Get PriceSort Products failed]:');
   }
 };
+
+
+//取得單一商品
+export const getSingleProduct = async (id) => {
+  try {
+    const rep = await axios({
+      method: 'GET',
+      url: `${baseURL}/api/products/detail/${id}`
+    });
+    return rep.data;
+  } catch (error) {
+    console.error('[Get Single Product failed]:');
+  }
+};
