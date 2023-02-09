@@ -573,7 +573,7 @@ const SingleProduct = () => {
     if (count === 1) {
       return;
     }
-    setCount(count - 1);
+    setCount((count) => count - 1);
   };
   const handleToggleCartModal = () => {
     setAddCartPop(!addCartPop);
@@ -590,7 +590,7 @@ const SingleProduct = () => {
                 <div
                   className='preview'
                   // style={{
-                  //   backgroundImage: `url('${product.Image[0].url}')`
+                  //   backgroundImage: `url('${product?.Image[0].url}')`
                   // }}
                 >
                   <div className='number'>1/3</div>
@@ -635,7 +635,7 @@ const SingleProduct = () => {
                       />
                     </div>
                     <div className='count'>{count}</div>
-                    <div onClick={() => setCount(count + 1)}>
+                    <div onClick={() => setCount((count) => count + 1)}>
                       <PlusIcon className='plus' />
                     </div>
                   </div>
