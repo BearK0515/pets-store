@@ -1,41 +1,26 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { CartIcon } from '../assets/icons/index';
-import { NavLink as Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import ProductPopCart from './ProductPopCart';
 
 const StyledCard = styled.div`
   position: relative;
   display: flex;
   flex-flow: column;
-  align-items: center;
+  align-items: start;
   aspect-ratio: 3/4;
 
   .product {
-    position: relative;
     width: 100%;
     aspect-ratio: 1/1;
     background-size: cover;
     background-image: url('https://picsum.photos/id/20/400');
   }
-  .addCart {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: absolute;
-    bottom: 10px;
-    right: 10px;
-    width: 30px;
-    height: 30px;
-    background-color: var(--red);
-    text-align: center;
-    border-width: 1px;
-    border-radius: 10%;
-  }
+
   .wrapper {
     display: flex;
     flex-flow: column;
-    align-items: left;
     gap: 5px 0;
     padding: 10px;
     width: 100%;
@@ -64,25 +49,37 @@ const StyledCard = styled.div`
   }
 `;
 
-const NavLink = styled(Link)`
+const Button = styled.div`
+  position: absolute;
+  bottom: 4em;
+  right: 0.3em;
   display: flex;
-  justify-content: center;
+  justify-content: end;
   align-items: center;
-  width: 0 auto;
-  height: 40px;
-  background-color: ${(props) =>
-    props.active ? 'var(--white)' : 'var(--footer-background)'};
-  color: ${(props) =>
-    props.active ? ' var(--footer-background)' : 'var(--white)'};
-  border: ${(props) =>
-    props.active ? '2px solid var(--footer-background)' : ''};
-  font-size: 20px;
-  font-weight: 400;
-  border-radius: 30px;
-  &:hover {
-    cursor: pointer;
+  width: 100%;
+  z-index: 99;
+
+  .addCart {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    width: 30px;
+    height: 30px;
+    background-color: var(--red);
+    border-width: 1px;
+    background-color: ${(props) =>
+      props.active ? 'var(--white)' : 'var(--red)'};
+    color: ${(props) => (props.active ? ' var(--red)' : 'var(--white)')};
+    border: ${(props) => (props.active ? '2px solid var(--red)' : '')};
+    font-size: 20px;
+    font-weight: 400;
+    border-radius: 10%;
+    &:hover {
+      cursor: pointer;
+    }
+    z-index: 99;
   }
-  z-index: 1;
 `;
 
 export const ProductItem = ({ id, price, image, name }) => {
@@ -94,23 +91,25 @@ export const ProductItem = ({ id, price, image, name }) => {
 
   return (
     <>
-      <Link to={`/product/detail/${id}`}>
-        <StyledCard id={id}>
-          <div
-            className='product'
-            style={{ backgroundImage: `url('${image}')` }}
-          >
-            <NavLink className='addCart' onClick={handleToggleCartModal}>
-              <CartIcon style={{ fontSize: '20px', cursor: 'pointer' }} />
-            </NavLink>
+      <StyledCard id={id}>
+        <Link
+          className='product'
+          style={{ backgroundImage: `url('${image}')` }}
+          to={`/product/detail/${id}`}
+        />
+        <Button onClick={handleToggleCartModal}>
+          <div className='addCart'>
+            <CartIcon style={{ fontSize: '18px', cursor: 'pointer' }} />
           </div>
+        </Button>
+        <div>
           <div className='wrapper'>
             <h4 className='title'>{name}</h4>
             <div className='price'>${price}</div>
             <div className='discount-price'>${Math.floor(price * 0.8)}</div>
           </div>
-        </StyledCard>
-      </Link>
+        </div>
+      </StyledCard>
       {addCartPop && (
         <ProductPopCart
           id={id}
