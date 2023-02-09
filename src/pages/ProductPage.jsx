@@ -1,13 +1,13 @@
-import React from "react";
-import styled from "styled-components";
-import { useLocation, useNavigate } from "react-router-dom";
-import ProductAside from "./ProductAside";
-import ProductAll from "./ProductAll";
-import ProductDog from "./ProductDog";
-import { HomeIcon } from "../assets/icons/index";
-import ProductCat from "./ProductCat";
-import SingleProduct from "./SingleProduct";
-import { HomeLinkWrapper } from "../components/common/HomeLinkWrapper";
+import React from 'react';
+import styled from 'styled-components';
+import { useLocation, useNavigate } from 'react-router-dom';
+import ProductAside from './ProductAside';
+import ProductAll from './ProductAll';
+import ProductDog from './ProductDog';
+import { HomeIcon } from '../assets/icons/index';
+import ProductCat from './ProductCat';
+import SingleProduct from './SingleProduct';
+import { HomeLinkWrapper } from '../components/common/HomeLinkWrapper';
 
 const ProductPageStyled = styled.div`
   box-sizing: border-box;
@@ -18,7 +18,7 @@ const ProductPageStyled = styled.div`
   max-width: 1140px;
   margin: 30px auto;
   padding: 0 30px;
-  @media screen and (max-width: 992px){
+  @media screen and (max-width: 992px) {
     grid-template-columns: 1fr;
   }
 `;
@@ -32,14 +32,14 @@ const ProductWrapper = styled.div`
   margin: 5px;
 `;
 const GoToHome = styled.div`
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    position: relative;
-    width: 100%;
-    text-align: left;
-    font-size: 1.2rem;
-    font-weight: 400;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  position: relative;
+  width: 100%;
+  text-align: left;
+  font-size: 1.2rem;
+  font-weight: 400;
 
   @media only screen and (min-width: 992px) {
     display: flex;
@@ -62,14 +62,14 @@ const ProductPage = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const page = location.pathname;
-  let NowPage = "";
+  let NowPage = '';
 
-  if (page.includes("all")) {
-    NowPage = "全部商品";
-  } else if (page.includes("dog")) {
-    NowPage = "狗狗專區";
-  } else if (page.includes("cat")) {
-    NowPage = "貓貓專區";
+  if (page.includes('all')) {
+    NowPage = '全部商品';
+  } else if (page.includes('dog')) {
+    NowPage = '狗狗專區';
+  } else if (page.includes('cat')) {
+    NowPage = '貓貓專區';
   }
 
   return (
@@ -79,17 +79,17 @@ const ProductPage = () => {
         <HomeLinkWrapper>
           <GoToHome>
             <HomeIcon
-              onClick={() => navigate("/")}
-              style={{ color: "var(--dark)", cursor: "pointer" }}
+              onClick={() => navigate('/')}
+              style={{ color: 'var(--dark)', cursor: 'pointer' }}
             />
             <p className='text'>{NowPage}</p>
           </GoToHome>
         </HomeLinkWrapper>
         <Breadcrumb />
-        {page === "/product/all" && <ProductAll />}
-        {page === "/product/dog" && <ProductDog />}
-        {page === "/product/cat" && <ProductCat />}
-        {page.includes("detail") && <SingleProduct />}
+        {page === '/product/all' && <ProductAll />}
+        {page === '/product/dog' && <ProductDog />}
+        {page === '/product/cat' && <ProductCat />}
+        {page.includes('detail') && <SingleProduct />}
       </ProductWrapper>
     </ProductPageStyled>
   );
