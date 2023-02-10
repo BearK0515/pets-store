@@ -1,4 +1,5 @@
-import axios from 'axios';
+import axios from "axios";
+import * as cheerio from "cheerio";
 
 const baseURL = 'https://www.waylins.com';
 // const baseURL =
@@ -41,7 +42,6 @@ export const productsPrice = async () => {
   }
 };
 
-
 //取得指定商品詳細資料
 export const productDetail = async (productId) => {
   try {
@@ -54,3 +54,82 @@ export const productDetail = async (productId) => {
     console.error("[Get Product Detail failed]:", error);
   }
 };
+
+// //GET取得7-11縣市資料
+// export const getCities = async() => {
+//   const crosUrl = "https://cors-anywhere.herokuapp.com/";
+//   try {
+//     const res = await axios({
+//       method:"GET",
+//       url:`${crosUrl}http://www.ibon.com.tw/retail_inquiry.aspx#gsc.tab=0`
+//       })
+//     const $ = cheerio.load(res.data)
+//     const cities = $("#Class1 option").map((index,city)=>{return $(city).text()})
+//     return cities;
+//   } catch (error) {
+//     console.error("GET Cities Failed",error)
+//   }
+// }
+// //GET取得7-11行政區資料
+// export const getAreas = async() => {
+//   const crosUrl = "https://cors-anywhere.herokuapp.com/";
+//   try {
+//     const res = await axios({
+//       method:"GET",
+//       url:`${crosUrl}http://www.ibon.com.tw/retail_inquiry.aspx#gsc.tab=0`
+//       })
+//     const $ = cheerio.load(res.data)
+//     const areas = $("#Class2 option").map((index,area)=>{return $(area).text()})
+//     return areas;
+//   } catch (error) {
+//     console.error("GET Ares Failed", error);
+//   }
+// }
+//POST取得7-11行政區資料 測試中
+export const getTownName = async (cityID) => {
+  const crosUrl = "https://cors-anywhere.herokuapp.com/";
+  try {
+    const res = await axios({
+      method: "POST",
+      url: `${crosUrl}http://emap.pcsc.com.tw/EMapSDK.aspx`,
+      data: {
+        commandid: "GetTown",
+        cityid: cityID,
+      },
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+    const $ = cheerio.load(res.data);
+    const areas = $("TownName").map((index,area)=>{return $(area).text()})
+    return areas;
+  } catch (error) {
+    console.error("POST Cities Failed", error);
+  }
+};
+// export const sevenMarket = async () => {
+//   const crosUrl = "https://cors-anywhere.herokuapp.com/"
+//   try {
+//     const rep = await axios({
+//       method: "POST",
+//       url: `${crosUrl}https://www.ibon.com.tw/retail_inquiry_ajax.aspx`,
+//       // url: `${crosUrl}https://emap.pcsc.com.tw/EMapSDK.aspx`,
+//       data: {
+//         strTargetField: "COUNTY",
+//         strKeyWords: "台北市",
+//       },
+//       // data: {
+//       //   commandid: "SearchStore",
+//       //   city: "基隆市",
+//       //   town: "中正區",
+//       // },
+//       headers: {
+//         "Content-Type": "multipart/form-data",
+//       },
+//     });
+//     console.log(rep.data);
+//     return rep;
+//   } catch (error) {
+//     console.error("[Get Product Detail failed]:", error);
+//   }
+// };
