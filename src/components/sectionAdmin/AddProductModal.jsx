@@ -258,9 +258,9 @@ const AddProductModal = ({ handleToggleProductModal }) => {
       formData.append("url", picture[0]);
       formData.append("url", picture[1]);
       formData.append("url", picture[2]);
-      // formData.append("url", picture[3]);
-      // formData.append("url", picture[4]);
-      // formData.append("url", picture[5]);
+      formData.append("url", picture[3]);
+      formData.append("url", picture[4]);
+      formData.append("url", picture[5]);
       await addProduct({ formData });
     } catch (error) {
       console.error("Product Submit faild :", error);
