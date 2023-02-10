@@ -550,9 +550,10 @@ const StyledBuyButton = styled.div`
 `;
 const SingleProduct = () => {
   const { productId } = useParams();
-  const [product, setProduct] = useState([]);
+  const [product, setProduct] = useState(null);
   const [count, setCount] = useState(1);
   const [addCartPop, setAddCartPop] = useState(false);
+  const [previewPic, setPreviewPic] = useState(0);
 
   //抓單一商品
   useEffect(() => {
@@ -569,7 +570,6 @@ const SingleProduct = () => {
   }, [setProduct, productId]);
 
   const handledecrease = () => {
-    console.log(product.Image[0].url);
     if (count === 1) {
       return;
     }
@@ -578,6 +578,7 @@ const SingleProduct = () => {
   const handleToggleCartModal = () => {
     setAddCartPop(!addCartPop);
   };
+
 
   return (
     <>
@@ -589,16 +590,34 @@ const SingleProduct = () => {
               <div className='picture'>
                 <div
                   className='preview'
-                  // style={{
-                  //   backgroundImage: `url('${product?.Image[0].url}')`
-                  // }}
+                  style={{
+                    backgroundImage: `url('${product?.Image[previewPic]?.url}')`
+                  }}
                 >
-                  <div className='number'>1/3</div>
+                  <div className='number'>{previewPic + 1}/3</div>
                 </div>
                 <div className='pics'>
-                  <div className='pic pic1'></div>
-                  <div className='pic pic2'></div>
-                  <div className='pic pic3'></div>
+                  <div
+                    onClick={() => setPreviewPic(0)}
+                    className='pic pic1'
+                    style={{
+                      backgroundImage: `url('${product?.Image[0]?.url}')`
+                    }}
+                  ></div>
+                  <div
+                    onClick={() => setPreviewPic(1)}
+                    className='pic pic2'
+                    style={{
+                      backgroundImage: `url('${product?.Image[1]?.url}')`
+                    }}
+                  ></div>
+                  <div
+                    onClick={() => setPreviewPic(2)}
+                    className='pic pic3'
+                    style={{
+                      backgroundImage: `url('${product?.Image[2]?.url}')`
+                    }}
+                  ></div>
                 </div>
                 <div className='share'>
                   <div>分享商品到</div>
@@ -609,17 +628,17 @@ const SingleProduct = () => {
               </div>
               <div className='information'>
                 <div className='number'>
-                  商品編號：<span>{product.id}</span>
+                  商品編號：<span>{product?.id}</span>
                 </div>
-                <div className='name'>{product.name}</div>
+                <div className='name'>{product?.name}</div>
                 <div className='price'>
                   <span>TWD $</span>
-                  <span className='unit-price'>{product.price}</span>
+                  <span className='unit-price'>{product?.price}</span>
                 </div>
                 <div className='discount-price'>
                   <span>TWD $</span>
                   <span className='unit-price'>
-                    {Math.floor(product.price * 0.8)}
+                    {Math.floor(product?.price * 0.8 || 0)}
                   </span>
                 </div>
                 <div className='row style'>
@@ -687,9 +706,9 @@ const SingleProduct = () => {
             </div>
             <div className='produts-wrapper'>
               {/* data.map() */}
-              <AddProductCard />
-              <AddProductCard />
-              <AddProductCard />
+              {product?.Image?.map((img) => {
+                return <AddProductCard key={img.url} image={img.url} />;
+              })}
             </div>
           </StyleProductsWrapper>
         </div>
@@ -703,9 +722,13 @@ const SingleProduct = () => {
               <hr />
             </StyledTitle>
             {/* productInfo.map() */}
-            <StyledProductInfo className='product-info'>
-              <img src='https://picsum.photos/id/142/600' alt='' />
-            </StyledProductInfo>
+            {product?.Image?.map((img) => {
+              return (
+                <StyledProductInfo key={img.url} className='product-info'>
+                  <img src={img.url} alt='' />
+                </StyledProductInfo>
+              );
+            })}
             <StyledImage
               className='order'
               onClick={() => Navigate('/product/all')}
@@ -759,7 +782,7 @@ const SingleProduct = () => {
   );
 };
 
-const AddProductCard = () => {
+const AddProductCard = ({ image }) => {
   const [isSelected, setIsSelected] = useState(false);
   const handleToggleSelectButton = () => {
     setIsSelected(!isSelected);
@@ -768,7 +791,12 @@ const AddProductCard = () => {
     <div className={`card ${isSelected ? 'active' : ''}`}>
       <header></header>
       <div className='card-wrapper'>
-        <div className='pic'></div>
+        <div
+          className='pic'
+          style={{
+            backgroundImage: `url('${image}')`
+          }}
+        ></div>
         <div className='information'>
           <div className='name'>【超值加購】腎臟保健粉</div>
           <div className='row price-wrapper'>
