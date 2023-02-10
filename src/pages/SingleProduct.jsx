@@ -738,13 +738,13 @@ const SingleProduct = () => {
             <StyledCart className='cart'>
               <hr />
               <div className='content-wrapper'>
-                <h2>【毛孩時代】腎臟專科保健粉(30包/盒)</h2>
+                <h2>{product?.name}</h2>
                 <div className='price-wrapper'>
                   <div className='price'>
-                    TWD $<span>750</span>
+                    TWD $<span>{product?.price}</span>
                   </div>
                   <div className='discount-price'>
-                    TWD $<span>690</span>
+                    TWD $<span>{Math.floor(product?.price * 0.8 || 0)}</span>
                   </div>
                 </div>
               </div>

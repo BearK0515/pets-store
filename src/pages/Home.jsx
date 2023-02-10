@@ -1,11 +1,11 @@
-import React from "react";
-import { useNavigate } from "react-router-dom";
-import styled from "styled-components";
-import lineLink from "../assets/images/home1.png";
-import productsLink from "../assets/images/home2.png";
-import SGS from "../assets/images/home3.png";
-import tips from "../assets/images/home4.jpg";
-import ProductAll from "./ProductAll";
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import styled from 'styled-components';
+import lineLink from '../assets/images/home1.png';
+import productsLink from '../assets/images/home2.png';
+import SGS from '../assets/images/home3.png';
+import tips from '../assets/images/home4.jpg';
+import ProductAll from './ProductAll';
 
 const StyledContainer = styled.div`
   margin: 0 15px;
@@ -30,7 +30,7 @@ const StyledLinkWrapper = styled.div`
     top: 0;
   }
   .light:hover::before {
-    content: "";
+    content: '';
     width: 200px;
     height: 1000px;
     background: #ffffff;
@@ -55,6 +55,7 @@ const StyledProductsContainer = styled.div`
   width: 100%;
   display: flex;
   flex-flow: column;
+  max-width: 1300px;
 `;
 
 const Home = () => {
@@ -62,13 +63,13 @@ const Home = () => {
   return (
     <>
       <StyledContainer>
-        <StyledLinkWrapper className='line-link' style={{ padding: "0px" }}>
+        <StyledLinkWrapper className='line-link' style={{ padding: '0px' }}>
           <div className='light'></div>
           <img src={lineLink} alt='' />
         </StyledLinkWrapper>
         <StyledLinkWrapper
           className='produts-link'
-          onClick={() => navigate("/product/all")}
+          onClick={() => navigate('/product/all')}
         >
           <div className='light'></div>
           <img src={productsLink} alt='' />
