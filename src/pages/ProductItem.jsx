@@ -27,7 +27,7 @@ const StyledCard = styled.div`
   }
   .title {
     text-align: left;
-    font-size: 0.5em;
+    font-size: 16px;
     height: 48px;
     line-height: 24px;
     color: #333;
@@ -35,7 +35,7 @@ const StyledCard = styled.div`
   .price {
     text-align: left;
     font-family: Roboto, sans-serif;
-    font-size: 0.2em;
+    font-size: 12px;
     font-weight: 700;
     text-decoration: line-through;
     color: var(--gray-dark);
@@ -43,29 +43,40 @@ const StyledCard = styled.div`
   .discount-price {
     text-align: left;
     font-family: Roboto, sans-serif;
-    font-size: 0.7em;
+    font-size: 16px;
     font-weight: 700;
     color: var(--text-red);
+  }
+
+  @media screen and (max-width: 768px) {
+    .title {
+      font-size: 18px;
+      line-height: 24px;
+    }
+    .price {
+      font-size: 12px;
+    }
+    .discount-price {
+      font-size: 18px;
+    }
   }
 `;
 
 const Button = styled.div`
   position: absolute;
-  bottom: 4em;
-  right: 0.3em;
+  bottom: 115px;
+  right: 10px;
   display: flex;
   justify-content: end;
   align-items: center;
-  width: 100%;
-  z-index: 99;
 
   .addCart {
     display: flex;
     justify-content: center;
     align-items: center;
     text-align: center;
-    width: 30px;
-    height: 30px;
+    width: 35px;
+    height: 35px;
     background-color: var(--red);
     border-width: 1px;
     background-color: ${(props) =>
@@ -78,7 +89,22 @@ const Button = styled.div`
     &:hover {
       cursor: pointer;
     }
-    z-index: 99;
+  }
+
+  @media screen and (max-width: 1300px) {
+    max-width: 80%;
+  }
+  @media screen and (max-width: 1200px) {
+    max-width: 90%;
+  }
+  @media screen and (max-width: 992px) {
+    max-width: 95%;
+  }
+  @media screen and (max-width: 768px) {
+    max-width: 99%;
+  }
+  @media screen and (max-width: 577px) {
+    max-width: 100%;
   }
 `;
 
@@ -102,12 +128,12 @@ export const ProductItem = ({ id, price, image, name }) => {
             <CartIcon style={{ fontSize: '18px', cursor: 'pointer' }} />
           </div>
         </Button>
-        <div>
-          <div className='wrapper'>
+        <div className='wrapper'>
+          <Link to={`/product/detail/${id}`}>
             <h4 className='title'>{name}</h4>
             <div className='price'>${price}</div>
             <div className='discount-price'>${Math.floor(price * 0.8)}</div>
-          </div>
+          </Link>
         </div>
       </StyledCard>
       {addCartPop && (
