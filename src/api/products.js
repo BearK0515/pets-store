@@ -1,7 +1,7 @@
 import axios from "axios";
 import * as cheerio from "cheerio";
 
-const baseURL = "https://www.waylins.com";
+const baseURL = 'https://www.waylins.com';
 // const baseURL =
 //   "http://eshop-env.eba-bv3rpum8.ap-northeast-1.elasticbeanstalk.com";
 
@@ -9,36 +9,36 @@ const baseURL = "https://www.waylins.com";
 export const productsHot = async () => {
   try {
     const rep = await axios({
-      method: "GET",
-      url: `${baseURL}/api/products/all/bestsell`,
+      method: 'GET',
+      url: `${baseURL}/api/products/all/bestsell`
     });
     return rep.data;
   } catch (error) {
-    console.error("[Get Hot Products failed]:", error);
+    console.error('[Get Hot Products failed]:');
   }
 };
 //取得所有商品(最新)
 export const productsNew = async () => {
   try {
     const rep = await axios({
-      method: "GET",
-      url: `${baseURL}/api/products/all/newest`,
+      method: 'GET',
+      url: `${baseURL}/api/products/all/newest`
     });
     return rep.data;
   } catch (error) {
-    console.error("[Get New Products failed]:", error);
+    console.error('[Get New Products failed]:');
   }
 };
 //取得所有商品(價格)
 export const productsPrice = async () => {
   try {
     const rep = await axios({
-      method: "GET",
-      url: `${baseURL}/api/products/all/sortbyprice`,
+      method: 'GET',
+      url: `${baseURL}/api/products/all/sortbyprice`
     });
     return rep.data;
   } catch (error) {
-    console.error("[Get PriceSort Products failed]:", error);
+    console.error('[Get PriceSort Products failed]:');
   }
 };
 

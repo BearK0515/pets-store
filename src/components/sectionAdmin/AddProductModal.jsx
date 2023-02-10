@@ -250,7 +250,7 @@ const AddProductModal = ({ handleToggleProductModal }) => {
     const styleValue = styleRef?.current?.value;
     const picture = [...productPicture, ...describePicture];
     try {
-      const formData = new FormData();
+      let formData = new FormData();
       formData.append("name", nameValue);
       formData.append("price", priceValue);
       formData.append("description", styleValue);
