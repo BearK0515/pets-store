@@ -1,70 +1,49 @@
-# Getting Started with Create React App
+# 寵物商品購物網站 in React
+DEMO： https://beark0515.github.io/pets-store/
+## 專案簡介
+1. 一般訪客
+* 可瀏覽網頁。
+* 主要有 首頁/關於/全部商品/狗狗專區/貓咪專區/部落格 頁面。
+* 首頁有全部商品及基本介紹。
+* 關於有商店聯絡方式、品牌故事及認證。
+* 全部商品可依照熱銷排行/上架時間/價格由高至低/價格由低至高排序。點擊商品卡片可連結到該商品的詳細資料，點擊購物車icon可將商品加入購物車，並繼續瀏覽。
+* 狗狗專區/貓咪專區是依照商品類別做分類，其他功能與全部商品相同。
+* 部落格依照時間由新到舊排序，置頂文章優先放在上方，還有以關鍵字搜尋文章、文章分類的功能。
+* 網頁左上方icon可跳轉到查詢訂單/購物說明/會員登入/管理員登入，右上方icon則是連結相關官方網站(沒做)及首頁按鈕。
+* 查詢訂單可依照訂單編號查詢該筆訂單資料。
+* 會員登入可用GOOGLE/Facebook/LINE登入。
+* 頁面右側有購物車/搜尋商品/商品瀏覽紀錄/聊天機器人/頁面往下滑會彈出置頂按鍵。
+* 點擊購物車內的"前往結帳"，可進入結帳頁面。裡面有購物車清單、及填寫訂單相關資料。
+2. 管理員
+* 點擊管理員按鈕，會連結到管理員登入頁面( 帳號：root@root.com 密碼：123 )
+* 在商品列表，管理員有下架商品、點擊商品卡片修改商品價格的權限。
+* 在訂單列表，可看到所有訂單，點擊該筆訂單可看到詳細資料。
+* 另外有新增商品的權限，可新增3張商品圖片、3張詳情圖片，並預覽圖片樣式。
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## 本地安裝
+1. 確認本機環境已下載 npm 及 Node.js
+2. clone 專案至本機
+```
+https://github.com/BearK0515/pets-store.git
+```
+3.開啟終端機(Terminal)進入專案資料夾，輸入
 
-## Available Scripts
+```
+npm install
+```
+4.終端機輸入開啟專案
 
-In the project directory, you can run:
+```
+npm start
+```
+5.瀏覽器開啟畫面成功
 
-### `npm start`
-
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
-
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+## 開發工具
+- react
+- axios: 1.2.2
+- react-icons: 4.7.1
+- react-redux: 8.0.5
+- @reduxjs/toolkit: 1.9.2
+- react-scroll-to-top: 3.0.0
+- styled-components: 5.3.6
+- sweetalert2: 11.7.0
