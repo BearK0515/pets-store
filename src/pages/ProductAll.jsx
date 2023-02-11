@@ -1,8 +1,8 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { CartIcon, PriceUpIcon, PriceDownIcon } from "../assets/icons/index";
 import ProductPopCart from "./ProductPopCart";
-import { NavLink as Link } from "react-router-dom";
+import { NavLink as Link, useOutletContext } from "react-router-dom";
 import { productsHot, productsNew, productsPrice } from "../api/products";
 
 const ProductList = styled.div`
@@ -133,6 +133,7 @@ const ProductAll = () => {
   const [priceToggle, setPriceToggle] = useState("desc");
   const [addCartPop, setAddCartPop] = useState(false);
   const [addToCart, setAddToCart] = useState(null);
+  const [productInCart, setProductInCart] = useOutletContext();
 
   //抓熱銷排行
   useEffect(() => {
@@ -337,6 +338,8 @@ const ProductAll = () => {
         <ProductPopCart
           handleToggleCartModal={handleToggleCartModal}
           product={addToCart}
+          productInCart={productInCart}
+          setProductInCart={setProductInCart}
         />
       )}
     </>

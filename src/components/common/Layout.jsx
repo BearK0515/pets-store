@@ -134,7 +134,7 @@ const StyledButtonWrapper = styled.div`
     color: var(--white);
     transform: translate(50%, -50%);
   }
-  @media screen and (max-width: 992px){
+  @media screen and (max-width: 992px) {
     display: none;
   }
 `;
@@ -190,8 +190,8 @@ const Layout = () => {
   const [isOpenLoginModal, setIsOpenLoginModal] = useState(false);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isSideabrOpen, setIsSideabrOpen] = useState(false);
-  
-  
+  const [productInCart, setProductInCart] = useState([]);
+
   const handleToggleLoginModal = () => {
     setIsOpenLoginModal(!isOpenLoginModal);
   };
@@ -202,7 +202,6 @@ const Layout = () => {
     setIsSideabrOpen(!isSideabrOpen);
   };
 
-
   return (
     <>
       <StyledContainer onClick={() => setSearchBarActive(false)}>
@@ -211,19 +210,19 @@ const Layout = () => {
           handleToggleCartModal={handleToggleCartModal}
           handleToggleSidebar={handleToggleSidebar}
         />
-        <Outlet />
+        <Outlet context={[productInCart, setProductInCart]} />
         <StyledButtonWrapper>
           <button
-            className='cart-button'
+            className="cart-button"
             onClick={() => setIsCartOpen(!isCartOpen)}
           >
             <CartIcon />
           </button>
-          <div className='count'>0</div>
-          <span className='search-bar'>
+          <div className="count">0</div>
+          <span className="search-bar">
             <label
-              className='search'
-              htmlFor='search-input'
+              className="search"
+              htmlFor="search-input"
               onClick={(e) => {
                 e.stopPropagation();
                 // e.nativeEvent.stopImmediatePropagation(); 不知道為什麼不用也沒差
@@ -234,10 +233,10 @@ const Layout = () => {
               <SearchIcon />
             </label>
             <input
-              type='text'
-              id='search-input'
+              type="text"
+              id="search-input"
               className={searchBarActive ? "active" : "none"}
-              placeholder='商品搜尋'
+              placeholder="商品搜尋"
               onClick={(e) => {
                 e.stopPropagation();
                 // e.nativeEvent.stopImmediatePropagation(); 不知道為什麼不用也沒差
@@ -246,22 +245,22 @@ const Layout = () => {
             />
           </span>
           {searchBarActive && (
-            <ul className='popular-items'>
-              <li className='popular-item'>156565</li>
-              <li className='popular-item'>256555565</li>
-              <li className='popular-item'>356565</li>
-              <li className='popular-item'>456565</li>
-              <li className='popular-item'>456565</li>
-              <li className='popular-item'>4555555555556565</li>
+            <ul className="popular-items">
+              <li className="popular-item">156565</li>
+              <li className="popular-item">256555565</li>
+              <li className="popular-item">356565</li>
+              <li className="popular-item">456565</li>
+              <li className="popular-item">456565</li>
+              <li className="popular-item">4555555555556565</li>
             </ul>
           )}
         </StyledButtonWrapper>
         <StyledSearchWrapper>
           <h6>瀏覽紀錄</h6>
-          <div className='product-wrapper'>
-            <div className='product'></div>
-            <div className='product'></div>
-            <div className='product'></div>
+          <div className="product-wrapper">
+            <div className="product"></div>
+            <div className="product"></div>
+            <div className="product"></div>
           </div>
           <span>清除全部</span>
         </StyledSearchWrapper>
@@ -269,7 +268,7 @@ const Layout = () => {
         <GoTop />
       </StyledContainer>
       <Footer />
-      {isCartOpen && <CartModal setIsCartOpen={setIsCartOpen} />}
+      {isCartOpen && <CartModal setIsCartOpen={setIsCartOpen} productInCart={productInCart}/>}
       {isOpenLoginModal && (
         <LoginModal
           setIsOpenLoginModal={setIsOpenLoginModal}

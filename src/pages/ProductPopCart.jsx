@@ -150,8 +150,12 @@ const StyledCard = styled.div`
 `;
 
 // handle 參數由 Product 傳入
-const ProductPopCart = ({ handleToggleCartModal, product }) => {
-  // console.log(product)
+const ProductPopCart = ({
+  handleToggleCartModal,
+  product,
+  productInCart,
+  setProductInCart,
+}) => {
   const [count, setCount] = useState(1);
   const handleDecrease = () => {
     if (count === 1) {
@@ -165,6 +169,10 @@ const ProductPopCart = ({ handleToggleCartModal, product }) => {
   };
 
   const handleAddCart = () => {
+    let tmpCart = productInCart;
+    tmpCart.push({ product: product, count: count });
+    console.log(tmpCart);
+    setProductInCart(tmpCart);
     Swal.fire({
       title: "加入購物車成功",
       icon: "success",
@@ -172,6 +180,8 @@ const ProductPopCart = ({ handleToggleCartModal, product }) => {
       timer: 1000,
       position: "top",
     });
+
+    handleToggleCartModal();
     return;
   };
 

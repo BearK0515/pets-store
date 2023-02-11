@@ -56,24 +56,33 @@ const CartStyled = styled.div`
   }
 `;
 
-export default function CartModal({ setIsCartOpen, cartItem }) {
+export default function CartModal({ setIsCartOpen, productInCart }) {
+  console.log(productInCart);
   const navigate = useNavigate();
-  function goToCart(){
+  function goToCart() {
     navigate("/cart");
     setIsCartOpen(false);
   }
   return (
     <CartStyled>
-      <div className='back-drop' onClick={() => setIsCartOpen(false)}></div>
-      <div className='cart-container'>
-        <div className='cart-title'>我的購物車</div>
-        {cartItem ? (
-          <div className='cart-items'>
-            <div className='cart-item'></div>
-          </div>
+      <div className="back-drop" onClick={() => setIsCartOpen(false)}></div>
+      <div className="cart-container">
+        <div className="cart-title">我的購物車</div>
+        {productInCart.length !== 0 ? (
+          productInCart.map((item) => {
+            return (
+              <div className="item-wrapper" key={item.product.id}>
+                <div className="item-name">{item.product.name}</div>
+                <div className="item-count">{item.count}</div>
+                <div className="item-price">
+                  {Math.floor(item.product.price * item.count * 0.8)}
+                </div>
+              </div>
+            );
+          })
         ) : (
-          <div className='no-item'>
-            <CartNoneIcon className='icon' />
+          <div className="no-item">
+            <CartNoneIcon className="icon" />
             <span>購物車內無任何商品</span>
           </div>
         )}
