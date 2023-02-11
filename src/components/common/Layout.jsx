@@ -209,6 +209,7 @@ const Layout = () => {
           handleToggleLoginModal={handleToggleLoginModal}
           handleToggleCartModal={handleToggleCartModal}
           handleToggleSidebar={handleToggleSidebar}
+          productInCart={productInCart}
         />
         <Outlet context={[productInCart, setProductInCart]} />
         <StyledButtonWrapper>
