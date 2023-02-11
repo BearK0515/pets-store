@@ -59,7 +59,10 @@ const ProductCat = () => {
     const getProductHotAsync = async () => {
       try {
         const resProductlHot = await productsHot();
-        setProductHot(resProductlHot);
+        const onShelvesProductHot = resProductlHot?.filter(
+          (product) => product.isOnShelves === 1
+        );
+        setProductHot(onShelvesProductHot);
       } catch (err) {
         console.error(err);
       }
@@ -73,7 +76,10 @@ const ProductCat = () => {
     const getProductNewAsync = async () => {
       try {
         const resProductNew = await productsNew();
-        setProductNew(resProductNew);
+        const onShelvesProductNew = resProductNew?.filter(
+          (product) => product.isOnShelves === 1
+        );
+        setProductNew(onShelvesProductNew);
       } catch (err) {
         console.error(err);
       }
@@ -87,8 +93,11 @@ const ProductCat = () => {
     const getProductPriceAsync = async () => {
       try {
         const resProductPrice = await productsPrice();
-        setProductPriceOrigin(resProductPrice);
-        setProductPrice(resProductPrice);
+        const onShelvesProductPrice = resProductPrice?.filter(
+          (product) => product.isOnShelves === 1
+        );
+        setProductPriceOrigin(onShelvesProductPrice);
+        setProductPrice(onShelvesProductPrice);
       } catch (err) {
         console.error(err);
       }
