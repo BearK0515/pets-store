@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { PriceUpIcon, PriceDownIcon } from '../assets/icons/index';
-import { productsHot, productsNew, productsPrice } from '../api/products';
 import { ProductItem } from './ProductItem';
 
 const ProductList = styled.div`
@@ -44,104 +43,39 @@ const ProductsSort = styled.div`
     }
   }
 `;
-const ProductDog = () => {
-  const [productHot, setProductHot] = useState([]);
-  const [productNew, setProductNew] = useState([]);
-  const [productPrice, setProductPrice] = useState([]);
-  const [productPriceOrigin, setProductPriceOrigin] = useState([]);
-  const [sortSelect, setSortSelect] = useState({
-    top: true
-  });
-  const [priceToggle, setPriceToggle] = useState('desc');
+const ProductDog = ({
+  productHot,
+  productNew,
+  productPrice,
+  priceToggle,
+  sortSelect,
+  sortSelectToggle
+}) => {
+  const [productsDogHot, setProductsDogHot] = useState([]);
+  const [productsDogNew, setProductsDogNew] = useState([]);
+  const [productsDogPrice, setProductsDogPrice] = useState([]);
 
-  //抓熱銷排行
   useEffect(() => {
-    const getProductHotAsync = async () => {
-      try {
-        const resProductlHot = await productsHot();
-        const onShelvesProductHot = resProductlHot?.filter(
-          (product) => product.isOnShelves === 1
-        );
-        setProductHot(onShelvesProductHot);
-      } catch (err) {
-        console.error(err);
-      }
-    };
-    getProductHotAsync();
-    return;
-  }, [setProductHot]);
+    setProductsDogHot(
+      productHot?.filter((productHot) => productHot.Category.name === 'dog')
+    );
+  }, [productHot]);
 
-  //抓最新商品
   useEffect(() => {
-    const getProductNewAsync = async () => {
-      try {
-        const resProductNew = await productsNew();
-        const onShelvesProductNew = resProductNew?.filter(
-          (product) => product.isOnShelves === 1
-        );
-        setProductNew(onShelvesProductNew);
-      } catch (err) {
-        console.error(err);
-      }
-    };
-    getProductNewAsync();
-    return;
-  }, [setProductNew]);
+    setProductsDogNew(
+      productNew?.filter((productNew) => productNew.Category.name === 'dog')
+    );
+  }, [productNew]);
 
-  //抓價格排序
   useEffect(() => {
-    const getProductPriceAsync = async () => {
-      try {
-        const resProductPrice = await productsPrice();
-        const onShelvesProductPrice = resProductPrice?.filter(
-          (product) => product.isOnShelves === 1
-        );
-        setProductPriceOrigin(onShelvesProductPrice);
-        setProductPrice(onShelvesProductPrice);
-      } catch (err) {
-        console.error(err);
-      }
-    };
-    getProductPriceAsync();
-    return;
-  }, [setProductPriceOrigin]);
-
-  // 點擊時，其他二個會變成 undefine 為 false，當為 true 時不改變
-  const sortSelectToggle = (e) => {
-    if (e.target.value === 'price') {
-      if (priceToggle === 'asc') {
-        setProductPrice(
-          productPriceOrigin.sort((a, b) => {
-            return a.price - b.price;
-          })
-        );
-        const priceSortOrder = priceToggle === 'asc' ? 'desc' : 'asc';
-        setPriceToggle(priceSortOrder);
-      } else if (priceToggle === 'desc') {
-        setProductPrice(
-          productPriceOrigin.sort((a, b) => {
-            return b.price - a.price;
-          })
-        );
-        const priceSortOrder = priceToggle === 'asc' ? 'desc' : 'asc';
-        setPriceToggle(priceSortOrder);
-      }
-    } else {
-      setPriceToggle('desc');
-      setProductPrice(
-        productPriceOrigin.sort((a, b) => {
-          return b.price - a.price;
-        })
+    if (priceToggle) {
+      setProductsDogPrice(
+        productPrice?.filter(
+          (productPrice) => productPrice.Category.name === 'dog'
+        )
       );
     }
-    if (sortSelect[e.target.value] === true) {
-      return;
-    } else {
-      setSortSelect(() => ({
-        [e.target.value]: !sortSelect[e.target.value]
-      }));
-    }
-  };
+  }, [productPrice, priceToggle]);
 
   return (
     <>
@@ -149,7 +83,7 @@ const ProductDog = () => {
         <ul className='sort-nav'>
           <button
             key={1}
-            className={sortSelect['top'] ? 'sort active' : 'sort'}
+            className={sortSelect?.top ? 'sort active' : 'sort'}
             onClick={sortSelectToggle}
             value='top'
           >
@@ -157,7 +91,7 @@ const ProductDog = () => {
           </button>
           <button
             key={2}
-            className={sortSelect['new'] ? 'sort active' : 'sort'}
+            className={sortSelect?.new ? 'sort active' : 'sort'}
             onClick={sortSelectToggle}
             value='new'
           >
@@ -165,12 +99,12 @@ const ProductDog = () => {
           </button>
           <button
             key={3}
-            className={sortSelect['price'] ? 'sort active' : 'sort'}
+            className={sortSelect?.price ? 'sort active' : 'sort'}
             onClick={sortSelectToggle}
             value='price'
           >
             價格
-            {sortSelect['price'] &&
+            {sortSelect?.price &&
               (priceToggle === 'asc' ? (
                 <PriceUpIcon
                   style={{ fontSize: '14px', pointerEvents: 'none' }}
@@ -184,8 +118,8 @@ const ProductDog = () => {
         </ul>
       </ProductsSort>
       <ProductList>
-        {sortSelect['top'] &&
-          productHot?.map((product) => {
+        {sortSelect?.top &&
+          productsDogHot?.map((product) => {
             return (
               <ProductItem
                 key={product.id}
@@ -196,8 +130,8 @@ const ProductDog = () => {
               />
             );
           })}
-        {sortSelect['new'] &&
-          productNew?.map((product) => {
+        {sortSelect?.new &&
+          productsDogNew?.map((product) => {
             return (
               <ProductItem
                 key={product.id}
@@ -208,8 +142,8 @@ const ProductDog = () => {
               />
             );
           })}
-        {sortSelect['price'] &&
-          productPrice?.map((product) => {
+        {sortSelect?.price &&
+          productsDogPrice?.map((product) => {
             return (
               <ProductItem
                 key={product.id}

@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import { PriceUpIcon, PriceDownIcon } from '../assets/icons/index';
-import { productsHot, productsNew, productsPrice } from '../api/products';
 import { ProductItem } from './ProductItem';
 
 const ProductList = styled.div`
@@ -45,112 +44,21 @@ const ProductsSort = styled.div`
   }
 `;
 
-const ProductAll = () => {
-  const [productHot, setProductHot] = useState([]);
-  const [productNew, setProductNew] = useState([]);
-  const [productPrice, setProductPrice] = useState([]);
-  const [productPriceOrigin, setProductPriceOrigin] = useState([]);
-  const [sortSelect, setSortSelect] = useState({
-    top: true
-  });
-  const [priceToggle, setPriceToggle] = useState('desc');
-
-  //抓熱銷排行
-  useEffect(() => {
-    const getProductHotAsync = async () => {
-      try {
-        const resProductlHot = await productsHot();
-        const onShelvesProductHot = resProductlHot?.filter(
-          (product) => product.isOnShelves === 1
-        );
-        setProductHot(onShelvesProductHot);
-      } catch (err) {
-        console.error(err);
-      }
-    };
-    getProductHotAsync();
-    return;
-  }, [setProductHot]);
-
-  //抓最新商品
-  useEffect(() => {
-    const getProductNewAsync = async () => {
-      try {
-        const resProductNew = await productsNew();
-        const onShelvesProductNew = resProductNew?.filter(
-          (product) => product.isOnShelves === 1
-        );
-        setProductNew(onShelvesProductNew);
-      } catch (err) {
-        console.error(err);
-      }
-    };
-    getProductNewAsync();
-    return;
-  }, [setProductNew]);
-
-  //抓價格排序
-  useEffect(() => {
-    const getProductPriceAsync = async () => {
-      try {
-        const resProductPrice = await productsPrice();
-        const onShelvesProductPrice = resProductPrice?.filter(
-          (product) => product.isOnShelves === 1
-        );
-        setProductPriceOrigin(onShelvesProductPrice);
-        setProductPrice(onShelvesProductPrice);
-      } catch (err) {
-        console.error(err);
-      }
-    };
-    getProductPriceAsync();
-    return;
-  }, [setProductPriceOrigin]);
-
-  // 點擊時，其他二個會變成 undefine 為 false，當為 true 時不改變
-  const sortSelectToggle = (e) => {
-    if (e.target.value === 'price') {
-      if (priceToggle === 'asc') {
-        setProductPrice(
-          productPriceOrigin.sort((a, b) => {
-            return a.price - b.price;
-          })
-        );
-        const priceSortOrder = priceToggle === 'asc' ? 'desc' : 'asc';
-        setPriceToggle(priceSortOrder);
-      } else if (priceToggle === 'desc') {
-        setProductPrice(
-          productPriceOrigin.sort((a, b) => {
-            return b.price - a.price;
-          })
-        );
-        const priceSortOrder = priceToggle === 'asc' ? 'desc' : 'asc';
-        setPriceToggle(priceSortOrder);
-      }
-    } else {
-      setPriceToggle('desc');
-      setProductPrice(
-        productPriceOrigin.sort((a, b) => {
-          return b.price - a.price;
-        })
-      );
-    }
-    if (sortSelect[e.target.value] === true) {
-      return;
-    } else {
-      setSortSelect(() => ({
-        [e.target.value]: !sortSelect[e.target.value]
-      }));
-    }
-  };
-
+const ProductAll = ({
+  productHot,
+  productNew,
+  productPrice,
+  priceToggle,
+  sortSelect,
+  sortSelectToggle
+}) => {
   return (
     <>
       <ProductsSort>
         <ul className='sort-nav'>
           <button
             key={1}
-            className={sortSelect['top'] ? 'sort active' : 'sort'}
+            className={sortSelect?.top ? 'sort active' : 'sort'}
             onClick={sortSelectToggle}
             value='top'
           >
@@ -158,7 +66,7 @@ const ProductAll = () => {
           </button>
           <button
             key={2}
-            className={sortSelect['new'] ? 'sort active' : 'sort'}
+            className={sortSelect?.new ? 'sort active' : 'sort'}
             onClick={sortSelectToggle}
             value='new'
           >
@@ -166,12 +74,12 @@ const ProductAll = () => {
           </button>
           <button
             key={3}
-            className={sortSelect['price'] ? 'sort active' : 'sort'}
+            className={sortSelect?.price ? 'sort active' : 'sort'}
             onClick={sortSelectToggle}
             value='price'
           >
             價格
-            {sortSelect['price'] &&
+            {sortSelect?.price &&
               (priceToggle === 'asc' ? (
                 <PriceUpIcon
                   style={{ fontSize: '14px', pointerEvents: 'none' }}
@@ -185,7 +93,7 @@ const ProductAll = () => {
         </ul>
       </ProductsSort>
       <ProductList>
-        {sortSelect['top'] &&
+        {sortSelect?.top &&
           productHot?.map((product) => {
             return (
               <ProductItem
@@ -197,7 +105,7 @@ const ProductAll = () => {
               />
             );
           })}
-        {sortSelect['new'] &&
+        {sortSelect?.new &&
           productNew?.map((product) => {
             return (
               <ProductItem
@@ -209,7 +117,7 @@ const ProductAll = () => {
               />
             );
           })}
-        {sortSelect['price'] &&
+        {sortSelect?.price &&
           productPrice?.map((product) => {
             return (
               <ProductItem
