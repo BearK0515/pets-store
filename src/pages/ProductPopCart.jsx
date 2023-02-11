@@ -1,4 +1,4 @@
-import React,{ useState } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import Swal from "sweetalert2";
 import { MinusIcon, PlusIcon } from "../assets/icons/index";
@@ -14,7 +14,7 @@ const StyledModalContainer = styled.div`
   bottom: 0;
   position: fixed;
   overflow-y: auto;
-  
+
   .overlay {
     top: 0;
     left: 0;
@@ -89,7 +89,7 @@ const StyledCard = styled.div`
       color: var(--text-red);
     }
   }
-  
+
   .count-wrapper {
     display: flex;
     flex-direction: column;
@@ -122,7 +122,7 @@ const StyledCard = styled.div`
       padding: 0 10px;
     }
   }
-  
+
   .button-wrapper {
     display: flex;
     margin-top: 10px;
@@ -147,77 +147,84 @@ const StyledCard = styled.div`
       cursor: pointer;
     }
   }
-
 `;
 
 // handle 參數由 Product 傳入
-const ProductPopCart = ({ handleToggleCartModal }) => {
+const ProductPopCart = ({ handleToggleCartModal, product }) => {
+  // console.log(product)
   const [count, setCount] = useState(1);
   const handleDecrease = () => {
     if (count === 1) {
       return;
     }
-    setCount((prevCount) => (prevCount - 1));
+    setCount((prevCount) => prevCount - 1);
   };
 
   const handleIncrease = () => {
-    setCount((prevCount) => (prevCount + 1));
+    setCount((prevCount) => prevCount + 1);
   };
-  
+
   const handleAddCart = () => {
     Swal.fire({
-        title: "加入購物車成功",
-        icon: "success",
-        showConfirmButton: false,
-        timer: 1000,
-        position: "top",
+      title: "加入購物車成功",
+      icon: "success",
+      showConfirmButton: false,
+      timer: 1000,
+      position: "top",
     });
     return;
-  }
+  };
 
   const handleToCartPage = () => {
     Swal.fire({
-        title: "加入購物車成功",
-        icon: "success",
-        showConfirmButton: true,
-        position: "top",
+      title: "加入購物車成功",
+      icon: "success",
+      showConfirmButton: true,
+      position: "top",
     });
     return;
-  }
-
+  };
 
   return (
     <StyledModalContainer>
       {/*overlay獨立*/}
-      <div className="overlay" onClick={handleToggleCartModal}></div> 
-        <div className="content">
-          <StyledCard className="wrapper">
-            <div className="title-wrapper"><h4 className="title">【毛孩時代】腎臟專科保健粉(30包/盒)</h4></div>
-              <div className="price-wrapper">
-                <div className="price">$750</div>
-                <div className="discount-price">$690</div>
-              </div>
-            <div className="count-wrapper">
-              <label className="count-name">數量</label>
-              <div className="count-select-wrapper">
-                <button onClick={handleDecrease}>
-                  <MinusIcon
-                        className={count > 1 ? "minus active" : "minus"}
-                        style={{ cursor: "pointer" }}
-                  />
-                </button>
-                <div className='count-number'>{count}</div>
-                <button onClick={handleIncrease}>
-                  <PlusIcon className='plus' style={{ cursor: "pointer" }} />
-                </button>
-              </div>
+      <div className="overlay" onClick={handleToggleCartModal}></div>
+      <div className="content">
+        <StyledCard className="wrapper">
+          <div className="title-wrapper">
+            <h4 className="title">{product.name}</h4>
+          </div>
+          <div className="price-wrapper">
+            <div className="price">${product.price * count}</div>
+            <div className="discount-price">
+              ${Math.floor(product.price * 0.8 * count)}
             </div>
-            <div className="button-wrapper">
-              <button className="addCart" onClick={handleAddCart}>加入購物車</button>
-              <button className="toCartPage" onClick={handleToCartPage}>立即購買</button>
+          </div>
+          <div className="count-wrapper">
+            <label className="count-name">數量</label>
+            <div className="count-select-wrapper">
+              <button onClick={handleDecrease}>
+                <MinusIcon
+                  className={count > 1 ? "minus active" : "minus"}
+                  style={{ cursor: "pointer" }}
+                />
+              </button>
+              <div className="count-number">{count}</div>
+              <button onClick={handleIncrease}>
+                <PlusIcon className="plus" style={{ cursor: "pointer" }} />
+              </button>
             </div>
-          </StyledCard>
-        </div>
+          </div>
+          <div className="button-wrapper">
+            <button className="addCart" onClick={handleAddCart}>
+              加入購物車
+            </button>
+            <button className="toCartPage" onClick={handleToCartPage}>
+              立即購買
+            </button>
+          </div>
+        </StyledCard>
+      </div>
     </StyledModalContainer>
   );
 };

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
 import { CartIcon, PriceUpIcon, PriceDownIcon } from "../assets/icons/index";
 import ProductPopCart from "./ProductPopCart";
@@ -130,8 +130,9 @@ const ProductAll = () => {
   const [sortSelect, setSortSelect] = useState({
     top: true,
   });
-  const [priceToggle, setPriceToggle] = useState('desc')
+  const [priceToggle, setPriceToggle] = useState("desc");
   const [addCartPop, setAddCartPop] = useState(false);
+  const [addToCart, setAddToCart] = useState(null);
 
   //抓熱銷排行
   useEffect(() => {
@@ -178,31 +179,37 @@ const ProductAll = () => {
 
   // 點擊時，其他二個會變成 undefine 為 false，當為 true 時不改變
   const sortSelectToggle = (e) => {
-    if (e.target.value === 'price') {
-      if (priceToggle === 'asc') {
-        setProductPrice(productPriceOrigin.sort((a,b) => {
-          return a.price - b.price
-        }))
-        const priceSortOrder = priceToggle === 'asc' ? 'desc' : 'asc' 
-        setPriceToggle(priceSortOrder)
-      } else if (priceToggle === 'desc') {
-        setProductPrice(productPriceOrigin.sort((a,b) => {
-        return b.price - a.price 
-        }))
-        const priceSortOrder = priceToggle === 'asc' ? 'desc' : 'asc'
-        setPriceToggle(priceSortOrder)
+    if (e.target.value === "price") {
+      if (priceToggle === "asc") {
+        setProductPrice(
+          productPriceOrigin.sort((a, b) => {
+            return a.price - b.price;
+          })
+        );
+        const priceSortOrder = priceToggle === "asc" ? "desc" : "asc";
+        setPriceToggle(priceSortOrder);
+      } else if (priceToggle === "desc") {
+        setProductPrice(
+          productPriceOrigin.sort((a, b) => {
+            return b.price - a.price;
+          })
+        );
+        const priceSortOrder = priceToggle === "asc" ? "desc" : "asc";
+        setPriceToggle(priceSortOrder);
       }
     } else {
-      setPriceToggle('desc')
-      setProductPrice(productPriceOrigin.sort((a,b) => {
-        return b.price - a.price
-      }))
+      setPriceToggle("desc");
+      setProductPrice(
+        productPriceOrigin.sort((a, b) => {
+          return b.price - a.price;
+        })
+      );
     }
     if (sortSelect[e.target.value] === true) {
       return;
     } else {
       setSortSelect(() => ({
-        [e.target.value]: !sortSelect[e.target.value]
+        [e.target.value]: !sortSelect[e.target.value],
       }));
     }
   };
@@ -214,12 +221,12 @@ const ProductAll = () => {
   return (
     <>
       <ProductsSort>
-        <ul className='sort-nav'>
+        <ul className="sort-nav">
           <button
             key={1}
             className={sortSelect["top"] ? "sort active" : "sort"}
             onClick={sortSelectToggle}
-            value='top'
+            value="top"
           >
             熱銷排行
           </button>
@@ -227,7 +234,7 @@ const ProductAll = () => {
             key={2}
             className={sortSelect["new"] ? "sort active" : "sort"}
             onClick={sortSelectToggle}
-            value='new'
+            value="new"
           >
             最新上架
           </button>
@@ -235,10 +242,19 @@ const ProductAll = () => {
             key={3}
             className={sortSelect["price"] ? "sort active" : "sort"}
             onClick={sortSelectToggle}
-            value='price'
+            value="price"
           >
             價格
-            { sortSelect["price"] && ( priceToggle === 'asc' ? <PriceUpIcon style={{fontSize: "14px", pointerEvents: "none"}}/> : <PriceDownIcon style={{fontSize: "14px", pointerEvents: "none"}}/> ) }
+            {sortSelect["price"] &&
+              (priceToggle === "asc" ? (
+                <PriceUpIcon
+                  style={{ fontSize: "14px", pointerEvents: "none" }}
+                />
+              ) : (
+                <PriceDownIcon
+                  style={{ fontSize: "14px", pointerEvents: "none" }}
+                />
+              ))}
           </button>
         </ul>
       </ProductsSort>
@@ -248,17 +264,23 @@ const ProductAll = () => {
             return (
               <StyledCard key={product.id}>
                 <div
-                  className='product'
+                  className="product"
                   style={{ backgroundImage: `url('${product.Images.url}')` }}
                 >
-                  <NavLink className='addCart' onClick={handleToggleCartModal}>
+                  <NavLink
+                    className="addCart"
+                    onClick={() => {
+                      handleToggleCartModal();
+                      setAddToCart(product);
+                    }}
+                  >
                     <CartIcon style={{ fontSize: "20px", cursor: "pointer" }} />
                   </NavLink>
                 </div>
-                <div className='wrapper'>
-                  <h4 className='title'>{product.name}</h4>
-                  <div className='price'>${product.price}</div>
-                  <div className='discount-price'>
+                <div className="wrapper">
+                  <h4 className="title">{product.name}</h4>
+                  <div className="price">${product.price}</div>
+                  <div className="discount-price">
                     ${Math.floor(product.price * 0.8)}
                   </div>
                 </div>
@@ -270,17 +292,17 @@ const ProductAll = () => {
             return (
               <StyledCard key={product.id}>
                 <div
-                  className='product'
+                  className="product"
                   style={{ backgroundImage: `url('${product.Images.url}')` }}
                 >
-                  <NavLink className='addCart' onClick={handleToggleCartModal}>
+                  <NavLink className="addCart" onClick={handleToggleCartModal}>
                     <CartIcon style={{ fontSize: "20px", cursor: "pointer" }} />
                   </NavLink>
                 </div>
-                <div className='wrapper'>
-                  <h4 className='title'>{product.name}</h4>
-                  <div className='price'>${product.price}</div>
-                  <div className='discount-price'>
+                <div className="wrapper">
+                  <h4 className="title">{product.name}</h4>
+                  <div className="price">${product.price}</div>
+                  <div className="discount-price">
                     ${Math.floor(product.price * 0.8)}
                   </div>
                 </div>
@@ -292,17 +314,17 @@ const ProductAll = () => {
             return (
               <StyledCard key={product.id}>
                 <div
-                  className='product'
+                  className="product"
                   style={{ backgroundImage: `url('${product.Images.url}')` }}
                 >
-                  <NavLink className='addCart' onClick={handleToggleCartModal}>
+                  <NavLink className="addCart" onClick={handleToggleCartModal}>
                     <CartIcon style={{ fontSize: "20px", cursor: "pointer" }} />
                   </NavLink>
                 </div>
-                <div className='wrapper'>
-                  <h4 className='title'>{product.name}</h4>
-                  <div className='price'>${product.price}</div>
-                  <div className='discount-price'>
+                <div className="wrapper">
+                  <h4 className="title">{product.name}</h4>
+                  <div className="price">${product.price}</div>
+                  <div className="discount-price">
                     ${Math.floor(product.price * 0.8)}
                   </div>
                 </div>
@@ -312,7 +334,10 @@ const ProductAll = () => {
       </ProductList>
       {/* Modal-跳出購物車 */}
       {addCartPop && (
-        <ProductPopCart handleToggleCartModal={handleToggleCartModal} />
+        <ProductPopCart
+          handleToggleCartModal={handleToggleCartModal}
+          product={addToCart}
+        />
       )}
     </>
   );

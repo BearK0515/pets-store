@@ -26,6 +26,7 @@ export const facebookLogin = async ({ token }) => {
       // data: {
       //   access_token: token,
       // },
+      // Host: "localhost:3000",
       headers: {
         Authorization: 'Bearer ' + token
       },
