@@ -270,6 +270,16 @@ const AddProductModal = ({ handleToggleProductModal }) => {
   //上傳產品圖片
   const handleProductImageChange = (e) => {
     const selectedFiles = e.target.files;
+    if (selectedFiles.size > 46137344) {
+      Swal.fire({
+        title: "超過容量大小",
+        icon: "error",
+        showConfirmButton: false,
+        timer: 2000,
+        position: "top",
+      });
+      return;
+    }
     if (selectedFiles.length > 3) {
       Swal.fire({
         title: "最多3張圖片",
@@ -294,6 +304,16 @@ const AddProductModal = ({ handleToggleProductModal }) => {
   //上傳詳情圖片
   const handleDescribeImageChange = (e) => {
     const selectedFiles = e.target.files;
+    if (selectedFiles.size > 46137344) {
+      Swal.fire({
+        title: "超過容量大小",
+        icon: "error",
+        showConfirmButton: false,
+        timer: 2000,
+        position: "top",
+      });
+      return;
+    }
     if (selectedFiles.length > 3) {
       Swal.fire({
         title: "最多3張圖片",
