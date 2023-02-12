@@ -134,7 +134,7 @@ const StyledButtonWrapper = styled.div`
     color: var(--white);
     transform: translate(50%, -50%);
   }
-  @media screen and (max-width: 992px){
+  @media screen and (max-width: 992px) {
     display: none;
   }
 `;
@@ -173,16 +173,52 @@ const StyledSearchWrapper = styled.div`
     gap: 5px 0;
     padding: 5px;
   }
-  .product {
-    width: 60px;
-    height: 60px;
-    background-size: cover;
-    background-image: url("https://picsum.photos/id/1020/600/400");
-    cursor: pointer;
-  }
   @media screen and (max-width: 992px) {
     display: none;
   }
+`;
+const StyledCardItem = styled.div`
+  position: relative;
+  width: 60px;
+  height: 60px;
+  background-size: cover;
+  background-image: url("https://picsum.photos/id/1020/600/400");
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+.back-drop{
+  opacity: 0;
+  transition: .3s;
+}
+.view{
+  opacity: 0;
+  transition: .3s;
+}
+  &:hover{
+    .back-drop {
+      position: absolute;
+      top: 0;
+      right: 0;
+    bottom: 0;
+    left: 0;
+    background-color: rgba(50, 55, 58, 0.85);
+    cursor: pointer;
+    opacity: 1;
+    transition: .3s;
+  }
+  .view {
+    background: #c14848;
+    border-radius: 50rem;
+    font-size: 12px;
+    line-height: 1;
+    padding: 2px 5px;
+    color: var(--white);
+    z-index: 2;
+    opacity: 1;
+    transition: .3s;
+  }
+}
 `;
 
 const Layout = () => {
@@ -190,8 +226,7 @@ const Layout = () => {
   const [isOpenLoginModal, setIsOpenLoginModal] = useState(false);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isSideabrOpen, setIsSideabrOpen] = useState(false);
-  
-  
+
   const handleToggleLoginModal = () => {
     setIsOpenLoginModal(!isOpenLoginModal);
   };
@@ -201,7 +236,6 @@ const Layout = () => {
   const handleToggleSidebar = () => {
     setIsSideabrOpen(!isSideabrOpen);
   };
-
 
   return (
     <>
@@ -259,9 +293,7 @@ const Layout = () => {
         <StyledSearchWrapper>
           <h6>瀏覽紀錄</h6>
           <div className='product-wrapper'>
-            <div className='product'></div>
-            <div className='product'></div>
-            <div className='product'></div>
+            <CardItem />
           </div>
           <span>清除全部</span>
         </StyledSearchWrapper>
@@ -287,3 +319,12 @@ const Layout = () => {
 };
 
 export default Layout;
+
+export const CardItem = () => {
+  return (
+    <StyledCardItem className='product'>
+      <div className='back-drop'></div>
+      <div className='view'>檢視</div>
+    </StyledCardItem>
+  );
+};

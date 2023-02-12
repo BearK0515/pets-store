@@ -69,7 +69,6 @@ export const singleOrder = async (orderId) => {
 //POST管理員新增商品 製作中
 export const addProduct = async ({ formData }) => {
   try {
-    // console.log("API formData", formData);
     const authToken = localStorage.getItem("authToken");
     const rep = await axios({
       method: "POST",
@@ -80,7 +79,6 @@ export const addProduct = async ({ formData }) => {
         "Content-Type": "multipart/form-data",
       },
     });
-    console.log("新增商品api", rep);
     return rep;
   } catch (error) {
     console.error("[POST add Product Failed]:", error);

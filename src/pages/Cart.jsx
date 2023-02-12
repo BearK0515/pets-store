@@ -1075,7 +1075,7 @@ const SevenElevenPickUp = () => {
   // }
   const handleGetTown = async()=>{
     try {
-      const data = await getTownName("01");
+      const data = await getTownName();
       console.log(data);
       return data
     } catch (error) {
