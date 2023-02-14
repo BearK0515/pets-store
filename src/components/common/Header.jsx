@@ -1,5 +1,5 @@
 import React from "react";
-import { NavLink as Link } from "react-router-dom";
+import { NavLink as Link } from 'react-router-dom';
 import styled from "styled-components";
 import {
   InstagramIcon,
