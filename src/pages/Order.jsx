@@ -1,6 +1,8 @@
-import React, { useState } from "react";
-import styled from "styled-components";
-import { AlertIcon, AlertTriangleIcon, ArrowRightIcon } from "../assets/icons";
+import React, { useState } from 'react';
+import styled from 'styled-components';
+import { AlertIcon, AlertTriangleIcon } from '../assets/icons';
+import { useNavigate } from 'react-router-dom';
+import Swal from 'sweetalert2';
 
 const StyledContainer = styled.div`
   font-family: Arial, Helvetica, sans-serif;
@@ -17,8 +19,9 @@ const StyledContainer = styled.div`
   }
 `;
 const StyledTitle = styled.div`
+  font-weight: bold;
   h2 {
-    font-size: 18px;
+    font-size: 24px;
     line-height: 18px;
   }
   hr {
@@ -41,7 +44,7 @@ const StyledWrapper = styled.div`
     .form-label {
       display: block;
       margin-bottom: 10px;
-      font-size: 14px;
+      font-size: 18px;
       line-height: 20px;
       color: #212529;
       margin-bottom: 10px;
@@ -57,7 +60,7 @@ const StyledWrapper = styled.div`
       font-size: 1rem;
       font-weight: 400;
       line-height: 1.5;
-      height: 36px;
+      height: 60px;
       border: 1px solid #d9d9d9;
       padding: 10px;
       &.active {
@@ -67,6 +70,9 @@ const StyledWrapper = styled.div`
         flex: 1;
         border: none;
         outline: none;
+        width: 100%;
+        height: 36px;
+        font-size: 18px;
       }
       .msg-error {
         display: flex;
@@ -106,7 +112,7 @@ const StyledButtonWrapper = styled.div`
   display: grid;
   align-items: center;
   grid-template-columns: 5fr 1fr;
-  @media screen and (max-width: 768px){
+  @media screen and (max-width: 768px) {
     grid-template-columns: 2fr 1fr;
   }
   button {
@@ -122,17 +128,34 @@ const StyledButtonWrapper = styled.div`
 
 const Order = () => {
   const [orderNumberError, setOrderNumberError] = useState(false);
-  const [authenticationError, setAuthenticationError] = useState(false);
-  const [orderNumber, setOrderNumber] = useState("");
-  const [authentication, setAuthentication] = useState("");
+  // const [authenticationError, setAuthenticationError] = useState(false);
+  const [orderNumber, setOrderNumber] = useState('');
+  // const [authentication, setAuthentication] = useState("");
+
+  const navigate = useNavigate();
 
   const handleSubmit = async () => {
     if (orderNumber?.length === 0) {
       setOrderNumberError(true);
     }
-    if (authentication?.length === 0) {
-      setAuthenticationError(true);
+
+    if (orderNumber?.length === 0) {
+      console.log('禁止送出');
+      return;
     }
+
+    Swal.fire({
+      title: '搜尋訂單中',
+      showConfirmButton: false,
+      timer: 1000,
+      position: 'center'
+    }).then(() => {
+      navigate(`/user-order/${orderNumber}`); // 絕對路由前面要加一槓
+    });
+
+    // if (authentication?.length === 0) {
+    //   setAuthenticationError(true);
+    // }
     // if(orderNumber?.length === 0 || authentication?.length === 0){
     //   console.log("禁止送出");
     //   return
@@ -151,13 +174,13 @@ const Order = () => {
             <div className='form-group'>
               <label
                 className={
-                  orderNumberError ? "form-label active" : "form-label"
+                  orderNumberError ? 'form-label active' : 'form-label'
                 }
               >
                 訂單編號
               </label>
               <div
-                className={orderNumberError ? "form-data active" : "form-data"}
+                className={orderNumberError ? 'form-data active' : 'form-data'}
               >
                 <input
                   type='text'
@@ -180,7 +203,7 @@ const Order = () => {
                 </div>
               ) : null}
             </div>
-            <div className='form-group'>
+            {/* <div className='form-group'>
               <label
                 className={
                   authenticationError ? "form-label active" : "form-label"
@@ -220,7 +243,7 @@ const Order = () => {
                   <span>請查閱信箱中的「訂購通知信」。</span>
                 </div>
               )}
-            </div>
+            </div> */}
           </StyledWrapper>
           <StyledButtonWrapper>
             <div></div>

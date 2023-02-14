@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate  } from 'react-router-dom';
 import ProductAside from './ProductAside';
 import ProductAll from './ProductAll';
 import ProductDog from './ProductDog';
@@ -68,6 +68,7 @@ const ProductPage = () => {
     top: true
   });
   const [priceToggle, setPriceToggle] = useState('desc');
+  // const [pageChange, setPageChange] = useState(true)
 
   const navigate = useNavigate();
   const location = useLocation();
