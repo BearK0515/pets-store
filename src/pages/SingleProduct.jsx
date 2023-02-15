@@ -564,16 +564,13 @@ const SingleProduct = () => {
       let length = record.length;
       let isRepeat = false;
       let repeatIndex;
-      if (record.length === 5) {
-        record.splice(0, 1);
-      }
       for (let i = 0; i < length; i++) {
         if (record[i].id === id) {
           isRepeat = true;
           repeatIndex = i;
-        } 
+        }
       }
-      if (!isRepeat) {
+      if (!isRepeat && length < 5) {
         record.push({ id, imageUrl });
         localStorage.setItem("productId", JSON.stringify(record));
       } else {
