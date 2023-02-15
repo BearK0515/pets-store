@@ -41,7 +41,6 @@ export const productsPrice = async () => {
   }
 };
 
-
 //取得指定商品詳細資料
 export const productDetail = async (productId) => {
   try {
@@ -54,3 +53,17 @@ export const productDetail = async (productId) => {
     console.error("[Get Product Detail failed]:", error);
   }
 };
+
+
+//取得單一商品
+// export const getSingleProduct = async (id) => {
+//   try {
+//     const rep = await axios({
+//       method: 'GET',
+//       url: `${baseURL}/api/products/detail/${id}`
+//     });
+//     return rep.data;
+//   } catch (error) {
+//     console.error('[Get Single Product failed]:');
+//   }
+// };
