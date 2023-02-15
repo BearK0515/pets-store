@@ -1,9 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import styled from "styled-components";
-import { CartIcon, PriceUpIcon, PriceDownIcon } from "../assets/icons/index";
-import ProductPopCart from "./ProductPopCart";
-import { NavLink as Link } from "react-router-dom";
-import { productsHot, productsNew, productsPrice } from "../api/products";
+import {  PriceUpIcon, PriceDownIcon } from "../assets/icons/index";
 import { ProductItem } from "./ProductItem";
 
 const ProductList = styled.div`
