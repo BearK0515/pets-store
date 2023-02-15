@@ -168,7 +168,7 @@ const ProductPopCart = ({ handleToggleCartModal, product }) => {
   const handleAddCart = () => {
     let tmpCart = productInCart;
     tmpCart.push({ product: product, count: count });
-    console.log(tmpCart);
+    // console.log(tmpCart);
     setProductInCart(tmpCart);
     Swal.fire({
       title: "加入購物車成功",

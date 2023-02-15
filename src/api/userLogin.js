@@ -17,18 +17,16 @@ const baseURL = 'https://www.waylins.com';
 //     console.error(`[Login Failed]${error}`);
 //   }
 // }
-export const facebookLogin = async ({ token }) => {
+export const facebookLogin = async ({ email, name }) => {
+  // console.log(email);
+  // console.log(name)
   try {
-    console.log(token);
     const rep = await axios({
-      method: "GET",
-      url: `${baseURL}/api/auth/facebook/token`,
-      // data: {
-      //   access_token: token,
-      // },
-      // Host: "localhost:3000",
-      headers: {
-        Authorization: 'Bearer ' + token
+      method: "POST",
+      url: `${baseURL}/api/users/login`,
+      data: {
+        email: email,
+        name: name,
       },
     });
     console.log('get FB reponse', rep);

@@ -146,7 +146,6 @@ const StyledCardItem = styled.div`
 `;
 
 export default function CartModal({ setIsCartOpen, productInCart }) {
-  console.log(productInCart);
   const navigate = useNavigate();
   function goToCart() {
     navigate("/cart");
@@ -160,7 +159,7 @@ export default function CartModal({ setIsCartOpen, productInCart }) {
         {productInCart.length !== 0 ? (
           productInCart?.map((product) => {
             return (
-              <div className="card-items">
+              <div className="card-items" key={product.product.id}>
                 <CatrItem product={product} />
               </div>
             );
@@ -178,7 +177,6 @@ export default function CartModal({ setIsCartOpen, productInCart }) {
 }
 
 export const CatrItem = ({ product }) => {
-  console.log(product.product);
   const options = [];
   for (let i = 1; i <= 999; i++) {
     options.push({ value: i, label: i });
@@ -197,7 +195,7 @@ export const CatrItem = ({ product }) => {
         </div>
         <div className="price">{product?.product.price}元</div>
         <div className="count">
-          <select defaultValue={options[0].value}>
+          <select defaultValue={options[product?.count - 1].value}>
             {Array.prototype.map.call(options, ({ value, label }, index) => {
               return (
                 <option key={index} value={value}>
@@ -208,7 +206,7 @@ export const CatrItem = ({ product }) => {
           </select>
         </div>
         <div className="subTotal">
-          {Math.floor(product?.product.price * 0.8)}元
+          {Math.floor(product?.product.price * product?.count * 0.8)}元
         </div>
       </div>
     </StyledCardItem>

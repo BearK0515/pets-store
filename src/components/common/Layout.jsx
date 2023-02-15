@@ -187,38 +187,38 @@ const StyledCardItem = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-.back-drop{
-  opacity: 0;
-  transition: .3s;
-}
-.view{
-  opacity: 0;
-  transition: .3s;
-}
-  &:hover{
+  .back-drop {
+    opacity: 0;
+    transition: 0.3s;
+  }
+  .view {
+    opacity: 0;
+    transition: 0.3s;
+  }
+  &:hover {
     .back-drop {
       position: absolute;
       top: 0;
       right: 0;
-    bottom: 0;
-    left: 0;
-    background-color: rgba(50, 55, 58, 0.85);
-    cursor: pointer;
-    opacity: 1;
-    transition: .3s;
+      bottom: 0;
+      left: 0;
+      background-color: rgba(50, 55, 58, 0.85);
+      cursor: pointer;
+      opacity: 1;
+      transition: 0.3s;
+    }
+    .view {
+      background: #c14848;
+      border-radius: 50rem;
+      font-size: 12px;
+      line-height: 1;
+      padding: 2px 5px;
+      color: var(--white);
+      z-index: 2;
+      opacity: 1;
+      transition: 0.3s;
+    }
   }
-  .view {
-    background: #c14848;
-    border-radius: 50rem;
-    font-size: 12px;
-    line-height: 1;
-    padding: 2px 5px;
-    color: var(--white);
-    z-index: 2;
-    opacity: 1;
-    transition: .3s;
-  }
-}
 `;
 
 const Layout = () => {
@@ -245,7 +245,7 @@ const Layout = () => {
           handleToggleLoginModal={handleToggleLoginModal}
           handleToggleCartModal={handleToggleCartModal}
           handleToggleSidebar={handleToggleSidebar}
-          productInCart={productInCart}
+          countProducts={productInCart.length}
         />
         <Outlet context={[productInCart, setProductInCart]} />
         <StyledButtonWrapper>
@@ -294,7 +294,7 @@ const Layout = () => {
         </StyledButtonWrapper>
         <StyledSearchWrapper>
           <h6>瀏覽紀錄</h6>
-          <div className='product-wrapper'>
+          <div className="product-wrapper">
             <CardItem />
           </div>
           <span>清除全部</span>
@@ -303,7 +303,12 @@ const Layout = () => {
         <GoTop />
       </StyledContainer>
       <Footer />
-      {isCartOpen && <CartModal setIsCartOpen={setIsCartOpen} productInCart={productInCart}/>}
+      {isCartOpen && (
+        <CartModal
+          setIsCartOpen={setIsCartOpen}
+          productInCart={productInCart}
+        />
+      )}
       {isOpenLoginModal && (
         <LoginModal
           setIsOpenLoginModal={setIsOpenLoginModal}
@@ -324,9 +329,9 @@ export default Layout;
 
 export const CardItem = () => {
   return (
-    <StyledCardItem className='product'>
-      <div className='back-drop'></div>
-      <div className='view'>檢視</div>
+    <StyledCardItem className="product">
+      <div className="back-drop"></div>
+      <div className="view">檢視</div>
     </StyledCardItem>
   );
 };

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { NavLink as Link } from "react-router-dom";
 import styled from "styled-components";
 import {
@@ -241,8 +241,9 @@ export default function Header({
   handleToggleLoginModal,
   handleToggleCartModal,
   handleToggleSidebar,
-  productInCart,
+  countProducts
 }) {
+  console.log(countProducts);
   return (
     <HeaderStyled>
       <div className="nav-mobile">
@@ -276,7 +277,7 @@ export default function Header({
           <li onClick={handleToggleCartModal}>
             <div className="icon">
               <CartIcon />
-              <div className="count">{productInCart.length}</div>
+              <div className="count">{countProducts}</div>
             </div>
             <div className="text">購物車</div>
           </li>
