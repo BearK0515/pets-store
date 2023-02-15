@@ -153,52 +153,56 @@ const StyledWrapper = styled.div`
 `;
 const LoginModal = ({ setIsOpenLoginModal, handleToggleLoginModal }) => {
   const navigate = useNavigate();
-  const [token, setToken] = useState(null);
+  const [email, setEmail] = useState(null);
+  const [name, setName] = useState(null);
 
   const linkTo = (location) => {
     setIsOpenLoginModal(false);
     navigate(location);
   };
 
-   useEffect(() => {
-     const getUserInfo = async () => {
-       console.log(token);
-       const data = await facebookLogin({ token });
-       console.log(data);
-     };
-     if (!token) return;
-     getUserInfo();
-   }, [token]);
+  useEffect(() => {
+    const getUserInfo = async () => {
+      const data = await facebookLogin({ email, name });
+      console.log(data);
+    };
+    if (!email || !name) return;
+    getUserInfo();
+  }, [email, name]);
 
   return (
     <StyledModalContainer>
-      <div className='overlay'></div>
-      <div className='content'>
+      <div className="overlay"></div>
+      <div className="content">
         <StyledWrapper>
-          <button className='cancel' onClick={handleToggleLoginModal}>
+          <button className="cancel" onClick={handleToggleLoginModal}>
             <CancelIcon size={40} />
           </button>
-          <div className='title'>
+          <div className="title">
             <h2>成為會員，獨享專屬好康優惠！</h2>
           </div>
-          <div className='wrapper'>
+          <div className="wrapper">
             <h3>綁定社群帳號，快速登入</h3>
-            <div className='icon-wrapper'>
-              <div className='icon line'>
+            <div className="icon-wrapper">
+              <div className="icon line">
                 <div>
                   <LineWhiteIcon />
                 </div>
                 <p>登入</p>
               </div>
-              <div className='icon facebook' onClick={() => facebookLogin()}>
+              <div
+                className="icon facebook"
+                // onClick={() => handleFbLogin({ email, name })}
+              >
                 <div>
                   {/* <FacebookWhiteIcon /> */}
                   <LoginSocialFacebook
-                    isOnlyGetToken
-                    appId='1699530640464382'
+                    // isOnlyGetToken
+                    appId="1699530640464382"
                     onResolve={(res) => {
-                      console.log(res.data);
-                      setToken(res.data.accessToken);
+                      // console.log(res.data.email);
+                      setEmail(res.data.email);
+                      setName(res.data.name);
                     }}
                     onReject={(err) => {
                       console.log(err);
@@ -209,20 +213,20 @@ const LoginModal = ({ setIsOpenLoginModal, handleToggleLoginModal }) => {
                 </div>
                 <p>登入</p>
               </div>
-              <div className='icon google' onClick={() => googleLogin()}>
+              <div className="icon google" onClick={() => googleLogin()}>
                 <div>
                   <GoogleIcon />
                 </div>
                 <p>登入</p>
               </div>
             </div>
-            <div className='waring-wrapper'>
+            <div className="waring-wrapper">
               <div>
                 <AlertIcon />
               </div>
               <p>注意：不同登入方式帳號不互通</p>
             </div>
-            <div className='manual'>
+            <div className="manual">
               註冊帳號即表示您
               <span
                 onClick={() => {

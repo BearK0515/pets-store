@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
-import styled from 'styled-components';
-import { CartIcon } from '../assets/icons/index';
-import { Link } from 'react-router-dom';
-import ProductPopCart from './ProductPopCart';
+import React, { useState } from "react";
+import styled from "styled-components";
+import { CartIcon } from "../assets/icons/index";
+import { Link } from "react-router-dom";
+import ProductPopCart from "./ProductPopCart";
 
 const StyledCard = styled.div`
   position: relative;
@@ -15,7 +15,7 @@ const StyledCard = styled.div`
     width: 100%;
     aspect-ratio: 1/1;
     background-size: cover;
-    background-image: url('https://picsum.photos/id/20/400');
+    background-image: url("https://picsum.photos/id/20/400");
   }
 
   .wrapper {
@@ -80,9 +80,9 @@ const Button = styled.div`
     background-color: var(--red);
     border-width: 1px;
     background-color: ${(props) =>
-      props.active ? 'var(--white)' : 'var(--red)'};
-    color: ${(props) => (props.active ? ' var(--red)' : 'var(--white)')};
-    border: ${(props) => (props.active ? '2px solid var(--red)' : '')};
+      props.active ? "var(--white)" : "var(--red)"};
+    color: ${(props) => (props.active ? " var(--red)" : "var(--white)")};
+    border: ${(props) => (props.active ? "2px solid var(--red)" : "")};
     font-size: 20px;
     font-weight: 400;
     border-radius: 10%;
@@ -108,7 +108,7 @@ const Button = styled.div`
   }
 `;
 
-export const ProductItem = ({ id, price, image, name }) => {
+export const ProductItem = ({ product }) => {
   const [addCartPop, setAddCartPop] = useState(false);
 
   const handleToggleCartModal = () => {
@@ -117,31 +117,35 @@ export const ProductItem = ({ id, price, image, name }) => {
 
   return (
     <>
-      <StyledCard id={id}>
+      <StyledCard id={product.id}>
         <Link
-          className='product'
-          style={{ backgroundImage: `url('${image}')` }}
-          to={`/product/detail/${id}`}
+          className="product"
+          style={{ backgroundImage: `url('${product.Images.url}')` }}
+          to={`/product/detail/${product.id}`}
         />
         <Button onClick={handleToggleCartModal}>
-          <div className='addCart'>
-            <CartIcon style={{ fontSize: '18px', cursor: 'pointer' }} />
+          <div className="addCart">
+            <CartIcon style={{ fontSize: "18px", cursor: "pointer" }} />
           </div>
         </Button>
-        <div className='wrapper'>
-          <Link to={`/product/detail/${id}`}>
-            <h4 className='title'>{name}</h4>
-            <div className='price'>${price}</div>
-            <div className='discount-price'>${Math.floor(price * 0.8)}</div>
+        <div className="wrapper">
+          <Link to={`/product/detail/${product.id}`}>
+            <h4 className="title">{product.name}</h4>
+            <div className="price">${product.price}</div>
+            <div className="discount-price">
+              ${Math.floor(product.price * 0.8)}
+            </div>
           </Link>
         </div>
       </StyledCard>
       {addCartPop && (
         <ProductPopCart
-          id={id}
-          name={name}
-          price={price}
+          product={product}
+          id={product.id}
+          name={product.name}
+          price={product.price}
           handleToggleCartModal={handleToggleCartModal}
+          image={product.Images.url}
         />
       )}
     </>

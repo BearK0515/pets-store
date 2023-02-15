@@ -1,7 +1,7 @@
-import React from 'react';
-import styled from 'styled-components';
-import { PriceUpIcon, PriceDownIcon } from '../assets/icons/index';
-import { ProductItem } from './ProductItem';
+import React from "react";
+import styled from "styled-components";
+import {  PriceUpIcon, PriceDownIcon } from "../assets/icons/index";
+import { ProductItem } from "./ProductItem";
 
 const ProductList = styled.div`
   width: 100%;
@@ -50,43 +50,43 @@ const ProductAll = ({
   productPrice,
   priceToggle,
   sortSelect,
-  sortSelectToggle
+  sortSelectToggle,
 }) => {
   return (
     <>
       <ProductsSort>
-        <ul className='sort-nav'>
+        <ul className="sort-nav">
           <button
             key={1}
-            className={sortSelect?.top ? 'sort active' : 'sort'}
+            className={sortSelect?.top ? "sort active" : "sort"}
             onClick={sortSelectToggle}
-            value='top'
+            value="top"
           >
             熱銷排行
           </button>
           <button
             key={2}
-            className={sortSelect?.new ? 'sort active' : 'sort'}
+            className={sortSelect?.new ? "sort active" : "sort"}
             onClick={sortSelectToggle}
-            value='new'
+            value="new"
           >
             最新上架
           </button>
           <button
             key={3}
-            className={sortSelect?.price ? 'sort active' : 'sort'}
+            className={sortSelect?.price ? "sort active" : "sort"}
             onClick={sortSelectToggle}
-            value='price'
+            value="price"
           >
             價格
             {sortSelect?.price &&
-              (priceToggle === 'asc' ? (
+              (priceToggle === "asc" ? (
                 <PriceUpIcon
-                  style={{ fontSize: '14px', pointerEvents: 'none' }}
+                  style={{ fontSize: "14px", pointerEvents: "none" }}
                 />
               ) : (
                 <PriceDownIcon
-                  style={{ fontSize: '14px', pointerEvents: 'none' }}
+                  style={{ fontSize: "14px", pointerEvents: "none" }}
                 />
               ))}
           </button>
@@ -95,39 +95,15 @@ const ProductAll = ({
       <ProductList>
         {sortSelect?.top &&
           productHot?.map((product) => {
-            return (
-              <ProductItem
-                key={product.id}
-                id={product.id}
-                price={product.price}
-                image={product.Images.url}
-                name={product.name}
-              />
-            );
+            return <ProductItem product={product} key={product.id} />;
           })}
         {sortSelect?.new &&
           productNew?.map((product) => {
-            return (
-              <ProductItem
-                key={product.id}
-                id={product.id}
-                price={product.price}
-                image={product.Images.url}
-                name={product.name}
-              />
-            );
+            return <ProductItem product={product} key={product.id} />;
           })}
         {sortSelect?.price &&
           productPrice?.map((product) => {
-            return (
-              <ProductItem
-                key={product.id}
-                id={product.id}
-                price={product.price}
-                image={product.Images.url}
-                name={product.name}
-              />
-            );
+            return <ProductItem product={product} key={product.id} />;
           })}
       </ProductList>
     </>

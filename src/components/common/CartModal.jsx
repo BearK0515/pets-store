@@ -131,12 +131,12 @@ const StyledCardItem = styled.div`
         border: none;
         color: #808080;
         font-size: 1rem;
-        &:focus{
+        &:focus {
           outline: none;
         }
       }
     }
-    .subTotal{
+    .subTotal {
       text-align: right;
       font-size: 16px;
       line-height: 1;
@@ -145,7 +145,7 @@ const StyledCardItem = styled.div`
   }
 `;
 
-export default function CartModal({ setIsCartOpen, cartItem }) {
+export default function CartModal({ setIsCartOpen, productInCart }) {
   const navigate = useNavigate();
   function goToCart() {
     navigate("/cart");
@@ -153,16 +153,20 @@ export default function CartModal({ setIsCartOpen, cartItem }) {
   }
   return (
     <CartStyled>
-      <div className='back-drop' onClick={() => setIsCartOpen(false)}></div>
-      <div className='cart-container'>
-        <div className='cart-title'>我的購物車</div>
-        {cartItem ? (
-          <div className='card-items'>
-            <CatrItem />
-          </div>
+      <div className="back-drop" onClick={() => setIsCartOpen(false)}></div>
+      <div className="cart-container">
+        <div className="cart-title">我的購物車</div>
+        {productInCart.length !== 0 ? (
+          productInCart?.map((product) => {
+            return (
+              <div className="card-items" key={product.product.id}>
+                <CatrItem product={product} />
+              </div>
+            );
+          })
         ) : (
-          <div className='no-item'>
-            <CartNoneIcon className='icon' />
+          <div className="no-item">
+            <CartNoneIcon className="icon" />
             <span>購物車內無任何商品</span>
           </div>
         )}
@@ -172,26 +176,26 @@ export default function CartModal({ setIsCartOpen, cartItem }) {
   );
 }
 
-export const CatrItem = () => {
+export const CatrItem = ({ product }) => {
   const options = [];
   for (let i = 1; i <= 999; i++) {
     options.push({ value: i, label: i });
   }
   return (
-    <StyledCardItem className='card-item'>
-      <div className='picture'>
-        <img src='https://picsum.photos/id/65/100' alt='' />
+    <StyledCardItem className="card-item">
+      <div className="picture">
+        <img src={product?.product.Images.url} alt={product?.product.name} />
       </div>
-      <div className='content'>
-        <div className='wrapper'>
-          <div className='name'>【毛孩時代】腎臟專科保健粉(30包/盒)</div>
-          <div className='icon'>
-            <DeleteProductIcon size='16' />
+      <div className="content">
+        <div className="wrapper">
+          <div className="name">{product?.product.name}</div>
+          <div className="icon">
+            <DeleteProductIcon size="16" />
           </div>
         </div>
-        <div className='price'>1包(每包$270元)</div>
-        <div className='count'>
-          <select defaultValue={options[0].value}>
+        <div className="price">{product?.product.price}元</div>
+        <div className="count">
+          <select defaultValue={options[product?.count - 1].value}>
             {Array.prototype.map.call(options, ({ value, label }, index) => {
               return (
                 <option key={index} value={value}>
@@ -201,7 +205,9 @@ export const CatrItem = () => {
             })}
           </select>
         </div>
-        <div className='subTotal'>$280</div>
+        <div className="subTotal">
+          {Math.floor(product?.product.price * product?.count * 0.8)}元
+        </div>
       </div>
     </StyledCardItem>
   );

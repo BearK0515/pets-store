@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Outlet } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import Footer from "./Footer";
 import Header from "./Header";
@@ -182,43 +182,48 @@ const StyledCardItem = styled.div`
   width: 60px;
   height: 60px;
   background-size: cover;
-  background-image: url("https://picsum.photos/id/1020/600/400");
   cursor: pointer;
   display: flex;
   justify-content: center;
   align-items: center;
-.back-drop{
-  opacity: 0;
-  transition: .3s;
-}
-.view{
-  opacity: 0;
-  transition: .3s;
-}
-  &:hover{
+  img {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+  }
+  .back-drop {
+    opacity: 0;
+    transition: 0.3s;
+    z-index: 999;
+  }
+  .view {
+    opacity: 0;
+    transition: 0.3s;
+  }
+  &:hover {
     .back-drop {
       position: absolute;
       top: 0;
       right: 0;
-    bottom: 0;
-    left: 0;
-    background-color: rgba(50, 55, 58, 0.85);
-    cursor: pointer;
-    opacity: 1;
-    transition: .3s;
+      bottom: 0;
+      left: 0;
+      background-color: rgba(50, 55, 58, 0.85);
+      cursor: pointer;
+      opacity: 1;
+      transition: 0.3s;
+    }
+    .view {
+      background: #c14848;
+      border-radius: 50rem;
+      font-size: 12px;
+      line-height: 1;
+      padding: 2px 5px;
+      color: var(--white);
+      z-index: 2;
+      opacity: 1;
+      transition: 0.3s;
+    }
   }
-  .view {
-    background: #c14848;
-    border-radius: 50rem;
-    font-size: 12px;
-    line-height: 1;
-    padding: 2px 5px;
-    color: var(--white);
-    z-index: 2;
-    opacity: 1;
-    transition: .3s;
-  }
-}
 `;
 
 const Layout = () => {
@@ -226,6 +231,9 @@ const Layout = () => {
   const [isOpenLoginModal, setIsOpenLoginModal] = useState(false);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isSideabrOpen, setIsSideabrOpen] = useState(false);
+  const [productInCart, setProductInCart] = useState([]);
+  let location = useLocation();
+  const [records, setRecords] = useState(null);
 
   const handleToggleLoginModal = () => {
     setIsOpenLoginModal(!isOpenLoginModal);
@@ -237,6 +245,10 @@ const Layout = () => {
     setIsSideabrOpen(!isSideabrOpen);
   };
 
+  useEffect(() => {
+    setRecords(JSON.parse(localStorage.getItem("productId")));
+  }, [location.pathname]);
+
   return (
     <>
       <StyledContainer onClick={() => setSearchBarActive(false)}>
@@ -244,20 +256,21 @@ const Layout = () => {
           handleToggleLoginModal={handleToggleLoginModal}
           handleToggleCartModal={handleToggleCartModal}
           handleToggleSidebar={handleToggleSidebar}
+          countProducts={productInCart.length}
         />
-        <Outlet />
+        <Outlet context={[productInCart, setProductInCart]} />
         <StyledButtonWrapper>
           <button
-            className='cart-button'
+            className="cart-button"
             onClick={() => setIsCartOpen(!isCartOpen)}
           >
             <CartIcon />
           </button>
-          <div className='count'>0</div>
-          <span className='search-bar'>
+          <div className="count">{productInCart.length}</div>
+          <span className="search-bar">
             <label
-              className='search'
-              htmlFor='search-input'
+              className="search"
+              htmlFor="search-input"
               onClick={(e) => {
                 e.stopPropagation();
                 // e.nativeEvent.stopImmediatePropagation(); 不知道為什麼不用也沒差
@@ -268,10 +281,10 @@ const Layout = () => {
               <SearchIcon />
             </label>
             <input
-              type='text'
-              id='search-input'
+              type="text"
+              id="search-input"
               className={searchBarActive ? "active" : "none"}
-              placeholder='商品搜尋'
+              placeholder="商品搜尋"
               onClick={(e) => {
                 e.stopPropagation();
                 // e.nativeEvent.stopImmediatePropagation(); 不知道為什麼不用也沒差
@@ -280,28 +293,44 @@ const Layout = () => {
             />
           </span>
           {searchBarActive && (
-            <ul className='popular-items'>
-              <li className='popular-item'>156565</li>
-              <li className='popular-item'>256555565</li>
-              <li className='popular-item'>356565</li>
-              <li className='popular-item'>456565</li>
-              <li className='popular-item'>456565</li>
-              <li className='popular-item'>4555555555556565</li>
+            <ul className="popular-items">
+              <li className="popular-item">156565</li>
+              <li className="popular-item">256555565</li>
+              <li className="popular-item">356565</li>
+              <li className="popular-item">456565</li>
+              <li className="popular-item">456565</li>
+              <li className="popular-item">4555555555556565</li>
             </ul>
           )}
         </StyledButtonWrapper>
-        <StyledSearchWrapper>
-          <h6>瀏覽紀錄</h6>
-          <div className='product-wrapper'>
-            <CardItem />
-          </div>
-          <span>清除全部</span>
-        </StyledSearchWrapper>
+        {records && (
+          <StyledSearchWrapper>
+            <h6>瀏覽紀錄</h6>
+            <div className="product-wrapper">
+              {records?.map((record) => {
+                return <CardItem record={record} key={record.id} />;
+              })}
+            </div>
+            <span
+              onClick={() => {
+                localStorage.removeItem("productId");
+                setRecords(null);
+              }}
+            >
+              清除全部
+            </span>
+          </StyledSearchWrapper>
+        )}
         <ChatRobot />
         <GoTop />
       </StyledContainer>
       <Footer />
-      {isCartOpen && <CartModal setIsCartOpen={setIsCartOpen} />}
+      {isCartOpen && (
+        <CartModal
+          setIsCartOpen={setIsCartOpen}
+          productInCart={productInCart}
+        />
+      )}
       {isOpenLoginModal && (
         <LoginModal
           setIsOpenLoginModal={setIsOpenLoginModal}
@@ -320,11 +349,18 @@ const Layout = () => {
 
 export default Layout;
 
-export const CardItem = () => {
+export const CardItem = ({ record }) => {
+  const navigate = useNavigate();
   return (
-    <StyledCardItem className='product'>
-      <div className='back-drop'></div>
-      <div className='view'>檢視</div>
+    <StyledCardItem
+      className="product"
+      onClick={() => {
+        navigate(`/product/detail/${record.id}`);
+      }}
+    >
+      <div className="back-drop"></div>
+      <img src={record.imageUrl} alt="" className="image" />
+      <div className="view">檢視</div>
     </StyledCardItem>
   );
 };

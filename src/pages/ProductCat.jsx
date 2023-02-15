@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import styled from 'styled-components';
-import { PriceUpIcon, PriceDownIcon } from '../assets/icons/index';
-import { ProductItem } from './ProductItem';
+import React, { useState, useEffect } from "react";
+import styled from "styled-components";
+import { PriceUpIcon, PriceDownIcon } from "../assets/icons/index";
+import { ProductItem } from "./ProductItem";
 
 const ProductList = styled.div`
   width: 100%;
@@ -49,7 +49,7 @@ const ProductCat = ({
   productPrice,
   priceToggle,
   sortSelect,
-  sortSelectToggle
+  sortSelectToggle,
 }) => {
   const [productsCatHot, setProductsCatHot] = useState([]);
   const [productsCatNew, setProductsCatNew] = useState([]);
@@ -57,13 +57,13 @@ const ProductCat = ({
 
   useEffect(() => {
     setProductsCatHot(
-      productHot?.filter((productHot) => productHot.Category.name === 'cat')
+      productHot?.filter((productHot) => productHot.Category.name === "cat")
     );
   }, [productHot]);
 
   useEffect(() => {
     setProductsCatNew(
-      productNew?.filter((productNew) => productNew.Category.name === 'cat')
+      productNew?.filter((productNew) => productNew.Category.name === "cat")
     );
   }, [productNew]);
 
@@ -71,7 +71,7 @@ const ProductCat = ({
     if (priceToggle) {
       setProductsCatPrice(
         productPrice?.filter(
-          (productPrice) => productPrice.Category.name === 'cat'
+          (productPrice) => productPrice.Category.name === "cat"
         )
       );
     }
@@ -80,38 +80,38 @@ const ProductCat = ({
   return (
     <>
       <ProductsSort>
-        <ul className='sort-nav'>
+        <ul className="sort-nav">
           <button
             key={1}
-            className={sortSelect?.top ? 'sort active' : 'sort'}
+            className={sortSelect?.top ? "sort active" : "sort"}
             onClick={sortSelectToggle}
-            value='top'
+            value="top"
           >
             熱銷排行
           </button>
           <button
             key={2}
-            className={sortSelect?.new ? 'sort active' : 'sort'}
+            className={sortSelect?.new ? "sort active" : "sort"}
             onClick={sortSelectToggle}
-            value='new'
+            value="new"
           >
             最新上架
           </button>
           <button
             key={3}
-            className={sortSelect?.price ? 'sort active' : 'sort'}
+            className={sortSelect?.price ? "sort active" : "sort"}
             onClick={sortSelectToggle}
-            value='price'
+            value="price"
           >
             價格
             {sortSelect?.price &&
-              (priceToggle === 'asc' ? (
+              (priceToggle === "asc" ? (
                 <PriceUpIcon
-                  style={{ fontSize: '14px', pointerEvents: 'none' }}
+                  style={{ fontSize: "14px", pointerEvents: "none" }}
                 />
               ) : (
                 <PriceDownIcon
-                  style={{ fontSize: '14px', pointerEvents: 'none' }}
+                  style={{ fontSize: "14px", pointerEvents: "none" }}
                 />
               ))}
           </button>
@@ -120,39 +120,15 @@ const ProductCat = ({
       <ProductList>
         {sortSelect?.top &&
           productsCatHot?.map((product) => {
-            return (
-              <ProductItem
-                key={product.id}
-                id={product.id}
-                price={product.price}
-                image={product.Images.url}
-                name={product.name}
-              />
-            );
+            return <ProductItem product={product} key={product.id} />;
           })}
         {sortSelect?.new &&
           productsCatNew?.map((product) => {
-            return (
-              <ProductItem
-                key={product.id}
-                id={product.id}
-                price={product.price}
-                image={product.Images.url}
-                name={product.name}
-              />
-            );
+            return <ProductItem product={product} key={product.id} />;
           })}
         {sortSelect?.price &&
           productsCatPrice?.map((product) => {
-            return (
-              <ProductItem
-                key={product.id}
-                id={product.id}
-                price={product.price}
-                image={product.Images.url}
-                name={product.name}
-              />
-            );
+            return <ProductItem product={product} key={product.id} />;
           })}
       </ProductList>
     </>
