@@ -166,6 +166,7 @@ const LoginModal = ({ setIsOpenLoginModal, handleToggleLoginModal }) => {
       const data = await facebookLogin({ email, name });
       console.log(data);
     };
+    if (!email || !name) return;
     getUserInfo();
   }, [email, name]);
 

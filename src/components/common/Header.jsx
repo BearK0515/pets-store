@@ -243,7 +243,6 @@ export default function Header({
   handleToggleSidebar,
   countProducts
 }) {
-  console.log(countProducts);
   return (
     <HeaderStyled>
       <div className="nav-mobile">

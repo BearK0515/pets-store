@@ -170,6 +170,7 @@ const ProductPopCart = ({ handleToggleCartModal, product }) => {
     tmpCart.push({ product: product, count: count });
     // console.log(tmpCart);
     setProductInCart(tmpCart);
+    // console.log("購物車被改變了",tmpCart)
     Swal.fire({
       title: "加入購物車成功",
       icon: "success",

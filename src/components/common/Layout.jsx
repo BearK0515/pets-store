@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Outlet } from "react-router-dom";
 import styled from "styled-components";
 import Footer from "./Footer";
@@ -255,7 +255,7 @@ const Layout = () => {
           >
             <CartIcon />
           </button>
-          <div className="count">0</div>
+          <div className="count">{productInCart.length}</div>
           <span className="search-bar">
             <label
               className="search"
