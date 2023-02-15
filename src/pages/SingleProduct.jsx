@@ -554,24 +554,36 @@ const SingleProduct = () => {
   const [count, setCount] = useState(1);
   const [addCartPop, setAddCartPop] = useState(false);
   const [previewPic, setPreviewPic] = useState(0);
-  if (!localStorage.getItem("productId")) {
-    localStorage.setItem("productId", JSON.stringify([productId]));
-  } else {
-    let record = JSON.parse(localStorage.getItem("productId"));
-    if (record.length > 5) {
-      record.splice(0, 1);
-    }
-    if (!record.includes(productId)) {
-      record.push(productId);
-      localStorage.setItem("productId", JSON.stringify(record));
+  if (product) {
+    const id = product?.id;
+    const imageUrl = product?.Image[0].url;
+    if (!localStorage.getItem("productId")) {
+      localStorage.setItem("productId", JSON.stringify([{ id, imageUrl }]));
     } else {
-      // console.log(productId);
-      let tmp = record.filter((id) => id !== productId);
-      tmp.push(productId);
-      localStorage.setItem("productId", JSON.stringify(tmp));
+      let record = JSON.parse(localStorage.getItem("productId"));
+      let length = record.length;
+      let isRepeat = false;
+      let repeatIndex;
+      if (record.length === 5) {
+        record.splice(0, 1);
+      }
+      for (let i = 0; i < length; i++) {
+        if (record[i].id === id) {
+          isRepeat = true;
+          repeatIndex = i;
+        } 
+      }
+      if (!isRepeat) {
+        record.push({ id, imageUrl });
+        localStorage.setItem("productId", JSON.stringify(record));
+      } else {
+        // console.log("test");
+        record.splice(repeatIndex, 1);
+        record.push({ id, imageUrl });
+        localStorage.setItem("productId", JSON.stringify(record));
+      }
     }
   }
-  console.log(localStorage.getItem("productId"));
 
   //抓單一商品
   useEffect(() => {

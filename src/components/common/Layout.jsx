@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Outlet } from "react-router-dom";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import Footer from "./Footer";
 import Header from "./Header";
@@ -182,14 +182,19 @@ const StyledCardItem = styled.div`
   width: 60px;
   height: 60px;
   background-size: cover;
-  background-image: url("https://picsum.photos/id/1020/600/400");
   cursor: pointer;
   display: flex;
   justify-content: center;
   align-items: center;
+  img {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+  }
   .back-drop {
     opacity: 0;
     transition: 0.3s;
+    z-index: 999;
   }
   .view {
     opacity: 0;
@@ -227,6 +232,8 @@ const Layout = () => {
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isSideabrOpen, setIsSideabrOpen] = useState(false);
   const [productInCart, setProductInCart] = useState([]);
+  let location = useLocation();
+  const [records, setRecords] = useState(null);
 
   const handleToggleLoginModal = () => {
     setIsOpenLoginModal(!isOpenLoginModal);
@@ -237,6 +244,10 @@ const Layout = () => {
   const handleToggleSidebar = () => {
     setIsSideabrOpen(!isSideabrOpen);
   };
+
+  useEffect(() => {
+    setRecords(JSON.parse(localStorage.getItem("productId")));
+  }, [location.pathname]);
 
   return (
     <>
@@ -292,13 +303,24 @@ const Layout = () => {
             </ul>
           )}
         </StyledButtonWrapper>
-        <StyledSearchWrapper>
-          <h6>瀏覽紀錄</h6>
-          <div className="product-wrapper">
-            <CardItem />
-          </div>
-          <span>清除全部</span>
-        </StyledSearchWrapper>
+        {records && (
+          <StyledSearchWrapper>
+            <h6>瀏覽紀錄</h6>
+            <div className="product-wrapper">
+              {records?.map((record) => {
+                return <CardItem record={record} key={record.id} />;
+              })}
+            </div>
+            <span
+              onClick={() => {
+                localStorage.removeItem("productId");
+                setRecords(null);
+              }}
+            >
+              清除全部
+            </span>
+          </StyledSearchWrapper>
+        )}
         <ChatRobot />
         <GoTop />
       </StyledContainer>
@@ -327,10 +349,17 @@ const Layout = () => {
 
 export default Layout;
 
-export const CardItem = () => {
+export const CardItem = ({ record }) => {
+  const navigate = useNavigate();
   return (
-    <StyledCardItem className="product">
+    <StyledCardItem
+      className="product"
+      onClick={() => {
+        navigate(`/product/detail/${record.id}`);
+      }}
+    >
       <div className="back-drop"></div>
+      <img src={record.imageUrl} alt="" className="image" />
       <div className="view">檢視</div>
     </StyledCardItem>
   );
