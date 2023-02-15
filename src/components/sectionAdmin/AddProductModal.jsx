@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useRef } from "react";
 import styled from "styled-components";
 import Swal from "sweetalert2";
@@ -52,8 +52,12 @@ const StyledSectionUp = styled.div`
     .preview {
       width: 100%;
       aspect-ratio: 3/4;
-      background-size: cover;
-      background-image: url("https://picsum.photos/id/6/300/400");
+      background: #d9d9d9;
+      /* background: var(--white); */
+      img{
+        width: 100%;
+        height: 100%;
+      }
     }
     .picture-wrapper {
       width: 100%;
@@ -174,8 +178,11 @@ const StyledSectionDown = styled.div`
   .preview {
     width: 100%;
     aspect-ratio: 3/4;
-    background-size: cover;
-    background-image: url("https://picsum.photos/id/7/300/400");
+    background: #d9d9d9;
+    img {
+      width: 100%;
+      height: 100%;
+    }
   }
   .right {
     display: flex;
@@ -223,14 +230,16 @@ const StyledButton = styled.button`
 
 const AddProductModal = ({ handleToggleProductModal }) => {
   const [categoryValue, setCategoryValue] = useState("default");
-  const [productPicture, setProductPicture] = useState([]);
+  const [productPicture, setProductPicture] = useState(null);
   const [previewProduct1, setPreviewProduct1] = useState("");
   const [previewProduct2, setPreviewProduct2] = useState("");
   const [previewProduct3, setPreviewProduct3] = useState("");
-  const [describePicture, setDescribePicture] = useState([]);
+  const [describePicture, setDescribePicture] = useState(null);
   const [previewDescribe1, setPreviewDescribe1] = useState("");
   const [previewDescribe2, setPreviewDescribe2] = useState("");
   const [previewDescribe3, setPreviewDescribe3] = useState("");
+  const [previewProduct, setPreviewProduct] = useState(previewProduct1);
+  const [previewDescription, setPreviewDescription] = useState(previewProduct1);
   const nameRef = useRef();
   const priceRef = useRef();
   const styleRef = useRef();
@@ -240,40 +249,19 @@ const AddProductModal = ({ handleToggleProductModal }) => {
     const priceValue = priceRef?.current?.value;
     const styleValue = styleRef?.current?.value;
     const picture = [...productPicture, ...describePicture];
-    // if (
-    //   nameValue?.length === 0 ||
-    //   priceValue?.length === 0 ||
-    //   styleValue?.length === 0 ||
-    //   categoryValue ||
-    //   picture?.length === 0
-    // ) {
-    //   console.log(nameValue);
-    //   Swal.fire({
-    //     title: "內容不可空白",
-    //     icon: "error",
-    //     showConfirmButton: false,
-    //     timer: 2000,
-    //     position: "top",
-    //   });
-    //   return;
-    // }
     try {
       let formData = new FormData();
       formData.append("name", nameValue);
       formData.append("price", priceValue);
       formData.append("description", styleValue);
       formData.append("CategoryId", categoryValue);
-      formData.append("url", picture);
-      const rep = await addProduct({ formData });
-      console.log("API接收", rep);
-      let object = {};
-      formData.forEach((val, key) => {
-        object[key] = val;
-      });
-      console.log(object);
-      console.log(productPicture);
-      console.log(describePicture);
-      console.log(picture);
+      formData.append("url", picture[0]);
+      formData.append("url", picture[1]);
+      formData.append("url", picture[2]);
+      formData.append("url", picture[3]);
+      formData.append("url", picture[4]);
+      formData.append("url", picture[5]);
+      await addProduct({ formData });
     } catch (error) {
       console.error("Product Submit faild :", error);
     }
@@ -282,6 +270,16 @@ const AddProductModal = ({ handleToggleProductModal }) => {
   //上傳產品圖片
   const handleProductImageChange = (e) => {
     const selectedFiles = e.target.files;
+    if (selectedFiles.size > 46137344) {
+      Swal.fire({
+        title: "超過容量大小",
+        icon: "error",
+        showConfirmButton: false,
+        timer: 2000,
+        position: "top",
+      });
+      return;
+    }
     if (selectedFiles.length > 3) {
       Swal.fire({
         title: "最多3張圖片",
@@ -306,6 +304,16 @@ const AddProductModal = ({ handleToggleProductModal }) => {
   //上傳詳情圖片
   const handleDescribeImageChange = (e) => {
     const selectedFiles = e.target.files;
+    if (selectedFiles.size > 46137344) {
+      Swal.fire({
+        title: "超過容量大小",
+        icon: "error",
+        showConfirmButton: false,
+        timer: 2000,
+        position: "top",
+      });
+      return;
+    }
     if (selectedFiles.length > 3) {
       Swal.fire({
         title: "最多3張圖片",
@@ -327,22 +335,37 @@ const AddProductModal = ({ handleToggleProductModal }) => {
     setPreviewDescribe3(objectUrl3);
     setDescribePicture(selectedFiles);
   };
-
+  useEffect(() => {
+    setPreviewProduct(previewProduct1);
+  }, [previewProduct1, previewProduct2, previewProduct3]);
+  useEffect(() => {
+    setPreviewDescription(previewDescribe1);
+  }, [previewDescribe1, previewDescribe2, previewDescribe3]);
+  //商品大圖
+const handlePreviewProduct = (e)=>{
+  setPreviewProduct(e.target.src);
+}
+//詳情大圖
+const handlePreviewDescription = (e)=>{
+  setPreviewDescription(e.target.src);
+}
   return (
     <StyledModalContainer>
       <div className='overlay' onClick={handleToggleProductModal}></div>
       <div className='content'>
         <StyledSectionUp>
           <div className='left'>
-            <div className='preview'></div>
+            <div className='preview'>
+              {previewProduct && <img src={`${previewProduct}`} alt='' />}
+            </div>
             <div className='picture-wrapper'>
-              <div className='picture-1'>
+              <div className='picture-1' onClick={handlePreviewProduct}>
                 {previewProduct1 && <img src={`${previewProduct1}`} alt='' />}
               </div>
-              <div className='picture-2'>
+              <div className='picture-2' onClick={handlePreviewProduct}>
                 {previewProduct2 && <img src={`${previewProduct2}`} alt='' />}
               </div>
-              <div className='picture-3'>
+              <div className='picture-3' onClick={handlePreviewProduct}>
                 {previewProduct3 && <img src={`${previewProduct3}`} alt='' />}
               </div>
             </div>
@@ -398,18 +421,22 @@ const AddProductModal = ({ handleToggleProductModal }) => {
                 onChange={(e) => handleDescribeImageChange(e)}
                 multiple
               />
-              <div className='preview'></div>
+              <div className='preview'>
+                {previewDescription && (
+                  <img src={`${previewDescription}`} alt='' />
+                )}
+              </div>
             </div>
           </div>
           <div className='right'>
             <div className='picture-wrapper'>
-              <div className='picture-1'>
+              <div className='picture-1' onClick={handlePreviewDescription}>
                 {previewDescribe1 && <img src={`${previewDescribe1}`} alt='' />}
               </div>
-              <div className='picture-2'>
+              <div className='picture-2' onClick={handlePreviewDescription}>
                 {previewDescribe2 && <img src={`${previewDescribe2}`} alt='' />}
               </div>
-              <div className='picture-3'>
+              <div className='picture-3' onClick={handlePreviewDescription}>
                 {previewDescribe3 && <img src={`${previewDescribe3}`} alt='' />}
               </div>
             </div>

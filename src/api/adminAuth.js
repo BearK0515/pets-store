@@ -79,7 +79,6 @@ export const addProduct = async ({ formData }) => {
         "Content-Type": "multipart/form-data",
       },
     });
-    console.log("新增商品api", rep);
     return rep;
   } catch (error) {
     console.error("[POST add Product Failed]:", error);

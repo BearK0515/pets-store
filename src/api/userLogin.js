@@ -1,6 +1,6 @@
-import axios from "axios";
+import axios from 'axios';
 
-const baseURL = "https://www.waylins.com";
+const baseURL = 'https://www.waylins.com';
 // const baseURL =
 //   "http://eshop-env.eba-bv3rpum8.ap-northeast-1.elasticbeanstalk.com";
 
@@ -19,7 +19,7 @@ const baseURL = "https://www.waylins.com";
 // }
 export const facebookLogin = async ({ token }) => {
   try {
-    console.log(token)
+    console.log(token);
     const rep = await axios({
       method: "GET",
       url: `${baseURL}/api/auth/facebook/token`,
@@ -31,22 +31,22 @@ export const facebookLogin = async ({ token }) => {
         Authorization: 'Bearer ' + token
       },
     });
-    console.log("get FB reponse", rep);
-    return rep
+    console.log('get FB reponse', rep);
+    return rep;
   } catch (error) {
     console.error(`[Login Failed]${error}`);
   }
-}
+};
 //Google 登入
 export const googleLogin = async () => {
   try {
     const rep = await axios({
-      method: "GET",
-      url: `${baseURL}/api/auth/google`,
+      method: 'GET',
+      url: `${baseURL}/api/auth/google`
     });
-    console.log("get Google reponse", rep);
-    return rep
+    console.log('get Google reponse', rep);
+    return rep;
   } catch (error) {
     console.error(`[Login Failed]${error}`);
   }
-}
+};

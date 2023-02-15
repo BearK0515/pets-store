@@ -131,7 +131,6 @@ const AdjustPriceModal = ({
     const adjustPrice = priceRef?.current?.value;
     try {
       await adjustProduct({ productId, adjustPrice });
-      console.log(adjustPrice);
       setIsOpenPriceModal(false);
     } catch (error) {
       console.error(error);

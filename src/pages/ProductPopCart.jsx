@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useOutletContext } from "react-router-dom";
 import styled from "styled-components";
 import Swal from "sweetalert2";
 import { MinusIcon, PlusIcon } from "../assets/icons/index";
@@ -13,7 +14,7 @@ const StyledModalContainer = styled.div`
   right: 0;
   bottom: 0;
   position: fixed;
-  overflow-y: auto;
+  z-index: 999;
 
   .overlay {
     top: 0;
@@ -150,13 +151,9 @@ const StyledCard = styled.div`
 `;
 
 // handle 參數由 Product 傳入
-const ProductPopCart = ({
-  handleToggleCartModal,
-  product,
-  productInCart,
-  setProductInCart,
-}) => {
+const ProductPopCart = ({ handleToggleCartModal, product }) => {
   const [count, setCount] = useState(1);
+  const [productInCart, setProductInCart] = useOutletContext();
   const handleDecrease = () => {
     if (count === 1) {
       return;
@@ -196,18 +193,18 @@ const ProductPopCart = ({
   };
 
   return (
-    <StyledModalContainer>
+    <StyledModalContainer key={product?.id} id={product?.id}>
       {/*overlay獨立*/}
       <div className="overlay" onClick={handleToggleCartModal}></div>
       <div className="content">
         <StyledCard className="wrapper">
           <div className="title-wrapper">
-            <h4 className="title">{product.name}</h4>
+            <h4 className="title">{product?.name}</h4>
           </div>
           <div className="price-wrapper">
-            <div className="price">${product.price * count}</div>
+            <div className="price">${product?.price * count}</div>
             <div className="discount-price">
-              ${Math.floor(product.price * 0.8 * count)}
+              ${Math.floor(product?.price * 0.8 * count)}
             </div>
           </div>
           <div className="count-wrapper">

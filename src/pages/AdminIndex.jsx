@@ -128,14 +128,17 @@ const AdminIndex = () => {
     const getProductsHotAsync = async () => {
       try {
         const resProductsAll = await productsHot();
-        setProductsAll(resProductsAll);
+        const OnShelvesAll = resProductsAll?.filter(
+          (newProducts) => newProducts?.isOnShelves === 1
+        );
+        setProductsAll(OnShelvesAll);
       } catch (error) {
         console.error(error);
       }
     };
     getProductsHotAsync();
     return;
-  }, [isOpenPriceModal, isOpenProductModal,setProductsAll]);
+  }, [isOpenPriceModal, isOpenProductModal, setProductsAll]);
   //GET所有訂單
   useEffect(() => {
     const getOrdersAllAsync = async () => {
