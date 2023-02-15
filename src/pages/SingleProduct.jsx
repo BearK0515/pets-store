@@ -558,9 +558,17 @@ const SingleProduct = () => {
     localStorage.setItem("productId", JSON.stringify([productId]));
   } else {
     let record = JSON.parse(localStorage.getItem("productId"));
+    if (record.length > 5) {
+      record.splice(0, 1);
+    }
     if (!record.includes(productId)) {
       record.push(productId);
       localStorage.setItem("productId", JSON.stringify(record));
+    } else {
+      // console.log(productId);
+      let tmp = record.filter((id) => id !== productId);
+      tmp.push(productId);
+      localStorage.setItem("productId", JSON.stringify(tmp));
     }
   }
   console.log(localStorage.getItem("productId"));
