@@ -163,13 +163,13 @@ const Home = () => {
   return (
     <>
       <StyledContainer>
-        <StyledLinkWrapper className='line-link' style={{ padding: '0px' }}>
+        <StyledLinkWrapper className='line-link' style={{ padding: "0px" }}>
           <div className='light'></div>
           <img src={lineLink} alt='' />
         </StyledLinkWrapper>
         <StyledLinkWrapper
           className='produts-link'
-          onClick={() => navigate('/product/all')}
+          onClick={() => navigate("/product/all")}
         >
           <div className='light'></div>
           <img src={productsLink} alt='' />

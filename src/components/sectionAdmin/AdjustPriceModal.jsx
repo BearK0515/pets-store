@@ -131,7 +131,6 @@ const AdjustPriceModal = ({
     const adjustPrice = priceRef?.current?.value;
     try {
       await adjustProduct({ productId, adjustPrice });
-      console.log(adjustPrice);
       setIsOpenPriceModal(false);
     } catch (error) {
       console.error(error);
@@ -142,7 +141,6 @@ const AdjustPriceModal = ({
     const getSingleProduct = async () => {
       try {
         const resSingleProduct = await productDetail(productId);
-      console.log("單一商品資料",resSingleProduct);
         setSingleProduct(resSingleProduct);
       } catch (error) {
         console.error(error);
