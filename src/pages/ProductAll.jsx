@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import styled from 'styled-components';
-import { PriceUpIcon, PriceDownIcon } from '../assets/icons/index';
-import { productsHot, productsNew, productsPrice } from '../api/products';
-import { ProductItem } from './ProductItem';
+import React from "react";
+import styled from "styled-components";
+import {  PriceUpIcon, PriceDownIcon } from "../assets/icons/index";
+import { ProductItem } from "./ProductItem";
 
 const ProductList = styled.div`
   width: 100%;
@@ -45,172 +44,66 @@ const ProductsSort = styled.div`
   }
 `;
 
-const ProductAll = () => {
-  const [productHot, setProductHot] = useState([]);
-  const [productNew, setProductNew] = useState([]);
-  const [productPrice, setProductPrice] = useState([]);
-  const [productPriceOrigin, setProductPriceOrigin] = useState([]);
-  const [sortSelect, setSortSelect] = useState({
-    top: true
-  });
-  const [priceToggle, setPriceToggle] = useState('desc');
-
-  //抓熱銷排行
-  useEffect(() => {
-    const getProductHotAsync = async () => {
-      try {
-        const resProductlHot = await productsHot();
-        setProductHot(resProductlHot);
-      } catch (err) {
-        console.error(err);
-      }
-    };
-    getProductHotAsync();
-    return;
-  }, [setProductHot]);
-
-  //抓最新商品
-  useEffect(() => {
-    const getProductNewAsync = async () => {
-      try {
-        const resProductNew = await productsNew();
-        setProductNew(resProductNew);
-      } catch (err) {
-        console.error(err);
-      }
-    };
-    getProductNewAsync();
-    return;
-  }, [setProductNew]);
-
-  //抓價格排序
-  useEffect(() => {
-    const getProductPriceAsync = async () => {
-      try {
-        const resProductPrice = await productsPrice();
-        setProductPriceOrigin(resProductPrice);
-        setProductPrice(resProductPrice);
-      } catch (err) {
-        console.error(err);
-      }
-    };
-    getProductPriceAsync();
-    return;
-  }, [setProductPriceOrigin]);
-
-  // 點擊時，其他二個會變成 undefine 為 false，當為 true 時不改變
-  const sortSelectToggle = (e) => {
-    if (e.target.value === 'price') {
-      if (priceToggle === 'asc') {
-        setProductPrice(
-          productPriceOrigin.sort((a, b) => {
-            return a.price - b.price;
-          })
-        );
-        const priceSortOrder = priceToggle === 'asc' ? 'desc' : 'asc';
-        setPriceToggle(priceSortOrder);
-      } else if (priceToggle === 'desc') {
-        setProductPrice(
-          productPriceOrigin.sort((a, b) => {
-            return b.price - a.price;
-          })
-        );
-        const priceSortOrder = priceToggle === 'asc' ? 'desc' : 'asc';
-        setPriceToggle(priceSortOrder);
-      }
-    } else {
-      setPriceToggle('desc');
-      setProductPrice(
-        productPriceOrigin.sort((a, b) => {
-          return b.price - a.price;
-        })
-      );
-    }
-    if (sortSelect[e.target.value] === true) {
-      return;
-    } else {
-      setSortSelect(() => ({
-        [e.target.value]: !sortSelect[e.target.value]
-      }));
-    }
-  };
-
+const ProductAll = ({
+  productHot,
+  productNew,
+  productPrice,
+  priceToggle,
+  sortSelect,
+  sortSelectToggle,
+}) => {
   return (
     <>
       <ProductsSort>
-        <ul className='sort-nav'>
+        <ul className="sort-nav">
           <button
             key={1}
-            className={sortSelect['top'] ? 'sort active' : 'sort'}
+            className={sortSelect?.top ? "sort active" : "sort"}
             onClick={sortSelectToggle}
-            value='top'
+            value="top"
           >
             熱銷排行
           </button>
           <button
             key={2}
-            className={sortSelect['new'] ? 'sort active' : 'sort'}
+            className={sortSelect?.new ? "sort active" : "sort"}
             onClick={sortSelectToggle}
-            value='new'
+            value="new"
           >
             最新上架
           </button>
           <button
             key={3}
-            className={sortSelect['price'] ? 'sort active' : 'sort'}
+            className={sortSelect?.price ? "sort active" : "sort"}
             onClick={sortSelectToggle}
-            value='price'
+            value="price"
           >
             價格
-            {sortSelect['price'] &&
-              (priceToggle === 'asc' ? (
+            {sortSelect?.price &&
+              (priceToggle === "asc" ? (
                 <PriceUpIcon
-                  style={{ fontSize: '14px', pointerEvents: 'none' }}
+                  style={{ fontSize: "14px", pointerEvents: "none" }}
                 />
               ) : (
                 <PriceDownIcon
-                  style={{ fontSize: '14px', pointerEvents: 'none' }}
+                  style={{ fontSize: "14px", pointerEvents: "none" }}
                 />
               ))}
           </button>
         </ul>
       </ProductsSort>
       <ProductList>
-        {sortSelect['top'] &&
+        {sortSelect?.top &&
           productHot?.map((product) => {
-            return (
-              <ProductItem
-                key={product.id}
-                id={product.id}
-                price={product.price}
-                image={product.Images.url}
-                name={product.name}
-              />
-            );
+            return <ProductItem product={product} key={product.id} />;
           })}
-        {sortSelect['new'] &&
+        {sortSelect?.new &&
           productNew?.map((product) => {
-            return (
-              <ProductItem
-                key={product.id}
-                id={product.id}
-                price={product.price}
-                image={product.Images.url}
-                name={product.name}
-              />
-            );
+            return <ProductItem product={product} key={product.id} />;
           })}
-        {sortSelect['price'] &&
+        {sortSelect?.price &&
           productPrice?.map((product) => {
-            return (
-              <ProductItem
-                key={product.id}
-                id={product.id}
-                price={product.price}
-                image={product.Images.url}
-                name={product.name}
-              />
-            );
+            return <ProductItem product={product} key={product.id} />;
           })}
       </ProductList>
     </>

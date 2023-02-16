@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate  } from 'react-router-dom';
 import ProductAside from './ProductAside';
 import ProductAll from './ProductAll';
 import ProductDog from './ProductDog';
+import { productsHot, productsNew, productsPrice } from '../api/products';
 import { HomeIcon } from '../assets/icons/index';
 import ProductCat from './ProductCat';
 import SingleProduct from './SingleProduct';
@@ -59,6 +60,16 @@ const Breadcrumb = styled.div`
 `;
 
 const ProductPage = () => {
+  const [productHot, setProductHot] = useState([]);
+  const [productNew, setProductNew] = useState([]);
+  const [productPrice, setProductPrice] = useState([]);
+  const [productPriceOrigin, setProductPriceOrigin] = useState([]);
+  const [sortSelect, setSortSelect] = useState({
+    top: true
+  });
+  const [priceToggle, setPriceToggle] = useState('desc');
+  // const [pageChange, setPageChange] = useState(true)
+
   const navigate = useNavigate();
   const location = useLocation();
   const page = location.pathname;
@@ -71,6 +82,96 @@ const ProductPage = () => {
   } else if (page.includes('cat')) {
     NowPage = '貓貓專區';
   }
+
+  // useEffect
+  //抓熱銷排行
+  useEffect(() => {
+    const getProductHotAsync = async () => {
+      try {
+        const resProductlHot = await productsHot();
+        const onShelvesProductHot = resProductlHot?.filter(
+          (product) => product.isOnShelves === 1
+        );
+        setProductHot(onShelvesProductHot);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    getProductHotAsync();
+    return;
+  }, [setProductHot]);
+
+  //抓最新商品
+  useEffect(() => {
+    const getProductNewAsync = async () => {
+      try {
+        const resProductNew = await productsNew();
+        const onShelvesProductNew = resProductNew?.filter(
+          (product) => product.isOnShelves === 1
+        );
+        setProductNew(onShelvesProductNew);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    getProductNewAsync();
+    return;
+  }, [setProductNew]);
+
+  //抓價格排序
+  useEffect(() => {
+    const getProductPriceAsync = async () => {
+      try {
+        const resProductPrice = await productsPrice();
+        const onShelvesProductPrice = resProductPrice?.filter(
+          (product) => product.isOnShelves === 1
+        );
+        setProductPriceOrigin(onShelvesProductPrice);
+        setProductPrice(onShelvesProductPrice);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    getProductPriceAsync();
+    return;
+  }, [setProductPriceOrigin]);
+
+  // 點擊時，其他二個會變成 undefine 為 false，當為 true 時不改變
+  const sortSelectToggle = (e) => {
+    if (e.target.value === 'price') {
+      if (priceToggle === 'asc') {
+        setProductPrice(
+          productPriceOrigin.sort((a, b) => {
+            return a.price - b.price;
+          })
+        );
+        const priceSortOrder = priceToggle === 'asc' ? 'desc' : 'asc';
+        setPriceToggle(priceSortOrder);
+      } else if (priceToggle === 'desc') {
+        setProductPrice(
+          productPriceOrigin.sort((a, b) => {
+            return b.price - a.price;
+          })
+        );
+        const priceSortOrder = priceToggle === 'asc' ? 'desc' : 'asc';
+        setPriceToggle(priceSortOrder);
+      }
+    } else {
+      setPriceToggle('desc');
+      setProductPrice(
+        productPriceOrigin.sort((a, b) => {
+          return b.price - a.price;
+        })
+      );
+    }
+    if (sortSelect[e.target.value] === true) {
+      return;
+    } else {
+      setSortSelect(() => ({
+        [e.target.value]: !sortSelect[e.target.value]
+      }));
+    }
+  };
 
   return (
     <ProductPageStyled>
@@ -86,9 +187,36 @@ const ProductPage = () => {
           </GoToHome>
         </HomeLinkWrapper>
         <Breadcrumb />
-        {page === '/product/all' && <ProductAll />}
-        {page === '/product/dog' && <ProductDog />}
-        {page === '/product/cat' && <ProductCat />}
+        {page === '/product/all' && (
+          <ProductAll
+            productHot={productHot}
+            productNew={productNew}
+            productPrice={productPrice}
+            priceToggle={priceToggle}
+            sortSelect={sortSelect}
+            sortSelectToggle={sortSelectToggle}
+          />
+        )}
+        {page === '/product/dog' && (
+          <ProductDog
+            productHot={productHot}
+            productNew={productNew}
+            productPrice={productPrice}
+            priceToggle={priceToggle}
+            sortSelect={sortSelect}
+            sortSelectToggle={sortSelectToggle}
+          />
+        )}
+        {page === '/product/cat' && (
+          <ProductCat
+            productHot={productHot}
+            productNew={productNew}
+            productPrice={productPrice}
+            priceToggle={priceToggle}
+            sortSelect={sortSelect}
+            sortSelectToggle={sortSelectToggle}
+          />
+        )}
         {page.includes('detail') && <SingleProduct />}
       </ProductWrapper>
     </ProductPageStyled>

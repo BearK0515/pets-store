@@ -1,11 +1,12 @@
-import React from "react";
-import { useNavigate } from "react-router-dom";
-import styled from "styled-components";
-import lineLink from "../assets/images/home1.png";
-import productsLink from "../assets/images/home2.png";
-import SGS from "../assets/images/home3.png";
-import tips from "../assets/images/home4.jpg";
-import ProductAll from "./ProductAll";
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import styled from 'styled-components';
+import lineLink from '../assets/images/home1.png';
+import productsLink from '../assets/images/home2.png';
+import SGS from '../assets/images/home3.png';
+import tips from '../assets/images/home4.jpg';
+import ProductAll from './ProductAll';
+import { productsHot, productsNew, productsPrice } from '../api/products';
 
 const StyledContainer = styled.div`
   margin: 0 15px;
@@ -30,7 +31,7 @@ const StyledLinkWrapper = styled.div`
     top: 0;
   }
   .light:hover::before {
-    content: "";
+    content: '';
     width: 200px;
     height: 1000px;
     background: #ffffff;
@@ -55,10 +56,110 @@ const StyledProductsContainer = styled.div`
   width: 100%;
   display: flex;
   flex-flow: column;
+  max-width: 1300px;
 `;
 
 const Home = () => {
   const navigate = useNavigate();
+  const [productHot, setProductHot] = useState([]);
+  const [productNew, setProductNew] = useState([]);
+  const [productPrice, setProductPrice] = useState([]);
+  const [productPriceOrigin, setProductPriceOrigin] = useState([]);
+  const [sortSelect, setSortSelect] = useState({
+    top: true
+  });
+  const [priceToggle, setPriceToggle] = useState('desc');
+
+  // useEffect
+  //抓熱銷排行
+  useEffect(() => {
+    const getProductHotAsync = async () => {
+      try {
+        const resProductlHot = await productsHot();
+        const onShelvesProductHot = resProductlHot?.filter(
+          (product) => product.isOnShelves === 1
+        );
+        setProductHot(onShelvesProductHot);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    getProductHotAsync();
+    return;
+  }, [setProductHot]);
+
+  //抓最新商品
+  useEffect(() => {
+    const getProductNewAsync = async () => {
+      try {
+        const resProductNew = await productsNew();
+        const onShelvesProductNew = resProductNew?.filter(
+          (product) => product.isOnShelves === 1
+        );
+        setProductNew(onShelvesProductNew);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    getProductNewAsync();
+    return;
+  }, [setProductNew]);
+
+  //抓價格排序
+  useEffect(() => {
+    const getProductPriceAsync = async () => {
+      try {
+        const resProductPrice = await productsPrice();
+        const onShelvesProductPrice = resProductPrice?.filter(
+          (product) => product.isOnShelves === 1
+        );
+        setProductPriceOrigin(onShelvesProductPrice);
+        setProductPrice(onShelvesProductPrice);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    getProductPriceAsync();
+    return;
+  }, [setProductPriceOrigin]);
+
+  // 點擊時，其他二個會變成 undefine 為 false，當為 true 時不改變
+  const sortSelectToggle = (e) => {
+    if (e.target.value === 'price') {
+      if (priceToggle === 'asc') {
+        setProductPrice(
+          productPriceOrigin.sort((a, b) => {
+            return a.price - b.price;
+          })
+        );
+        const priceSortOrder = priceToggle === 'asc' ? 'desc' : 'asc';
+        setPriceToggle(priceSortOrder);
+      } else if (priceToggle === 'desc') {
+        setProductPrice(
+          productPriceOrigin.sort((a, b) => {
+            return b.price - a.price;
+          })
+        );
+        const priceSortOrder = priceToggle === 'asc' ? 'desc' : 'asc';
+        setPriceToggle(priceSortOrder);
+      }
+    } else {
+      setPriceToggle('desc');
+      setProductPrice(
+        productPriceOrigin.sort((a, b) => {
+          return b.price - a.price;
+        })
+      );
+    }
+    if (sortSelect[e.target.value] === true) {
+      return;
+    } else {
+      setSortSelect(() => ({
+        [e.target.value]: !sortSelect[e.target.value]
+      }));
+    }
+  };
+
   return (
     <>
       <StyledContainer>
@@ -81,7 +182,14 @@ const Home = () => {
         </StyledLinkWrapper>
       </StyledContainer>
       <StyledProductsContainer>
-        <ProductAll />
+        <ProductAll
+          productHot={productHot}
+          productNew={productNew}
+          productPrice={productPrice}
+          priceToggle={priceToggle}
+          sortSelect={sortSelect}
+          sortSelectToggle={sortSelectToggle}
+        />
       </StyledProductsContainer>
     </>
   );
