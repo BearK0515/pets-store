@@ -41,6 +41,11 @@ const CartStyled = styled.div`
       border-bottom: 1px solid var(--white);
       margin-bottom: 10px;
     }
+    .wrapper{
+      display: flex;
+      flex-flow: column;
+      gap: 10px;
+    }
     .card-items {
       width: 100%;
       padding: 0 15px;
@@ -96,6 +101,8 @@ const StyledCardItem = styled.div`
     gap: 10px;
     .wrapper {
       display: flex;
+      flex-flow: row;
+      justify-content: space-between;
       gap: 5px;
       .name {
         color: #333;
@@ -156,6 +163,7 @@ export default function CartModal({ setIsCartOpen, productInCart }) {
       <div className="back-drop" onClick={() => setIsCartOpen(false)}></div>
       <div className="cart-container">
         <div className="cart-title">我的購物車</div>
+        <div className="wrapper">
         {productInCart.length !== 0 ? (
           productInCart?.map((product) => {
             return (
@@ -169,7 +177,7 @@ export default function CartModal({ setIsCartOpen, productInCart }) {
             <CartNoneIcon className="icon" />
             <span>購物車內無任何商品</span>
           </div>
-        )}
+        )}</div>
         <button onClick={goToCart}>前往結帳</button>
       </div>
     </CartStyled>

@@ -80,11 +80,14 @@ const StyledWrapper = styled.div`
         display: none;
       }
     }
-    & p ~ p {
+    .phone,
+    .email,
+    .address,
+    .remark {
       display: flex;
       justify-content: center;
     }
-    & P:nth-last-child(1) {
+    .remark {
       flex-flow: wrap;
       word-wrap: break-all;
     }
@@ -118,7 +121,7 @@ const StyledWrapper = styled.div`
 `;
 
 const SingleOrder = () => {
-  const [order, setOrder] = useState({});
+  const [order, setOrder] = useState(null);
   const params = useParams()
   let total = order?.products?.reduce(
     (total, item) => total + Number(item.subTotal),
@@ -137,7 +140,6 @@ const SingleOrder = () => {
     getOrdersAllAsync();
     return;
   }, [params.orderId,setOrder]);
-
   return (
     <StyledContainer>
       <StyledTitle>
@@ -187,34 +189,34 @@ const SingleOrder = () => {
           <h3>購買者資料</h3>
           <hr />
           <div className='wrapper-title sender'>
-            <p>姓名</p>
-            <p>電話</p>
-            <p>email</p>
+            <p className='name'>姓名</p>
+            <p className='phone'>電話</p>
+            <p className='email'>email</p>
             <p className='remark'>備註</p>
           </div>
           <div className='wrapper-content sender'>
-            <p>{order.purchaserName}</p>
-            <p>{order.purchaserPhone}</p>
-            <p>{order.purchaserEmail}</p>
-            <p className='remark'>{order.comment}</p>
+            <p className='name'>{order?.purchaserName}</p>
+            <p className='phone'>{order?.purchaserPhone}</p>
+            <p className='email'>{order?.purchaserEmail}</p>
+            <p className='remark'>{order?.comment}</p>
           </div>
           <div className='remark-md'>
             <p className='wrapper-title'>備註</p>
-            <p className='wrapper-content'>{order.comment}</p>
+            <p className='wrapper-content'>{order?.comment}</p>
           </div>
         </StyledWrapper>
         <StyledWrapper>
           <h3>收件者資料</h3>
           <hr />
           <div className='wrapper-title addressee'>
-            <p>姓名</p>
-            <p>電話</p>
-            <p>地址</p>
+            <p className='name'>姓名</p>
+            <p className='phone'>電話</p>
+            <p className='address'>地址</p>
           </div>
           <div className='wrapper-content addressee'>
-            <p>{order.receiverName}</p>
-            <p>{order.receiverPhone}</p>
-            <p>{order.receiverAddress}</p>
+            <p className='name'>{order?.receiverName}</p>
+            <p className='phone'>{order?.receiverPhone}</p>
+            <p className='address'>{order?.receiverAddress}</p>
           </div>
         </StyledWrapper>
       </StyledOrderList>

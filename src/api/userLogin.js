@@ -18,8 +18,6 @@ const baseURL = 'https://www.waylins.com';
 //   }
 // }
 export const facebookLogin = async ({ email, name }) => {
-  // console.log(email);
-  // console.log(name)
   try {
     const rep = await axios({
       method: "POST",
@@ -29,8 +27,8 @@ export const facebookLogin = async ({ email, name }) => {
         name: name,
       },
     });
-    console.log('get FB reponse', rep);
-    return rep;
+    console.log()
+    return rep.data.data.token;
   } catch (error) {
     console.error(`[Login Failed]${error}`);
   }
