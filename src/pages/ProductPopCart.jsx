@@ -1,8 +1,8 @@
-import React, { useState } from "react";
-import { useOutletContext } from "react-router-dom";
-import styled from "styled-components";
-import Swal from "sweetalert2";
-import { MinusIcon, PlusIcon } from "../assets/icons/index";
+import React, { useState } from 'react';
+import { useOutletContext } from 'react-router-dom';
+import styled from 'styled-components';
+import Swal from 'sweetalert2';
+import { MinusIcon, PlusIcon } from '../assets/icons/index';
 
 const StyledModalContainer = styled.div`
   width: 100vw;
@@ -172,11 +172,11 @@ const ProductPopCart = ({ handleToggleCartModal, product }) => {
     setProductInCart(tmpCart);
     // console.log("購物車被改變了",tmpCart)
     Swal.fire({
-      title: "加入購物車成功",
-      icon: "success",
+      title: '加入購物車成功',
+      icon: 'success',
       showConfirmButton: false,
       timer: 1000,
-      position: "top",
+      position: 'top'
     });
 
     handleToggleCartModal();
@@ -185,10 +185,11 @@ const ProductPopCart = ({ handleToggleCartModal, product }) => {
 
   const handleToCartPage = () => {
     Swal.fire({
-      title: "加入購物車成功",
-      icon: "success",
-      showConfirmButton: true,
-      position: "top",
+      title: '立即購買成功',
+      icon: 'success',
+      showConfirmButton: false,
+      timer: 1000,
+      position: 'top'
     });
     return;
   };
@@ -196,38 +197,38 @@ const ProductPopCart = ({ handleToggleCartModal, product }) => {
   return (
     <StyledModalContainer key={product?.id} id={product?.id}>
       {/*overlay獨立*/}
-      <div className="overlay" onClick={handleToggleCartModal}></div>
-      <div className="content">
-        <StyledCard className="wrapper">
-          <div className="title-wrapper">
-            <h4 className="title">{product?.name}</h4>
+      <div className='overlay' onClick={handleToggleCartModal}></div>
+      <div className='content'>
+        <StyledCard className='wrapper'>
+          <div className='title-wrapper'>
+            <h4 className='title'>{product?.name}</h4>
           </div>
-          <div className="price-wrapper">
-            <div className="price">${product?.price * count}</div>
-            <div className="discount-price">
+          <div className='price-wrapper'>
+            <div className='price'>${product?.price * count}</div>
+            <div className='discount-price'>
               ${Math.floor(product?.price * 0.8 * count)}
             </div>
           </div>
-          <div className="count-wrapper">
-            <label className="count-name">數量</label>
-            <div className="count-select-wrapper">
+          <div className='count-wrapper'>
+            <label className='count-name'>數量</label>
+            <div className='count-select-wrapper'>
               <button onClick={handleDecrease}>
                 <MinusIcon
-                  className={count > 1 ? "minus active" : "minus"}
-                  style={{ cursor: "pointer" }}
+                  className={count > 1 ? 'minus active' : 'minus'}
+                  style={{ cursor: 'pointer' }}
                 />
               </button>
-              <div className="count-number">{count}</div>
+              <div className='count-number'>{count}</div>
               <button onClick={handleIncrease}>
-                <PlusIcon className="plus" style={{ cursor: "pointer" }} />
+                <PlusIcon className='plus' style={{ cursor: 'pointer' }} />
               </button>
             </div>
           </div>
-          <div className="button-wrapper">
-            <button className="addCart" onClick={handleAddCart}>
+          <div className='button-wrapper'>
+            <button className='addCart' onClick={handleAddCart}>
               加入購物車
             </button>
-            <button className="toCartPage" onClick={handleToCartPage}>
+            <button className='toCartPage' onClick={handleToCartPage}>
               立即購買
             </button>
           </div>
