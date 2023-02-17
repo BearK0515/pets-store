@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import styled from "styled-components";
-import { singleOrder } from "../api/adminAuth";
-import { userSingleOrder } from "../api/userLogin";
+import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import styled from 'styled-components';
+import { singleOrder } from '../api/adminAuth';
+import { userSingleOrder } from '../api/userAuth';
 
 const StyledContainer = styled.div`
   width: 100%;
@@ -123,41 +123,31 @@ const StyledWrapper = styled.div`
 
 const SingleOrder = () => {
   const [order, setOrder] = useState(null);
-  const [userOrder, setUserOrder] = useState(null);
-  const params = useParams()
+  const params = useParams();
+
   let total = order?.products?.reduce(
     (total, item) => total + Number(item.subTotal),
     0
   );
-  console.log(userOrder);
-  //尚未完成
-  const isAdmin = localStorage.getItem("isAdmin")
+
   useEffect(() => {
-    if (isAdmin) {
-      const getSingleOrderAsync = async () => {
-        try {
-          const resOrder = await singleOrder(params.orderId);
-          setOrder(resOrder?.data);
-        } catch (error) {
-          console.error(error);
+    const getOrdersAllAsync = async () => {
+      try {
+        const resOrder = await singleOrder(params.orderId);
+        const resUserOrder = await userSingleOrder(params.orderNumber);
+        if (resOrder) {
+          setOrder(resOrder.data);
         }
-      };
-      getSingleOrderAsync();
-      return;
-    } else {
-      const getSingleOrderAsync = async () => {
-        try {
-          const resOrder = await userSingleOrder(params.orderId);
-          setUserOrder(resOrder?.data);
-        } catch (error) {
-          console.error(error);
+        if (resUserOrder) {
+          setOrder(resUserOrder.data);
         }
-      };
-      getSingleOrderAsync();
-      return;
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [setUserOrder]);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    getOrdersAllAsync();
+    return;
+  }, [params.orderId, params.orderNumber, setOrder]);
   return (
     <StyledContainer>
       <StyledTitle>

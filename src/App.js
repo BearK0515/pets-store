@@ -44,7 +44,7 @@ function App() {
             <Route path='blogs' element={<Blogs />} />
             <Route path='cart' element={<Cart />} />
             <Route path='order/query' element={<Order />} />
-            <Route path='user-order/:orderId' element={<SingleOrder />} />
+            <Route path='user-order/:orderNumber' element={<SingleOrder />} />
             <Route path='faq' element={<Faq />} />
           </Route>
           <Route path='login' element={<AdminLogin />} />
