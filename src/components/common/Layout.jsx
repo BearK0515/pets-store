@@ -10,6 +10,7 @@ import { CartIcon, SearchIcon } from "../../assets/icons";
 import LoginModal from "./LoginModal";
 import CartModal from "./CartModal";
 import SidebarModal from "./SidebarModal";
+import { useSelector } from "react-redux";
 
 const StyledContainer = styled.div`
   display: flex;
@@ -231,9 +232,9 @@ const Layout = () => {
   const [isOpenLoginModal, setIsOpenLoginModal] = useState(false);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isSideabrOpen, setIsSideabrOpen] = useState(false);
-  const [productInCart, setProductInCart] = useState([]);
   let location = useLocation();
   const [records, setRecords] = useState(null);
+  const productInCart=useSelector((state)=>state.product.cart)
 
   const handleToggleLoginModal = () => {
     setIsOpenLoginModal(!isOpenLoginModal);
@@ -258,7 +259,7 @@ const Layout = () => {
           handleToggleSidebar={handleToggleSidebar}
           countProducts={productInCart.length}
         />
-        <Outlet context={[productInCart, setProductInCart]} />
+        <Outlet />
         <StyledButtonWrapper>
           <button
             className="cart-button"
@@ -328,7 +329,6 @@ const Layout = () => {
       {isCartOpen && (
         <CartModal
           setIsCartOpen={setIsCartOpen}
-          productInCart={productInCart}
         />
       )}
       {isOpenLoginModal && (
