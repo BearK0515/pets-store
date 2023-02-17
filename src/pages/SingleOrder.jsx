@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import styled from "styled-components";
-import { singleOrder } from "../api/adminAuth";
+import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import styled from 'styled-components';
+import { singleOrder } from '../api/adminAuth';
+import { userSingleOrder } from '../api/userAuth';
 
 const StyledContainer = styled.div`
   width: 100%;
@@ -122,24 +123,31 @@ const StyledWrapper = styled.div`
 
 const SingleOrder = () => {
   const [order, setOrder] = useState(null);
-  const params = useParams()
+  const params = useParams();
+
   let total = order?.products?.reduce(
     (total, item) => total + Number(item.subTotal),
     0
   );
-  
+
   useEffect(() => {
     const getOrdersAllAsync = async () => {
       try {
         const resOrder = await singleOrder(params.orderId);
-        setOrder(resOrder.data);
+        const resUserOrder = await userSingleOrder(params.orderNumber);
+        if (resOrder) {
+          setOrder(resOrder.data);
+        }
+        if (resUserOrder) {
+          setOrder(resUserOrder.data);
+        }
       } catch (error) {
         console.error(error);
       }
     };
     getOrdersAllAsync();
     return;
-  }, [params.orderId,setOrder]);
+  }, [params.orderId, params.orderNumber, setOrder]);
   return (
     <StyledContainer>
       <StyledTitle>
