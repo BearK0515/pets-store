@@ -27,7 +27,6 @@ export const facebookLogin = async ({ email, name }) => {
         name: name,
       },
     });
-    console.log()
     return rep.data.data.token;
   } catch (error) {
     console.error(`[Login Failed]${error}`);
@@ -40,9 +39,25 @@ export const googleLogin = async () => {
       method: 'GET',
       url: `${baseURL}/api/auth/google`
     });
-    console.log('get Google reponse', rep);
     return rep;
   } catch (error) {
     console.error(`[Login Failed]${error}`);
+  }
+};
+
+//GET一般會員取得單一訂單
+export const userSingleOrder = async (orderId) => {
+  try {
+    const authToken = localStorage.getItem("authToken");
+    const rep = await axios({
+      method: "GET",
+      url: `${baseURL}/api/users/orders?orderNumber=${orderId}`,
+      headers: {
+        Authorization: `Bearer ${authToken}`,
+      },
+    });
+    return rep;
+  } catch (error) {
+    console.error("[GET single order Failed]:", error);
   }
 };

@@ -1,8 +1,9 @@
 import React, { useState } from "react";
-import { useOutletContext } from "react-router-dom";
+import { useDispatch } from "react-redux";
 import styled from "styled-components";
 import Swal from "sweetalert2";
 import { MinusIcon, PlusIcon } from "../assets/icons/index";
+import { addTocart } from "../store/productSlice";
 
 const StyledModalContainer = styled.div`
   width: 100vw;
@@ -152,25 +153,25 @@ const StyledCard = styled.div`
 
 // handle 參數由 Product 傳入
 const ProductPopCart = ({ handleToggleCartModal, product }) => {
+  const dispatch = useDispatch()
   const [count, setCount] = useState(1);
-  const [productInCart, setProductInCart] = useOutletContext();
   const handleDecrease = () => {
     if (count === 1) {
       return;
     }
     setCount((prevCount) => prevCount - 1);
   };
-
   const handleIncrease = () => {
     setCount((prevCount) => prevCount + 1);
   };
 
   const handleAddCart = () => {
-    let tmpCart = productInCart;
-    tmpCart.push({ product: product, count: count });
-    // console.log(tmpCart);
-    setProductInCart(tmpCart);
-    // console.log("購物車被改變了",tmpCart)
+    const id = product.id
+    const name = product.name
+    const price = product.price
+    const image = product.Images.url
+    
+    dispatch(addTocart({ id, name, price, image, count }));
     Swal.fire({
       title: "加入購物車成功",
       icon: "success",
