@@ -7,12 +7,12 @@ const baseURL = 'https://www.waylins.com';
 //GET會員取得單一訂單
 export const userSingleOrder = async (orderNumber) => {
   try {
-    const authToken = localStorage.getItem('authToken');
+    const userToken = localStorage.getItem('userToken');
     const rep = await axios({
       method: 'GET',
       url: `${baseURL}/api/users/orders/?orderNumber=${orderNumber}`,
       headers: {
-        Authorization: `Bearer ${authToken}`
+        Authorization: `Bearer ${userToken}`
       }
     });
     return rep;

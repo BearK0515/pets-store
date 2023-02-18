@@ -124,30 +124,31 @@ const StyledWrapper = styled.div`
 const SingleOrder = () => {
   const [order, setOrder] = useState(null);
   const params = useParams();
-
   let total = order?.products?.reduce(
     (total, item) => total + Number(item.subTotal),
     0
   );
 
   useEffect(() => {
-    const getOrdersAllAsync = async () => {
+    const getOrdersAllAsync = async (params) => {
       try {
-        const resOrder = await singleOrder(params.orderId);
-        const resUserOrder = await userSingleOrder(params.orderNumber);
-        if (resOrder) {
+        if (params.orderId) {
+          const resOrder = await singleOrder(params.orderId);
           setOrder(resOrder.data);
+          return;
         }
-        if (resUserOrder) {
+        if (params.orderNumber) {
+          const resUserOrder = await userSingleOrder(params.orderNumber);
           setOrder(resUserOrder.data);
+          return;
         }
       } catch (error) {
         console.error(error);
       }
     };
-    getOrdersAllAsync();
+    getOrdersAllAsync(params);
     return;
-  }, [params.orderId, params.orderNumber, setOrder]);
+  }, [params, setOrder]);
   return (
     <StyledContainer>
       <StyledTitle>
