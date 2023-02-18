@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import { HomeIcon, ClockIcon, BookMarkIcon } from '../assets/icons/index';
 import { HomeLinkWrapper } from '../components/common/HomeLinkWrapper';
 import { artical } from '../api/blogs';
+import { BlogFilterContext } from '../App';
 
 const BlogStyled = styled.div`
   box-sizing: border-box;
@@ -296,6 +297,7 @@ const Blogs = () => {
   const [articalAll, setArticalAll] = useState([]);
   const [query, setQuery] = useState('');
   const [optionsState, setOptionsState] = useState('');
+  const { blogFilter } = useContext(BlogFilterContext);
 
   //抓文章api
   useEffect(() => {
@@ -315,13 +317,29 @@ const Blogs = () => {
     return;
   }, [setArticalOrigin]);
 
+  useEffect(() => {
+    if (blogFilter === 'dog') {
+      setOptionsState(blogFilter);
+      setArticalAll(
+        articalOrigin.filter((artical) => artical.category === 'dog')
+      );
+    } else if (blogFilter === 'cat') {
+      setOptionsState(blogFilter);
+      setArticalAll(
+        articalOrigin.filter((artical) => artical.category === 'cat')
+      );
+    }
+  }, [blogFilter, articalOrigin]);
+
   const handleFilterDog = () => {
+    setOptionsState('dog');
     setArticalAll(
       articalOrigin.filter((artical) => artical.category === 'dog')
     );
   };
 
   const handleFilterCat = () => {
+    setOptionsState('cat');
     setArticalAll(
       articalOrigin.filter((artical) => artical.category === 'cat')
     );
@@ -337,6 +355,9 @@ const Blogs = () => {
   const handleChangeSelect = (e) => {
     if (e.target.value === 'default') {
       return;
+    }
+    if (e.target.value === 'all') {
+      setArticalAll(articalOrigin);
     }
     if (e.target.value === 'dog') {
       setArticalAll(
@@ -396,6 +417,7 @@ const Blogs = () => {
               onChange={handleChangeSelect}
             >
               <option value='default'>- 請選擇文章分類 -</option>
+              <option value='all'>全部文章分類</option>
               <option value='dog'>狗狗健康知識庫</option>
               <option value='cat'>貓咪健康知識庫</option>
             </select>
@@ -406,7 +428,7 @@ const Blogs = () => {
             {articalAll.length === 0 &&
               articalOrigin?.map((artical) => {
                 return (
-                  <BlogCard>
+                  <BlogCard key={artical.title}>
                     <BlogCardImg
                       style={{ backgroundImage: `url("${artical.image}")` }}
                     />
@@ -444,7 +466,7 @@ const Blogs = () => {
               })}
             {articalAll?.map((artical) => {
               return (
-                <BlogCard>
+                <BlogCard key={artical.title}>
                   <BlogCardImg
                     style={{ backgroundImage: `url("${artical.image}")` }}
                   />
@@ -506,7 +528,7 @@ const Blogs = () => {
               <BlogArticalList>
                 {articalOrigin?.map((artical) => {
                   return (
-                    <li className='articalContent'>
+                    <li className='articalContent' key={artical.title}>
                       <h6>{artical.title}</h6>
                       <ul className='DateCategory'>
                         <li className='BlogDate'>
