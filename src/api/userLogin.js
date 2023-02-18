@@ -27,7 +27,7 @@ export const facebookLogin = async ({ email, name }) => {
         name: name,
       },
     });
-    return rep.data.data.token;
+    return rep.data.data;
   } catch (error) {
     console.error(`[Login Failed]${error}`);
   }

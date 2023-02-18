@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
+import Swal from "sweetalert2";
 import { getTownName } from "../api/products";
+import { submitOrder } from "../api/userAuth";
 import {
   AlertIcon,
   AlertTriangleIcon,
@@ -13,7 +15,7 @@ import {
   VisaIcon,
 } from "../assets/icons";
 import { taiwan } from "../components/common/country";
-import { setCount } from "../store/productSlice";
+import { removeItem, setClearCart, setCount } from "../store/productSlice";
 // import { sevenAreas } from "../components/common/sevenStories";
 
 //Layout樣式
@@ -536,10 +538,62 @@ const Checkbox = styled.label`
 
 const Cart = () => {
   const cartProducts = useSelector((state) => state.product.cart);
-  let total = cartProducts.reduce(
-    (total, item) => total + Number(item.count) * Number(item.price),
+  let totalAmount = cartProducts.reduce(
+    (total, item) =>
+      Math.floor(total + Number(item.count) * Number(item.price) * 0.8),
     0
   );
+  const dispatch = useDispatch()
+  const [purchaserName, setPurchaserName] = useState("");
+  const [purchaserPhone, setPurchaserPhone] = useState("");
+  const [purchaserEmail, setPurchaserEmail] = useState("");
+  const [receiverName, setReceiverName] = useState("");
+  const [receiverPhone, setReceiverPhone] = useState("");
+  const [receiverAddress, setReceiverAddress] = useState("");
+  const [comment, setComment] = useState("");
+  const [deliveryId, setDeliveryId] = useState(null);
+  const products = cartProducts.map((product) => ({
+    ProductId: product.id,
+    orderQuantity: product.count,
+  }));
+  const handlesubmit = async () => {
+    try {
+      const { data } = await submitOrder({
+        purchaserName,
+        purchaserPhone,
+        purchaserEmail,
+        receiverName,
+        receiverPhone,
+        receiverAddress,
+        comment,
+        products,
+        totalAmount,
+        deliveryId,
+      });
+      const { status, orderNumber } = data;
+      if (status === "success") {
+        Swal.fire({
+          position: "top",
+          icon: "success",
+          title: "成功送出訂單",
+          text: "訂單編號" + orderNumber,
+          showConfirmButton: true,
+        });
+      }
+      setPurchaserName("")
+      setPurchaserPhone("");
+      setPurchaserEmail("");
+      setReceiverName("");
+      setReceiverPhone("");
+      setReceiverAddress("");
+      setComment("");
+      setDeliveryId("");
+      dispatch(setClearCart());
+    } catch (error) {
+      console.error("Order Submit faild :", error);
+    }
+  };
+
   return (
     <>
       <StyledContainer>
@@ -566,7 +620,7 @@ const Cart = () => {
               </div>
               <StyledTextWrapper>
                 <div className='text'>小計</div>
-                <div className='subtotal'>${total}</div>
+                <div className='subtotal'>${totalAmount}</div>
               </StyledTextWrapper>
               <StyledTextWrapper>
                 <div className='text'>運費</div>
@@ -577,7 +631,7 @@ const Cart = () => {
                   <p>總金額</p>
                   <p>(TWD)</p>
                 </div>
-                <div className='total'>${total}</div>
+                <div className='total'>${totalAmount}</div>
               </StyledTotal>
             </StyledCartContainter>
           </div>
@@ -594,7 +648,10 @@ const Cart = () => {
                   <hr />
                 </StyledTitle>
                 {/* 運送方式 */}
-                <ShippingSelect />
+                <ShippingSelect
+                  setDeliveryId={setDeliveryId}
+                  setReceiverAddress={setReceiverAddress}
+                />
               </div>
               {/* 購買人資料 */}
               <div className='wrapper buyer-information'>
@@ -605,6 +662,8 @@ const Cart = () => {
                 <Input
                   placeholder='請輸入購買人姓名'
                   label='姓名欄只能輸入中文和英文。'
+                  value={purchaserName}
+                  onChange={(e) => setPurchaserName(e.target.value)}
                 />
                 <div className='tips'>
                   <div>
@@ -615,10 +674,14 @@ const Cart = () => {
                 <Input
                   placeholder='請輸入聯絡電話'
                   label='聯絡電話只能輸入8~20碼以內的數字及+和#符號。'
+                  value={purchaserPhone}
+                  onChange={(e) => setPurchaserPhone(e.target.value)}
                 />
                 <Input
                   placeholder='ex: example@wahaha.com'
                   label='Email無法辨識，請與郵件供應商聯絡。'
+                  value={purchaserEmail}
+                  onChange={(e) => setPurchaserEmail(e.target.value)}
                 />
                 <div className='tips'>
                   <div>
@@ -632,6 +695,8 @@ const Cart = () => {
                   id=''
                   cols='30'
                   rows='3'
+                  value={comment}
+                  onChange={(e) => setComment(e.target.value)}
                 ></textarea>
                 <div className='check'>
                   <Checkbox>
@@ -650,6 +715,8 @@ const Cart = () => {
                 <Input
                   placeholder='請輸入收件人姓名'
                   label='姓名欄位只能輸入中文和英文。'
+                  value={receiverName}
+                  onChange={(e) => setReceiverName(e.target.value)}
                 />
                 <div className='tips'>
                   <div>
@@ -660,6 +727,8 @@ const Cart = () => {
                 <Input
                   placeholder='請輸入聯絡電話'
                   label='聯絡電話只能輸入8~20碼以內的數字及+和#符號。'
+                  value={receiverPhone}
+                  onChange={(e) => setReceiverPhone(e.target.value)}
                 />
               </div>
               {/* 發票資料 */}
@@ -692,11 +761,11 @@ const Cart = () => {
             </div>
             <div className='total'>
               <div>
-                實付金額(TWD)<span>$1170</span>
+                實付金額(TWD)<span>${totalAmount}</span>
               </div>
             </div>
             <div className='button'>
-              <button>確認送出</button>
+              <button onClick={handlesubmit}>確認送出</button>
             </div>
           </div>
         </div>
@@ -711,7 +780,7 @@ const Product = ({ product }) => {
   for (let i = 1; i <= 999; i++) {
     options.push({ value: i, label: i });
   }
-
+const id = product.id;
   return (
     <ul className='product'>
       <li className='name'>
@@ -740,13 +809,20 @@ const Product = ({ product }) => {
           })}
         </select>
       </li>
-      <li className='price'>${product?.price}</li>
-      <li className='price-md'>每盒${product?.price}元</li>
-      <li className='subtotal'>${product?.count * product?.price}</li>
-      <li className='subtotal-md'>
-        小計：${product?.count * product?.product?.price}
+      <li className='price'>${Math.floor(product?.price * 0.8)}</li>
+      <li className='price-md'>每盒${Math.floor(product?.price * 0.8)}元</li>
+      <li className='subtotal'>
+        ${Math.floor(product?.count * product?.price * 0.8)}
       </li>
-      <li className='delete'>
+      <li className='subtotal-md'>
+        小計：${Math.floor(product?.count * product?.price * 0.8)}
+      </li>
+      <li
+        className='delete'
+        onClick={() => {
+          dispatch(removeItem(id));
+        }}
+      >
         <DeleteProductIcon size='18px' color='#32373a' />
       </li>
     </ul>
@@ -771,7 +847,7 @@ const Select = ({ arrayOption, label, onChange }) => {
   );
 };
 //購買資訊Select樣式
-const ShippingSelect = () => {
+const ShippingSelect = ({ setDeliveryId, setReceiverAddress }) => {
   const [selectedOption, setSelectedOption] = useState("default");
   const paymentOptions = ["- 請選擇 付款方式 -"];
   return (
@@ -779,7 +855,10 @@ const ShippingSelect = () => {
       <StyledSelect className='select bill-wrapper'>
         <select
           defaultValue={selectedOption}
-          onChange={(e) => setSelectedOption(e.target.value)}
+          onChange={(e) => {
+            setSelectedOption(e.target.value);
+            setDeliveryId(e.target.value);
+          }}
         >
           <option disabled value='default'>
             - 請選擇 運送方式 -
@@ -795,7 +874,9 @@ const ShippingSelect = () => {
         {selectedOption === "- 請選擇 運送方式 -" && (
           <Select arrayOption={paymentOptions} label='請選擇付款方式' />
         )}
-        {selectedOption === "1" && <CashOnDelivery />}
+        {selectedOption === "1" && (
+          <CashOnDelivery setReceiverAddress={setReceiverAddress} />
+        )}
         {selectedOption === "2" && <HomeDelivery />}
         {selectedOption === "3" && <SevenElevenPickUp />}
         {selectedOption === "4" && <FamilyMartPickUp />}
@@ -920,11 +1001,17 @@ const InvoiceDonation = () => {
   );
 };
 //Input樣式
-const Input = ({ placeholder, label }) => {
+const Input = ({ placeholder, label, value, onChange }) => {
   return (
     <>
       <StyledInput>
-        <input className='' type='text' placeholder={placeholder} />
+        <input
+          className=''
+          type='text'
+          placeholder={placeholder}
+          value={value}
+          onChange={onChange}
+        />
         <div className='wrapper'>
           <div className='icon '>
             <AlertTriangleIcon color='#cb3747' />
@@ -941,13 +1028,16 @@ const Input = ({ placeholder, label }) => {
   );
 };
 //貨到付款
-const CashOnDelivery = () => {
+const CashOnDelivery = ({ setReceiverAddress }) => {
+  //選擇縣市
   const [selectedCity, setSelectedCity] = useState(null);
+  //縣市行政區
   const [towns, setTowns] = useState([]);
+  //選擇鄉鎮
+  const [town, setTown] = useState(null);
+  //地址
+  const [address, setAddress] = useState("");
   const cities = taiwan.map((city) => city.city);
-
-  const [town, setTown] = useState("");
-
   const handleCities = (e) => {
     setSelectedCity(e.target.value);
     const selectedCityData = taiwan.find(
@@ -956,8 +1046,14 @@ const CashOnDelivery = () => {
     setTowns(selectedCityData?.towns);
     setTown(selectedCityData?.towns[0]);
   };
-console.log("selectedCity", selectedCity);
-console.log("town", town);
+  useEffect(() => {
+    if (selectedCity?.length && town?.length && address?.length) {
+      const updatedAddress = `${selectedCity}${town}${address}`;
+      setReceiverAddress(updatedAddress);
+    }
+    return;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [address]);
   return (
     <>
       <div className='country-wrapper'>
@@ -972,7 +1068,12 @@ console.log("town", town);
           onChange={(e) => setTown(e.target.value)}
         />
       </div>
-      <Input placeholder='收件地址' label='請輸入收件地址' />
+      <Input
+        placeholder='收件地址'
+        label='請輸入收件地址'
+        value={address}
+        onChange={(e) => setAddress(e.target.value)}
+      />
       <div className='content-wrapper'>
         <p>運送說明</p>
         <div className='arrow-right'>
@@ -993,19 +1094,27 @@ console.log("town", town);
 };
 //一般宅配
 const HomeDelivery = () => {
+  //選擇縣市
   const [selectedCity, setSelectedCity] = useState(null);
+  //縣市行政區
   const [towns, setTowns] = useState([]);
-
+  //選擇鄉鎮
+  const [town, setTown] = useState(null);
+  //地址
+  const [address, setAddress] = useState("");
   const cities = taiwan.map((city) => city.city);
 
-  useEffect(() => {
-    if (selectedCity) {
-      const selectedCityData = taiwan.find(
-        (city) => city.city === selectedCity
-      );
-      setTowns(selectedCityData.towns);
-    }
-  }, [selectedCity]);
+  const handleCities = (e) => {
+    setSelectedCity(e.target.value);
+    const selectedCityData = taiwan.find(
+      (city) => city.city === e.target.value
+    );
+    setTowns(selectedCityData?.towns);
+    setTown(selectedCityData?.towns[0]);
+  };
+  console.log("selectedCity", selectedCity);
+  console.log("town", town);
+  console.log("address", address);
 
   return (
     <>
@@ -1013,11 +1122,16 @@ const HomeDelivery = () => {
         <Select
           arrayOption={cities}
           label='請選擇城市'
-          onChange={(e) => setSelectedCity(e.target.value)}
+          onChange={handleCities}
         />
         <Select arrayOption={towns} label='' />
       </div>
-      <Input placeholder='收件地址' label='請輸入收件地址' />
+      <Input
+        placeholder='收件地址'
+        label='請輸入收件地址'
+        value={address}
+        onChange={(e) => setAddress(e.target.value)}
+      />
       <div className='content-wrapper'>
         <p>運送說明</p>
         <div className='arrow-right'>

@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { CartNoneIcon, DeleteProductIcon } from "../../assets/icons";
-import { setCount } from "../../store/productSlice";
+import { removeItem, setCount } from "../../store/productSlice";
 
 const CartStyled = styled.div`
   width: 100vw;
@@ -194,6 +194,7 @@ export const CatrItem = ({ product }) => {
   for (let i = 1; i <= 999; i++) {
     options.push({ value: i, label: i });
   }
+  const id= product.id
   return (
     <StyledCardItem className='card-item'>
       <div className='picture'>
@@ -202,7 +203,9 @@ export const CatrItem = ({ product }) => {
       <div className='content'>
         <div className='wrapper'>
           <div className='name'>{product?.name}</div>
-          <div className='icon'>
+          <div className='icon' onClick={()=>{
+            dispatch(removeItem(id));
+          }}>
             <DeleteProductIcon size='16' />
           </div>
         </div>

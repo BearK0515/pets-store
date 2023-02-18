@@ -163,8 +163,9 @@ const LoginModal = ({ setIsOpenLoginModal, handleToggleLoginModal }) => {
 
   useEffect(() => {
     const getUserInfo = async () => {
-      const data = await facebookLogin({ email, name });
-      localStorage.setItem("authToken", data);
+      const {token,user} = await facebookLogin({ email, name });
+      localStorage.setItem("authToken", token);
+      localStorage.setItem("UserId", user.id);
       handleToggleLoginModal();
     };
     if (!email || !name) return;
