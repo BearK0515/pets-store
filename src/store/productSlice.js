@@ -19,20 +19,6 @@ const productSlice = createSlice({
         state.cart?.push({ ...action.payload });
       }
     },
-    //購物車商品數量+1
-    // incrementcount: (state, action) => {
-    //   const item = state.cart.find((item) => item.id === action.payload);
-    //   item.count++;
-    // },
-    //購物車商品數量-1
-    // decrementcount: (state, action) => {
-    //   const item = state.cart.find((item) => item.id === action.payload);
-    //   if (item.count === 1) {
-    //     item.count = 1;
-    //   } else {
-    //     item.count--;
-    //   }
-    // },
     //購物車中移除商品
     removeItem: (state, action) => {
       const removeItem = state.cart.filter(
@@ -41,16 +27,20 @@ const productSlice = createSlice({
       state.cart = removeItem;
     },
     //select改變商品數量
-    setCount:(state,action)=>{
+    setCount: (state, action) => {
       const { productId, count } = action.payload;
       const productIndex = state.cart.findIndex(
         (product) => product.id === productId
       );
       state.cart[productIndex].count = count;
     },
+    //清空購物車
+    setClearCart: (state, action) => {
+      state.cart = [...initialState.cart];
+    },
   },
 });
 
-export const { addTocart, removeItem, setCount } = productSlice.actions;
+export const { addTocart, removeItem, setCount, setClearCart } = productSlice.actions;
 
 export default productSlice.reducer;
