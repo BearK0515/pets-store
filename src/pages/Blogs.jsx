@@ -318,6 +318,9 @@ const Blogs = () => {
   }, [setArticalOrigin]);
 
   useEffect(() => {
+    if (blogFilter === 'null') {
+      return;
+    }
     if (blogFilter === 'dog') {
       setOptionsState(blogFilter);
       setArticalAll(
