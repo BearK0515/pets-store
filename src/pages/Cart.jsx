@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
+import Swal from "sweetalert2";
 import { getTownName } from "../api/products";
+import { submitOrder } from "../api/userAuth";
 import {
   AlertIcon,
   AlertTriangleIcon,
@@ -12,6 +15,7 @@ import {
   VisaIcon,
 } from "../assets/icons";
 import { taiwan } from "../components/common/country";
+import { removeItem, setClearCart, setCount } from "../store/productSlice";
 // import { sevenAreas } from "../components/common/sevenStories";
 
 //Layout樣式
@@ -533,131 +537,203 @@ const Checkbox = styled.label`
 `;
 
 const Cart = () => {
+  const cartProducts = useSelector((state) => state.product.cart);
+  let totalAmount = cartProducts.reduce(
+    (total, item) =>
+      Math.floor(total + Number(item.count) * Number(item.price) * 0.8),
+    0
+  );
+  const dispatch = useDispatch()
+  const [purchaserName, setPurchaserName] = useState("");
+  const [purchaserPhone, setPurchaserPhone] = useState("");
+  const [purchaserEmail, setPurchaserEmail] = useState("");
+  const [receiverName, setReceiverName] = useState("");
+  const [receiverPhone, setReceiverPhone] = useState("");
+  const [receiverAddress, setReceiverAddress] = useState("");
+  const [comment, setComment] = useState("");
+  const [deliveryId, setDeliveryId] = useState(null);
+  const products = cartProducts.map((product) => ({
+    ProductId: product.id,
+    orderQuantity: product.count,
+  }));
+  const handlesubmit = async () => {
+    try {
+      const { data } = await submitOrder({
+        purchaserName,
+        purchaserPhone,
+        purchaserEmail,
+        receiverName,
+        receiverPhone,
+        receiverAddress,
+        comment,
+        products,
+        totalAmount,
+        deliveryId,
+      });
+      const { status, orderNumber } = data;
+      if (status === "success") {
+        Swal.fire({
+          position: "top",
+          icon: "success",
+          title: "成功送出訂單",
+          text: "訂單編號" + orderNumber,
+          showConfirmButton: true,
+        });
+      }
+      setPurchaserName("")
+      setPurchaserPhone("");
+      setPurchaserEmail("");
+      setReceiverName("");
+      setReceiverPhone("");
+      setReceiverAddress("");
+      setComment("");
+      setDeliveryId("");
+      dispatch(setClearCart());
+    } catch (error) {
+      console.error("Order Submit faild :", error);
+    }
+  };
+
   return (
     <>
       <StyledContainer>
-        <div className="cont">
-          <div className="item-area">
-            <StyledTitle className="title">
+        <div className='cont'>
+          <div className='item-area'>
+            <StyledTitle className='title'>
               <h2>我的購物車</h2>
               <hr />
             </StyledTitle>
             <StyledCartContainter>
-              <ul className="title">
-                <li className="title name">品名</li>
-                <li className="title style">規格</li>
-                <li className="title count">數量</li>
-                <li className="title price">單價</li>
-                <li className="title subtotal">小計</li>
-                <li className="title delete">刪除</li>
+              <ul className='title'>
+                <li className='title name'>品名</li>
+                <li className='title style'>規格</li>
+                <li className='title count'>數量</li>
+                <li className='title price'>單價</li>
+                <li className='title subtotal'>小計</li>
+                <li className='title delete'>刪除</li>
               </ul>
-              <div className="product-wrapper">
+              <div className='product-wrapper'>
                 {/* 商品清單 */}
-                <Product />
-                <Product />
-                <Product />
+                {cartProducts.map((product) => {
+                  return <Product product={product} key={product.id} />;
+                })}
               </div>
               <StyledTextWrapper>
-                <div className="text">小計</div>
-                <div className="subtotal">$1560</div>
+                <div className='text'>小計</div>
+                <div className='subtotal'>${totalAmount}</div>
               </StyledTextWrapper>
               <StyledTextWrapper>
-                <div className="text">運費</div>
-                <div className="subtotal">前往下一步驟計算</div>
+                <div className='text'>運費</div>
+                <div className='subtotal'>前往下一步驟計算</div>
               </StyledTextWrapper>
               <StyledTotal>
-                <div className="text-wrapper">
+                <div className='text-wrapper'>
                   <p>總金額</p>
                   <p>(TWD)</p>
                 </div>
-                <div className="total">$1560</div>
+                <div className='total'>${totalAmount}</div>
               </StyledTotal>
             </StyledCartContainter>
           </div>
         </div>
       </StyledContainer>
       <StyledOrderContainer>
-        <div className="cont">
-          <div className="item-area">
-            <div className="container">
+        <div className='cont'>
+          <div className='item-area'>
+            <div className='container'>
               {/* 購物資訊 */}
-              <div className="wrapper purchase-information">
-                <StyledTitle className="title">
+              <div className='wrapper purchase-information'>
+                <StyledTitle className='title'>
                   <h2>購物資訊</h2>
                   <hr />
                 </StyledTitle>
                 {/* 運送方式 */}
-                <ShippingSelect />
+                <ShippingSelect
+                  setDeliveryId={setDeliveryId}
+                  setReceiverAddress={setReceiverAddress}
+                />
               </div>
               {/* 購買人資料 */}
-              <div className="wrapper buyer-information">
-                <StyledTitle className="title">
+              <div className='wrapper buyer-information'>
+                <StyledTitle className='title'>
                   <h2>購買人資料</h2>
                   <hr />
                 </StyledTitle>
                 <Input
-                  placeholder="請輸入購買人姓名"
-                  label="姓名欄只能輸入中文和英文。"
+                  placeholder='請輸入購買人姓名'
+                  label='姓名欄只能輸入中文和英文。'
+                  value={purchaserName}
+                  onChange={(e) => setPurchaserName(e.target.value)}
                 />
-                <div className="tips">
+                <div className='tips'>
                   <div>
-                    <ArrowRightIcon color="#27ae61" />
+                    <ArrowRightIcon color='#27ae61' />
                   </div>
                   <p>務必正確輸入購買人姓名確保正確送達。</p>
                 </div>
                 <Input
-                  placeholder="請輸入聯絡電話"
-                  label="聯絡電話只能輸入8~20碼以內的數字及+和#符號。"
+                  placeholder='請輸入聯絡電話'
+                  label='聯絡電話只能輸入8~20碼以內的數字及+和#符號。'
+                  value={purchaserPhone}
+                  onChange={(e) => setPurchaserPhone(e.target.value)}
                 />
                 <Input
-                  placeholder="ex: example@wahaha.com"
-                  label="Email無法辨識，請與郵件供應商聯絡。"
+                  placeholder='ex: example@wahaha.com'
+                  label='Email無法辨識，請與郵件供應商聯絡。'
+                  value={purchaserEmail}
+                  onChange={(e) => setPurchaserEmail(e.target.value)}
                 />
-                <div className="tips">
+                <div className='tips'>
                   <div>
-                    <CheckCircleIcon color="#27ae61" />
+                    <CheckCircleIcon color='#27ae61' />
                   </div>
                   <p>我們會將您的訂單通知信寄送至此。</p>
                 </div>
                 <textarea
-                  placeholder="請輸入客戶備註(選填)"
-                  name=""
-                  id=""
-                  cols="30"
-                  rows="3"
+                  placeholder='請輸入客戶備註(選填)'
+                  name=''
+                  id=''
+                  cols='30'
+                  rows='3'
+                  value={comment}
+                  onChange={(e) => setComment(e.target.value)}
                 ></textarea>
-                <div className="check">
+                <div className='check'>
                   <Checkbox>
-                    <input type="checkbox" id="information" />
+                    <input type='checkbox' id='information' />
                   </Checkbox>
-                  <label htmlFor="information">
+                  <label htmlFor='information'>
                     我想收到最新資訊及優惠方案
                   </label>
                 </div>
-                <div className="check">
+                <div className='check'>
                   <Checkbox>
-                    <input type="checkbox" id="buyer-info" />
+                    <input type='checkbox' id='buyer-info' />
                   </Checkbox>
-                  <label htmlFor="buyer-info">收件人同購買人資料</label>
+                  <label htmlFor='buyer-info'>收件人同購買人資料</label>
                 </div>
                 <Input
-                  placeholder="請輸入收件人姓名"
-                  label="姓名欄位只能輸入中文和英文。"
+                  placeholder='請輸入收件人姓名'
+                  label='姓名欄位只能輸入中文和英文。'
+                  value={receiverName}
+                  onChange={(e) => setReceiverName(e.target.value)}
                 />
-                <div className="tips">
+                <div className='tips'>
                   <div>
-                    <ArrowRightIcon color="#27ae61" />
+                    <ArrowRightIcon color='#27ae61' />
                   </div>
                   <p>務必正確輸入購收件人姓名確保正確送達。</p>
                 </div>
                 <Input
-                  placeholder="請輸入聯絡電話"
-                  label="聯絡電話只能輸入8~20碼以內的數字及+和#符號。"
+                  placeholder='請輸入聯絡電話'
+                  label='聯絡電話只能輸入8~20碼以內的數字及+和#符號。'
+                  value={receiverPhone}
+                  onChange={(e) => setReceiverPhone(e.target.value)}
                 />
               </div>
               {/* 發票資料 */}
-              <div className="wrapper invoice-information">
-                <StyledTitle className="title">
+              <div className='wrapper invoice-information'>
+                <StyledTitle className='title'>
                   <h2>發票資料</h2>
                   <hr />
                 </StyledTitle>
@@ -665,31 +741,31 @@ const Cart = () => {
               </div>
             </div>
             {/* 條款同意 */}
-            <div className="clause-wrapper">
-              <div className="check">
+            <div className='clause-wrapper'>
+              <div className='check'>
                 <Checkbox>
-                  <input type="checkbox" id="record" />
+                  <input type='checkbox' id='record' />
                 </Checkbox>
-                <label htmlFor="record">我同意將寄送資訊記錄在這台裝置上</label>
+                <label htmlFor='record'>我同意將寄送資訊記錄在這台裝置上</label>
               </div>
             </div>
-            <div className="clause-wrapper">
-              <div className="check">
+            <div className='clause-wrapper'>
+              <div className='check'>
                 <Checkbox>
-                  <input type="checkbox" id="service" />
+                  <input type='checkbox' id='service' />
                 </Checkbox>
-                <label htmlFor="service">
+                <label htmlFor='service'>
                   我已閱讀「<span>售後服務</span>」並同意。
                 </label>
               </div>
             </div>
-            <div className="total">
+            <div className='total'>
               <div>
-                實付金額(TWD)<span>$1170</span>
+                實付金額(TWD)<span>${totalAmount}</span>
               </div>
             </div>
-            <div className="button">
-              <button>確認送出</button>
+            <div className='button'>
+              <button onClick={handlesubmit}>確認送出</button>
             </div>
           </div>
         </div>
@@ -698,20 +774,32 @@ const Cart = () => {
   );
 };
 //購物車內商品
-const Product = () => {
+const Product = ({ product }) => {
+  const dispatch = useDispatch();
   const options = [];
   for (let i = 1; i <= 999; i++) {
     options.push({ value: i, label: i });
   }
+const id = product.id;
   return (
-    <ul className="product">
-      <li className="name">
-        <img src="https://picsum.photos/id/15/400" alt="" />
-        <p>【毛孩時代】情緒穩定保養粉(30包/盒)</p>
+    <ul className='product'>
+      <li className='name'>
+        <img src={product?.image} alt='' />
+        <p>{product?.name}</p>
       </li>
-      <li className="style">30包/盒</li>
-      <li className="count">
-        <select defaultValue={options[0].value}>
+      <li className='style'>30包/盒</li>
+      <li className='count'>
+        <select
+          defaultValue={product?.count}
+          onChange={(e) => {
+            dispatch(
+              setCount({
+                productId: product.id,
+                count: e.target.value,
+              })
+            );
+          }}
+        >
           {Array.prototype.map.call(options, ({ value, label }, index) => {
             return (
               <option key={index} value={value}>
@@ -721,12 +809,21 @@ const Product = () => {
           })}
         </select>
       </li>
-      <li className="price">$520</li>
-      <li className="price-md">每盒$520元</li>
-      <li className="subtotal">$520</li>
-      <li className="subtotal-md">小計：$520</li>
-      <li className="delete">
-        <DeleteProductIcon size="18px" color="#32373a" />
+      <li className='price'>${Math.floor(product?.price * 0.8)}</li>
+      <li className='price-md'>每盒${Math.floor(product?.price * 0.8)}元</li>
+      <li className='subtotal'>
+        ${Math.floor(product?.count * product?.price * 0.8)}
+      </li>
+      <li className='subtotal-md'>
+        小計：${Math.floor(product?.count * product?.price * 0.8)}
+      </li>
+      <li
+        className='delete'
+        onClick={() => {
+          dispatch(removeItem(id));
+        }}
+      >
+        <DeleteProductIcon size='18px' color='#32373a' />
       </li>
     </ul>
   );
@@ -735,47 +832,54 @@ const Product = () => {
 const Select = ({ arrayOption, label, onChange }) => {
   return (
     <StyledSelect>
-      <select className="shipping" name="" id="" onChange={onChange}>
-        {arrayOption.map((option, index) => (
+      <select className='shipping' name='' id='' onChange={onChange}>
+        {arrayOption?.map((option, index) => (
           <option key={index} value={option}>
             {option}
           </option>
         ))}
       </select>
-      <div className="alert">
-        <AlertIcon color="#cb3747" />
+      <div className='alert'>
+        <AlertIcon color='#cb3747' />
         <p>{label}</p>
       </div>
     </StyledSelect>
   );
 };
 //購買資訊Select樣式
-const ShippingSelect = () => {
-  const [selectedOption, setSelectedOption] = useState("- 請選擇 運送方式 -");
-  const shippingOptions = [
-    "- 請選擇 運送方式 -",
-    "貨到付款",
-    "一般宅配",
-    "7-11取貨",
-    "全家取貨",
-  ];
+const ShippingSelect = ({ setDeliveryId, setReceiverAddress }) => {
+  const [selectedOption, setSelectedOption] = useState("default");
   const paymentOptions = ["- 請選擇 付款方式 -"];
   return (
     <>
-      <Select
-        arrayOption={shippingOptions}
-        label="請選擇運送方式"
-        onChange={(e) => setSelectedOption(e.target.value)}
-      />
+      <StyledSelect className='select bill-wrapper'>
+        <select
+          defaultValue={selectedOption}
+          onChange={(e) => {
+            setSelectedOption(e.target.value);
+            setDeliveryId(e.target.value);
+          }}
+        >
+          <option disabled value='default'>
+            - 請選擇 運送方式 -
+          </option>
+          <option value={1}>貨到付款</option>
+          {/* <option value={2}>一般宅配</option>
+          <option value={3}>7-11取貨</option>
+          <option value={4}>全家取貨</option> */}
+        </select>
+      </StyledSelect>
       {/* 運送方式 */}
-      <div className="shipping-wrapper">
+      <div className='shipping-wrapper'>
         {selectedOption === "- 請選擇 運送方式 -" && (
-          <Select arrayOption={paymentOptions} label="請選擇付款方式" />
+          <Select arrayOption={paymentOptions} label='請選擇付款方式' />
         )}
-        {selectedOption === "貨到付款" && <CashOnDelivery />}
-        {selectedOption === "一般宅配" && <HomeDelivery />}
-        {selectedOption === "7-11取貨" && <SevenElevenPickUp />}
-        {selectedOption === "全家取貨" && <FamilyMartPickUp />}
+        {selectedOption === "1" && (
+          <CashOnDelivery setReceiverAddress={setReceiverAddress} />
+        )}
+        {selectedOption === "2" && <HomeDelivery />}
+        {selectedOption === "3" && <SevenElevenPickUp />}
+        {selectedOption === "4" && <FamilyMartPickUp />}
       </div>
     </>
   );
@@ -785,17 +889,17 @@ const BillSelect = () => {
   const [selectedOption, setSelectedOption] = useState("個人電子發票(兩聯式)");
   return (
     <>
-      <StyledSelect className="select bill-wrapper">
+      <StyledSelect className='select bill-wrapper'>
         <select
           defaultValue={selectedOption}
           onChange={(e) => setSelectedOption(e.target.value)}
         >
-          <option disabled value="default">
+          <option disabled value='default'>
             - 請選擇 發票資料 -
           </option>
-          <option value="個人電子發票(兩聯式)">個人電子發票(兩聯式)</option>
-          <option value="公司用(三聯式)">公司用(三聯式)</option>
-          <option value="電子發票捐贈">電子發票捐贈</option>
+          <option value='個人電子發票(兩聯式)'>個人電子發票(兩聯式)</option>
+          <option value='公司用(三聯式)'>公司用(三聯式)</option>
+          <option value='電子發票捐贈'>電子發票捐贈</option>
         </select>
       </StyledSelect>
       {selectedOption === "個人電子發票(兩聯式)" && <PersonalBill />}
@@ -809,44 +913,44 @@ const PersonalBill = () => {
   const [selectedOption, setSelectedOption] = useState("無載具");
   return (
     <>
-      <StyledSelect className="select bill-wrapper">
+      <StyledSelect className='select bill-wrapper'>
         <select
           defaultValue={selectedOption}
           onChange={(e) => setSelectedOption(e.target.value)}
         >
-          <option disabled value="default">
+          <option disabled value='default'>
             - 請選擇 發票類型 -
           </option>
-          <option value="無載具">無載具</option>
-          <option value="手機條碼載具">手機條碼載具</option>
-          <option value="自然人憑證載具">自然人憑證載具</option>
-          <option value="悠遊卡載具">悠遊卡載具</option>
+          <option value='無載具'>無載具</option>
+          <option value='手機條碼載具'>手機條碼載具</option>
+          <option value='自然人憑證載具'>自然人憑證載具</option>
+          <option value='悠遊卡載具'>悠遊卡載具</option>
         </select>
       </StyledSelect>
       {selectedOption === "無載具" && ""}
       {selectedOption === "手機條碼載具" && (
         <Input
-          placeholder="請輸入手機載具編號"
-          label="手機載具編號格式錯誤。"
+          placeholder='請輸入手機載具編號'
+          label='手機載具編號格式錯誤。'
         />
       )}
       {selectedOption === "自然人憑證載具" && (
         <Input
-          placeholder="請輸入自然人憑證載具編號"
-          label="自然人憑證載具編號格式錯誤。"
+          placeholder='請輸入自然人憑證載具編號'
+          label='自然人憑證載具編號格式錯誤。'
         />
       )}
       {selectedOption === "悠遊卡載具" && (
         <Input
-          placeholder="請輸入悠遊卡隱碼"
-          label="悠遊卡載具編號格式錯誤。"
+          placeholder='請輸入悠遊卡隱碼'
+          label='悠遊卡載具編號格式錯誤。'
         />
       )}
-      <div className="check">
+      <div className='check'>
         <Checkbox>
-          <input type="checkbox" id="bill" />
+          <input type='checkbox' id='bill' />
         </Checkbox>
-        <label htmlFor="bill">
+        <label htmlFor='bill'>
           我同意辦理退貨時，由「毛孩時代Petstimes｜寵物保健食品領導品牌NO.1」代為處理發票，以加速退貨退款作業。
           <span>(統一發票使用規定)</span>
         </label>
@@ -857,9 +961,9 @@ const PersonalBill = () => {
 //公司用(三聯式)樣式
 const CompanyBill = () => {
   return (
-    <div className="wrapper">
-      <Input placeholder="請輸入發票抬頭" label="必填欄位，不得為空白。" />
-      <Input placeholder="請輸入統一編號" label="請填寫正確的統一編號。" />
+    <div className='wrapper'>
+      <Input placeholder='請輸入發票抬頭' label='必填欄位，不得為空白。' />
+      <Input placeholder='請輸入統一編號' label='請填寫正確的統一編號。' />
     </div>
   );
 };
@@ -868,27 +972,27 @@ const InvoiceDonation = () => {
   const [selectedOption, setSelectedOption] = useState("無載具");
   return (
     <>
-      <StyledSelect className="select bill-wrapper">
+      <StyledSelect className='select bill-wrapper'>
         <select
           value={selectedOption}
           onChange={(e) => setSelectedOption(e.target.value)}
         >
-          <option value="財團法人喜憨兒社會福利基金會">
+          <option value='財團法人喜憨兒社會福利基金會'>
             財團法人喜憨兒社會福利基金會
           </option>
-          <option value="社團法人中華民國身心障礙聯盟">
+          <option value='社團法人中華民國身心障礙聯盟'>
             社團法人中華民國身心障礙聯盟
           </option>
-          <option value="社團法人台灣動物保護協進會">
+          <option value='社團法人台灣動物保護協進會'>
             社團法人台灣動物保護協進會
           </option>
         </select>
       </StyledSelect>
-      <div className="check">
+      <div className='check'>
         <Checkbox>
-          <input type="checkbox" id="bill" />
+          <input type='checkbox' id='bill' />
         </Checkbox>
-        <label htmlFor="bill">
+        <label htmlFor='bill'>
           我同意辦理退貨時，由「毛孩時代Petstimes｜寵物保健食品領導品牌NO.1」代為處理發票，以加速退貨退款作業。
           <span>(統一發票使用規定)</span>
         </label>
@@ -897,18 +1001,24 @@ const InvoiceDonation = () => {
   );
 };
 //Input樣式
-const Input = ({ placeholder, label }) => {
+const Input = ({ placeholder, label, value, onChange }) => {
   return (
     <>
       <StyledInput>
-        <input className="" type="text" placeholder={placeholder} />
-        <div className="wrapper">
-          <div className="icon ">
-            <AlertTriangleIcon color="#cb3747" />
+        <input
+          className=''
+          type='text'
+          placeholder={placeholder}
+          value={value}
+          onChange={onChange}
+        />
+        <div className='wrapper'>
+          <div className='icon '>
+            <AlertTriangleIcon color='#cb3747' />
           </div>
-          <div className="alert">
+          <div className='alert'>
             <div>
-              <AlertIcon size="16px" color="#cb3747" />
+              <AlertIcon size='16px' color='#cb3747' />
             </div>
             <p>{label}</p>
           </div>
@@ -918,101 +1028,134 @@ const Input = ({ placeholder, label }) => {
   );
 };
 //貨到付款
-const CashOnDelivery = () => {
+const CashOnDelivery = ({ setReceiverAddress }) => {
+  //選擇縣市
   const [selectedCity, setSelectedCity] = useState(null);
+  //縣市行政區
   const [towns, setTowns] = useState([]);
-
+  //選擇鄉鎮
+  const [town, setTown] = useState(null);
+  //地址
+  const [address, setAddress] = useState("");
   const cities = taiwan.map((city) => city.city);
-
+  const handleCities = (e) => {
+    setSelectedCity(e.target.value);
+    const selectedCityData = taiwan.find(
+      (city) => city.city === e.target.value
+    );
+    setTowns(selectedCityData?.towns);
+    setTown(selectedCityData?.towns[0]);
+  };
   useEffect(() => {
-    if (selectedCity) {
-      const selectedCityData = taiwan.find(
-        (city) => city.city === selectedCity
-      );
-      setTowns(selectedCityData.towns);
+    if (selectedCity?.length && town?.length && address?.length) {
+      const updatedAddress = `${selectedCity}${town}${address}`;
+      setReceiverAddress(updatedAddress);
     }
-  }, [selectedCity]);
-
+    return;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [address]);
   return (
     <>
-      <div className="country-wrapper">
+      <div className='country-wrapper'>
         <Select
           arrayOption={cities}
-          label="請選擇城市"
-          onChange={(e) => setSelectedCity(e.target.value)}
+          label='請選擇城市'
+          onChange={handleCities}
         />
-        <Select arrayOption={towns} label="" />
+        <Select
+          arrayOption={towns}
+          label=''
+          onChange={(e) => setTown(e.target.value)}
+        />
       </div>
-      <Input placeholder="收件地址" label="請輸入收件地址" />
-      <div className="content-wrapper">
+      <Input
+        placeholder='收件地址'
+        label='請輸入收件地址'
+        value={address}
+        onChange={(e) => setAddress(e.target.value)}
+      />
+      <div className='content-wrapper'>
         <p>運送說明</p>
-        <div className="arrow-right">
+        <div className='arrow-right'>
           <ArrowRightIcon />
         </div>
-        <div className="content">
+        <div className='content'>
           送貨前，司機會以電話聯絡，請務必保持手機暢通，謝謝
         </div>
       </div>
-      <div className="shipping-method-wrapper">
-        <div className="arrow-right">
+      <div className='shipping-method-wrapper'>
+        <div className='arrow-right'>
           <ArrowRightIcon />
         </div>
-        <div className="content">宅配方式</div>
+        <div className='content'>宅配代收</div>
       </div>
     </>
   );
 };
 //一般宅配
 const HomeDelivery = () => {
+  //選擇縣市
   const [selectedCity, setSelectedCity] = useState(null);
+  //縣市行政區
   const [towns, setTowns] = useState([]);
-
+  //選擇鄉鎮
+  const [town, setTown] = useState(null);
+  //地址
+  const [address, setAddress] = useState("");
   const cities = taiwan.map((city) => city.city);
 
-  useEffect(() => {
-    if (selectedCity) {
-      const selectedCityData = taiwan.find(
-        (city) => city.city === selectedCity
-      );
-      setTowns(selectedCityData.towns);
-    }
-  }, [selectedCity]);
+  const handleCities = (e) => {
+    setSelectedCity(e.target.value);
+    const selectedCityData = taiwan.find(
+      (city) => city.city === e.target.value
+    );
+    setTowns(selectedCityData?.towns);
+    setTown(selectedCityData?.towns[0]);
+  };
+  console.log("selectedCity", selectedCity);
+  console.log("town", town);
+  console.log("address", address);
 
   return (
     <>
-      <div className="country-wrapper">
+      <div className='country-wrapper'>
         <Select
           arrayOption={cities}
-          label="請選擇城市"
-          onChange={(e) => setSelectedCity(e.target.value)}
+          label='請選擇城市'
+          onChange={handleCities}
         />
-        <Select arrayOption={towns} label="" />
+        <Select arrayOption={towns} label='' />
       </div>
-      <Input placeholder="收件地址" label="請輸入收件地址" />
-      <div className="content-wrapper">
+      <Input
+        placeholder='收件地址'
+        label='請輸入收件地址'
+        value={address}
+        onChange={(e) => setAddress(e.target.value)}
+      />
+      <div className='content-wrapper'>
         <p>運送說明</p>
-        <div className="arrow-right">
+        <div className='arrow-right'>
           <ArrowRightIcon />
         </div>
-        <div className="content">
+        <div className='content'>
           送貨前，司機會以電話聯絡，請務必保持手機暢通，謝謝
         </div>
       </div>
-      <div className="shipping-method-wrapper">
-        <div className="arrow-right">
+      <div className='shipping-method-wrapper'>
+        <div className='arrow-right'>
           <ArrowRightIcon />
         </div>
-        <div className="content">信用卡</div>
+        <div className='content'>信用卡</div>
       </div>
-      <div className="credit-card-icon-wrapper">
+      <div className='credit-card-icon-wrapper'>
         <p>可使用</p>
-        <div className="icon">
+        <div className='icon'>
           <VisaIcon />
         </div>
-        <div className="icon">
+        <div className='icon'>
           <MasterIcon />
         </div>
-        <div className="icon">
+        <div className='icon'>
           <JCBIcon />
         </div>
       </div>
@@ -1054,7 +1197,7 @@ const SevenElevenPickUp = () => {
   //     console.log(data);
   //     return data
   //   } catch (error) {
-      
+
   //   }
   // }
   // const handleGetAreas = async () => {
@@ -1070,18 +1213,16 @@ const SevenElevenPickUp = () => {
   //     console.log(data);
   //     return data
   //   } catch (error) {
-      
+
   //   }
   // }
-  const handleGetTown = async()=>{
+  const handleGetTown = async () => {
     try {
       const data = await getTownName();
       console.log(data);
-      return data
-    } catch (error) {
-      
-    }
-  }
+      return data;
+    } catch (error) {}
+  };
   return (
     <>
       {/* <button className='button' onClick={handleGetCities}>
@@ -1104,56 +1245,56 @@ const SevenElevenPickUp = () => {
       </a> */}
       <div className='content-wrapper'>
         <p>取件門市代號</p>
-        <div className="arrow-right">
+        <div className='arrow-right'>
           <ArrowRightIcon />
         </div>
-        <div className="content">無</div>
+        <div className='content'>無</div>
       </div>
-      <div className="content-wrapper">
+      <div className='content-wrapper'>
         <p>取件門市名稱</p>
-        <div className="arrow-right">
+        <div className='arrow-right'>
           <ArrowRightIcon />
         </div>
-        <div className="content">無</div>
+        <div className='content'>無</div>
       </div>
-      <div className="content-wrapper">
+      <div className='content-wrapper'>
         <p>取件門市地址</p>
-        <div className="arrow-right">
+        <div className='arrow-right'>
           <ArrowRightIcon />
         </div>
-        <div className="content">無</div>
+        <div className='content'>無</div>
       </div>
-      <div className="content-wrapper">
+      <div className='content-wrapper'>
         <p>運送說明</p>
-        <div className="arrow-right">
+        <div className='arrow-right'>
           <ArrowRightIcon />
         </div>
-        <div className="content">
+        <div className='content'>
           貨抵達7-11門市會發簡訊通知您取貨，請留意簡訊通知，謝謝
         </div>
       </div>
-      <StyledSelect className="select bill-wrapper">
+      <StyledSelect className='select bill-wrapper'>
         <select
           defaultValue={selectedOption}
           onChange={(e) => setSelectedOption(e.target.value)}
         >
-          <option disabled value="default">
+          <option disabled value='default'>
             - 請選擇 付款方式 -
           </option>
-          <option value="信用卡">信用卡</option>
-          <option value="7-11取貨付款">7-11取貨付款</option>
+          <option value='信用卡'>信用卡</option>
+          <option value='7-11取貨付款'>7-11取貨付款</option>
         </select>
       </StyledSelect>
       {selectedOption === "信用卡" && (
-        <div className="credit-card-icon-wrapper">
+        <div className='credit-card-icon-wrapper'>
           <p>可使用</p>
-          <div className="icon">
+          <div className='icon'>
             <VisaIcon />
           </div>
-          <div className="icon">
+          <div className='icon'>
             <MasterIcon />
           </div>
-          <div className="icon">
+          <div className='icon'>
             <JCBIcon />
           </div>
         </div>
@@ -1166,59 +1307,59 @@ const FamilyMartPickUp = () => {
   const [selectedOption, setSelectedOption] = useState("default");
   return (
     <>
-      <button className="button">選擇取件超商門市</button>
-      <div className="content-wrapper">
+      <button className='button'>選擇取件超商門市</button>
+      <div className='content-wrapper'>
         <p>取件門市代號</p>
-        <div className="arrow-right">
+        <div className='arrow-right'>
           <ArrowRightIcon />
         </div>
-        <div className="content">無</div>
+        <div className='content'>無</div>
       </div>
-      <div className="content-wrapper">
+      <div className='content-wrapper'>
         <p>取件門市名稱</p>
-        <div className="arrow-right">
+        <div className='arrow-right'>
           <ArrowRightIcon />
         </div>
-        <div className="content">無</div>
+        <div className='content'>無</div>
       </div>
-      <div className="content-wrapper">
+      <div className='content-wrapper'>
         <p>取件門市地址</p>
-        <div className="arrow-right">
+        <div className='arrow-right'>
           <ArrowRightIcon />
         </div>
-        <div className="content">無</div>
+        <div className='content'>無</div>
       </div>
-      <div className="content-wrapper">
+      <div className='content-wrapper'>
         <p>運送說明</p>
-        <div className="arrow-right">
+        <div className='arrow-right'>
           <ArrowRightIcon />
         </div>
-        <div className="content">
+        <div className='content'>
           貨抵達全家門市會發簡訊通知您取貨，請留意簡訊通知，謝謝
         </div>
       </div>
-      <StyledSelect className="select bill-wrapper">
+      <StyledSelect className='select bill-wrapper'>
         <select
           defaultValue={selectedOption}
           onChange={(e) => setSelectedOption(e.target.value)}
         >
-          <option disabled value="default">
+          <option disabled value='default'>
             - 請選擇 付款方式 -
           </option>
-          <option value="信用卡">信用卡</option>
-          <option value="7-11取貨付款">7-11取貨付款</option>
+          <option value='信用卡'>信用卡</option>
+          <option value='7-11取貨付款'>7-11取貨付款</option>
         </select>
       </StyledSelect>
       {selectedOption === "信用卡" && (
-        <div className="credit-card-icon-wrapper">
+        <div className='credit-card-icon-wrapper'>
           <p>可使用</p>
-          <div className="icon">
+          <div className='icon'>
             <VisaIcon />
           </div>
-          <div className="icon">
+          <div className='icon'>
             <MasterIcon />
           </div>
-          <div className="icon">
+          <div className='icon'>
             <JCBIcon />
           </div>
         </div>

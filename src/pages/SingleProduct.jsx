@@ -574,7 +574,6 @@ const SingleProduct = () => {
         record.push({ id, imageUrl });
         localStorage.setItem("productId", JSON.stringify(record));
       } else {
-        // console.log("test");
         record.splice(repeatIndex, 1);
         record.push({ id, imageUrl });
         localStorage.setItem("productId", JSON.stringify(record));

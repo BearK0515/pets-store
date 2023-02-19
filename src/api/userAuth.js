@@ -20,3 +20,46 @@ export const userSingleOrder = async (orderNumber) => {
     console.error('[GET single order Failed]:', error);
   }
 };
+
+//POST會員送出訂單
+export const submitOrder = async ({
+  purchaserName,
+  purchaserPhone,
+  purchaserEmail,
+  receiverName,
+  receiverPhone,
+  receiverAddress,
+  comment,
+  products,
+  totalAmount,
+  deliveryId
+}) => {
+  try {
+    const authToken = localStorage.getItem('authToken');
+    const UserId = localStorage.getItem('UserId');
+    const rep = await axios({
+      method: 'POST',
+      url: `${baseURL}/api/users/orders`,
+      data: {
+        UserId: UserId,
+        purchaserName: purchaserName,
+        purchaserPhone: purchaserPhone,
+        purchaserEmail: purchaserEmail,
+        receiverName: receiverName,
+        receiverPhone: receiverPhone,
+        receiverAddress: receiverAddress,
+        DeliveryId: deliveryId,
+        comment: comment,
+        PaymentId: 1,
+        totalAmount: totalAmount,
+        products: products
+      },
+      headers: {
+        Authorization: `Bearer ${authToken}`
+      }
+    });
+    return rep;
+  } catch (error) {
+    console.error('[POST submit order Failed]:', error);
+  }
+};

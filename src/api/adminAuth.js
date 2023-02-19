@@ -66,7 +66,7 @@ export const singleOrder = async (orderId) => {
     console.error("[GET single order Failed]:", error);
   }
 };
-//POST管理員新增商品 製作中
+//POST管理員新增商品
 export const addProduct = async ({ formData }) => {
   try {
     const authToken = localStorage.getItem("authToken");
