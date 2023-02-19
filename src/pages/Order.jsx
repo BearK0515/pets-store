@@ -152,6 +152,9 @@ const Order = () => {
     }).then(() => {
       navigate(`/user-order/${orderNumber}`); // 絕對路由前面要加一槓
     });
+    // .catch((error) => {
+    //   Swal.showValidationMessage(`Request failed: ${error}`);
+    // });
 
     // if (authentication?.length === 0) {
     //   setAuthenticationError(true);

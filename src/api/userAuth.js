@@ -1,25 +1,26 @@
-import axios from "axios";
+import axios from 'axios';
 
-const baseURL = "https://www.waylins.com";
+const baseURL = 'https://www.waylins.com';
 // const baseURL =
 //   "https://eshop-env.eba-bv3rpum8.ap-northeast-1.elasticbeanstalk.com";
 
 //GET會員取得單一訂單
 export const userSingleOrder = async (orderNumber) => {
   try {
-    const authToken = localStorage.getItem("authToken");
+    const userToken = localStorage.getItem('userToken');
     const rep = await axios({
-      method: "GET",
+      method: 'GET',
       url: `${baseURL}/api/users/orders/?orderNumber=${orderNumber}`,
       headers: {
-        Authorization: `Bearer ${authToken}`,
-      },
+        Authorization: `Bearer ${userToken}`
+      }
     });
     return rep;
   } catch (error) {
-    console.error("[GET single order Failed]:", error);
+    console.error('[GET single order Failed]:', error);
   }
 };
+
 //POST會員送出訂單
 export const submitOrder = async ({
   purchaserName,
@@ -31,13 +32,13 @@ export const submitOrder = async ({
   comment,
   products,
   totalAmount,
-  deliveryId,
+  deliveryId
 }) => {
   try {
-    const authToken = localStorage.getItem("authToken");
-    const UserId = localStorage.getItem("UserId");
+    const authToken = localStorage.getItem('authToken');
+    const UserId = localStorage.getItem('UserId');
     const rep = await axios({
-      method: "POST",
+      method: 'POST',
       url: `${baseURL}/api/users/orders`,
       data: {
         UserId: UserId,
@@ -51,15 +52,14 @@ export const submitOrder = async ({
         comment: comment,
         PaymentId: 1,
         totalAmount: totalAmount,
-        products: products,
+        products: products
       },
       headers: {
-        Authorization: `Bearer ${authToken}`,
-      },
+        Authorization: `Bearer ${authToken}`
+      }
     });
     return rep;
   } catch (error) {
-    console.error("[POST submit order Failed]:", error);
-
+    console.error('[POST submit order Failed]:', error);
   }
 };

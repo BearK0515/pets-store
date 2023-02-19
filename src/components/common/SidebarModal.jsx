@@ -1,14 +1,15 @@
-import React from "react";
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import styled from "styled-components";
+import React from 'react';
+import { useState, useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
+import styled from 'styled-components';
 import {
   FacebookIcon,
   HomeIcon,
   InstagramIcon,
-  LineIcon,
-} from "../../assets/icons";
-import smallLogo from "../../assets/icons/logo-small.jpg";
+  LineIcon
+} from '../../assets/icons';
+import smallLogo from '../../assets/icons/logo-small.jpg';
+import { BlogFilterContext } from '../../App';
 
 const StyledSidebar = styled.div`
   width: 100vw;
@@ -92,7 +93,7 @@ const StyledContainer = styled.div`
       position: relative;
     }
     .blogs::after {
-      content: "";
+      content: '';
       position: absolute;
       top: 0;
       bottom: 0;
@@ -125,9 +126,8 @@ const StyledContainer = styled.div`
         font-size: 12px;
         font-weight: 400;
         transform: translateX(-20px);
-        li{
+        li {
           padding: 10px 10px 10px 36px;
-
         }
       }
     }
@@ -136,41 +136,48 @@ const StyledContainer = styled.div`
 
 const SidebarModal = ({ setIsSideabrOpen }) => {
   const navigate = useNavigate();
-  const [isArticleOpen, setIsArticleOpen] = useState(false)
+  const [isArticleOpen, setIsArticleOpen] = useState(false);
+  const { setBlogFilter } = useContext(BlogFilterContext);
 
   function handleToggleArticle() {
     setIsArticleOpen(!isArticleOpen);
   }
   function GoToHome() {
-    navigate("/");
+    navigate('/');
     setIsSideabrOpen(false);
   }
   function GoToAbout() {
-    navigate("/about");
+    navigate('/about');
     setIsSideabrOpen(false);
   }
   function GoToProductAll() {
-    navigate("/product/all");
+    navigate('/product/all');
     setIsSideabrOpen(false);
   }
   function GoToProductDog() {
-    navigate("/product/dog");
+    navigate('/product/dog');
     setIsSideabrOpen(false);
   }
   function GoToProductCat() {
-    navigate("/product/cat");
+    navigate('/product/cat');
     setIsSideabrOpen(false);
   }
-  function GoToBlogs() {
-    navigate("/blogs");
+  function GoToBlogsDog() {
+    navigate('/blogs');
+    setBlogFilter('dog');
+    setIsSideabrOpen(false);
+  }
+  function GoToBlogsCat() {
+    navigate('/blogs');
+    setBlogFilter('cat');
     setIsSideabrOpen(false);
   }
   function GoToOrderSearch() {
-    navigate("/order/query");
+    navigate('/order/query');
     setIsSideabrOpen(false);
   }
   function GoToFaq() {
-    navigate("/faq");
+    navigate('/faq');
     setIsSideabrOpen(false);
   }
 
@@ -211,13 +218,13 @@ const SidebarModal = ({ setIsSideabrOpen }) => {
             <p>貓咪專區</p>
           </div>
           <div
-            className={`item ${isArticleOpen ? "active" : ""}`}
+            className={`item ${isArticleOpen ? 'active' : ''}`}
             onClick={handleToggleArticle}
           >
             <p className='blogs'>部落格</p>
             <ul className='article'>
-              <li onClick={GoToBlogs}>狗狗健康知識庫</li>
-              <li onClick={GoToBlogs}>貓貓健康知識庫</li>
+              <li onClick={GoToBlogsDog}>狗狗健康知識庫</li>
+              <li onClick={GoToBlogsCat}>貓貓健康知識庫</li>
             </ul>
           </div>
           <div className='item' onClick={GoToOrderSearch}>
