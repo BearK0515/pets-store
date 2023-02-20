@@ -151,7 +151,11 @@ const StyledWrapper = styled.div`
     }
   }
 `;
-const LoginModal = ({ setIsOpenLoginModal, handleToggleLoginModal }) => {
+const LoginModal = ({
+  setIsOpenLoginModal,
+  handleToggleLoginModal,
+  setLogin,
+}) => {
   const navigate = useNavigate();
   const [email, setEmail] = useState(null);
   const [name, setName] = useState(null);
@@ -163,10 +167,11 @@ const LoginModal = ({ setIsOpenLoginModal, handleToggleLoginModal }) => {
 
   useEffect(() => {
     const getUserInfo = async () => {
-      const {token,user} = await facebookLogin({ email, name });
+      const { token, user } = await facebookLogin({ email, name });
       localStorage.setItem("authToken", token);
       localStorage.setItem("UserId", user.id);
       handleToggleLoginModal();
+      setLogin(true)
     };
     if (!email || !name) return;
     getUserInfo();

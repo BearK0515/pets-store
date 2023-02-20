@@ -1013,7 +1013,7 @@ const Input = ({ placeholder, label, value, onChange }) => {
           onChange={onChange}
         />
         <div className='wrapper'>
-          <div className='icon '>
+          <div className='icon'>
             <AlertTriangleIcon color='#cb3747' />
           </div>
           <div className='alert'>

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { NavLink as Link } from "react-router-dom";
 import styled from "styled-components";
 import {
@@ -241,99 +241,134 @@ export default function Header({
   handleToggleLoginModal,
   handleToggleCartModal,
   handleToggleSidebar,
-  countProducts
+  countProducts,
+  setLogin,
+  login,
 }) {
+  const handleLogout = () => {
+    localStorage.removeItem("authToken");
+    localStorage.removeItem("UserId");
+    setLogin(false);
+  };
+  useEffect(() => {
+    const authToken = localStorage.getItem("authToken");
+    if (authToken) {
+      setLogin(true);
+    } else {
+      setLogin(false);
+    }
+  }, [setLogin]);
+
   return (
     <HeaderStyled>
-      <div className="nav-mobile">
+      <div className='nav-mobile'>
         <ul>
           <li onClick={handleToggleSidebar}>
-            <div className="icon">
+            <div className='icon'>
               <MenuIcon />
             </div>
-            <div className="text">選單</div>
+            <div className='text'>選單</div>
           </li>
           <li>
-            <Link to="order/query">
-              <div className="icon">
-                <OrderIcon size="30px" />
+            <Link to='order/query'>
+              <div className='icon'>
+                <OrderIcon size='30px' />
               </div>
-              <div className="text">查訂單</div>
+              <div className='text'>查訂單</div>
             </Link>
           </li>
-          <li onClick={handleToggleLoginModal}>
-            <div className="icon">
-              <LoginIcon />
-            </div>
-            <div className="text">登入</div>
-          </li>
+          {login ? (
+            <li onClick={handleLogout}>
+              <div className='icon'>
+                <LoginIcon />
+              </div>
+              <div className='text '>登出</div>
+            </li>
+          ) : (
+            <li onClick={handleToggleLoginModal}>
+              <div className='icon'>
+                <LoginIcon />
+              </div>
+              <div className='text '>登入</div>
+            </li>
+          )}
           <li>
-            <div className="icon">
+            <div className='icon'>
               <SearchIcon />
             </div>
-            <div className="text">搜尋</div>
+            <div className='text'>搜尋</div>
           </li>
           <li onClick={handleToggleCartModal}>
-            <div className="icon">
+            <div className='icon'>
               <CartIcon />
-              <div className="count">{countProducts}</div>
+              <div className='count'>{countProducts}</div>
             </div>
-            <div className="text">購物車</div>
+            <div className='text'>購物車</div>
           </li>
         </ul>
       </div>
-      <div className="nav">
-        <nav className="tool-box-left">
-          <div className="icon-wrapper">
-            <Link to="order/query">
-              <div className="icon order">
+      <div className='nav'>
+        <nav className='tool-box-left'>
+          <div className='icon-wrapper'>
+            <Link to='order/query'>
+              <div className='icon order'>
                 <OrderIcon />
               </div>
             </Link>
-            <div className="tips">訂單查詢</div>
+            <div className='tips'>訂單查詢</div>
           </div>
-          <div className="icon-wrapper">
-            <Link to="faq">
-              <div className="icon info">
+          <div className='icon-wrapper'>
+            <Link to='faq'>
+              <div className='icon info'>
                 <FaqIcon />
               </div>
             </Link>
-            <div className="tips">購物說明</div>
+            <div className='tips'>購物說明</div>
           </div>
-          <div className="icon-wrapper">
-            <div className="icon login" onClick={handleToggleLoginModal}>
-              <AccountIcon />
-              登入
+
+          {login ? (
+            <Link to='/'>
+              <div className='icon logout' onClick={handleLogout}>
+                登出
+              </div>
+            </Link>
+          ) : (
+            <div className='icon-wrapper'>
+              <div className='icon login' onClick={handleToggleLoginModal}>
+                <AccountIcon />
+                登入
+              </div>
+              <div className='tips'>會員登入</div>
             </div>
-            <div className="tips">會員登入</div>
-          </div>
-          <Link to="login">
-            <div className="icon logout">管理員</div>
+          )}
+
+          <Link to='login'>
+            <div className='icon logout'>管理員</div>
           </Link>
         </nav>
-        <nav className="tool-box-right">
-          <FacebookIcon className="icon facebook" />
-          <InstagramIcon className="icon instagram" />
-          <LineIcon className="icon line" />
-          <Link to="/">
-            <div className="icon homepage">
+        <nav className='tool-box-right'>
+          <FacebookIcon className='icon facebook' />
+          <InstagramIcon className='icon instagram' />
+          <LineIcon className='icon line' />
+          <Link to='/'>
+            <div className='icon homepage'>
               <HomeIcon />
             </div>
           </Link>
         </nav>
       </div>
 
-      <div className="banner">
-        <Link to="/">
-          <BigLogo src={bigLogo} alt="logo-big" />
+      <div className='banner'>
+        <Link to='/'>
+          <BigLogo src={bigLogo} alt='logo-big' />
         </Link>
         <ul>
-          <NavLink to="/">首頁</NavLink>
-          <NavLink to="about">關於</NavLink>
-          <NavLink to="product/all">全部商品</NavLink>
-          <NavLink to="product/dog">狗狗專區</NavLink>
-          <NavLink to="product/cat">貓咪專區</NavLink>
-          <NavLink to="blogs">部落格</NavLink>
+          <NavLink to='/'>首頁</NavLink>
+          <NavLink to='about'>關於</NavLink>
+          <NavLink to='product/all'>全部商品</NavLink>
+          <NavLink to='product/dog'>狗狗專區</NavLink>
+          <NavLink to='product/cat'>貓咪專區</NavLink>
+          <NavLink to='blogs'>部落格</NavLink>
         </ul>
       </div>
     </HeaderStyled>
