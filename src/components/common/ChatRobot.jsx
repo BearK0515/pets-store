@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import chatRobot from "../../assets/icons/icon_FB_chat.png";
-import MessengerChat from "../MessengerChat";
 
 const StyledChatRobot = styled.div`
   .top-button {
@@ -65,7 +64,6 @@ export default function ChatRobot() {
           </button>
         )}
       </StyledChatRobot>
-      <MessengerChat />
     </>
   );
 }
