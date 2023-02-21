@@ -62,7 +62,7 @@
 
   - 頁面右側有商品瀏覽紀錄，點擊可到該商品的詳細資料。
 
-  ![](https://i.imgur.com/gpAhmZ7.mp4)
+  ![](https://i.imgur.com/x5riKcY.gif)
 
   - 頁面右側有關鍵字搜尋商品，可篩選想要的商品。
 
