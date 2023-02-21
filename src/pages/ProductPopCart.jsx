@@ -154,7 +154,6 @@ const StyledCard = styled.div`
 
 // handle 參數由 Product 傳入
 const ProductPopCart = ({ handleToggleCartModal, product, image }) => {
-  console.log(product);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [count, setCount] = useState(1);
