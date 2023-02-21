@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { LoginSocialFacebook } from "reactjs-social-login";
+import { LoginSocialFacebook, LoginSocialGoogle } from "reactjs-social-login";
 import { facebookLogin, googleLogin } from "../../api/userLogin";
 import {
   AlertIcon,
@@ -12,6 +12,7 @@ import {
   GoogleIcon,
   LineWhiteIcon,
 } from "../../assets/icons";
+import { GoogleLoginButton } from "react-social-login-buttons";
 
 const StyledModalContainer = styled.div`
   width: 100vw;
@@ -171,7 +172,7 @@ const LoginModal = ({
       localStorage.setItem("authToken", token);
       localStorage.setItem("UserId", user.id);
       handleToggleLoginModal();
-      setLogin(true)
+      setLogin(true);
     };
     if (!email || !name) return;
     getUserInfo();
@@ -179,26 +180,26 @@ const LoginModal = ({
 
   return (
     <StyledModalContainer>
-      <div className='overlay'></div>
-      <div className='content'>
+      <div className="overlay"></div>
+      <div className="content">
         <StyledWrapper>
-          <button className='cancel' onClick={handleToggleLoginModal}>
+          <button className="cancel" onClick={handleToggleLoginModal}>
             <CancelIcon size={40} />
           </button>
-          <div className='title'>
+          <div className="title">
             <h2>成為會員，獨享專屬好康優惠！</h2>
           </div>
-          <div className='wrapper'>
+          <div className="wrapper">
             <h3>綁定社群帳號，快速登入</h3>
-            <div className='icon-wrapper'>
-              <div className='icon line'>
+            <div className="icon-wrapper">
+              <div className="icon line">
                 <div>
                   <LineWhiteIcon />
                 </div>
                 <p>登入</p>
               </div>
               <LoginSocialFacebook
-                appId='1699530640464382'
+                appId="1699530640464382"
                 onResolve={(res) => {
                   setEmail(res.data.email);
                   setName(res.data.name);
@@ -207,27 +208,40 @@ const LoginModal = ({
                   console.log(err);
                 }}
               >
-                <div className='icon facebook'>
+                <div className="icon facebook">
                   <div>
                     <FacebookWhiteIcon />
                   </div>
                   <p>登入</p>
                 </div>
               </LoginSocialFacebook>
-              <div className='icon google' onClick={() => googleLogin()}>
-                <div>
-                  <GoogleIcon />
+              <LoginSocialGoogle
+                client_id="1089820286873-p5k491t42gkgbd29cijfuit0kgi7h18k.apps.googleusercontent.com"
+                onResolve={(res) => {
+                  console.log(res);
+                  // setEmail(res.data.email);
+                  // setName(res.data.name);
+                }}
+                onReject={(err) => {
+                  console.log(err);
+                }}
+                // onClick={()=>console.log("click")}
+              >
+                <div className="icon google">
+                  <div>
+                    <GoogleIcon />
+                  </div>
+                  <p>登入</p>
                 </div>
-                <p>登入</p>
-              </div>
+              </LoginSocialGoogle>
             </div>
-            <div className='waring-wrapper'>
+            <div className="waring-wrapper">
               <div>
                 <AlertIcon />
               </div>
               <p>注意：不同登入方式帳號不互通</p>
             </div>
-            <div className='manual'>
+            <div className="manual">
               註冊帳號即表示您
               <span
                 onClick={() => {
