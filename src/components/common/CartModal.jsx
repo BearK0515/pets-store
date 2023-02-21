@@ -1,9 +1,9 @@
-import React from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import styled from "styled-components";
-import { CartNoneIcon, DeleteProductIcon } from "../../assets/icons";
-import { removeItem, setCount } from "../../store/productSlice";
+import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import styled from 'styled-components';
+import { CartNoneIcon, DeleteProductIcon } from '../../assets/icons';
+import { removeItem, setCount } from '../../store/productSlice';
 
 const CartStyled = styled.div`
   width: 100vw;
@@ -158,7 +158,7 @@ export default function CartModal({ setIsCartOpen }) {
   const cartProducts = useSelector((state) => state.product.cart);
   const navigate = useNavigate();
   function goToCart() {
-    navigate("/cart");
+    navigate('/cart');
     setIsCartOpen(false);
   }
   return (
@@ -194,7 +194,7 @@ export const CatrItem = ({ product }) => {
   for (let i = 1; i <= 999; i++) {
     options.push({ value: i, label: i });
   }
-  const id= product.id
+  const id = product.id;
   return (
     <StyledCardItem className='card-item'>
       <div className='picture'>
@@ -203,9 +203,12 @@ export const CatrItem = ({ product }) => {
       <div className='content'>
         <div className='wrapper'>
           <div className='name'>{product?.name}</div>
-          <div className='icon' onClick={()=>{
-            dispatch(removeItem(id));
-          }}>
+          <div
+            className='icon'
+            onClick={() => {
+              dispatch(removeItem(id));
+            }}
+          >
             <DeleteProductIcon size='16' />
           </div>
         </div>
@@ -217,7 +220,7 @@ export const CatrItem = ({ product }) => {
               dispatch(
                 setCount({
                   productId: product.id,
-                  count: e.target.value,
+                  count: e.target.value
                 })
               );
             }}

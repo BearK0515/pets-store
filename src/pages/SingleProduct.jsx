@@ -1,6 +1,8 @@
-import React, { useState, useEffect } from "react";
-import { Navigate, useParams } from "react-router-dom";
-import styled from "styled-components";
+import React, { useState, useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { useParams, useNavigate } from 'react-router-dom';
+import styled from 'styled-components';
+import Swal from 'sweetalert2';
 import {
   CartIcon,
   CheckedIcon,
@@ -8,11 +10,12 @@ import {
   LineIcon,
   MinusIcon,
   PlusIcon,
-  TwitterIcon,
-} from "../assets/icons";
-import order from "../assets/images/order.png";
-import ProductPopCart from "./ProductPopCart";
-import { productDetail } from "../api/products";
+  TwitterIcon
+} from '../assets/icons';
+import order from '../assets/images/order.png';
+import ProductPopCart from './ProductPopCart';
+import { productDetail } from '../api/products';
+import { addTocart, setCount as countRedux } from '../store/productSlice';
 
 const StyledContainer = styled.div`
   position: relative;
@@ -45,7 +48,7 @@ const StyledProdutWrapper = styled.div`
       position: relative;
       aspect-ratio: 1/1;
       background-size: cover;
-      background-image: url("https://picsum.photos/id/334/600/400");
+      background-image: url('https://picsum.photos/id/334/600/400');
       .number {
         position: absolute;
         display: flex;
@@ -72,7 +75,7 @@ const StyledProdutWrapper = styled.div`
       .pic {
         aspect-ratio: 1/1;
         background-size: cover;
-        background-image: url("https://picsum.photos/id/611/600/400");
+        background-image: url('https://picsum.photos/id/611/600/400');
         cursor: pointer;
       }
     }
@@ -337,7 +340,7 @@ const StyleProductsWrapper = styled.div`
         .pic {
           aspect-ratio: 1/1;
           background-size: cover;
-          background-image: url("https://picsum.photos/id/312/600/400");
+          background-image: url('https://picsum.photos/id/312/600/400');
         }
         .information {
           padding-left: 10px;
@@ -388,10 +391,10 @@ const Button = styled.button`
   align-items: center;
   gap: 5px;
   width: 100px;
-  background-color: ${(props) => (props.selected ? "#c14848" : "var(--white)")};
-  color: ${(props) => (props.selected ? "var(--white)" : "#aaa")};
+  background-color: ${(props) => (props.selected ? '#c14848' : 'var(--white)')};
+  color: ${(props) => (props.selected ? 'var(--white)' : '#aaa')};
   border: ${(props) =>
-    props.selected ? "1px solid #c14848" : "1px solid #aaa"};
+    props.selected ? '1px solid #c14848' : '1px solid #aaa'};
   border-radius: 3px;
   padding: 10px;
   cursor: pointer;
@@ -549,18 +552,21 @@ const StyledBuyButton = styled.div`
   }
 `;
 const SingleProduct = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { productId } = useParams();
   const [product, setProduct] = useState(null);
   const [count, setCount] = useState(1);
   const [addCartPop, setAddCartPop] = useState(false);
   const [previewPic, setPreviewPic] = useState(0);
+
   if (product) {
     const id = product?.id;
     const imageUrl = product?.Image[0].url;
-    if (!localStorage.getItem("productId")) {
-      localStorage.setItem("productId", JSON.stringify([{ id, imageUrl }]));
+    if (!localStorage.getItem('productId')) {
+      localStorage.setItem('productId', JSON.stringify([{ id, imageUrl }]));
     } else {
-      let record = JSON.parse(localStorage.getItem("productId"));
+      let record = JSON.parse(localStorage.getItem('productId'));
       let length = record.length;
       let isRepeat = false;
       let repeatIndex;
@@ -572,11 +578,11 @@ const SingleProduct = () => {
       }
       if (!isRepeat && length < 5) {
         record.push({ id, imageUrl });
-        localStorage.setItem("productId", JSON.stringify(record));
+        localStorage.setItem('productId', JSON.stringify(record));
       } else {
         record.splice(repeatIndex, 1);
         record.push({ id, imageUrl });
-        localStorage.setItem("productId", JSON.stringify(record));
+        localStorage.setItem('productId', JSON.stringify(record));
       }
     }
   }
@@ -599,8 +605,61 @@ const SingleProduct = () => {
     if (count === 1) {
       return;
     }
-    setCount((count) => count - 1);
+    setCount((prevCount) => prevCount - 1);
   };
+
+  const handleAddCart = () => {
+    const id = product?.id;
+    const name = product?.name;
+    const price = product?.price;
+    const image = product?.Image[0].url;
+
+    dispatch(addTocart({ id, name, price, image, count }));
+
+    dispatch(
+      countRedux({
+        productId: id,
+        count: count
+      })
+    );
+
+    Swal.fire({
+      title: '加入購物車成功',
+      icon: 'success',
+      showConfirmButton: false,
+      timer: 1000,
+      position: 'center'
+    });
+    return;
+  };
+
+  const handleToCartPage = () => {
+    const id = product?.id;
+    const name = product?.name;
+    const price = product?.price;
+    const image = product?.Image[0].url;
+
+    dispatch(addTocart({ id, name, price, image, count }));
+
+    dispatch(
+      countRedux({
+        productId: id,
+        count: count
+      })
+    );
+
+    Swal.fire({
+      title: '立即購買成功',
+      icon: 'success',
+      showConfirmButton: false,
+      timer: 1000,
+      position: 'center'
+    }).then(() => {
+      navigate(`/cart`);
+    });
+    return;
+  };
+
   const handleToggleCartModal = () => {
     setAddCartPop(!addCartPop);
   };
@@ -609,109 +668,111 @@ const SingleProduct = () => {
     <>
       {/* 加入購物車 */}
       <StyledContainer>
-        <div className="cont">
-          <div className="item-area">
+        <div className='cont'>
+          <div className='item-area'>
             <StyledProdutWrapper>
-              <div className="picture">
+              <div className='picture'>
                 <div
-                  className="preview"
+                  className='preview'
                   style={{
-                    backgroundImage: `url('${product?.Image[previewPic]?.url}')`,
+                    backgroundImage: `url('${product?.Image[previewPic]?.url}')`
                   }}
                 >
-                  <div className="number">{previewPic + 1}/3</div>
+                  <div className='number'>{previewPic + 1}/3</div>
                 </div>
-                <div className="pics">
+                <div className='pics'>
                   <div
                     onClick={() => setPreviewPic(0)}
-                    className="pic pic1"
+                    className='pic pic1'
                     style={{
-                      backgroundImage: `url('${product?.Image[0]?.url}')`,
+                      backgroundImage: `url('${product?.Image[0]?.url}')`
                     }}
                   ></div>
                   <div
                     onClick={() => setPreviewPic(1)}
-                    className="pic pic2"
+                    className='pic pic2'
                     style={{
-                      backgroundImage: `url('${product?.Image[1]?.url}')`,
+                      backgroundImage: `url('${product?.Image[1]?.url}')`
                     }}
                   ></div>
                   <div
                     onClick={() => setPreviewPic(2)}
-                    className="pic pic3"
+                    className='pic pic3'
                     style={{
-                      backgroundImage: `url('${product?.Image[2]?.url}')`,
+                      backgroundImage: `url('${product?.Image[2]?.url}')`
                     }}
                   ></div>
                 </div>
-                <div className="share">
+                <div className='share'>
                   <div>分享商品到</div>
-                  <FacebookIcon className="icon" />
-                  <TwitterIcon className="icon" />
-                  <LineIcon className="icon" />
+                  <FacebookIcon className='icon' />
+                  <TwitterIcon className='icon' />
+                  <LineIcon className='icon' />
                 </div>
               </div>
-              <div className="information">
-                <div className="number">
+              <div className='information'>
+                <div className='number'>
                   商品編號：<span>{product?.id}</span>
                 </div>
-                <div className="name">{product?.name}</div>
-                <div className="price">
+                <div className='name'>{product?.name}</div>
+                <div className='price'>
                   <span>TWD $</span>
-                  <span className="unit-price">{product?.price}</span>
+                  <span className='unit-price'>{product?.price}</span>
                 </div>
-                <div className="discount-price">
+                <div className='discount-price'>
                   <span>TWD $</span>
-                  <span className="unit-price">
+                  <span className='unit-price'>
                     {Math.floor(product?.price * 0.8 || 0)}
                   </span>
                 </div>
-                <div className="row style">
+                <div className='row style'>
                   <p>規格</p>
                   <p>30包/盒</p>
                 </div>
-                <div className="row count-wrapper">
+                <div className='row count-wrapper'>
                   <p>數量</p>
-                  <div className="count-box">
+                  <div className='count-box'>
                     <div onClick={handledecrease}>
                       <MinusIcon
-                        className={count > 1 ? "minus active" : "minus"}
+                        className={count > 1 ? 'minus active' : 'minus'}
                       />
                     </div>
-                    <div className="count">{count}</div>
-                    <div onClick={() => setCount((count) => count + 1)}>
-                      <PlusIcon className="plus" />
+                    <div className='count'>{count}</div>
+                    <div onClick={() => setCount((prevCount) => prevCount + 1)}>
+                      <PlusIcon className='plus' />
                     </div>
                   </div>
                 </div>
-                <div className="row button-group">
-                  <button className="button cart">
+                <div className='row button-group'>
+                  <button onClick={handleAddCart} className='button cart'>
                     <span>
-                      <CartIcon size="20" />
+                      <CartIcon size='20' />
                     </span>
                     加入購物車
                   </button>
-                  <button className="button buy">立即購買</button>
+                  <button onClick={handleToCartPage} className='button buy'>
+                    立即購買
+                  </button>
                 </div>
-                <div className="title">
+                <div className='title'>
                   <h5>運送&付款</h5>
                 </div>
-                <div className="content">
-                  <label htmlFor="">運送方式</label>
-                  <div className="info">
+                <div className='content'>
+                  <label htmlFor=''>運送方式</label>
+                  <div className='info'>
                     貨到付款、一般宅配、國際快遞、7-11取貨、全家取貨
                   </div>
-                  <label htmlFor="">付款方式</label>
-                  <div className="info">
+                  <label htmlFor=''>付款方式</label>
+                  <div className='info'>
                     轉帳匯款、宅配代收、7-11取貨付款、全家取貨付款、信用卡
                   </div>
                 </div>
               </div>
-              <div className="share-md">
+              <div className='share-md'>
                 <div>分享商品到</div>
-                <FacebookIcon className="icon" />
-                <TwitterIcon className="icon" />
-                <LineIcon className="icon" />
+                <FacebookIcon className='icon' />
+                <TwitterIcon className='icon' />
+                <LineIcon className='icon' />
               </div>
             </StyledProdutWrapper>
           </div>
@@ -719,17 +780,17 @@ const SingleProduct = () => {
       </StyledContainer>
       {/* 加購商品 */}
       <StyledContainer>
-        <div className="cont">
-          <StyleProductsWrapper className="item-area">
-            <StyledTitle className="title">
+        <div className='cont'>
+          <StyleProductsWrapper className='item-area'>
+            <StyledTitle className='title'>
               <h2>優惠加購</h2>
               <hr />
             </StyledTitle>
-            <div className="add">
+            <div className='add'>
               加購可選
               <span>1</span>件
             </div>
-            <div className="produts-wrapper">
+            <div className='produts-wrapper'>
               {/* data.map() */}
               {product?.Image?.map((img) => {
                 return <AddProductCard key={img.url} image={img.url} />;
@@ -740,57 +801,61 @@ const SingleProduct = () => {
       </StyledContainer>
       {/* 商品詳情 */}
       <StyledContainer>
-        <div className="cont">
-          <div className="item-area">
-            <StyledTitle className="title">
+        <div className='cont'>
+          <div className='item-area'>
+            <StyledTitle className='title'>
               <h2>商品詳情</h2>
               <hr />
             </StyledTitle>
             {/* productInfo.map() */}
             {product?.Image?.map((img) => {
               return (
-                <StyledProductInfo key={img.url} className="product-info">
-                  <img src={img.url} alt="" />
+                <StyledProductInfo key={img.url} className='product-info'>
+                  <img src={img.url} alt='' />
                 </StyledProductInfo>
               );
             })}
             <StyledImage
-              className="order"
-              onClick={() => Navigate("/product/all")}
+              className='order'
+              onClick={() => navigate('/product/all')}
             >
-              <img src={order} alt="" />
+              <img src={order} alt='' />
             </StyledImage>
-            <StyledCart className="cart">
+            <StyledCart className='cart'>
               <hr />
-              <div className="content-wrapper">
+              <div className='content-wrapper'>
                 <h2>{product?.name}</h2>
-                <div className="price-wrapper">
-                  <div className="price">
+                <div className='price-wrapper'>
+                  <div className='price'>
                     TWD $<span>{product?.price}</span>
                   </div>
-                  <div className="discount-price">
+                  <div className='discount-price'>
                     TWD $<span>{Math.floor(product?.price * 0.8 || 0)}</span>
                   </div>
                 </div>
               </div>
-              <div className="shipping-wrapper">
-                <div className="style-count-wrapper">
+              <div className='shipping-wrapper'>
+                <div className='style-count-wrapper'>
                   <p>規格： 30包/盒</p>
-                  <div className="count-box">
+                  <div className='count-box'>
                     <div onClick={handledecrease}>
                       <MinusIcon
-                        className={count > 1 ? "minus active" : "minus"}
+                        className={count > 1 ? 'minus active' : 'minus'}
                       />
                     </div>
-                    <div className="count">{count}</div>
+                    <div className='count'>{count}</div>
                     <div onClick={() => setCount(count + 1)}>
-                      <PlusIcon className="plus" />
+                      <PlusIcon className='plus' />
                     </div>
                   </div>
                 </div>
-                <div className="button-group">
-                  <button className="button cart">加入購物車</button>
-                  <button className="button buy">立即購買</button>
+                <div className='button-group'>
+                  <button onClick={handleAddCart} className='button cart'>
+                    加入購物車
+                  </button>
+                  <button onClick={handleToCartPage} className='button buy'>
+                    立即購買
+                  </button>
                 </div>
               </div>
             </StyledCart>
@@ -801,7 +866,14 @@ const SingleProduct = () => {
         我要購買
       </StyledBuyButton>
       {addCartPop && (
-        <ProductPopCart handleToggleCartModal={handleToggleCartModal} />
+        <ProductPopCart
+          product={product}
+          id={product?.id}
+          name={product?.name}
+          price={product?.price}
+          image={product?.Image[0].url}
+          handleToggleCartModal={handleToggleCartModal}
+        />
       )}
     </>
   );
@@ -813,27 +885,27 @@ const AddProductCard = ({ image }) => {
     setIsSelected(!isSelected);
   };
   return (
-    <div className={`card ${isSelected ? "active" : ""}`}>
+    <div className={`card ${isSelected ? 'active' : ''}`}>
       <header></header>
-      <div className="card-wrapper">
+      <div className='card-wrapper'>
         <div
-          className="pic"
+          className='pic'
           style={{
-            backgroundImage: `url('${image}')`,
+            backgroundImage: `url('${image}')`
           }}
         ></div>
-        <div className="information">
-          <div className="name">【超值加購】腎臟保健粉</div>
-          <div className="row price-wrapper">
-            <div className="price">1盒(每盒$690元)</div>
-            <div className="discount-price">
+        <div className='information'>
+          <div className='name'>【超值加購】腎臟保健粉</div>
+          <div className='row price-wrapper'>
+            <div className='price'>1盒(每盒$690元)</div>
+            <div className='discount-price'>
               TWD <span>$489</span>
             </div>
           </div>
-          <div className="button">
+          <div className='button'>
             {isSelected ? (
               <Button selected onClick={handleToggleSelectButton}>
-                <div className="checked">
+                <div className='checked'>
                   <CheckedIcon />
                 </div>
                 已選購

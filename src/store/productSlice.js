@@ -1,11 +1,11 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-  cart: [],
+  cart: []
 };
 
 const productSlice = createSlice({
-  name: "product",
+  name: 'product',
   initialState: initialState,
   reducers: {
     //添加商品到購物車
@@ -32,15 +32,16 @@ const productSlice = createSlice({
       const productIndex = state.cart.findIndex(
         (product) => product.id === productId
       );
-      state.cart[productIndex].count = count;
+      state.cart[productIndex].count = count
     },
     //清空購物車
     setClearCart: (state, action) => {
       state.cart = [...initialState.cart];
-    },
-  },
+    }
+  }
 });
 
-export const { addTocart, removeItem, setCount, setClearCart } = productSlice.actions;
+export const { addTocart, removeItem, setCount, setClearCart } =
+  productSlice.actions;
 
 export default productSlice.reducer;

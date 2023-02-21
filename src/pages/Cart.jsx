@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import styled from "styled-components";
-import Swal from "sweetalert2";
-import { getTownName } from "../api/products";
-import { submitOrder } from "../api/userAuth";
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import styled from 'styled-components';
+import Swal from 'sweetalert2';
+import { getTownName } from '../api/products';
+import { submitOrder } from '../api/userAuth';
 import {
   AlertIcon,
   AlertTriangleIcon,
@@ -12,10 +12,10 @@ import {
   DeleteProductIcon,
   JCBIcon,
   MasterIcon,
-  VisaIcon,
-} from "../assets/icons";
-import { taiwan } from "../components/common/country";
-import { removeItem, setClearCart, setCount } from "../store/productSlice";
+  VisaIcon
+} from '../assets/icons';
+import { taiwan } from '../components/common/country';
+import { removeItem, setClearCart, setCount } from '../store/productSlice';
 // import { sevenAreas } from "../components/common/sevenStories";
 
 //Layout樣式
@@ -82,9 +82,9 @@ const StyledCartContainter = styled.section`
         display: grid;
         grid-template-columns: 2fr 1fr auto;
         grid-template-areas:
-          "name name delete"
-          "style count count"
-          "price . subtotal";
+          'name name delete'
+          'style count count'
+          'price . subtotal';
         .name {
           grid-area: name;
         }
@@ -432,13 +432,13 @@ const StyledOrderContainer = styled.div`
   .button {
     display: grid;
     grid-template-columns: 5fr 1fr;
-    grid-template-areas: ". button";
+    grid-template-areas: '. button';
     @media screen and (max-width: 768px) {
       grid-template-columns: 2fr 1fr;
     }
     @media screen and (max-width: 577px) {
       grid-template-columns: 1fr;
-      grid-template-areas: "button";
+      grid-template-areas: 'button';
     }
     button {
       grid-area: button;
@@ -528,7 +528,7 @@ const Checkbox = styled.label`
   cursor: pointer;
   margin-right: 5px;
   border-radius: 3px;
-  input[type="checkbox"] {
+  input[type='checkbox'] {
     width: 20px;
     height: 20px;
     border-radius: 5px;
@@ -543,18 +543,18 @@ const Cart = () => {
       Math.floor(total + Number(item.count) * Number(item.price) * 0.8),
     0
   );
-  const dispatch = useDispatch()
-  const [purchaserName, setPurchaserName] = useState("");
-  const [purchaserPhone, setPurchaserPhone] = useState("");
-  const [purchaserEmail, setPurchaserEmail] = useState("");
-  const [receiverName, setReceiverName] = useState("");
-  const [receiverPhone, setReceiverPhone] = useState("");
-  const [receiverAddress, setReceiverAddress] = useState("");
-  const [comment, setComment] = useState("");
+  const dispatch = useDispatch();
+  const [purchaserName, setPurchaserName] = useState('');
+  const [purchaserPhone, setPurchaserPhone] = useState('');
+  const [purchaserEmail, setPurchaserEmail] = useState('');
+  const [receiverName, setReceiverName] = useState('');
+  const [receiverPhone, setReceiverPhone] = useState('');
+  const [receiverAddress, setReceiverAddress] = useState('');
+  const [comment, setComment] = useState('');
   const [deliveryId, setDeliveryId] = useState(null);
   const products = cartProducts.map((product) => ({
     ProductId: product.id,
-    orderQuantity: product.count,
+    orderQuantity: product.count
   }));
   const handlesubmit = async () => {
     try {
@@ -568,29 +568,29 @@ const Cart = () => {
         comment,
         products,
         totalAmount,
-        deliveryId,
+        deliveryId
       });
       const { status, orderNumber } = data;
-      if (status === "success") {
+      if (status === 'success') {
         Swal.fire({
-          position: "top",
-          icon: "success",
-          title: "成功送出訂單",
-          text: "訂單編號" + orderNumber,
-          showConfirmButton: true,
+          position: 'top',
+          icon: 'success',
+          title: '成功送出訂單',
+          text: '訂單編號' + orderNumber,
+          showConfirmButton: true
         });
       }
-      setPurchaserName("")
-      setPurchaserPhone("");
-      setPurchaserEmail("");
-      setReceiverName("");
-      setReceiverPhone("");
-      setReceiverAddress("");
-      setComment("");
-      setDeliveryId("");
+      setPurchaserName('');
+      setPurchaserPhone('');
+      setPurchaserEmail('');
+      setReceiverName('');
+      setReceiverPhone('');
+      setReceiverAddress('');
+      setComment('');
+      setDeliveryId('');
       dispatch(setClearCart());
     } catch (error) {
-      console.error("Order Submit faild :", error);
+      console.error('Order Submit faild :', error);
     }
   };
 
@@ -780,7 +780,7 @@ const Product = ({ product }) => {
   for (let i = 1; i <= 999; i++) {
     options.push({ value: i, label: i });
   }
-const id = product.id;
+  const id = product.id;
   return (
     <ul className='product'>
       <li className='name'>
@@ -795,7 +795,7 @@ const id = product.id;
             dispatch(
               setCount({
                 productId: product.id,
-                count: e.target.value,
+                count: e.target.value
               })
             );
           }}
@@ -848,8 +848,8 @@ const Select = ({ arrayOption, label, onChange }) => {
 };
 //購買資訊Select樣式
 const ShippingSelect = ({ setDeliveryId, setReceiverAddress }) => {
-  const [selectedOption, setSelectedOption] = useState("default");
-  const paymentOptions = ["- 請選擇 付款方式 -"];
+  const [selectedOption, setSelectedOption] = useState('default');
+  const paymentOptions = ['- 請選擇 付款方式 -'];
   return (
     <>
       <StyledSelect className='select bill-wrapper'>
@@ -871,22 +871,22 @@ const ShippingSelect = ({ setDeliveryId, setReceiverAddress }) => {
       </StyledSelect>
       {/* 運送方式 */}
       <div className='shipping-wrapper'>
-        {selectedOption === "- 請選擇 運送方式 -" && (
+        {selectedOption === '- 請選擇 運送方式 -' && (
           <Select arrayOption={paymentOptions} label='請選擇付款方式' />
         )}
-        {selectedOption === "1" && (
+        {selectedOption === '1' && (
           <CashOnDelivery setReceiverAddress={setReceiverAddress} />
         )}
-        {selectedOption === "2" && <HomeDelivery />}
-        {selectedOption === "3" && <SevenElevenPickUp />}
-        {selectedOption === "4" && <FamilyMartPickUp />}
+        {selectedOption === '2' && <HomeDelivery />}
+        {selectedOption === '3' && <SevenElevenPickUp />}
+        {selectedOption === '4' && <FamilyMartPickUp />}
       </div>
     </>
   );
 };
 //發票Select樣式
 const BillSelect = () => {
-  const [selectedOption, setSelectedOption] = useState("個人電子發票(兩聯式)");
+  const [selectedOption, setSelectedOption] = useState('個人電子發票(兩聯式)');
   return (
     <>
       <StyledSelect className='select bill-wrapper'>
@@ -902,15 +902,15 @@ const BillSelect = () => {
           <option value='電子發票捐贈'>電子發票捐贈</option>
         </select>
       </StyledSelect>
-      {selectedOption === "個人電子發票(兩聯式)" && <PersonalBill />}
-      {selectedOption === "公司用(三聯式)" && <CompanyBill />}
-      {selectedOption === "電子發票捐贈" && <InvoiceDonation />}
+      {selectedOption === '個人電子發票(兩聯式)' && <PersonalBill />}
+      {selectedOption === '公司用(三聯式)' && <CompanyBill />}
+      {selectedOption === '電子發票捐贈' && <InvoiceDonation />}
     </>
   );
 };
 //個人電子發票(兩聯式)
 const PersonalBill = () => {
-  const [selectedOption, setSelectedOption] = useState("無載具");
+  const [selectedOption, setSelectedOption] = useState('無載具');
   return (
     <>
       <StyledSelect className='select bill-wrapper'>
@@ -927,20 +927,20 @@ const PersonalBill = () => {
           <option value='悠遊卡載具'>悠遊卡載具</option>
         </select>
       </StyledSelect>
-      {selectedOption === "無載具" && ""}
-      {selectedOption === "手機條碼載具" && (
+      {selectedOption === '無載具' && ''}
+      {selectedOption === '手機條碼載具' && (
         <Input
           placeholder='請輸入手機載具編號'
           label='手機載具編號格式錯誤。'
         />
       )}
-      {selectedOption === "自然人憑證載具" && (
+      {selectedOption === '自然人憑證載具' && (
         <Input
           placeholder='請輸入自然人憑證載具編號'
           label='自然人憑證載具編號格式錯誤。'
         />
       )}
-      {selectedOption === "悠遊卡載具" && (
+      {selectedOption === '悠遊卡載具' && (
         <Input
           placeholder='請輸入悠遊卡隱碼'
           label='悠遊卡載具編號格式錯誤。'
@@ -969,7 +969,7 @@ const CompanyBill = () => {
 };
 //電子發票捐贈
 const InvoiceDonation = () => {
-  const [selectedOption, setSelectedOption] = useState("無載具");
+  const [selectedOption, setSelectedOption] = useState('無載具');
   return (
     <>
       <StyledSelect className='select bill-wrapper'>
@@ -1036,7 +1036,7 @@ const CashOnDelivery = ({ setReceiverAddress }) => {
   //選擇鄉鎮
   const [town, setTown] = useState(null);
   //地址
-  const [address, setAddress] = useState("");
+  const [address, setAddress] = useState('');
   const cities = taiwan.map((city) => city.city);
   const handleCities = (e) => {
     setSelectedCity(e.target.value);
@@ -1101,7 +1101,7 @@ const HomeDelivery = () => {
   //選擇鄉鎮
   const [town, setTown] = useState(null);
   //地址
-  const [address, setAddress] = useState("");
+  const [address, setAddress] = useState('');
   const cities = taiwan.map((city) => city.city);
 
   const handleCities = (e) => {
@@ -1112,9 +1112,9 @@ const HomeDelivery = () => {
     setTowns(selectedCityData?.towns);
     setTown(selectedCityData?.towns[0]);
   };
-  console.log("selectedCity", selectedCity);
-  console.log("town", town);
-  console.log("address", address);
+  console.log('selectedCity', selectedCity);
+  console.log('town', town);
+  console.log('address', address);
 
   return (
     <>
@@ -1164,7 +1164,7 @@ const HomeDelivery = () => {
 };
 //7-11取貨
 const SevenElevenPickUp = () => {
-  const [selectedOption, setSelectedOption] = useState("default");
+  const [selectedOption, setSelectedOption] = useState('default');
   // const [selectedCity, setSelectedCity] = useState(null);
   // const [townId, setTownId] = useState([]);
   // const [towns, setTowns] = useState([]);
@@ -1285,7 +1285,7 @@ const SevenElevenPickUp = () => {
           <option value='7-11取貨付款'>7-11取貨付款</option>
         </select>
       </StyledSelect>
-      {selectedOption === "信用卡" && (
+      {selectedOption === '信用卡' && (
         <div className='credit-card-icon-wrapper'>
           <p>可使用</p>
           <div className='icon'>
@@ -1304,7 +1304,7 @@ const SevenElevenPickUp = () => {
 };
 //全家取貨
 const FamilyMartPickUp = () => {
-  const [selectedOption, setSelectedOption] = useState("default");
+  const [selectedOption, setSelectedOption] = useState('default');
   return (
     <>
       <button className='button'>選擇取件超商門市</button>
@@ -1350,7 +1350,7 @@ const FamilyMartPickUp = () => {
           <option value='7-11取貨付款'>7-11取貨付款</option>
         </select>
       </StyledSelect>
-      {selectedOption === "信用卡" && (
+      {selectedOption === '信用卡' && (
         <div className='credit-card-icon-wrapper'>
           <p>可使用</p>
           <div className='icon'>

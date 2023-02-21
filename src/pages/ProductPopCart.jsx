@@ -1,9 +1,10 @@
-import React, { useState } from "react";
-import { useDispatch } from "react-redux";
-import styled from "styled-components";
-import Swal from "sweetalert2";
-import { MinusIcon, PlusIcon } from "../assets/icons/index";
-import { addTocart } from "../store/productSlice";
+import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import styled from 'styled-components';
+import Swal from 'sweetalert2';
+import { MinusIcon, PlusIcon } from '../assets/icons/index';
+import { addTocart, setCount as countRedux } from '../store/productSlice';
+import { useNavigate } from 'react-router-dom';
 
 const StyledModalContainer = styled.div`
   width: 100vw;
@@ -152,8 +153,10 @@ const StyledCard = styled.div`
 `;
 
 // handle 參數由 Product 傳入
-const ProductPopCart = ({ handleToggleCartModal, product }) => {
-  const dispatch = useDispatch()
+const ProductPopCart = ({ handleToggleCartModal, product, image }) => {
+  console.log(product);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [count, setCount] = useState(1);
   const handleDecrease = () => {
     if (count === 1) {
@@ -166,18 +169,25 @@ const ProductPopCart = ({ handleToggleCartModal, product }) => {
   };
 
   const handleAddCart = () => {
-    const id = product.id
-    const name = product.name
-    const price = product.price
-    const image = product.Images.url
-    
+    const id = product.id;
+    const name = product.name;
+    const price = product.price;
+
     dispatch(addTocart({ id, name, price, image, count }));
+
+    dispatch(
+      countRedux({
+        productId: id,
+        count: count
+      })
+    );
+
     Swal.fire({
       title: '加入購物車成功',
       icon: 'success',
       showConfirmButton: false,
       timer: 1000,
-      position: 'top'
+      position: 'center'
     });
 
     handleToggleCartModal();
@@ -185,13 +195,29 @@ const ProductPopCart = ({ handleToggleCartModal, product }) => {
   };
 
   const handleToCartPage = () => {
+    const id = product.id;
+    const name = product.name;
+    const price = product.price;
+
+    dispatch(addTocart({ id, name, price, image, count }));
+
+    dispatch(
+      countRedux({
+        productId: id,
+        count: count
+      })
+    );
+
     Swal.fire({
       title: '立即購買成功',
       icon: 'success',
       showConfirmButton: false,
       timer: 1000,
-      position: 'top'
+      position: 'center'
+    }).then(() => {
+      navigate(`/cart`);
     });
+    handleToggleCartModal();
     return;
   };
 
