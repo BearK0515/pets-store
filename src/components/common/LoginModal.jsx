@@ -217,15 +217,14 @@ const LoginModal = ({
               </LoginSocialFacebook>
               <LoginSocialGoogle
                 client_id="1089820286873-p5k491t42gkgbd29cijfuit0kgi7h18k.apps.googleusercontent.com"
+                scope="openid profile email"
                 onResolve={(res) => {
-                  console.log(res);
-                  // setEmail(res.data.email);
-                  // setName(res.data.name);
+                  setEmail(res.data.email);
+                  setName(res.data.name);
                 }}
                 onReject={(err) => {
                   console.log(err);
                 }}
-                // onClick={()=>console.log("click")}
               >
                 <div className="icon google">
                   <div>
