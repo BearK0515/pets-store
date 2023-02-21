@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { singleOrder } from '../api/adminAuth';
 import { userSingleOrder } from '../api/userAuth';
+import Swal from 'sweetalert2';
 
 const StyledContainer = styled.div`
   width: 100%;
@@ -122,6 +123,7 @@ const StyledWrapper = styled.div`
 `;
 
 const SingleOrder = () => {
+  const navigate = useNavigate();
   const [order, setOrder] = useState(null);
   const params = useParams();
   let total = order?.products?.reduce(
@@ -134,11 +136,35 @@ const SingleOrder = () => {
       try {
         if (params.orderId) {
           const resOrder = await singleOrder(params.orderId);
+          if (resOrder === undefined) {
+            Swal.fire({
+              position: 'center',
+              icon: 'false',
+              title: '查無該訂單編號，請重新查詢',
+              text: '訂單編號 ' + params.orderNumber,
+              showConfirmButton: true
+            }).then(() => {
+              navigate(`/admin/orders`);
+            });
+            return;
+          }
           setOrder(resOrder.data);
           return;
         }
         if (params.orderNumber) {
           const resUserOrder = await userSingleOrder(params.orderNumber);
+          if (resUserOrder === undefined) {
+            Swal.fire({
+              position: 'center',
+              icon: 'false',
+              title: '查無該訂單編號，請重新查詢',
+              text: '訂單編號 ' + params.orderNumber,
+              showConfirmButton: true
+            }).then(() => {
+              navigate(`/order/query`);
+            });
+            return;
+          }
           setOrder(resUserOrder.data);
           return;
         }
@@ -148,7 +174,7 @@ const SingleOrder = () => {
     };
     getOrdersAllAsync(params);
     return;
-  }, [params, setOrder]);
+  }, [params, setOrder, navigate]);
   return (
     <StyledContainer>
       <StyledTitle>
