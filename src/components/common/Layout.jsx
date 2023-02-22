@@ -11,6 +11,8 @@ import LoginModal from "./LoginModal";
 import CartModal from "./CartModal";
 import SidebarModal from "./SidebarModal";
 import { useSelector } from "react-redux";
+import { lineLogin } from "../../api/userLogin";
+import jwtDecode from "jwt-decode";
 
 const StyledContainer = styled.div`
   display: flex;
@@ -250,6 +252,23 @@ const Layout = () => {
   useEffect(() => {
     setRecords(JSON.parse(localStorage.getItem("productId")));
   }, [location.pathname]);
+
+  useEffect(() => {
+    const getUserInfo = async () => {
+      const getUrlString = window.location.href;
+      const url = new URL(getUrlString);
+      const code = url.searchParams.get("code");
+      if (code) {
+        const data = await lineLogin(code);
+        const idToken = data?.data.id_token;
+        const userInfo = jwtDecode(idToken);
+        const { email, name } = userInfo;
+        console.log(email);
+        console.log(name);
+      }
+    };
+    getUserInfo();
+  }, []);
 
   return (
     <>

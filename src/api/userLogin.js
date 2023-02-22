@@ -44,6 +44,28 @@ export const googleLogin = async () => {
     console.error(`[Login Failed]${error}`);
   }
 };
+//LINE 登入
+export const lineLogin = async (code) => {
+  try {
+    const res = await axios({
+      method: "POST",
+      url: `https://api.line.me/oauth2/v2.1/token`,
+      data: {
+        grant_type: "authorization_code",
+        code: code,
+        redirect_uri: "http://localhost:3000/pets-store",
+        client_id: "1657937254",
+        client_secret: "af41c394dd21a6c1ad9f0446f4fdbb60",
+      },
+      headers: {
+        "Content-type": "application/x-www-form-urlencoded ",
+      },
+    });
+    return res;
+  } catch (error) {
+    console.error(`[Login Failed]${error}`);
+  }
+};
 
 //GET一般會員取得單一訂單
 export const userSingleOrder = async (orderId) => {
