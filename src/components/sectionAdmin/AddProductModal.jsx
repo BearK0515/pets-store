@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from "react";
-import { useRef } from "react";
-import styled from "styled-components";
-import Swal from "sweetalert2";
-import { addProduct } from "../../api/adminAuth";
+import React, { useEffect, useState } from 'react';
+import { useRef } from 'react';
+import styled from 'styled-components';
+import Swal from 'sweetalert2';
+import { addProduct } from '../../api/adminAuth';
+import { IsLoadingComponent as Loading } from '../common/IsLoading';
 
 const StyledModalContainer = styled.div`
   width: 100vw;
@@ -54,7 +55,7 @@ const StyledSectionUp = styled.div`
       aspect-ratio: 3/4;
       background: #d9d9d9;
       /* background: var(--white); */
-      img{
+      img {
         width: 100%;
         height: 100%;
       }
@@ -229,15 +230,16 @@ const StyledButton = styled.button`
 `;
 
 const AddProductModal = ({ handleToggleProductModal }) => {
-  const [categoryValue, setCategoryValue] = useState("default");
+  const [isLoading, setIsLoading] = useState(false);
+  const [categoryValue, setCategoryValue] = useState('default');
   const [productPicture, setProductPicture] = useState(null);
-  const [previewProduct1, setPreviewProduct1] = useState("");
-  const [previewProduct2, setPreviewProduct2] = useState("");
-  const [previewProduct3, setPreviewProduct3] = useState("");
+  const [previewProduct1, setPreviewProduct1] = useState('');
+  const [previewProduct2, setPreviewProduct2] = useState('');
+  const [previewProduct3, setPreviewProduct3] = useState('');
   const [describePicture, setDescribePicture] = useState(null);
-  const [previewDescribe1, setPreviewDescribe1] = useState("");
-  const [previewDescribe2, setPreviewDescribe2] = useState("");
-  const [previewDescribe3, setPreviewDescribe3] = useState("");
+  const [previewDescribe1, setPreviewDescribe1] = useState('');
+  const [previewDescribe2, setPreviewDescribe2] = useState('');
+  const [previewDescribe3, setPreviewDescribe3] = useState('');
   const [previewProduct, setPreviewProduct] = useState(previewProduct1);
   const [previewDescription, setPreviewDescription] = useState(previewProduct1);
   const nameRef = useRef();
@@ -249,21 +251,24 @@ const AddProductModal = ({ handleToggleProductModal }) => {
     const priceValue = priceRef?.current?.value;
     const styleValue = styleRef?.current?.value;
     const picture = [...productPicture, ...describePicture];
+    setIsLoading(true);
     try {
       let formData = new FormData();
-      formData.append("name", nameValue);
-      formData.append("price", priceValue);
-      formData.append("description", styleValue);
-      formData.append("CategoryId", categoryValue);
-      formData.append("url", picture[0]);
-      formData.append("url", picture[1]);
-      formData.append("url", picture[2]);
-      formData.append("url", picture[3]);
-      formData.append("url", picture[4]);
-      formData.append("url", picture[5]);
+      formData.append('name', nameValue);
+      formData.append('price', priceValue);
+      formData.append('description', styleValue);
+      formData.append('CategoryId', categoryValue);
+      formData.append('url', picture[0]);
+      formData.append('url', picture[1]);
+      formData.append('url', picture[2]);
+      formData.append('url', picture[3]);
+      formData.append('url', picture[4]);
+      formData.append('url', picture[5]);
       await addProduct({ formData });
+      setIsLoading(false);
     } catch (error) {
-      console.error("Product Submit faild :", error);
+      console.error('Product Submit faild :', error);
+      setIsLoading(false);
     }
     handleToggleProductModal();
   };
@@ -272,21 +277,21 @@ const AddProductModal = ({ handleToggleProductModal }) => {
     const selectedFiles = e.target.files;
     if (selectedFiles.size > 46137344) {
       Swal.fire({
-        title: "超過容量大小",
-        icon: "error",
+        title: '超過容量大小',
+        icon: 'error',
         showConfirmButton: false,
         timer: 2000,
-        position: "top",
+        position: 'top'
       });
       return;
     }
     if (selectedFiles.length > 3) {
       Swal.fire({
-        title: "最多3張圖片",
-        icon: "error",
+        title: '最多3張圖片',
+        icon: 'error',
         showConfirmButton: false,
         timer: 2000,
-        position: "top",
+        position: 'top'
       });
       return;
     }
@@ -306,21 +311,21 @@ const AddProductModal = ({ handleToggleProductModal }) => {
     const selectedFiles = e.target.files;
     if (selectedFiles.size > 46137344) {
       Swal.fire({
-        title: "超過容量大小",
-        icon: "error",
+        title: '超過容量大小',
+        icon: 'error',
         showConfirmButton: false,
         timer: 2000,
-        position: "top",
+        position: 'top'
       });
       return;
     }
     if (selectedFiles.length > 3) {
       Swal.fire({
-        title: "最多3張圖片",
-        icon: "error",
+        title: '最多3張圖片',
+        icon: 'error',
         showConfirmButton: false,
         timer: 2000,
-        position: "top",
+        position: 'top'
       });
       return;
     }
@@ -335,116 +340,136 @@ const AddProductModal = ({ handleToggleProductModal }) => {
     setPreviewDescribe3(objectUrl3);
     setDescribePicture(selectedFiles);
   };
+
   useEffect(() => {
     setPreviewProduct(previewProduct1);
   }, [previewProduct1, previewProduct2, previewProduct3]);
+
   useEffect(() => {
     setPreviewDescription(previewDescribe1);
   }, [previewDescribe1, previewDescribe2, previewDescribe3]);
+
   //商品大圖
-const handlePreviewProduct = (e)=>{
-  setPreviewProduct(e.target.src);
-}
-//詳情大圖
-const handlePreviewDescription = (e)=>{
-  setPreviewDescription(e.target.src);
-}
+  const handlePreviewProduct = (e) => {
+    setPreviewProduct(e.target.src);
+  };
+  //詳情大圖
+  const handlePreviewDescription = (e) => {
+    setPreviewDescription(e.target.src);
+  };
   return (
-    <StyledModalContainer>
-      <div className='overlay' onClick={handleToggleProductModal}></div>
-      <div className='content'>
-        <StyledSectionUp>
-          <div className='left'>
-            <div className='preview'>
-              {previewProduct && <img src={`${previewProduct}`} alt='' />}
-            </div>
-            <div className='picture-wrapper'>
-              <div className='picture-1' onClick={handlePreviewProduct}>
-                {previewProduct1 && <img src={`${previewProduct1}`} alt='' />}
-              </div>
-              <div className='picture-2' onClick={handlePreviewProduct}>
-                {previewProduct2 && <img src={`${previewProduct2}`} alt='' />}
-              </div>
-              <div className='picture-3' onClick={handlePreviewProduct}>
-                {previewProduct3 && <img src={`${previewProduct3}`} alt='' />}
-              </div>
-            </div>
-            <div className='wrapper'>
-              <p>商品圖片：</p>
-              <label htmlFor='add-product-picture'>新增商品圖片</label>
-              <input
-                type='file'
-                id='add-product-picture'
-                accept='image/*'
-                onChange={(e) => handleProductImageChange(e)}
-                multiple
-              />
-            </div>
-          </div>
-          <div className='right'>
-            <div className='wrapper'>
-              <label>商品分類：</label>
-              <select
-                defaultValue={categoryValue}
-                onChange={(e) => setCategoryValue(e.target.value)}
-              >
-                <option disabled value='default'>
-                  商品分類
-                </option>
-                <option value='1'>狗狗專區</option>
-                <option value='2'>貓咪專區</option>
-              </select>
-            </div>
-            <div className='wrapper'>
-              <label>商品名稱：</label>
-              <input type='text' placeholder='請輸入商品名稱' ref={nameRef} />
-            </div>
-            <div className='wrapper'>
-              <label>商品單價：</label>
-              <input type='text' placeholder='請輸入商品價格' ref={priceRef} />
-            </div>
-            <div className='wrapper'>
-              <label>商品規格：</label>
-              <input type='text' placeholder='請輸入商品規格' ref={styleRef} />
-            </div>
-          </div>
-        </StyledSectionUp>
-        <StyledSectionDown>
-          <div className='left'>
-            <div className='wrapper'>
-              <p>商品詳情：</p>
-              <label htmlFor='add-describe-picture'>新增商品詳情圖片</label>
-              <input
-                type='file'
-                id='add-describe-picture'
-                accept='image/*'
-                onChange={(e) => handleDescribeImageChange(e)}
-                multiple
-              />
+    <>
+      {isLoading && <Loading />}
+      <StyledModalContainer>
+        <div className='overlay' onClick={handleToggleProductModal}></div>
+        <div className='content'>
+          <StyledSectionUp>
+            <div className='left'>
               <div className='preview'>
-                {previewDescription && (
-                  <img src={`${previewDescription}`} alt='' />
-                )}
+                {previewProduct && <img src={`${previewProduct}`} alt='' />}
+              </div>
+              <div className='picture-wrapper'>
+                <div className='picture-1' onClick={handlePreviewProduct}>
+                  {previewProduct1 && <img src={`${previewProduct1}`} alt='' />}
+                </div>
+                <div className='picture-2' onClick={handlePreviewProduct}>
+                  {previewProduct2 && <img src={`${previewProduct2}`} alt='' />}
+                </div>
+                <div className='picture-3' onClick={handlePreviewProduct}>
+                  {previewProduct3 && <img src={`${previewProduct3}`} alt='' />}
+                </div>
+              </div>
+              <div className='wrapper'>
+                <p>商品圖片：</p>
+                <label htmlFor='add-product-picture'>新增商品圖片</label>
+                <input
+                  type='file'
+                  id='add-product-picture'
+                  accept='image/*'
+                  onChange={(e) => handleProductImageChange(e)}
+                  multiple
+                />
               </div>
             </div>
-          </div>
-          <div className='right'>
-            <div className='picture-wrapper'>
-              <div className='picture-1' onClick={handlePreviewDescription}>
-                {previewDescribe1 && <img src={`${previewDescribe1}`} alt='' />}
+            <div className='right'>
+              <div className='wrapper'>
+                <label>商品分類：</label>
+                <select
+                  defaultValue={categoryValue}
+                  onChange={(e) => setCategoryValue(e.target.value)}
+                >
+                  <option disabled value='default'>
+                    商品分類
+                  </option>
+                  <option value='1'>狗狗專區</option>
+                  <option value='2'>貓咪專區</option>
+                </select>
               </div>
-              <div className='picture-2' onClick={handlePreviewDescription}>
-                {previewDescribe2 && <img src={`${previewDescribe2}`} alt='' />}
+              <div className='wrapper'>
+                <label>商品名稱：</label>
+                <input type='text' placeholder='請輸入商品名稱' ref={nameRef} />
               </div>
-              <div className='picture-3' onClick={handlePreviewDescription}>
-                {previewDescribe3 && <img src={`${previewDescribe3}`} alt='' />}
+              <div className='wrapper'>
+                <label>商品單價：</label>
+                <input
+                  type='text'
+                  placeholder='請輸入商品價格'
+                  ref={priceRef}
+                />
+              </div>
+              <div className='wrapper'>
+                <label>商品規格：</label>
+                <input
+                  type='text'
+                  placeholder='請輸入商品規格'
+                  ref={styleRef}
+                />
               </div>
             </div>
-          </div>
-        </StyledSectionDown>
-        <StyledButton onClick={handleSubmit}>新增商品</StyledButton>
-      </div>
-    </StyledModalContainer>
+          </StyledSectionUp>
+          <StyledSectionDown>
+            <div className='left'>
+              <div className='wrapper'>
+                <p>商品詳情：</p>
+                <label htmlFor='add-describe-picture'>新增商品詳情圖片</label>
+                <input
+                  type='file'
+                  id='add-describe-picture'
+                  accept='image/*'
+                  onChange={(e) => handleDescribeImageChange(e)}
+                  multiple
+                />
+                <div className='preview'>
+                  {previewDescription && (
+                    <img src={`${previewDescription}`} alt='' />
+                  )}
+                </div>
+              </div>
+            </div>
+            <div className='right'>
+              <div className='picture-wrapper'>
+                <div className='picture-1' onClick={handlePreviewDescription}>
+                  {previewDescribe1 && (
+                    <img src={`${previewDescribe1}`} alt='' />
+                  )}
+                </div>
+                <div className='picture-2' onClick={handlePreviewDescription}>
+                  {previewDescribe2 && (
+                    <img src={`${previewDescribe2}`} alt='' />
+                  )}
+                </div>
+                <div className='picture-3' onClick={handlePreviewDescription}>
+                  {previewDescribe3 && (
+                    <img src={`${previewDescribe3}`} alt='' />
+                  )}
+                </div>
+              </div>
+            </div>
+          </StyledSectionDown>
+          <StyledButton onClick={handleSubmit}>新增商品</StyledButton>
+        </div>
+      </StyledModalContainer>
+    </>
   );
 };
 
