@@ -88,6 +88,8 @@
 
   - 新增商品，可新增3張商品圖片、3張詳情圖片，並預覽圖片樣式。
 
+  ![](https://i.imgur.com/bM41AFr.gif)
+
 
 ## 開發工具
 
@@ -96,7 +98,7 @@
 - Prettier - 統一程式碼格式
 - AWS - 部屬網站
 - [axios: 1.2.2](https://axios-http.com/) - 串接API
-- [react-icons: 4.7.1](https://react-icons.github.io/react-icons/) - 各種小 icon　引用
+- [react-icons: 4.7.1](https://react-icons.github.io/react-icons/) - 各種小 icon 引用
 - [react-redux: 8.0.5](https://react-redux.js.org/) - 管理購物車狀態
 - [@reduxjs/toolkit: 1.9.2](https://redux-toolkit.js.org/) - 管理購物車狀態
 - [react-scroll-to-top: 3.0.0](https://www.npmjs.com/package/react-scroll-to-top) - 置頂按鍵
