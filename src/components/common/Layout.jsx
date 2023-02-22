@@ -11,7 +11,7 @@ import LoginModal from "./LoginModal";
 import CartModal from "./CartModal";
 import SidebarModal from "./SidebarModal";
 import { useSelector } from "react-redux";
-import { lineLogin } from "../../api/userLogin";
+import { facebookLogin, lineLogin } from "../../api/userLogin";
 import jwtDecode from "jwt-decode";
 
 const StyledContainer = styled.div`
@@ -272,12 +272,15 @@ const Layout = () => {
         const idToken = data?.data.id_token;
         const userInfo = jwtDecode(idToken);
         const { email, name } = userInfo;
-        console.log(email);
-        console.log(name);
+        const { token, user } = await facebookLogin({ email, name });
+        localStorage.setItem("authToken", token);
+        localStorage.setItem("UserId", user.id);
+        setLogin(true);
       }
     };
     getUserInfo();
   }, []);
+
 
   return (
     <>
