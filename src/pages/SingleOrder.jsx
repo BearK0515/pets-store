@@ -139,7 +139,7 @@ const SingleOrder = () => {
           if (resOrder === undefined) {
             Swal.fire({
               position: 'center',
-              icon: 'false',
+              icon: 'error',
               title: '查無該訂單編號，請重新查詢',
               text: '訂單編號 ' + params.orderNumber,
               showConfirmButton: true
@@ -156,7 +156,7 @@ const SingleOrder = () => {
           if (resUserOrder === undefined) {
             Swal.fire({
               position: 'center',
-              icon: 'false',
+              icon: 'error',
               title: '查無該訂單編號，請重新查詢',
               text: '訂單編號 ' + params.orderNumber,
               showConfirmButton: true
