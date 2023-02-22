@@ -1,15 +1,16 @@
-import React, { useState, useEffect } from 'react';
-import styled from 'styled-components';
-import { useLocation, useNavigate } from 'react-router-dom';
-import ProductAside from './ProductAside';
-import ProductAll from './ProductAll';
-import ProductDog from './ProductDog';
-import { productsHot, productsNew, productsPrice } from '../api/products';
-import { HomeIcon } from '../assets/icons/index';
-import ProductCat from './ProductCat';
-import SingleProduct from './SingleProduct';
-import { HomeLinkWrapper } from '../components/common/HomeLinkWrapper';
-import { IsLoadingComponent as Loading } from '../components/common/IsLoading';
+import React, { useState, useEffect } from "react";
+import styled from "styled-components";
+import { useLocation, useNavigate } from "react-router-dom";
+import ProductAside from "./ProductAside";
+import ProductAll from "./ProductAll";
+import ProductDog from "./ProductDog";
+import { productsHot, productsNew, productsPrice } from "../api/products";
+import { HomeIcon } from "../assets/icons/index";
+import ProductCat from "./ProductCat";
+import SingleProduct from "./SingleProduct";
+import { HomeLinkWrapper } from "../components/common/HomeLinkWrapper";
+import { IsLoadingComponent as Loading } from "../components/common/IsLoading";
+import ProductSearch from "./ProductSearch";
 
 const ProductPageStyled = styled.div`
   box-sizing: border-box;
@@ -67,22 +68,22 @@ const ProductPage = () => {
   const [productPrice, setProductPrice] = useState([]);
   const [productPriceOrigin, setProductPriceOrigin] = useState([]);
   const [sortSelect, setSortSelect] = useState({
-    top: true
+    top: true,
   });
-  const [priceToggle, setPriceToggle] = useState('desc');
+  const [priceToggle, setPriceToggle] = useState("desc");
   // const [pageChange, setPageChange] = useState(true)
 
   const navigate = useNavigate();
   const location = useLocation();
   const page = location.pathname;
-  let NowPage = '';
+  let NowPage = "";
 
-  if (page.includes('all')) {
-    NowPage = '全部商品';
-  } else if (page.includes('dog')) {
-    NowPage = '狗狗專區';
-  } else if (page.includes('cat')) {
-    NowPage = '貓貓專區';
+  if (page.includes("all")) {
+    NowPage = "全部商品";
+  } else if (page.includes("dog")) {
+    NowPage = "狗狗專區";
+  } else if (page.includes("cat")) {
+    NowPage = "貓貓專區";
   }
 
   // useEffect
@@ -144,32 +145,32 @@ const ProductPage = () => {
       }
     };
     getProductPriceAsync();
-    
+
     return;
   }, [setProductPriceOrigin]);
 
   // 點擊時，其他二個會變成 undefine 為 false，當為 true 時不改變
   const sortSelectToggle = (e) => {
-    if (e.target.value === 'price') {
-      if (priceToggle === 'asc') {
+    if (e.target.value === "price") {
+      if (priceToggle === "asc") {
         setProductPrice(
           productPriceOrigin.sort((a, b) => {
             return a.price - b.price;
           })
         );
-        const priceSortOrder = priceToggle === 'asc' ? 'desc' : 'asc';
+        const priceSortOrder = priceToggle === "asc" ? "desc" : "asc";
         setPriceToggle(priceSortOrder);
-      } else if (priceToggle === 'desc') {
+      } else if (priceToggle === "desc") {
         setProductPrice(
           productPriceOrigin.sort((a, b) => {
             return b.price - a.price;
           })
         );
-        const priceSortOrder = priceToggle === 'asc' ? 'desc' : 'asc';
+        const priceSortOrder = priceToggle === "asc" ? "desc" : "asc";
         setPriceToggle(priceSortOrder);
       }
     } else {
-      setPriceToggle('desc');
+      setPriceToggle("desc");
       setProductPrice(
         productPriceOrigin.sort((a, b) => {
           return b.price - a.price;
@@ -180,7 +181,7 @@ const ProductPage = () => {
       return;
     } else {
       setSortSelect(() => ({
-        [e.target.value]: !sortSelect[e.target.value]
+        [e.target.value]: !sortSelect[e.target.value],
       }));
     }
   };
@@ -194,14 +195,14 @@ const ProductPage = () => {
           <HomeLinkWrapper>
             <GoToHome>
               <HomeIcon
-                onClick={() => navigate('/')}
-                style={{ color: 'var(--dark)', cursor: 'pointer' }}
+                onClick={() => navigate("/")}
+                style={{ color: "var(--dark)", cursor: "pointer" }}
               />
-              <p className='text'>{NowPage}</p>
+              <p className="text">{NowPage}</p>
             </GoToHome>
           </HomeLinkWrapper>
           <Breadcrumb />
-          {page === '/product/all' && (
+          {page === "/product/all" && (
             <ProductAll
               productHot={productHot}
               productNew={productNew}
@@ -211,7 +212,7 @@ const ProductPage = () => {
               sortSelectToggle={sortSelectToggle}
             />
           )}
-          {page === '/product/dog' && (
+          {page === "/product/dog" && (
             <ProductDog
               productHot={productHot}
               productNew={productNew}
@@ -221,7 +222,7 @@ const ProductPage = () => {
               sortSelectToggle={sortSelectToggle}
             />
           )}
-          {page === '/product/cat' && (
+          {page === "/product/cat" && (
             <ProductCat
               productHot={productHot}
               productNew={productNew}
@@ -231,7 +232,17 @@ const ProductPage = () => {
               sortSelectToggle={sortSelectToggle}
             />
           )}
-          {page.includes('detail') && <SingleProduct />}
+          {page.includes("search") && (
+            <ProductSearch
+              productHot={productHot}
+              productNew={productNew}
+              productPrice={productPrice}
+              priceToggle={priceToggle}
+              sortSelect={sortSelect}
+              sortSelectToggle={sortSelectToggle}
+            />
+          )}
+          {page.includes("detail") && <SingleProduct />}
         </ProductWrapper>
       </ProductPageStyled>
     </>

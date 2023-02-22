@@ -35,7 +35,7 @@ const productSlice = createSlice({
       state.cart[productIndex].count = count
     },
     //清空購物車
-    setClearCart: (state, action) => {
+    setClearCart: (state) => {
       state.cart = [...initialState.cart];
     }
   }

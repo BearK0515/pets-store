@@ -176,12 +176,12 @@ const LoginModal = ({
   }, [email, name]);
 
   const handleLineLogin = async () => {
-    window.location.replace(
-      `https://access.line.me/oauth2/v2.1/authorize?response_type=code&client_id=1657937254&redirect_uri=https://beark0515.github.io/pets-store/&state=12345abcde&scope=profile%20openid%20email&nonce=09876xyz`
-    );
     // window.location.replace(
-    //   `https://access.line.me/oauth2/v2.1/authorize?response_type=code&client_id=1657937254&redirect_uri=http://localhost:3000/pets-store&state=12345abcde&scope=profile%20openid%20email&nonce=09876xyz`
+    //   `https://access.line.me/oauth2/v2.1/authorize?response_type=code&client_id=1657937254&redirect_uri=https://beark0515.github.io/pets-store/&state=12345abcde&scope=profile%20openid%20email&nonce=09876xyz`
     // );
+    window.location.replace(
+      `https://access.line.me/oauth2/v2.1/authorize?response_type=code&client_id=1657937254&redirect_uri=http://localhost:3000/pets-store&state=12345abcde&scope=profile%20openid%20email&nonce=09876xyz`
+    );
   };
 
   return (
@@ -225,14 +225,12 @@ const LoginModal = ({
                 client_id={process.env.GOOGLE_APPID}
                 scope='openid profile email'
                 onResolve={(res) => {
-                  console.log(res);
-                  // setEmail(res.data.email);
-                  // setName(res.data.name);
+                  setEmail(res.data.email);
+                  setName(res.data.name);
                 }}
                 onReject={(err) => {
                   console.log(err);
                 }}
-                // onClick={()=>console.log("click")}
               >
                 <div className='icon google'>
                   <div>
