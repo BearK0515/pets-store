@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Outlet, useLocation, useNavigate } from "react-router-dom";
+import { Outlet, useLocation, useNavigate, Link } from "react-router-dom";
 import styled from "styled-components";
 import Footer from "./Footer";
 import Header from "./Header";
@@ -332,12 +332,26 @@ const Layout = () => {
           </span>
           {searchBarActive && (
             <ul className="popular-items">
-              <li className="popular-item">156565</li>
-              <li className="popular-item">256555565</li>
-              <li className="popular-item">356565</li>
-              <li className="popular-item">456565</li>
-              <li className="popular-item">456565</li>
-              <li className="popular-item">4555555555556565</li>
+              <Link to="../product/all">
+                <li className="popular-item" style={{ color: "black" }}>
+                  我們
+                </li>
+              </Link>
+              <Link to="../product/all">
+                <li className="popular-item" style={{ color: "black" }}>
+                  分類
+                </li>
+              </Link>
+              <Link to="../product/all">
+                <li className="popular-item" style={{ color: "black" }}>
+                  沒有
+                </li>
+              </Link>
+              <Link to="../product/all">
+                <li className="popular-item" style={{ color: "black" }}>
+                  標籤
+                </li>
+              </Link>
             </ul>
           )}
         </StyledButtonWrapper>
