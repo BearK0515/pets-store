@@ -54,10 +54,12 @@ const StyledLinkWrapper = styled.div`
   }
 `;
 const StyledProductsContainer = styled.div`
-  width: 100%;
+  width: 90%;
   display: flex;
   flex-flow: column;
   max-width: 1300px;
+  min-height: 1200px;
+  margin: 0 auto;
 `;
 
 const Home = () => {
