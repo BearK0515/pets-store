@@ -1,8 +1,8 @@
-import React, { useEffect, useRef, useState } from "react";
-import styled from "styled-components";
-import { adjustProduct } from "../../api/adminAuth";
-import { productDetail } from "../../api/products";
-import { CancelIcon } from "../../assets/icons";
+import React, { useEffect, useRef, useState } from 'react';
+import styled from 'styled-components';
+import { adjustProduct } from '../../api/adminAuth';
+import { productDetail } from '../../api/products';
+import { CancelIcon } from '../../assets/icons';
 
 const StyledModalContainer = styled.div`
   width: 100vw;
@@ -44,7 +44,7 @@ const StyledCard = styled.div`
     width: 100%;
     aspect-ratio: 1/1;
     background-size: cover;
-    background-image: url("https://picsum.photos/id/24/400");
+    background-image: url('https://picsum.photos/id/24/400');
   }
   .wrapper {
     display: flex;
@@ -122,7 +122,7 @@ const StyledCard = styled.div`
 const AdjustPriceModal = ({
   setIsOpenPriceModal,
   handleTogglePriceModal,
-  productId,
+  productId
 }) => {
   const priceRef = useRef(null);
   const [singleProduct, setSingleProduct] = useState(null);
@@ -159,7 +159,7 @@ const AdjustPriceModal = ({
             <div
               className='product'
               style={{
-                backgroundImage: `url('${singleProduct?.Image[0]?.url}')`,
+                backgroundImage: `url('${singleProduct?.Image[0]?.url}')`
               }}
             ></div>
             <div className='wrapper'>

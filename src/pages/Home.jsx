@@ -7,6 +7,7 @@ import SGS from '../assets/images/home3.png';
 import tips from '../assets/images/home4.jpg';
 import ProductAll from './ProductAll';
 import { productsHot, productsNew, productsPrice } from '../api/products';
+import { IsLoadingComponent as Loading } from '../components/common/IsLoading';
 
 const StyledContainer = styled.div`
   margin: 0 15px;
@@ -61,6 +62,7 @@ const StyledProductsContainer = styled.div`
 
 const Home = () => {
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(true);
   const [productHot, setProductHot] = useState([]);
   const [productNew, setProductNew] = useState([]);
   const [productPrice, setProductPrice] = useState([]);
@@ -73,6 +75,7 @@ const Home = () => {
   // useEffect
   //抓熱銷排行
   useEffect(() => {
+    setIsLoading(true);
     const getProductHotAsync = async () => {
       try {
         const resProductlHot = await productsHot();
@@ -80,7 +83,9 @@ const Home = () => {
           (product) => product.isOnShelves === 1
         );
         setProductHot(onShelvesProductHot);
+        setIsLoading(false);
       } catch (err) {
+        setIsLoading(false);
         console.error(err);
       }
     };
@@ -90,6 +95,7 @@ const Home = () => {
 
   //抓最新商品
   useEffect(() => {
+    setIsLoading(true);
     const getProductNewAsync = async () => {
       try {
         const resProductNew = await productsNew();
@@ -97,8 +103,10 @@ const Home = () => {
           (product) => product.isOnShelves === 1
         );
         setProductNew(onShelvesProductNew);
+        setIsLoading(false);
       } catch (err) {
         console.error(err);
+        setIsLoading(false);
       }
     };
     getProductNewAsync();
@@ -107,6 +115,7 @@ const Home = () => {
 
   //抓價格排序
   useEffect(() => {
+    setIsLoading(true);
     const getProductPriceAsync = async () => {
       try {
         const resProductPrice = await productsPrice();
@@ -115,8 +124,10 @@ const Home = () => {
         );
         setProductPriceOrigin(onShelvesProductPrice);
         setProductPrice(onShelvesProductPrice);
+        setIsLoading(false);
       } catch (err) {
         console.error(err);
+        setIsLoading(false);
       }
     };
     getProductPriceAsync();
@@ -162,14 +173,15 @@ const Home = () => {
 
   return (
     <>
+      {isLoading && <Loading />}
       <StyledContainer>
-        <StyledLinkWrapper className='line-link' style={{ padding: "0px" }}>
+        <StyledLinkWrapper className='line-link' style={{ padding: '0px' }}>
           <div className='light'></div>
           <img src={lineLink} alt='' />
         </StyledLinkWrapper>
         <StyledLinkWrapper
           className='produts-link'
-          onClick={() => navigate("/product/all")}
+          onClick={() => navigate('/product/all')}
         >
           <div className='light'></div>
           <img src={productsLink} alt='' />
