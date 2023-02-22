@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import Footer from "./Footer";
@@ -238,6 +238,8 @@ const Layout = () => {
   const [records, setRecords] = useState(null);
   const productInCart = useSelector((state) => state.product.cart);
   const [login, setLogin] = useState(false);
+  const searchRef = useRef(null);
+  const navigate = useNavigate();
 
   const handleToggleLoginModal = () => {
     setIsOpenLoginModal(!isOpenLoginModal);
@@ -247,6 +249,13 @@ const Layout = () => {
   };
   const handleToggleSidebar = () => {
     setIsSideabrOpen(!isSideabrOpen);
+  };
+  const handleSearch = () => {
+    const keyword = searchRef.current.value;
+    if (!keyword || !searchBarActive) return;
+    searchRef.current.value = null;
+    setSearchBarActive(false);
+    navigate(`../product/search/${keyword}`);
   };
 
   useEffect(() => {
@@ -284,16 +293,16 @@ const Layout = () => {
         <Outlet />
         <StyledButtonWrapper>
           <button
-            className='cart-button'
+            className="cart-button"
             onClick={() => setIsCartOpen(!isCartOpen)}
           >
             <CartIcon />
           </button>
-          <div className='count'>{productInCart.length}</div>
-          <span className='search-bar'>
+          <div className="count">{productInCart.length}</div>
+          <span className="search-bar">
             <label
-              className='search'
-              htmlFor='search-input'
+              className="search"
+              htmlFor="search-input"
               onClick={(e) => {
                 e.stopPropagation();
                 // e.nativeEvent.stopImmediatePropagation(); 不知道為什麼不用也沒差
@@ -304,10 +313,16 @@ const Layout = () => {
               <SearchIcon />
             </label>
             <input
-              type='text'
-              id='search-input'
+              type="text"
+              id="search-input"
               className={searchBarActive ? "active" : "none"}
-              placeholder='商品搜尋'
+              placeholder="商品搜尋"
+              ref={searchRef}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  handleSearch();
+                }
+              }}
               onClick={(e) => {
                 e.stopPropagation();
                 // e.nativeEvent.stopImmediatePropagation(); 不知道為什麼不用也沒差
@@ -316,20 +331,20 @@ const Layout = () => {
             />
           </span>
           {searchBarActive && (
-            <ul className='popular-items'>
-              <li className='popular-item'>156565</li>
-              <li className='popular-item'>256555565</li>
-              <li className='popular-item'>356565</li>
-              <li className='popular-item'>456565</li>
-              <li className='popular-item'>456565</li>
-              <li className='popular-item'>4555555555556565</li>
+            <ul className="popular-items">
+              <li className="popular-item">156565</li>
+              <li className="popular-item">256555565</li>
+              <li className="popular-item">356565</li>
+              <li className="popular-item">456565</li>
+              <li className="popular-item">456565</li>
+              <li className="popular-item">4555555555556565</li>
             </ul>
           )}
         </StyledButtonWrapper>
         {records && (
           <StyledSearchWrapper>
             <h6>瀏覽紀錄</h6>
-            <div className='product-wrapper'>
+            <div className="product-wrapper">
               {records?.map((record) => {
                 return <CardItem record={record} key={record.id} />;
               })}
@@ -372,14 +387,14 @@ export const CardItem = ({ record }) => {
   const navigate = useNavigate();
   return (
     <StyledCardItem
-      className='product'
+      className="product"
       onClick={() => {
         navigate(`/product/detail/${record.id}`);
       }}
     >
-      <div className='back-drop'></div>
-      <img src={record.imageUrl} alt='' className='image' />
-      <div className='view'>檢視</div>
+      <div className="back-drop"></div>
+      <img src={record.imageUrl} alt="" className="image" />
+      <div className="view">檢視</div>
     </StyledCardItem>
   );
 };
