@@ -53,7 +53,8 @@ export const lineLogin = async (code) => {
       data: {
         grant_type: "authorization_code",
         code: code,
-        redirect_uri: "http://localhost:3000/pets-store",
+        redirect_uri: "https://beark0515.github.io/pets-store/",
+        // redirect_uri: "http://localhost:3000/pets-store",
         client_id: "1657937254",
         client_secret: "af41c394dd21a6c1ad9f0446f4fdbb60",
       },
