@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { useLocation, useNavigate  } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import ProductAside from './ProductAside';
 import ProductAll from './ProductAll';
 import ProductDog from './ProductDog';
@@ -9,6 +9,7 @@ import { HomeIcon } from '../assets/icons/index';
 import ProductCat from './ProductCat';
 import SingleProduct from './SingleProduct';
 import { HomeLinkWrapper } from '../components/common/HomeLinkWrapper';
+import { IsLoadingComponent as Loading } from '../components/common/IsLoading';
 
 const ProductPageStyled = styled.div`
   box-sizing: border-box;
@@ -60,6 +61,7 @@ const Breadcrumb = styled.div`
 `;
 
 const ProductPage = () => {
+  const [isLoading, setIsLoading] = useState(true);
   const [productHot, setProductHot] = useState([]);
   const [productNew, setProductNew] = useState([]);
   const [productPrice, setProductPrice] = useState([]);
@@ -86,6 +88,7 @@ const ProductPage = () => {
   // useEffect
   //抓熱銷排行
   useEffect(() => {
+    setIsLoading(true);
     const getProductHotAsync = async () => {
       try {
         const resProductlHot = await productsHot();
@@ -93,8 +96,10 @@ const ProductPage = () => {
           (product) => product.isOnShelves === 1
         );
         setProductHot(onShelvesProductHot);
+        setIsLoading(false);
       } catch (err) {
         console.error(err);
+        setIsLoading(false);
       }
     };
     getProductHotAsync();
@@ -103,6 +108,7 @@ const ProductPage = () => {
 
   //抓最新商品
   useEffect(() => {
+    setIsLoading(true);
     const getProductNewAsync = async () => {
       try {
         const resProductNew = await productsNew();
@@ -110,8 +116,10 @@ const ProductPage = () => {
           (product) => product.isOnShelves === 1
         );
         setProductNew(onShelvesProductNew);
+        setIsLoading(false);
       } catch (err) {
         console.error(err);
+        setIsLoading(false);
       }
     };
     getProductNewAsync();
@@ -120,6 +128,7 @@ const ProductPage = () => {
 
   //抓價格排序
   useEffect(() => {
+    setIsLoading(true);
     const getProductPriceAsync = async () => {
       try {
         const resProductPrice = await productsPrice();
@@ -128,11 +137,14 @@ const ProductPage = () => {
         );
         setProductPriceOrigin(onShelvesProductPrice);
         setProductPrice(onShelvesProductPrice);
+        setIsLoading(false);
       } catch (err) {
         console.error(err);
+        setIsLoading(false);
       }
     };
     getProductPriceAsync();
+    
     return;
   }, [setProductPriceOrigin]);
 
@@ -174,52 +186,55 @@ const ProductPage = () => {
   };
 
   return (
-    <ProductPageStyled>
-      <ProductAside />
-      <ProductWrapper>
-        <HomeLinkWrapper>
-          <GoToHome>
-            <HomeIcon
-              onClick={() => navigate('/')}
-              style={{ color: 'var(--dark)', cursor: 'pointer' }}
+    <>
+      {isLoading && <Loading />}
+      <ProductPageStyled>
+        <ProductAside />
+        <ProductWrapper>
+          <HomeLinkWrapper>
+            <GoToHome>
+              <HomeIcon
+                onClick={() => navigate('/')}
+                style={{ color: 'var(--dark)', cursor: 'pointer' }}
+              />
+              <p className='text'>{NowPage}</p>
+            </GoToHome>
+          </HomeLinkWrapper>
+          <Breadcrumb />
+          {page === '/product/all' && (
+            <ProductAll
+              productHot={productHot}
+              productNew={productNew}
+              productPrice={productPrice}
+              priceToggle={priceToggle}
+              sortSelect={sortSelect}
+              sortSelectToggle={sortSelectToggle}
             />
-            <p className='text'>{NowPage}</p>
-          </GoToHome>
-        </HomeLinkWrapper>
-        <Breadcrumb />
-        {page === '/product/all' && (
-          <ProductAll
-            productHot={productHot}
-            productNew={productNew}
-            productPrice={productPrice}
-            priceToggle={priceToggle}
-            sortSelect={sortSelect}
-            sortSelectToggle={sortSelectToggle}
-          />
-        )}
-        {page === '/product/dog' && (
-          <ProductDog
-            productHot={productHot}
-            productNew={productNew}
-            productPrice={productPrice}
-            priceToggle={priceToggle}
-            sortSelect={sortSelect}
-            sortSelectToggle={sortSelectToggle}
-          />
-        )}
-        {page === '/product/cat' && (
-          <ProductCat
-            productHot={productHot}
-            productNew={productNew}
-            productPrice={productPrice}
-            priceToggle={priceToggle}
-            sortSelect={sortSelect}
-            sortSelectToggle={sortSelectToggle}
-          />
-        )}
-        {page.includes('detail') && <SingleProduct />}
-      </ProductWrapper>
-    </ProductPageStyled>
+          )}
+          {page === '/product/dog' && (
+            <ProductDog
+              productHot={productHot}
+              productNew={productNew}
+              productPrice={productPrice}
+              priceToggle={priceToggle}
+              sortSelect={sortSelect}
+              sortSelectToggle={sortSelectToggle}
+            />
+          )}
+          {page === '/product/cat' && (
+            <ProductCat
+              productHot={productHot}
+              productNew={productNew}
+              productPrice={productPrice}
+              priceToggle={priceToggle}
+              sortSelect={sortSelect}
+              sortSelectToggle={sortSelectToggle}
+            />
+          )}
+          {page.includes('detail') && <SingleProduct />}
+        </ProductWrapper>
+      </ProductPageStyled>
+    </>
   );
 };
 

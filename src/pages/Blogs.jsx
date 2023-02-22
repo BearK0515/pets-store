@@ -5,6 +5,8 @@ import { HomeIcon, ClockIcon, BookMarkIcon } from '../assets/icons/index';
 import { HomeLinkWrapper } from '../components/common/HomeLinkWrapper';
 import { artical } from '../api/blogs';
 import { BlogFilterContext } from '../App';
+import { IsLoadingComponent as Loading } from '../components/common/IsLoading';
+import Swal from 'sweetalert2';
 
 const BlogStyled = styled.div`
   box-sizing: border-box;
@@ -293,6 +295,7 @@ const BlogCategoryList = styled.ul`
 
 const Blogs = () => {
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(true);
   const [articalOrigin, setArticalOrigin] = useState([]);
   const [articalAll, setArticalAll] = useState([]);
   const [query, setQuery] = useState('');
@@ -301,6 +304,7 @@ const Blogs = () => {
 
   //抓文章api
   useEffect(() => {
+    setIsLoading(true);
     const getBlogsArticalAsync = async () => {
       try {
         const resArticalAll = await artical();
@@ -309,8 +313,10 @@ const Blogs = () => {
         });
         setArticalOrigin(resArticalAll);
         setArticalAll(resArticalAll);
+        setIsLoading(false);
       } catch (err) {
         console.error(err);
+        setIsLoading(false);
       }
     };
     getBlogsArticalAsync();
@@ -349,7 +355,7 @@ const Blogs = () => {
   };
 
   const handleChange = (e) => {
-    if (e.target.value === 0) {
+    if (e.target.value === null) {
       return;
     }
     setQuery(e.target.value);
@@ -376,60 +382,109 @@ const Blogs = () => {
   };
 
   const handleSearchArtical = (e) => {
-    if (e.target.value === 0) {
+    if (e.target.value === null) {
       return;
     }
     if (e.key === 'Enter') {
-      setArticalAll(
-        articalOrigin.filter((artical) =>
-          artical['title'].includes(e.target.value)
-        )
+      const searchArtical = articalOrigin.filter((artical) =>
+        artical['title'].includes(e.target.value)
       );
+      if (searchArtical.length === 0) {
+        Swal.fire({
+          position: 'center',
+          icon: 'error',
+          title: '查無該關鍵字，請重新輸入',
+          showConfirmButton: false,
+          timer: 1000
+        });
+        return;
+      }
+      setArticalAll(searchArtical);
       e.preventDefault(); //瀏覽器預設行為中斷(需放在if)
     }
   };
 
   return (
-    <BlogStyled>
-      <HomeLinkWrapper>
-        <GoToHome>
-          <HomeIcon
-            onClick={() => navigate('/')}
-            style={{ color: 'var(--dark)', cursor: 'pointer' }}
-          />
-          <p className='text'>部落格</p>
-        </GoToHome>
-      </HomeLinkWrapper>
-      <Breadcrumb />
-      <BlogContent>
-        <BlogSearchTop>
-          <form>
-            <input
-              className='formStyled'
-              type='text'
-              placeholder='請輸入搜尋關鍵字'
-              value={query}
-              onChange={handleChange}
-              onKeyDown={handleSearchArtical}
+    <>
+      {isLoading && <Loading />}
+      <BlogStyled>
+        <HomeLinkWrapper>
+          <GoToHome>
+            <HomeIcon
+              onClick={() => navigate('/')}
+              style={{ color: 'var(--dark)', cursor: 'pointer' }}
             />
-          </form>
-          <form>
-            <select
-              className='formStyled'
-              value={optionsState}
-              onChange={handleChangeSelect}
-            >
-              <option value='default'>- 請選擇文章分類 -</option>
-              <option value='all'>全部文章分類</option>
-              <option value='dog'>狗狗健康知識庫</option>
-              <option value='cat'>貓咪健康知識庫</option>
-            </select>
-          </form>
-        </BlogSearchTop>
-        <BlogListWrapper>
-          <ul>
-            {articalAll.length === 0 &&
-              articalOrigin?.map((artical) => {
+            <p className='text'>部落格</p>
+          </GoToHome>
+        </HomeLinkWrapper>
+        <Breadcrumb />
+        <BlogContent>
+          <BlogSearchTop>
+            <form>
+              <input
+                className='formStyled'
+                type='text'
+                placeholder='請輸入搜尋關鍵字'
+                value={query}
+                onChange={handleChange}
+                onKeyDown={handleSearchArtical}
+              />
+            </form>
+            <form>
+              <select
+                className='formStyled'
+                value={optionsState}
+                onChange={handleChangeSelect}
+              >
+                <option value='default'>- 請選擇文章分類 -</option>
+                <option value='all'>全部文章分類</option>
+                <option value='dog'>狗狗健康知識庫</option>
+                <option value='cat'>貓咪健康知識庫</option>
+              </select>
+            </form>
+          </BlogSearchTop>
+          <BlogListWrapper>
+            <ul>
+              {articalAll.length === 0 &&
+                articalOrigin?.map((artical) => {
+                  return (
+                    <BlogCard key={artical.title}>
+                      <BlogCardImg
+                        style={{ backgroundImage: `url("${artical.image}")` }}
+                      />
+                      <div className='BlogCardInner'>
+                        <div className='BlogCardIntro'>
+                          <h2 className='BlogTitle'>
+                            {artical.isTop && (
+                              <div className='topHighLight'>置頂</div>
+                            )}
+                            <b>{artical.title}</b>
+                          </h2>
+                          <ul className='DateCategory'>
+                            <li className='BlogDate'>
+                              <ClockIcon />
+                              {new Date(artical.createdAt).toLocaleDateString()}
+                            </li>
+                            <li className='BlogCategory'>
+                              <BookMarkIcon />
+                              {artical['category'].includes('dog') &&
+                                '狗狗健康知識庫'}
+                              {artical['category'].includes('cat') &&
+                                '貓貓健康知識庫'}
+                            </li>
+                          </ul>
+                          <article>
+                            <p>
+                              {artical.content}
+                              <span>...閱讀更多</span>
+                            </p>
+                          </article>
+                        </div>
+                      </div>
+                    </BlogCard>
+                  );
+                })}
+              {articalAll?.map((artical) => {
                 return (
                   <BlogCard key={artical.title}>
                     <BlogCardImg
@@ -467,104 +522,67 @@ const Blogs = () => {
                   </BlogCard>
                 );
               })}
-            {articalAll?.map((artical) => {
-              return (
-                <BlogCard key={artical.title}>
-                  <BlogCardImg
-                    style={{ backgroundImage: `url("${artical.image}")` }}
+            </ul>
+          </BlogListWrapper>
+          <BlogAside>
+            <div className='BlogArticalInner'>
+              <BlogSearch>
+                <h4>
+                  <b>搜尋文章</b>
+                </h4>
+                <form>
+                  <input
+                    className='formStyled'
+                    type='text'
+                    placeholder='搜尋文章'
+                    value={query}
+                    onChange={handleChange}
+                    onKeyDown={handleSearchArtical}
                   />
-                  <div className='BlogCardInner'>
-                    <div className='BlogCardIntro'>
-                      <h2 className='BlogTitle'>
-                        {artical.isTop && (
-                          <div className='topHighLight'>置頂</div>
-                        )}
-                        <b>{artical.title}</b>
-                      </h2>
-                      <ul className='DateCategory'>
-                        <li className='BlogDate'>
-                          <ClockIcon />
-                          {new Date(artical.createdAt).toLocaleDateString()}
-                        </li>
-                        <li className='BlogCategory'>
-                          <BookMarkIcon />
-                          {artical['category'].includes('dog') &&
-                            '狗狗健康知識庫'}
-                          {artical['category'].includes('cat') &&
-                            '貓貓健康知識庫'}
-                        </li>
-                      </ul>
-                      <article>
-                        <p>
-                          {artical.content}
-                          <span>...閱讀更多</span>
-                        </p>
-                      </article>
+                </form>
+              </BlogSearch>
+              <BlogNews>
+                <h4>
+                  <b>最新文章</b>
+                </h4>
+                <BlogArticalList>
+                  {articalOrigin?.map((artical) => {
+                    return (
+                      <li className='articalContent' key={artical.title}>
+                        <h6>{artical.title}</h6>
+                        <ul className='DateCategory'>
+                          <li className='BlogDate'>
+                            <ClockIcon />
+                            {new Date(artical.updatedAt).toLocaleDateString()}
+                          </li>
+                        </ul>
+                      </li>
+                    );
+                  })}
+                </BlogArticalList>
+              </BlogNews>
+              <BlogCategoryArea>
+                <h4>
+                  <b>文章分類</b>
+                </h4>
+                <BlogCategoryList>
+                  <li onClick={handleFilterDog}>
+                    <div className='toFlex'>
+                      <h6>狗狗健康知識庫</h6>
                     </div>
-                  </div>
-                </BlogCard>
-              );
-            })}
-          </ul>
-        </BlogListWrapper>
-        <BlogAside>
-          <div className='BlogArticalInner'>
-            <BlogSearch>
-              <h4>
-                <b>搜尋文章</b>
-              </h4>
-              <form>
-                <input
-                  className='formStyled'
-                  type='text'
-                  placeholder='搜尋文章'
-                  value={query}
-                  onChange={handleChange}
-                  onKeyDown={handleSearchArtical}
-                />
-              </form>
-            </BlogSearch>
-            <BlogNews>
-              <h4>
-                <b>最新文章</b>
-              </h4>
-              <BlogArticalList>
-                {articalOrigin?.map((artical) => {
-                  return (
-                    <li className='articalContent' key={artical.title}>
-                      <h6>{artical.title}</h6>
-                      <ul className='DateCategory'>
-                        <li className='BlogDate'>
-                          <ClockIcon />
-                          {new Date(artical.updatedAt).toLocaleDateString()}
-                        </li>
-                      </ul>
-                    </li>
-                  );
-                })}
-              </BlogArticalList>
-            </BlogNews>
-            <BlogCategoryArea>
-              <h4>
-                <b>文章分類</b>
-              </h4>
-              <BlogCategoryList>
-                <li onClick={handleFilterDog}>
-                  <div className='toFlex'>
-                    <h6>狗狗健康知識庫</h6>
-                  </div>
-                </li>
-                <li onClick={handleFilterCat}>
-                  <div className='toFlex'>
-                    <h6>貓貓健康知識庫</h6>
-                  </div>
-                </li>
-              </BlogCategoryList>
-            </BlogCategoryArea>
-          </div>
-        </BlogAside>
-      </BlogContent>
-    </BlogStyled>
+                  </li>
+                  <li onClick={handleFilterCat}>
+                    <div className='toFlex'>
+                      <h6>貓貓健康知識庫</h6>
+                    </div>
+                  </li>
+                </BlogCategoryList>
+              </BlogCategoryArea>
+            </div>
+          </BlogAside>
+        </BlogContent>
+      </BlogStyled>
+    </>
   );
 };
 

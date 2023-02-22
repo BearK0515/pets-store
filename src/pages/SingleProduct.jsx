@@ -16,6 +16,7 @@ import order from '../assets/images/order.png';
 import ProductPopCart from './ProductPopCart';
 import { productDetail } from '../api/products';
 import { addTocart, setCount as countRedux } from '../store/productSlice';
+import { IsLoadingComponent as Loading } from '../components/common/IsLoading';
 
 const StyledContainer = styled.div`
   position: relative;
@@ -554,6 +555,7 @@ const StyledBuyButton = styled.div`
 const SingleProduct = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(true);
   const { productId } = useParams();
   const [product, setProduct] = useState(null);
   const [count, setCount] = useState(1);
@@ -589,12 +591,15 @@ const SingleProduct = () => {
 
   //抓單一商品
   useEffect(() => {
+    setIsLoading(true);
     const getSingleProductAsync = async () => {
       try {
         const resSingleProduct = await productDetail(productId);
         setProduct(resSingleProduct);
+        setIsLoading(false);
       } catch (err) {
         console.error(err);
+        setIsLoading(false);
       }
     };
     getSingleProductAsync();
@@ -666,6 +671,7 @@ const SingleProduct = () => {
 
   return (
     <>
+      {isLoading && <Loading />}
       {/* 加入購物車 */}
       <StyledContainer>
         <div className='cont'>
