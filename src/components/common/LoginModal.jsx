@@ -3,8 +3,8 @@ import React, { useState } from "react";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { LoginSocialFacebook } from "reactjs-social-login";
-import { facebookLogin, googleLogin } from "../../api/userLogin";
+import { LoginSocialFacebook, LoginSocialGoogle } from "reactjs-social-login";
+import { facebookLogin } from "../../api/userLogin";
 import {
   AlertIcon,
   CancelIcon,
@@ -159,23 +159,27 @@ const LoginModal = ({
   const navigate = useNavigate();
   const [email, setEmail] = useState(null);
   const [name, setName] = useState(null);
-
   const linkTo = (location) => {
     setIsOpenLoginModal(false);
     navigate(location);
   };
-
   useEffect(() => {
     const getUserInfo = async () => {
       const { token, user } = await facebookLogin({ email, name });
       localStorage.setItem("authToken", token);
       localStorage.setItem("UserId", user.id);
       handleToggleLoginModal();
-      setLogin(true)
+      setLogin(true);
     };
     if (!email || !name) return;
     getUserInfo();
   }, [email, name]);
+
+  const handleLineLogin = async () => {
+    window.location.replace(
+      `https://access.line.me/oauth2/v2.1/authorize?response_type=code&client_id=1657937254&redirect_uri=http://localhost:3000/pets-store&state=12345abcde&scope=profile%20openid%20email&nonce=09876xyz`
+    );
+  };
 
   return (
     <StyledModalContainer>
@@ -191,14 +195,14 @@ const LoginModal = ({
           <div className='wrapper'>
             <h3>綁定社群帳號，快速登入</h3>
             <div className='icon-wrapper'>
-              <div className='icon line'>
+              <div className='icon line' onClick={handleLineLogin}>
                 <div>
                   <LineWhiteIcon />
                 </div>
                 <p>登入</p>
               </div>
               <LoginSocialFacebook
-                appId='1699530640464382'
+                appId={process.env.FACEBOOK_APPID}
                 onResolve={(res) => {
                   setEmail(res.data.email);
                   setName(res.data.name);
@@ -214,12 +218,26 @@ const LoginModal = ({
                   <p>登入</p>
                 </div>
               </LoginSocialFacebook>
-              <div className='icon google' onClick={() => googleLogin()}>
-                <div>
-                  <GoogleIcon />
+              <LoginSocialGoogle
+                client_id={process.env.GOOGLE_APPID}
+                scope='openid profile email'
+                onResolve={(res) => {
+                  console.log(res);
+                  // setEmail(res.data.email);
+                  // setName(res.data.name);
+                }}
+                onReject={(err) => {
+                  console.log(err);
+                }}
+                // onClick={()=>console.log("click")}
+              >
+                <div className='icon google'>
+                  <div>
+                    <GoogleIcon />
+                  </div>
+                  <p>登入</p>
                 </div>
-                <p>登入</p>
-              </div>
+              </LoginSocialGoogle>
             </div>
             <div className='waring-wrapper'>
               <div>
