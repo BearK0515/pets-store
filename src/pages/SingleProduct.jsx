@@ -553,7 +553,7 @@ const StyledBuyButton = styled.div`
   }
 `;
 const SingleProduct = () => {
-  window.scrollTo(0, 450);
+  window.scrollTo(0, 350);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
