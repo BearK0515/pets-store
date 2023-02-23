@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import Swal from 'sweetalert2';
 import { getTownName } from '../api/products';
@@ -53,6 +54,11 @@ const StyledCartContainter = styled.section`
   flex-flow: column;
   border: 1px solid rgba(0, 0, 0, 0.1);
   border-radius: 5px;
+  .productHover {
+    &:hover {
+      text-decoration: underline;
+    }
+  }
   ul {
     display: grid;
     grid-template-columns: 2fr 1fr minmax(80px, auto) 150px 150px 80px;
@@ -242,6 +248,7 @@ const StyledOrderContainer = styled.div`
     display: flex;
     flex-flow: column;
   }
+
   .item-area {
     margin-bottom: 30px;
     padding: 30px;
@@ -539,7 +546,7 @@ const Checkbox = styled.label`
 const Cart = () => {
   useEffect(() => {
     window.scrollTo(0, 125);
-  },[])
+  }, []);
 
   const cartProducts = useSelector((state) => state.product.cart);
   let totalAmount = cartProducts.reduce(
@@ -560,9 +567,22 @@ const Cart = () => {
     ProductId: product.id,
     orderQuantity: product.count
   }));
+  const [copy, setCopy] = useState(true);
+
+  const copyInfo = () => {
+    setCopy(!copy);
+    if (copy) {
+      setReceiverName(purchaserName);
+      setReceiverPhone(purchaserPhone);
+    } else {
+      setReceiverName('');
+      setReceiverPhone('');
+    }
+  };
+
   const handlesubmit = async () => {
     try {
-      const { data } = await submitOrder({
+      const data = await submitOrder({
         purchaserName,
         purchaserPhone,
         purchaserEmail,
@@ -575,6 +595,7 @@ const Cart = () => {
         deliveryId
       });
       const { status, orderNumber } = data;
+
       if (status === 'success') {
         Swal.fire({
           position: 'top',
@@ -584,6 +605,7 @@ const Cart = () => {
           showConfirmButton: true
         });
       }
+
       setPurchaserName('');
       setPurchaserPhone('');
       setPurchaserEmail('');
@@ -676,12 +698,20 @@ const Cart = () => {
                   <p>務必正確輸入購買人姓名確保正確送達。</p>
                 </div>
                 <Input
+                  type='number'
                   placeholder='請輸入聯絡電話'
                   label='聯絡電話只能輸入8~20碼以內的數字及+和#符號。'
                   value={purchaserPhone}
                   onChange={(e) => setPurchaserPhone(e.target.value)}
                 />
+                <div className='tips'>
+                  <div>
+                    <ArrowRightIcon color='#27ae61' />
+                  </div>
+                  <p>聯絡電話只能輸入8~20碼以內的數字及+和#符號。</p>
+                </div>
                 <Input
+                  type='email'
                   placeholder='ex: example@wahaha.com'
                   label='Email無法辨識，請與郵件供應商聯絡。'
                   value={purchaserEmail}
@@ -712,7 +742,7 @@ const Cart = () => {
                 </div>
                 <div className='check'>
                   <Checkbox>
-                    <input type='checkbox' id='buyer-info' />
+                    <input type='checkbox' id='buyer-info' onClick={copyInfo} />
                   </Checkbox>
                   <label htmlFor='buyer-info'>收件人同購買人資料</label>
                 </div>
@@ -734,6 +764,12 @@ const Cart = () => {
                   value={receiverPhone}
                   onChange={(e) => setReceiverPhone(e.target.value)}
                 />
+                <div className='tips'>
+                  <div>
+                    <ArrowRightIcon color='#27ae61' />
+                  </div>
+                  <p>聯絡電話只能輸入8~20碼以內的數字及+和#符號。</p>
+                </div>
               </div>
               {/* 發票資料 */}
               <div className='wrapper invoice-information'>
@@ -787,10 +823,12 @@ const Product = ({ product }) => {
   const id = product.id;
   return (
     <ul className='product'>
-      <li className='name'>
-        <img src={product?.image} alt='' />
-        <p>{product?.name}</p>
-      </li>
+      <Link className='productHover' to={`/product/detail/${product.id}`}>
+        <li className='name'>
+          <img src={product?.image} alt='' />
+          <p>{product?.name}</p>
+        </li>
+      </Link>
       <li className='style'>30包/盒</li>
       <li className='count'>
         <select
