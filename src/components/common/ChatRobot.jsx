@@ -40,8 +40,8 @@ const StyledChatRobot = styled.div`
 
   @media screen and (max-width: 768px) {
     .top-button {
-      width: 80px;
-      height: 80px;
+      width: 40px;
+      height: 40px;
       position: fixed;
       right: 20px;
       bottom: 60px;
@@ -49,7 +49,7 @@ const StyledChatRobot = styled.div`
 
     .transformUp {
       animation: messageMoveUp 0.1s ease-in 1 alternate;
-      transform: translate(0, -100px);
+      transform: translate(0, -50px);
     }
 
     @keyframes messageMoveUp {
@@ -57,13 +57,13 @@ const StyledChatRobot = styled.div`
         transform: translate(0, 0);
       }
       to {
-        transform: translate(0, -100px);
+        transform: translate(0, -50px);
       }
     }
 
     .chat-robot {
-      width: 60px;
-      height: 60px;
+      width: 30px;
+      height: 30px;
     }
   }
 `;

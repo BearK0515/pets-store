@@ -34,11 +34,11 @@ const GoTopStyled = styled.ul`
     .top-icon {
       position: fixed;
       right: 20px;
-      bottom: 20px;
-      font-size: 4em;
-      height: 80px;
-      width: 80px;
-      margin: 40px 0;
+      bottom: 40px;
+      font-size: 2em;
+      height: 40px;
+      width: 40px;
+      margin: 20px 0;
   }
 `;
 
