@@ -537,7 +537,10 @@ const Checkbox = styled.label`
 `;
 
 const Cart = () => {
-  window.scrollTo(0, 125);
+  useEffect(() => {
+    window.scrollTo(0, 125);
+  },[])
+
   const cartProducts = useSelector((state) => state.product.cart);
   let totalAmount = cartProducts.reduce(
     (total, item) =>
