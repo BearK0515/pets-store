@@ -16,6 +16,7 @@ const StyledChatRobot = styled.div`
     border: 1px solid #ddd;
     border-radius: 4px;
     cursor: pointer;
+    opacity: 0.8;
   }
 
   .transformUp {
@@ -34,6 +35,35 @@ const StyledChatRobot = styled.div`
     }
     to {
       transform: translate(0, -60px);
+    }
+  }
+
+  @media screen and (max-width: 768px) {
+    .top-button {
+      width: 80px;
+      height: 80px;
+      position: fixed;
+      right: 20px;
+      bottom: 60px;
+    }
+
+    .transformUp {
+      animation: messageMoveUp 0.1s ease-in 1 alternate;
+      transform: translate(0, -100px);
+    }
+
+    @keyframes messageMoveUp {
+      from {
+        transform: translate(0, 0);
+      }
+      to {
+        transform: translate(0, -100px);
+      }
+    }
+
+    .chat-robot {
+      width: 60px;
+      height: 60px;
     }
   }
 `;

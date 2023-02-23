@@ -19,14 +19,18 @@ const IsLoadingStyle = styled.div`
   z-index: 4;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%);
+  transform: translate(-75%, -50%);
 `;
 
 export function IsLoadingComponent() {
   return (
     <FixedBackground>
       <IsLoadingStyle>
-        <PacmanLoader color='#469189' size='75px' speedMultiplier='2' />
+        <PacmanLoader
+          color='#469189'
+          size='75px'
+          speedMultiplier='2'
+        />
       </IsLoadingStyle>
     </FixedBackground>
   );
