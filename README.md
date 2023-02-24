@@ -64,8 +64,6 @@
 
   ![](https://i.imgur.com/x5riKcY.gif)
 
-  - 頁面右側有關鍵字搜尋商品，可篩選想要的商品。
-
   - 商品可依照熱銷排行/上架時間/價格由高至低/價格由低至高排序。
 
   ![](https://i.imgur.com/DqGmZA5.gif)
@@ -74,7 +72,6 @@
 
   ![](https://i.imgur.com/d49XmaW.gif)
 
-  - 頁面可使用 messenger 聊天機器人進行對話。
 
 ### 管理後台
 
@@ -96,7 +93,7 @@
 - Create React App - 建立專案項目環境
 - React - Function Components + Hooks
 - Prettier - 統一程式碼格式
-- AWS - 部屬網站
+- AWS - 後端架伺服器用
 - [axios: 1.2.2](https://axios-http.com/) - 串接API
 - [react-icons: 4.7.1](https://react-icons.github.io/react-icons/) - 各種小 icon 引用
 - [react-redux: 8.0.5](https://react-redux.js.org/) - 管理購物車狀態

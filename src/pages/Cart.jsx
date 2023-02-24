@@ -29,6 +29,7 @@ const StyledContainer = styled.div`
     display: flex;
     flex-flow: column;
   }
+
   .item-area {
     margin-bottom: 30px;
     padding: 30px;
@@ -248,7 +249,9 @@ const StyledOrderContainer = styled.div`
     display: flex;
     flex-flow: column;
   }
-
+  .mustInfo {
+    color: #cb3747;
+  }
   .item-area {
     margin-bottom: 30px;
     padding: 30px;
@@ -665,6 +668,7 @@ const Cart = () => {
       </StyledContainer>
       <StyledOrderContainer>
         <div className='cont'>
+          <div className='mustInfo'>*資料皆為必填資訊</div>
           <div className='item-area'>
             <div className='container'>
               {/* 購物資訊 */}
