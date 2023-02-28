@@ -112,6 +112,7 @@ https://github.com/BearK0515/pets-store.git
 ```
 - 開啟終端機(Terminal)進入專案資料夾，輸入
 
+
 ```
 npm install
 ```
