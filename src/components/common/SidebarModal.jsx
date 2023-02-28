@@ -1,15 +1,15 @@
-import React from 'react';
-import { useState, useContext } from 'react';
-import { useNavigate } from 'react-router-dom';
-import styled from 'styled-components';
+import React from "react";
+import { useState, useContext } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import styled from "styled-components";
 import {
   FacebookIcon,
   HomeIcon,
   InstagramIcon,
-  LineIcon
-} from '../../assets/icons';
-import smallLogo from '../../assets/icons/logo-small.jpg';
-import { BlogFilterContext } from '../../App';
+  LineIcon,
+} from "../../assets/icons";
+import smallLogo from "../../assets/icons/logo-small.jpg";
+import { BlogFilterContext } from "../../App";
 
 const StyledSidebar = styled.div`
   width: 100vw;
@@ -93,7 +93,7 @@ const StyledContainer = styled.div`
       position: relative;
     }
     .blogs::after {
-      content: '';
+      content: "";
       position: absolute;
       top: 0;
       bottom: 0;
@@ -143,41 +143,41 @@ const SidebarModal = ({ setIsSideabrOpen }) => {
     setIsArticleOpen(!isArticleOpen);
   }
   function GoToHome() {
-    navigate('/');
+    navigate("/");
     setIsSideabrOpen(false);
   }
   function GoToAbout() {
-    navigate('/about');
+    navigate("/about");
     setIsSideabrOpen(false);
   }
   function GoToProductAll() {
-    navigate('/product/all');
+    navigate("/product/all");
     setIsSideabrOpen(false);
   }
   function GoToProductDog() {
-    navigate('/product/dog');
+    navigate("/product/dog");
     setIsSideabrOpen(false);
   }
   function GoToProductCat() {
-    navigate('/product/cat');
+    navigate("/product/cat");
     setIsSideabrOpen(false);
   }
   function GoToBlogsDog() {
-    navigate('/blogs');
-    setBlogFilter('dog');
+    navigate("/blogs");
+    setBlogFilter("dog");
     setIsSideabrOpen(false);
   }
   function GoToBlogsCat() {
-    navigate('/blogs');
-    setBlogFilter('cat');
+    navigate("/blogs");
+    setBlogFilter("cat");
     setIsSideabrOpen(false);
   }
   function GoToOrderSearch() {
-    navigate('/order/query');
+    navigate("/order/query");
     setIsSideabrOpen(false);
   }
   function GoToFaq() {
-    navigate('/faq');
+    navigate("/faq");
     setIsSideabrOpen(false);
   }
 
@@ -187,9 +187,11 @@ const SidebarModal = ({ setIsSideabrOpen }) => {
       <StyledContainer>
         <div className='top'>
           <div className='logo-wrapper'>
-            <div className='logo'>
-              <img src={smallLogo} alt='' />
-            </div>
+            <Link to='login'>
+              <div className='logo'>
+                <img src={smallLogo} alt='' />
+              </div>
+            </Link>
             <h2>毛孩時代Petstimes | 寵物保健食品領導品牌NO.1</h2>
           </div>
           <div className='icons-group'>
@@ -218,7 +220,7 @@ const SidebarModal = ({ setIsSideabrOpen }) => {
             <p>貓咪專區</p>
           </div>
           <div
-            className={`item ${isArticleOpen ? 'active' : ''}`}
+            className={`item ${isArticleOpen ? "active" : ""}`}
             onClick={handleToggleArticle}
           >
             <p className='blogs'>部落格</p>

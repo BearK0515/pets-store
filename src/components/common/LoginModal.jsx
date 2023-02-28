@@ -205,7 +205,7 @@ const LoginModal = ({
                 <p>登入</p>
               </div>
               <LoginSocialFacebook
-                appId={process.env.FACEBOOK_APPID}
+                appId='1699530640464382'
                 onResolve={(res) => {
                   setEmail(res.data.email);
                   setName(res.data.name);
@@ -222,7 +222,7 @@ const LoginModal = ({
                 </div>
               </LoginSocialFacebook>
               <LoginSocialGoogle
-                client_id={process.env.GOOGLE_APPID}
+                client_id='1089820286873-p5k491t42gkgbd29cijfuit0kgi7h18k.apps.googleusercontent.com'
                 scope='openid profile email'
                 onResolve={(res) => {
                   setEmail(res.data.email);
