@@ -1,9 +1,12 @@
-import React, { useEffect } from "react";
-import styled from "styled-components";
-import { useNavigate } from "react-router-dom";
-import { HomeIcon, ClockIcon, BookMarkIcon } from "../assets/icons/index";
-import { HomeLinkWrapper } from "../components/common/HomeLinkWrapper";
-import { articles } from "../api/blogs";
+import React, { useEffect, useState, useContext } from 'react';
+import styled from 'styled-components';
+import { useNavigate } from 'react-router-dom';
+import { HomeIcon, ClockIcon, BookMarkIcon } from '../assets/icons/index';
+import { HomeLinkWrapper } from '../components/common/HomeLinkWrapper';
+import { artical } from '../api/blogs';
+import { BlogFilterContext } from '../App';
+import { IsLoadingComponent as Loading } from '../components/common/IsLoading';
+import Swal from 'sweetalert2';
 
 const BlogStyled = styled.div`
   box-sizing: border-box;
@@ -15,25 +18,67 @@ const BlogStyled = styled.div`
 `;
 const GoToHome = styled.div`
   display: flex;
-  justify-content: flex-end;
   align-items: center;
+  justify-content: flex-start;
+  position: relative;
   width: 100%;
-  text-align: right;
-  font-size: 1rem;
+  text-align: left;
+  font-size: 1.2rem;
   font-weight: 400;
-  line-height: 1.5;
-  color: var(--dark);
+
+  @media only screen and (min-width: 992px) {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    width: 100%;
+    text-align: right;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: var(--dark);
+  }
+`;
+
+const BlogSearchTop = styled.div`
+  @media only screen and (min-width: 992px) {
+    display: none;
+  }
+  @media only screen and (max-width: 992px) {
+    outline: 1px solid #c7cbd0;
+    outline-offset: -1px;
+    width: 100%;
+    margin-bottom: 15px;
+    padding: 15px;
+    h4 {
+      font-size: 18px;
+      line-height: 1;
+      margin-top: 0px;
+    }
+    b {
+      font-weight: bolder;
+    }
+    .formStyled {
+      width: 100%;
+      height: 36px;
+      margin: 5px 0;
+      padding: 10px;
+      border: 1px solid #d9d9d9;
+      color: var(--gray);
+    }
+  }
 `;
 
 const Breadcrumb = styled.div`
-  margin-bottom: 20px;
-  position: relative;
+  display: flex;
+  align-items: center;
 `;
 
 const BlogContent = styled.div`
-  display: grid;
-  grid-template-columns: 1fr 230px;
-  grid-gap: 0 15px;
+  @media only screen and (min-width: 992px) {
+    display: grid;
+    grid-template-columns: 1fr 230px;
+    gap: 0 15px;
+  }
 `;
 
 const BlogListWrapper = styled.div`
@@ -48,18 +93,21 @@ const BlogListWrapper = styled.div`
 
 const BlogCard = styled.li`
   margin-bottom: 50px;
-
   .BlogCardInner {
+    z-index: 10;
     padding: 20px 0;
-    outline: 1px solid #c7cbd0;
-    outline-offset: 20px;
+    border-right: 1px solid #c7cbd0;
+    border-bottom: 1px solid #c7cbd0;
+    border-left: 1px solid #c7cbd0;
   }
   .BlogCardIntro {
     display: grid;
     grid-gap: 10px 0;
+    padding: 20px;
   }
   .BlogTitle {
     display: flex;
+    gap: 10px;
     justify-content: start;
     align-items: center;
     overflow-wrap: break-all;
@@ -82,6 +130,7 @@ const BlogCard = styled.li`
   }
   .DateCategory {
     display: flex;
+    align-items: baseline;
     gap: 0 10px;
     color: var(--gray);
   }
@@ -89,7 +138,7 @@ const BlogCard = styled.li`
     display: flex;
     align-items: center;
     gap: 0 3px;
-    font-size: 14px;
+    font-size: 16px;
   }
   .BlogCategory {
     display: flex;
@@ -111,31 +160,36 @@ const BlogCardImg = styled.div`
   aspect-ratio: 4/2;
   background-size: cover;
   background-position: center center;
-  background-image: url("https://i.imgur.com/KZ2rS8G.jpg");
+  background-image: url('https://i.imgur.com/KZ2rS8G.jpg');
 `;
 
 const BlogAside = styled.div`
-  // border: 2px solid red;
+  //
 `;
 
 const BlogSearch = styled.div`
-  outline: 1px solid #c7cbd0;
-  outline-offset: -1px;
-  margin-bottom: 15px;
-  padding: 15px;
-  h4 {
-    font-size: 18px;
-    line-height: 1;
-    margin-top: 0px;
+  @media only screen and (max-width: 992px) {
+    display: none;
   }
-  b {
-    font-weight: bolder;
-  }
-  .formStyled {
-    height: 36px;
-    margin-top: 10px;
-    padding: 10px;
-    border: 1px solid #d9d9d9;
+  @media only screen and (min-width: 992px) {
+    outline: 1px solid #c7cbd0;
+    outline-offset: -1px;
+    margin-bottom: 15px;
+    padding: 15px;
+    h4 {
+      font-size: 18px;
+      line-height: 1;
+      margin-top: 0px;
+    }
+    b {
+      font-weight: bolder;
+    }
+    .formStyled {
+      height: 36px;
+      margin-top: 10px;
+      padding: 10px;
+      border: 1px solid #d9d9d9;
+    }
   }
 `;
 
@@ -179,8 +233,9 @@ const BlogArticalList = styled.ul`
     justify-content: end;
     align-items: center;
     gap: 0 3px;
-    font-size: 14px;
+    font-size: 16px;
     color: var(--gray);
+    margin-top: 5px;
   }
   .BlogCategory {
     display: flex;
@@ -210,6 +265,7 @@ const BlogCategoryList = styled.ul`
   margin-top: 15px;
   font-size: 14px;
   color: var(--gray);
+  cursor: pointer;
   li {
     margin-bottom: 10px;
     padding-bottom: 10px;
@@ -228,7 +284,7 @@ const BlogCategoryList = styled.ul`
       display: block;
       background-color: #c8c8c8;
       border-radius: 50%;
-      content: "";
+      content: '';
       margin-right: 10px;
       height: 5px;
       width: 5px;
@@ -239,224 +295,294 @@ const BlogCategoryList = styled.ul`
 
 const Blogs = () => {
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(true);
+  const [articalOrigin, setArticalOrigin] = useState([]);
+  const [articalAll, setArticalAll] = useState([]);
+  const [query, setQuery] = useState('');
+  const [optionsState, setOptionsState] = useState('');
+  const { blogFilter } = useContext(BlogFilterContext);
 
+  //抓文章api
   useEffect(() => {
-    const getArticlesAsync = async () => {
+    setIsLoading(true);
+    const getBlogsArticalAsync = async () => {
       try {
-        const repArticles = await articles();
-        console.log(repArticles.data);
-      } catch (error) {
-        console.error(error);
+        const resArticalAll = await artical();
+        resArticalAll.sort((a, b) => {
+          return b.isTop - a.isTop; //正數-負數排序(true[1]-false[0])
+        });
+        setArticalOrigin(resArticalAll);
+        setArticalAll(resArticalAll);
+        setIsLoading(false);
+      } catch (err) {
+        console.error(err);
+        setIsLoading(false);
       }
     };
-    getArticlesAsync();
+    getBlogsArticalAsync();
     return;
-  }, []);
+  }, [setArticalOrigin]);
+
+  useEffect(() => {
+    if (blogFilter === 'null') {
+      return;
+    }
+    if (blogFilter === 'dog') {
+      setOptionsState(blogFilter);
+      setArticalAll(
+        articalOrigin.filter((artical) => artical.category === 'dog')
+      );
+    } else if (blogFilter === 'cat') {
+      setOptionsState(blogFilter);
+      setArticalAll(
+        articalOrigin.filter((artical) => artical.category === 'cat')
+      );
+    }
+  }, [blogFilter, articalOrigin]);
+
+  const handleFilterDog = () => {
+    setOptionsState('dog');
+    setArticalAll(
+      articalOrigin.filter((artical) => artical.category === 'dog')
+    );
+  };
+
+  const handleFilterCat = () => {
+    setOptionsState('cat');
+    setArticalAll(
+      articalOrigin.filter((artical) => artical.category === 'cat')
+    );
+  };
+
+  const handleChange = (e) => {
+    if (e.target.value === null) {
+      return;
+    }
+    setQuery(e.target.value);
+  };
+
+  const handleChangeSelect = (e) => {
+    if (e.target.value === 'default') {
+      return;
+    }
+    if (e.target.value === 'all') {
+      setArticalAll(articalOrigin);
+    }
+    if (e.target.value === 'dog') {
+      setArticalAll(
+        articalOrigin.filter((artical) => artical.category === 'dog')
+      );
+    }
+    if (e.target.value === 'cat') {
+      setArticalAll(
+        articalOrigin.filter((artical) => artical.category === 'cat')
+      );
+    }
+    setOptionsState(e.target.value);
+  };
+
+  const handleSearchArtical = (e) => {
+    if (e.target.value === null) {
+      return;
+    }
+    if (e.key === 'Enter') {
+      const searchArtical = articalOrigin.filter((artical) =>
+        artical['title'].includes(e.target.value)
+      );
+      if (searchArtical.length === 0) {
+        Swal.fire({
+          position: 'center',
+          icon: 'error',
+          title: '查無該關鍵字，請重新輸入',
+          showConfirmButton: false,
+          timer: 1000
+        });
+        return;
+      }
+      setArticalAll(searchArtical);
+      e.preventDefault(); //瀏覽器預設行為中斷(需放在if)
+    }
+  };
 
   return (
-    <BlogStyled>
-      <HomeLinkWrapper>
-        <GoToHome>
-          <HomeIcon
-            onClick={() => navigate("/home")}
-            style={{ color: "var(--dark)", cursor: "pointer" }}
-          />
-          <p className='text'>部落格</p>
-        </GoToHome>
-      </HomeLinkWrapper>
-      <Breadcrumb />
-      <BlogContent>
-        <BlogListWrapper>
-          <ul>
-            <BlogCard>
-              <BlogCardImg />
-              <div className='BlogCardInner'>
-                <div className='BlogCardIntro'>
-                  <h2 className='BlogTitle'>
-                    <div className='topHighLight'>置頂</div>
-                    <b>【10種貓不能吃的食物】主人們你的同情害到他了！</b>
-                  </h2>
-                  <ul className='DateCategory'>
-                    <li className='BlogDate'>
-                      <ClockIcon />
-                      01 Jan, 2021
-                    </li>
-                    <li className='BlogCategory'>
-                      <BookMarkIcon />
-                      貓咪健康知識庫
-                    </li>
-                  </ul>
-                  <article>
-                    <p>
-                      貓不能吃什麼？主人們你的同情害到他了！
-                      Joe常常在吃飯的時候，我家那隻貓皇上就在旁邊喵喵叫，不給他吃好像對不起我的主子但我都堅持不把人類的食物給他，因為人類食物對毛孩的身體健康，藏著很多隱形危機（當然有些還是可以的，請詳見內文）
-                      今天我們就來討論家裡的<span>...閱讀更多</span>
-                    </p>
-                  </article>
-                </div>
-              </div>
-            </BlogCard>
-            <BlogCard>
-              <BlogCardImg />
-              <div className='BlogCardInner'>
-                <div className='BlogCardIntro'>
-                  <h2 className='BlogTitle'>
-                    <div className='topHighLight'>置頂</div>
-                    <b>【10種貓不能吃的食物】主人們你的同情害到他了！</b>
-                  </h2>
-                  <ul className='DateCategory'>
-                    <li className='BlogDate'>
-                      <ClockIcon />
-                      01 Jan, 2021
-                    </li>
-                    <li className='BlogCategory'>
-                      <BookMarkIcon />
-                      貓咪健康知識庫
-                    </li>
-                  </ul>
-                  <article>
-                    <p>
-                      貓不能吃什麼？主人們你的同情害到他了！
-                      Joe常常在吃飯的時候，我家那隻貓皇上就在旁邊喵喵叫，不給他吃好像對不起我的主子但我都堅持不把人類的食物給他，因為人類食物對毛孩的身體健康，藏著很多隱形危機（當然有些還是可以的，請詳見內文）
-                      今天我們就來討論家裡的<span>...閱讀更多</span>
-                    </p>
-                  </article>
-                </div>
-              </div>
-            </BlogCard>
-            <BlogCard>
-              <BlogCardImg />
-              <div className='BlogCardInner'>
-                <div className='BlogCardIntro'>
-                  <h2 className='BlogTitle'>
-                    <div className='topHighLight'>置頂</div>
-                    <b>【10種貓不能吃的食物】主人們你的同情害到他了！</b>
-                  </h2>
-                  <ul className='DateCategory'>
-                    <li className='BlogDate'>
-                      <ClockIcon />
-                      01 Jan, 2021
-                    </li>
-                    <li className='BlogCategory'>
-                      <BookMarkIcon />
-                      貓咪健康知識庫
-                    </li>
-                  </ul>
-                  <article>
-                    <p>
-                      貓不能吃什麼？主人們你的同情害到他了！
-                      Joe常常在吃飯的時候，我家那隻貓皇上就在旁邊喵喵叫，不給他吃好像對不起我的主子但我都堅持不把人類的食物給他，因為人類食物對毛孩的身體健康，藏著很多隱形危機（當然有些還是可以的，請詳見內文）
-                      今天我們就來討論家裡的<span>...閱讀更多</span>
-                    </p>
-                  </article>
-                </div>
-              </div>
-            </BlogCard>
-            <BlogCard>
-              <BlogCardImg />
-              <div className='BlogCardInner'>
-                <div className='BlogCardIntro'>
-                  <h2 className='BlogTitle'>
-                    <div className='topHighLight'>置頂</div>
-                    <b>【10種貓不能吃的食物】主人們你的同情害到他了！</b>
-                  </h2>
-                  <ul className='DateCategory'>
-                    <li className='BlogDate'>
-                      <ClockIcon />
-                      01 Jan, 2021
-                    </li>
-                    <li className='BlogCategory'>
-                      <BookMarkIcon />
-                      貓咪健康知識庫
-                    </li>
-                  </ul>
-                  <article>
-                    <p>
-                      貓不能吃什麼？主人們你的同情害到他了！
-                      Joe常常在吃飯的時候，我家那隻貓皇上就在旁邊喵喵叫，不給他吃好像對不起我的主子但我都堅持不把人類的食物給他，因為人類食物對毛孩的身體健康，藏著很多隱形危機（當然有些還是可以的，請詳見內文）
-                      今天我們就來討論家裡的<span>...閱讀更多</span>
-                    </p>
-                  </article>
-                </div>
-              </div>
-            </BlogCard>
-          </ul>
-        </BlogListWrapper>
-        <BlogAside>
-          <div className='BlogArticalInner'>
-            <BlogSearch>
-              <h4>
-                <b>搜尋文章</b>
-              </h4>
-              <form>
-                <input
-                  className='formStyled'
-                  type='text'
-                  placeholder='搜尋文章'
-                />
-              </form>
-            </BlogSearch>
-            <BlogNews>
-              <h4>
-                <b>最新文章</b>
-              </h4>
-              <BlogArticalList>
-                <li className='articalContent'>
-                  <h6>
-                    貓咪大便很臭怎麼辦？一篇瞭解貓便便臭原因以及毛球症對貓咪的影響
-                  </h6>
-                  <ul className='DateCategory'>
-                    <li className='BlogDate'>
-                      <ClockIcon />
-                      01 Jan, 2021
-                    </li>
-                  </ul>
-                </li>
-                <li className='articalContent'>
-                  <h6>
-                    【化毛粉怎麼吃總整理】食用頻率、餵食方法等常見問題一次解答
-                  </h6>
-                  <ul className='DateCategory'>
-                    <li className='BlogDate'>
-                      <ClockIcon />
-                      06 Jan, 2023
-                    </li>
-                  </ul>
-                </li>
-                <li className='articalContent'>
-                  <h6>
-                    狗狗突然禿一塊毛怎麼辦？狗狗掉毛原因與改善日常掉毛的4個方法分享
-                  </h6>
-                  <ul className='DateCategory'>
-                    <li className='BlogDate'>
-                      <ClockIcon />
-                      15 Sep, 2022
-                    </li>
-                  </ul>
-                </li>
-              </BlogArticalList>
-            </BlogNews>
-            <BlogCategoryArea>
-              <h4>
-                <b>文章分類</b>
-              </h4>
-              <BlogCategoryList>
-                <li>
-                  <div className='toFlex'>
-                    <h6>狗狗健康知識庫</h6>
-                  </div>
-                </li>
-                <li>
-                  <div className='toFlex'>
-                    <h6>貓貓健康知識庫</h6>
-                  </div>
-                </li>
-              </BlogCategoryList>
-            </BlogCategoryArea>
-          </div>
-        </BlogAside>
-      </BlogContent>
-    </BlogStyled>
+    <>
+      {isLoading && <Loading />}
+      <BlogStyled>
+        <HomeLinkWrapper>
+          <GoToHome>
+            <HomeIcon
+              onClick={() => navigate('/')}
+              style={{ color: 'var(--dark)', cursor: 'pointer' }}
+            />
+            <p className='text'>部落格</p>
+          </GoToHome>
+        </HomeLinkWrapper>
+        <Breadcrumb />
+        <BlogContent>
+          <BlogSearchTop>
+            <form>
+              <input
+                className='formStyled'
+                type='text'
+                placeholder='請輸入搜尋關鍵字'
+                value={query}
+                onChange={handleChange}
+                onKeyDown={handleSearchArtical}
+              />
+            </form>
+            <form>
+              <select
+                className='formStyled'
+                value={optionsState}
+                onChange={handleChangeSelect}
+              >
+                <option value='default'>- 請選擇文章分類 -</option>
+                <option value='all'>全部文章分類</option>
+                <option value='dog'>狗狗健康知識庫</option>
+                <option value='cat'>貓咪健康知識庫</option>
+              </select>
+            </form>
+          </BlogSearchTop>
+          <BlogListWrapper>
+            <ul>
+              {articalAll.length === 0 &&
+                articalOrigin?.map((artical) => {
+                  return (
+                    <BlogCard key={artical.title}>
+                      <BlogCardImg
+                        style={{ backgroundImage: `url("${artical.image}")` }}
+                      />
+                      <div className='BlogCardInner'>
+                        <div className='BlogCardIntro'>
+                          <h2 className='BlogTitle'>
+                            {artical.isTop && (
+                              <div className='topHighLight'>置頂</div>
+                            )}
+                            <b>{artical.title}</b>
+                          </h2>
+                          <ul className='DateCategory'>
+                            <li className='BlogDate'>
+                              <ClockIcon />
+                              {new Date(artical.createdAt).toLocaleDateString()}
+                            </li>
+                            <li className='BlogCategory'>
+                              <BookMarkIcon />
+                              {artical['category'].includes('dog') &&
+                                '狗狗健康知識庫'}
+                              {artical['category'].includes('cat') &&
+                                '貓貓健康知識庫'}
+                            </li>
+                          </ul>
+                          <article>
+                            <p>
+                              {artical.content}
+                              <span>...閱讀更多</span>
+                            </p>
+                          </article>
+                        </div>
+                      </div>
+                    </BlogCard>
+                  );
+                })}
+              {articalAll?.map((artical) => {
+                return (
+                  <BlogCard key={artical.title}>
+                    <BlogCardImg
+                      style={{ backgroundImage: `url("${artical.image}")` }}
+                    />
+                    <div className='BlogCardInner'>
+                      <div className='BlogCardIntro'>
+                        <h2 className='BlogTitle'>
+                          {artical.isTop && (
+                            <div className='topHighLight'>置頂</div>
+                          )}
+                          <b>{artical.title}</b>
+                        </h2>
+                        <ul className='DateCategory'>
+                          <li className='BlogDate'>
+                            <ClockIcon />
+                            {new Date(artical.createdAt).toLocaleDateString()}
+                          </li>
+                          <li className='BlogCategory'>
+                            <BookMarkIcon />
+                            {artical['category'].includes('dog') &&
+                              '狗狗健康知識庫'}
+                            {artical['category'].includes('cat') &&
+                              '貓貓健康知識庫'}
+                          </li>
+                        </ul>
+                        <article>
+                          <p>
+                            {artical.content}
+                            <span>...閱讀更多</span>
+                          </p>
+                        </article>
+                      </div>
+                    </div>
+                  </BlogCard>
+                );
+              })}
+            </ul>
+          </BlogListWrapper>
+          <BlogAside>
+            <div className='BlogArticalInner'>
+              <BlogSearch>
+                <h4>
+                  <b>搜尋文章</b>
+                </h4>
+                <form>
+                  <input
+                    className='formStyled'
+                    type='text'
+                    placeholder='搜尋文章'
+                    value={query}
+                    onChange={handleChange}
+                    onKeyDown={handleSearchArtical}
+                  />
+                </form>
+              </BlogSearch>
+              <BlogNews>
+                <h4>
+                  <b>最新文章</b>
+                </h4>
+                <BlogArticalList>
+                  {articalOrigin?.map((artical) => {
+                    return (
+                      <li className='articalContent' key={artical.title}>
+                        <h6>{artical.title}</h6>
+                        <ul className='DateCategory'>
+                          <li className='BlogDate'>
+                            <ClockIcon />
+                            {new Date(artical.updatedAt).toLocaleDateString()}
+                          </li>
+                        </ul>
+                      </li>
+                    );
+                  })}
+                </BlogArticalList>
+              </BlogNews>
+              <BlogCategoryArea>
+                <h4>
+                  <b>文章分類</b>
+                </h4>
+                <BlogCategoryList>
+                  <li onClick={handleFilterDog}>
+                    <div className='toFlex'>
+                      <h6>狗狗健康知識庫</h6>
+                    </div>
+                  </li>
+                  <li onClick={handleFilterCat}>
+                    <div className='toFlex'>
+                      <h6>貓貓健康知識庫</h6>
+                    </div>
+                  </li>
+                </BlogCategoryList>
+              </BlogCategoryArea>
+            </div>
+          </BlogAside>
+        </BlogContent>
+      </BlogStyled>
+    </>
   );
 };
 

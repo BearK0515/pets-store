@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
 import styled from "styled-components";
-import {  PriceUpIcon, PriceDownIcon } from "../assets/icons/index";
+import { PriceUpIcon, PriceDownIcon } from "../assets/icons/index";
 import { ProductItem } from "./ProductItem";
 
 const ProductList = styled.div`
@@ -43,8 +44,7 @@ const ProductsSort = styled.div`
     }
   }
 `;
-
-const ProductAll = ({
+const ProductSearch = ({
   productHot,
   productNew,
   productPrice,
@@ -52,6 +52,36 @@ const ProductAll = ({
   sortSelect,
   sortSelectToggle,
 }) => {
+  const [productsSearchHot, setProductsSearchHot] = useState([]);
+  const [productsSearchNew, setProductsSearchNew] = useState([]);
+  const [productsSearchPrice, setProductsSearchPrice] = useState([]);
+  const params = useParams();
+  const keyword = params.keyword;
+
+  useEffect(() => {
+    // console.log(searchKeyword);
+
+    setProductsSearchHot(
+      productHot?.filter((productHot) => productHot.name.includes(keyword))
+    );
+  }, [productHot, keyword]);
+
+  useEffect(() => {
+    setProductsSearchNew(
+      productNew?.filter((productNew) => productNew.name.includes(keyword))
+    );
+  }, [productNew, keyword]);
+
+  useEffect(() => {
+    if (priceToggle) {
+      setProductsSearchPrice(
+        productPrice?.filter((productPrice) =>
+          productPrice.name.includes(keyword)
+        )
+      );
+    }
+  }, [productPrice, priceToggle, keyword]);
+
   return (
     <>
       <ProductsSort>
@@ -94,20 +124,23 @@ const ProductAll = ({
       </ProductsSort>
       <ProductList>
         {sortSelect?.top &&
-          productHot?.map((product) => {
+          productsSearchHot?.map((product) => {
             return <ProductItem product={product} key={product.id} />;
           })}
         {sortSelect?.new &&
-          productNew?.map((product) => {
+          productsSearchNew?.map((product) => {
             return <ProductItem product={product} key={product.id} />;
           })}
         {sortSelect?.price &&
-          productPrice?.map((product) => {
+          productsSearchPrice?.map((product) => {
             return <ProductItem product={product} key={product.id} />;
           })}
+        {productsSearchHot.length === 0 && (
+          <div className="non-item">找不到產品</div>
+        )}
       </ProductList>
     </>
   );
 };
 
-export default ProductAll;
+export default ProductSearch;

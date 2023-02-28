@@ -1,6 +1,10 @@
-import React from "react";
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useState } from "react";
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import { LoginSocialFacebook, LoginSocialGoogle } from "reactjs-social-login";
+import { facebookLogin } from "../../api/userLogin";
 import {
   AlertIcon,
   CancelIcon,
@@ -37,7 +41,6 @@ const StyledModalContainer = styled.div`
     min-width: 400px;
   }
 `;
-
 const StyledWrapper = styled.div`
   display: flex;
   flex-flow: column;
@@ -90,7 +93,8 @@ const StyledWrapper = styled.div`
         height: 40px;
         border-radius: 4px;
         cursor: pointer;
-        div {
+        div,
+        a {
           width: 22px;
           height: 21px;
           display: flex;
@@ -147,12 +151,37 @@ const StyledWrapper = styled.div`
     }
   }
 `;
-const LoginModal = ({ setIsOpenLoginModal, handleToggleLoginModal }) => {
+const LoginModal = ({
+  setIsOpenLoginModal,
+  handleToggleLoginModal,
+  setLogin,
+}) => {
   const navigate = useNavigate();
-
+  const [email, setEmail] = useState(null);
+  const [name, setName] = useState(null);
   const linkTo = (location) => {
     setIsOpenLoginModal(false);
     navigate(location);
+  };
+  useEffect(() => {
+    const getUserInfo = async () => {
+      const { token, user } = await facebookLogin({ email, name });
+      localStorage.setItem("authToken", token);
+      localStorage.setItem("UserId", user.id);
+      handleToggleLoginModal();
+      setLogin(true);
+    };
+    if (!email || !name) return;
+    getUserInfo();
+  }, [email, name]);
+
+  const handleLineLogin = async () => {
+    window.location.replace(
+      `https://access.line.me/oauth2/v2.1/authorize?response_type=code&client_id=1657937254&redirect_uri=https://beark0515.github.io/pets-store/&state=12345abcde&scope=profile%20openid%20email&nonce=09876xyz`
+    );
+    // window.location.replace(
+    //   `https://access.line.me/oauth2/v2.1/authorize?response_type=code&client_id=1657937254&redirect_uri=http://localhost:3000/pets-store&state=12345abcde&scope=profile%20openid%20email&nonce=09876xyz`
+    // );
   };
 
   return (
@@ -169,24 +198,47 @@ const LoginModal = ({ setIsOpenLoginModal, handleToggleLoginModal }) => {
           <div className='wrapper'>
             <h3>綁定社群帳號，快速登入</h3>
             <div className='icon-wrapper'>
-              <div className='icon line'>
+              <div className='icon line' onClick={handleLineLogin}>
                 <div>
                   <LineWhiteIcon />
                 </div>
                 <p>登入</p>
               </div>
-              <div className='icon facebook'>
-                <div>
-                  <FacebookWhiteIcon />
+              <LoginSocialFacebook
+                appId='1699530640464382'
+                onResolve={(res) => {
+                  setEmail(res.data.email);
+                  setName(res.data.name);
+                }}
+                onReject={(err) => {
+                  console.log(err);
+                }}
+              >
+                <div className='icon facebook'>
+                  <div>
+                    <FacebookWhiteIcon />
+                  </div>
+                  <p>登入</p>
                 </div>
-                <p>登入</p>
-              </div>
-              <div className='icon google'>
-                <div>
-                  <GoogleIcon />
+              </LoginSocialFacebook>
+              <LoginSocialGoogle
+                client_id='1089820286873-p5k491t42gkgbd29cijfuit0kgi7h18k.apps.googleusercontent.com'
+                scope='openid profile email'
+                onResolve={(res) => {
+                  setEmail(res.data.email);
+                  setName(res.data.name);
+                }}
+                onReject={(err) => {
+                  console.log(err);
+                }}
+              >
+                <div className='icon google'>
+                  <div>
+                    <GoogleIcon />
+                  </div>
+                  <p>登入</p>
                 </div>
-                <p>登入</p>
-              </div>
+              </LoginSocialGoogle>
             </div>
             <div className='waring-wrapper'>
               <div>

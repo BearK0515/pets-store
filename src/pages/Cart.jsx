@@ -1,5 +1,10 @@
-import React, { useEffect, useState } from "react";
-import styled from "styled-components";
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
+import styled from 'styled-components';
+import Swal from 'sweetalert2';
+import { getTownName } from '../api/products';
+import { submitOrder } from '../api/userAuth';
 import {
   AlertIcon,
   AlertTriangleIcon,
@@ -8,9 +13,11 @@ import {
   DeleteProductIcon,
   JCBIcon,
   MasterIcon,
-  VisaIcon,
-} from "../assets/icons";
-import { taiwan } from "../components/common/country";
+  VisaIcon
+} from '../assets/icons';
+import { taiwan } from '../components/common/country';
+import { removeItem, setClearCart, setCount } from '../store/productSlice';
+// import { sevenAreas } from "../components/common/sevenStories";
 
 //Layout樣式
 const StyledContainer = styled.div`
@@ -22,6 +29,7 @@ const StyledContainer = styled.div`
     display: flex;
     flex-flow: column;
   }
+
   .item-area {
     margin-bottom: 30px;
     padding: 30px;
@@ -47,6 +55,11 @@ const StyledCartContainter = styled.section`
   flex-flow: column;
   border: 1px solid rgba(0, 0, 0, 0.1);
   border-radius: 5px;
+  .productHover {
+    &:hover {
+      text-decoration: underline;
+    }
+  }
   ul {
     display: grid;
     grid-template-columns: 2fr 1fr minmax(80px, auto) 150px 150px 80px;
@@ -57,9 +70,63 @@ const StyledCartContainter = styled.section`
     align-items: center;
     font-size: 85%;
     padding: 15px 10px;
+    @media screen and (max-width: 992px) {
+      grid-template-columns: 3fr 1fr minmax(80px, auto) 100px 100px 80px;
+    }
+    @media screen and (max-width: 768px) {
+      grid-template-columns: 1fr;
+      &.title {
+        .style,
+        .count,
+        .price,
+        .subtotal,
+        .delete {
+          display: none;
+        }
+      }
+      &.product {
+        width: 100%;
+        display: grid;
+        grid-template-columns: 2fr 1fr auto;
+        grid-template-areas:
+          'name name delete'
+          'style count count'
+          'price . subtotal';
+        .name {
+          grid-area: name;
+        }
+        .style {
+          grid-area: style;
+        }
+        .count {
+          grid-area: count;
+        }
+        .price-md {
+          display: inline;
+          grid-area: price;
+        }
+        .subtotal-md {
+          display: inline;
+          grid-area: subtotal;
+        }
+        .delete {
+          grid-area: delete;
+        }
+        .price {
+          display: none;
+        }
+        .subtotal {
+          display: none;
+        }
+      }
+    }
     li {
       text-align: center;
       color: #fff;
+    }
+    .price-md,
+    .subtotal-md {
+      display: none;
     }
   }
   .product {
@@ -77,6 +144,7 @@ const StyledCartContainter = styled.section`
     .name {
       display: flex;
       gap: 10px;
+      font-size: 14px;
       img {
         height: 50px;
         width: 50px;
@@ -101,18 +169,21 @@ const StyledCartContainter = styled.section`
         cursor: pointer;
       }
     }
-    .price {
+    .price,
+    .price-md {
       color: #212529;
       font-weight: 400;
       line-height: 1.5;
     }
-    .subtotal {
+    .subtotal,
+    .subtotal-md {
       color: #212529;
       font-weight: 700;
       line-height: 1.5;
     }
     .delete {
       color: #32373a;
+      cursor: pointer;
     }
   }
 `;
@@ -128,6 +199,10 @@ const StyledTextWrapper = styled.div`
   line-height: 1.5;
   color: #212529;
   text-align: right;
+  @media screen and (max-width: 768px) {
+    display: flex;
+    justify-content: space-between;
+  }
   .text {
     font-size: 14px;
     line-height: 20px;
@@ -151,6 +226,10 @@ const StyledTotal = styled.div`
   gap: 10px;
   align-items: center;
   text-align: right;
+  @media screen and (max-width: 768px) {
+    display: flex;
+    justify-content: space-between;
+  }
   .text-wrapper {
     font-size: 14px;
     line-height: 20px;
@@ -170,6 +249,9 @@ const StyledOrderContainer = styled.div`
     display: flex;
     flex-flow: column;
   }
+  .mustInfo {
+    color: #cb3747;
+  }
   .item-area {
     margin-bottom: 30px;
     padding: 30px;
@@ -181,6 +263,9 @@ const StyledOrderContainer = styled.div`
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 30px;
+      @media screen and (max-width: 768px) {
+        grid-template-columns: 1fr;
+      }
     }
   }
   //購買資訊
@@ -226,7 +311,10 @@ const StyledOrderContainer = styled.div`
           }
         }
       }
-      button {
+      .button {
+        display: flex;
+        justify-content: center;
+        align-items: center;
         width: 100%;
         font-size: 1rem;
         font-weight: 400;
@@ -307,6 +395,9 @@ const StyledOrderContainer = styled.div`
     display: flex;
     justify-content: end;
     width: 100%;
+    @media screen and (max-width: 768px) {
+      justify-content: start;
+    }
     .check {
       margin-bottom: 10px;
       display: flex;
@@ -351,7 +442,14 @@ const StyledOrderContainer = styled.div`
   .button {
     display: grid;
     grid-template-columns: 5fr 1fr;
-    grid-template-areas: ". button";
+    grid-template-areas: '. button';
+    @media screen and (max-width: 768px) {
+      grid-template-columns: 2fr 1fr;
+    }
+    @media screen and (max-width: 577px) {
+      grid-template-columns: 1fr;
+      grid-template-areas: 'button';
+    }
     button {
       grid-area: button;
       background-color: #c14848;
@@ -440,7 +538,7 @@ const Checkbox = styled.label`
   cursor: pointer;
   margin-right: 5px;
   border-radius: 3px;
-  input[type="checkbox"] {
+  input[type='checkbox'] {
     width: 20px;
     height: 20px;
     border-radius: 5px;
@@ -449,6 +547,82 @@ const Checkbox = styled.label`
 `;
 
 const Cart = () => {
+  useEffect(() => {
+    window.scrollTo(0, 125);
+  }, []);
+
+  const cartProducts = useSelector((state) => state.product.cart);
+  let totalAmount = cartProducts.reduce(
+    (total, item) =>
+      Math.floor(total + Number(item.count) * Number(item.price) * 0.8),
+    0
+  );
+  const dispatch = useDispatch();
+  const [purchaserName, setPurchaserName] = useState('');
+  const [purchaserPhone, setPurchaserPhone] = useState('');
+  const [purchaserEmail, setPurchaserEmail] = useState('');
+  const [receiverName, setReceiverName] = useState('');
+  const [receiverPhone, setReceiverPhone] = useState('');
+  const [receiverAddress, setReceiverAddress] = useState('');
+  const [comment, setComment] = useState('');
+  const [deliveryId, setDeliveryId] = useState(null);
+  const products = cartProducts.map((product) => ({
+    ProductId: product.id,
+    orderQuantity: product.count
+  }));
+  const [copy, setCopy] = useState(true);
+
+  const copyInfo = () => {
+    setCopy(!copy);
+    if (copy) {
+      setReceiverName(purchaserName);
+      setReceiverPhone(purchaserPhone);
+    } else {
+      setReceiverName('');
+      setReceiverPhone('');
+    }
+  };
+
+  const handlesubmit = async () => {
+    try {
+      const data = await submitOrder({
+        purchaserName,
+        purchaserPhone,
+        purchaserEmail,
+        receiverName,
+        receiverPhone,
+        receiverAddress,
+        comment,
+        products,
+        totalAmount,
+        deliveryId
+      });
+      const { status, orderNumber } = data;
+
+      if (status === 'success') {
+        Swal.fire({
+          position: 'top',
+          icon: 'success',
+          title: '成功送出訂單',
+          text: '訂單編號' + orderNumber,
+          showConfirmButton: true
+        });
+      }
+
+      setPurchaserName('');
+      setPurchaserPhone('');
+      setPurchaserEmail('');
+      setReceiverName('');
+      setReceiverPhone('');
+      setReceiverAddress('');
+      setComment('');
+      setDeliveryId('');
+      dispatch(setClearCart());
+    } catch (error) {
+      console.error('Order Submit faild :', error);
+    }
+  };
+
   return (
     <>
       <StyledContainer>
@@ -460,22 +634,22 @@ const Cart = () => {
             </StyledTitle>
             <StyledCartContainter>
               <ul className='title'>
-                <li className='name'>品名</li>
-                <li className='style'>規格</li>
-                <li className='count'>數量</li>
-                <li className='price'>單價</li>
-                <li className='subtotal'>小計</li>
-                <li className='delete'>刪除</li>
+                <li className='title name'>品名</li>
+                <li className='title style'>規格</li>
+                <li className='title count'>數量</li>
+                <li className='title price'>單價</li>
+                <li className='title subtotal'>小計</li>
+                <li className='title delete'>刪除</li>
               </ul>
               <div className='product-wrapper'>
                 {/* 商品清單 */}
-                <Product />
-                <Product />
-                <Product />
+                {cartProducts.map((product) => {
+                  return <Product product={product} key={product.id} />;
+                })}
               </div>
               <StyledTextWrapper>
                 <div className='text'>小計</div>
-                <div className='subtotal'>$1560</div>
+                <div className='subtotal'>${totalAmount}</div>
               </StyledTextWrapper>
               <StyledTextWrapper>
                 <div className='text'>運費</div>
@@ -486,7 +660,7 @@ const Cart = () => {
                   <p>總金額</p>
                   <p>(TWD)</p>
                 </div>
-                <div className='total'>$1560</div>
+                <div className='total'>${totalAmount}</div>
               </StyledTotal>
             </StyledCartContainter>
           </div>
@@ -494,6 +668,7 @@ const Cart = () => {
       </StyledContainer>
       <StyledOrderContainer>
         <div className='cont'>
+          <div className='mustInfo'>*資料皆為必填資訊</div>
           <div className='item-area'>
             <div className='container'>
               {/* 購物資訊 */}
@@ -503,7 +678,10 @@ const Cart = () => {
                   <hr />
                 </StyledTitle>
                 {/* 運送方式 */}
-                <ShippingSelect />
+                <ShippingSelect
+                  setDeliveryId={setDeliveryId}
+                  setReceiverAddress={setReceiverAddress}
+                />
               </div>
               {/* 購買人資料 */}
               <div className='wrapper buyer-information'>
@@ -514,6 +692,8 @@ const Cart = () => {
                 <Input
                   placeholder='請輸入購買人姓名'
                   label='姓名欄只能輸入中文和英文。'
+                  value={purchaserName}
+                  onChange={(e) => setPurchaserName(e.target.value)}
                 />
                 <div className='tips'>
                   <div>
@@ -522,12 +702,24 @@ const Cart = () => {
                   <p>務必正確輸入購買人姓名確保正確送達。</p>
                 </div>
                 <Input
+                  type='number'
                   placeholder='請輸入聯絡電話'
                   label='聯絡電話只能輸入8~20碼以內的數字及+和#符號。'
+                  value={purchaserPhone}
+                  onChange={(e) => setPurchaserPhone(e.target.value)}
                 />
+                <div className='tips'>
+                  <div>
+                    <ArrowRightIcon color='#27ae61' />
+                  </div>
+                  <p>聯絡電話只能輸入8~20碼以內的數字及+和#符號。</p>
+                </div>
                 <Input
+                  type='email'
                   placeholder='ex: example@wahaha.com'
                   label='Email無法辨識，請與郵件供應商聯絡。'
+                  value={purchaserEmail}
+                  onChange={(e) => setPurchaserEmail(e.target.value)}
                 />
                 <div className='tips'>
                   <div>
@@ -541,6 +733,8 @@ const Cart = () => {
                   id=''
                   cols='30'
                   rows='3'
+                  value={comment}
+                  onChange={(e) => setComment(e.target.value)}
                 ></textarea>
                 <div className='check'>
                   <Checkbox>
@@ -552,13 +746,15 @@ const Cart = () => {
                 </div>
                 <div className='check'>
                   <Checkbox>
-                    <input type='checkbox' id='buyer-info' />
+                    <input type='checkbox' id='buyer-info' onClick={copyInfo} />
                   </Checkbox>
                   <label htmlFor='buyer-info'>收件人同購買人資料</label>
                 </div>
                 <Input
                   placeholder='請輸入收件人姓名'
                   label='姓名欄位只能輸入中文和英文。'
+                  value={receiverName}
+                  onChange={(e) => setReceiverName(e.target.value)}
                 />
                 <div className='tips'>
                   <div>
@@ -569,7 +765,15 @@ const Cart = () => {
                 <Input
                   placeholder='請輸入聯絡電話'
                   label='聯絡電話只能輸入8~20碼以內的數字及+和#符號。'
+                  value={receiverPhone}
+                  onChange={(e) => setReceiverPhone(e.target.value)}
                 />
+                <div className='tips'>
+                  <div>
+                    <ArrowRightIcon color='#27ae61' />
+                  </div>
+                  <p>聯絡電話只能輸入8~20碼以內的數字及+和#符號。</p>
+                </div>
               </div>
               {/* 發票資料 */}
               <div className='wrapper invoice-information'>
@@ -601,11 +805,11 @@ const Cart = () => {
             </div>
             <div className='total'>
               <div>
-                實付金額(TWD)<span>$1170</span>
+                實付金額(TWD)<span>${totalAmount}</span>
               </div>
             </div>
             <div className='button'>
-              <button>確認送出</button>
+              <button onClick={handlesubmit}>確認送出</button>
             </div>
           </div>
         </div>
@@ -614,20 +818,34 @@ const Cart = () => {
   );
 };
 //購物車內商品
-const Product = () => {
+const Product = ({ product }) => {
+  const dispatch = useDispatch();
   const options = [];
   for (let i = 1; i <= 999; i++) {
     options.push({ value: i, label: i });
   }
+  const id = product.id;
   return (
     <ul className='product'>
-      <li className='name'>
-        <img src='https://picsum.photos/id/15/400' alt='' />
-        <p>【毛孩時代】情緒穩定保養粉(30包/盒)</p>
-      </li>
+      <Link className='productHover' to={`/product/detail/${product.id}`}>
+        <li className='name'>
+          <img src={product?.image} alt='' />
+          <p>{product?.name}</p>
+        </li>
+      </Link>
       <li className='style'>30包/盒</li>
       <li className='count'>
-        <select defaultValue={options[0].value}>
+        <select
+          defaultValue={product?.count}
+          onChange={(e) => {
+            dispatch(
+              setCount({
+                productId: product.id,
+                count: e.target.value
+              })
+            );
+          }}
+        >
           {Array.prototype.map.call(options, ({ value, label }, index) => {
             return (
               <option key={index} value={value}>
@@ -637,9 +855,20 @@ const Product = () => {
           })}
         </select>
       </li>
-      <li className='price'>$520</li>
-      <li className='subtotal'>$520</li>
-      <li className='delete'>
+      <li className='price'>${Math.floor(product?.price * 0.8)}</li>
+      <li className='price-md'>每盒${Math.floor(product?.price * 0.8)}元</li>
+      <li className='subtotal'>
+        ${Math.floor(product?.count * product?.price * 0.8)}
+      </li>
+      <li className='subtotal-md'>
+        小計：${Math.floor(product?.count * product?.price * 0.8)}
+      </li>
+      <li
+        className='delete'
+        onClick={() => {
+          dispatch(removeItem(id));
+        }}
+      >
         <DeleteProductIcon size='18px' color='#32373a' />
       </li>
     </ul>
@@ -650,7 +879,7 @@ const Select = ({ arrayOption, label, onChange }) => {
   return (
     <StyledSelect>
       <select className='shipping' name='' id='' onChange={onChange}>
-        {arrayOption.map((option, index) => (
+        {arrayOption?.map((option, index) => (
           <option key={index} value={option}>
             {option}
           </option>
@@ -664,39 +893,46 @@ const Select = ({ arrayOption, label, onChange }) => {
   );
 };
 //購買資訊Select樣式
-const ShippingSelect = () => {
-  const [selectedOption, setSelectedOption] = useState("- 請選擇 運送方式 -");
-  const shippingOptions = [
-    "- 請選擇 運送方式 -",
-    "貨到付款",
-    "一般宅配",
-    "7-11取貨",
-    "全家取貨",
-  ];
-  const paymentOptions = ["- 請選擇 付款方式 -"];
+const ShippingSelect = ({ setDeliveryId, setReceiverAddress }) => {
+  const [selectedOption, setSelectedOption] = useState('default');
+  const paymentOptions = ['- 請選擇 付款方式 -'];
   return (
     <>
-      <Select
-        arrayOption={shippingOptions}
-        label='請選擇運送方式'
-        onChange={(e) => setSelectedOption(e.target.value)}
-      />
+      <StyledSelect className='select bill-wrapper'>
+        <select
+          defaultValue={selectedOption}
+          onChange={(e) => {
+            setSelectedOption(e.target.value);
+            setDeliveryId(e.target.value);
+          }}
+        >
+          <option disabled value='default'>
+            - 請選擇 運送方式 -
+          </option>
+          <option value={1}>貨到付款</option>
+          {/* <option value={2}>一般宅配</option>
+          <option value={3}>7-11取貨</option>
+          <option value={4}>全家取貨</option> */}
+        </select>
+      </StyledSelect>
       {/* 運送方式 */}
       <div className='shipping-wrapper'>
-        {selectedOption === "- 請選擇 運送方式 -" && (
+        {selectedOption === '- 請選擇 運送方式 -' && (
           <Select arrayOption={paymentOptions} label='請選擇付款方式' />
         )}
-        {selectedOption === "貨到付款" && <CashOnDelivery />}
-        {selectedOption === "一般宅配" && <HomeDelivery />}
-        {selectedOption === "7-11取貨" && <SevenElevenPickUp />}
-        {selectedOption === "全家取貨" && <FamilyMartPickUp />}
+        {selectedOption === '1' && (
+          <CashOnDelivery setReceiverAddress={setReceiverAddress} />
+        )}
+        {selectedOption === '2' && <HomeDelivery />}
+        {selectedOption === '3' && <SevenElevenPickUp />}
+        {selectedOption === '4' && <FamilyMartPickUp />}
       </div>
     </>
   );
 };
 //發票Select樣式
 const BillSelect = () => {
-  const [selectedOption, setSelectedOption] = useState("個人電子發票(兩聯式)");
+  const [selectedOption, setSelectedOption] = useState('個人電子發票(兩聯式)');
   return (
     <>
       <StyledSelect className='select bill-wrapper'>
@@ -712,15 +948,15 @@ const BillSelect = () => {
           <option value='電子發票捐贈'>電子發票捐贈</option>
         </select>
       </StyledSelect>
-      {selectedOption === "個人電子發票(兩聯式)" && <PersonalBill />}
-      {selectedOption === "公司用(三聯式)" && <CompanyBill />}
-      {selectedOption === "電子發票捐贈" && <InvoiceDonation />}
+      {selectedOption === '個人電子發票(兩聯式)' && <PersonalBill />}
+      {selectedOption === '公司用(三聯式)' && <CompanyBill />}
+      {selectedOption === '電子發票捐贈' && <InvoiceDonation />}
     </>
   );
 };
 //個人電子發票(兩聯式)
 const PersonalBill = () => {
-  const [selectedOption, setSelectedOption] = useState("無載具");
+  const [selectedOption, setSelectedOption] = useState('無載具');
   return (
     <>
       <StyledSelect className='select bill-wrapper'>
@@ -737,20 +973,20 @@ const PersonalBill = () => {
           <option value='悠遊卡載具'>悠遊卡載具</option>
         </select>
       </StyledSelect>
-      {selectedOption === "無載具" && ""}
-      {selectedOption === "手機條碼載具" && (
+      {selectedOption === '無載具' && ''}
+      {selectedOption === '手機條碼載具' && (
         <Input
           placeholder='請輸入手機載具編號'
           label='手機載具編號格式錯誤。'
         />
       )}
-      {selectedOption === "自然人憑證載具" && (
+      {selectedOption === '自然人憑證載具' && (
         <Input
           placeholder='請輸入自然人憑證載具編號'
           label='自然人憑證載具編號格式錯誤。'
         />
       )}
-      {selectedOption === "悠遊卡載具" && (
+      {selectedOption === '悠遊卡載具' && (
         <Input
           placeholder='請輸入悠遊卡隱碼'
           label='悠遊卡載具編號格式錯誤。'
@@ -779,7 +1015,7 @@ const CompanyBill = () => {
 };
 //電子發票捐贈
 const InvoiceDonation = () => {
-  const [selectedOption, setSelectedOption] = useState("無載具");
+  const [selectedOption, setSelectedOption] = useState('無載具');
   return (
     <>
       <StyledSelect className='select bill-wrapper'>
@@ -811,13 +1047,19 @@ const InvoiceDonation = () => {
   );
 };
 //Input樣式
-const Input = ({ placeholder, label }) => {
+const Input = ({ placeholder, label, value, onChange }) => {
   return (
     <>
       <StyledInput>
-        <input className='' type='text' placeholder={placeholder} />
+        <input
+          className=''
+          type='text'
+          placeholder={placeholder}
+          value={value}
+          onChange={onChange}
+        />
         <div className='wrapper'>
-          <div className='icon '>
+          <div className='icon'>
             <AlertTriangleIcon color='#cb3747' />
           </div>
           <div className='alert'>
@@ -832,32 +1074,52 @@ const Input = ({ placeholder, label }) => {
   );
 };
 //貨到付款
-const CashOnDelivery = () => {
+const CashOnDelivery = ({ setReceiverAddress }) => {
+  //選擇縣市
   const [selectedCity, setSelectedCity] = useState(null);
+  //縣市行政區
   const [towns, setTowns] = useState([]);
-
+  //選擇鄉鎮
+  const [town, setTown] = useState(null);
+  //地址
+  const [address, setAddress] = useState('');
   const cities = taiwan.map((city) => city.city);
-
+  const handleCities = (e) => {
+    setSelectedCity(e.target.value);
+    const selectedCityData = taiwan.find(
+      (city) => city.city === e.target.value
+    );
+    setTowns(selectedCityData?.towns);
+    setTown(selectedCityData?.towns[0]);
+  };
   useEffect(() => {
-    if (selectedCity) {
-      const selectedCityData = taiwan.find(
-        (city) => city.city === selectedCity
-      );
-      setTowns(selectedCityData.towns);
+    if (selectedCity?.length && town?.length && address?.length) {
+      const updatedAddress = `${selectedCity}${town}${address}`;
+      setReceiverAddress(updatedAddress);
     }
-  }, [selectedCity]);
-
+    return;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [address]);
   return (
     <>
       <div className='country-wrapper'>
         <Select
           arrayOption={cities}
           label='請選擇城市'
-          onChange={(e) => setSelectedCity(e.target.value)}
+          onChange={handleCities}
         />
-        <Select arrayOption={towns} label='' />
+        <Select
+          arrayOption={towns}
+          label=''
+          onChange={(e) => setTown(e.target.value)}
+        />
       </div>
-      <Input placeholder='收件地址' label='請輸入收件地址' />
+      <Input
+        placeholder='收件地址'
+        label='請輸入收件地址'
+        value={address}
+        onChange={(e) => setAddress(e.target.value)}
+      />
       <div className='content-wrapper'>
         <p>運送說明</p>
         <div className='arrow-right'>
@@ -871,26 +1133,34 @@ const CashOnDelivery = () => {
         <div className='arrow-right'>
           <ArrowRightIcon />
         </div>
-        <div className='content'>宅配方式</div>
+        <div className='content'>宅配代收</div>
       </div>
     </>
   );
 };
 //一般宅配
 const HomeDelivery = () => {
+  //選擇縣市
   const [selectedCity, setSelectedCity] = useState(null);
+  //縣市行政區
   const [towns, setTowns] = useState([]);
-
+  //選擇鄉鎮
+  const [town, setTown] = useState(null);
+  //地址
+  const [address, setAddress] = useState('');
   const cities = taiwan.map((city) => city.city);
 
-  useEffect(() => {
-    if (selectedCity) {
-      const selectedCityData = taiwan.find(
-        (city) => city.city === selectedCity
-      );
-      setTowns(selectedCityData.towns);
-    }
-  }, [selectedCity]);
+  const handleCities = (e) => {
+    setSelectedCity(e.target.value);
+    const selectedCityData = taiwan.find(
+      (city) => city.city === e.target.value
+    );
+    setTowns(selectedCityData?.towns);
+    setTown(selectedCityData?.towns[0]);
+  };
+  console.log('selectedCity', selectedCity);
+  console.log('town', town);
+  console.log('address', address);
 
   return (
     <>
@@ -898,11 +1168,16 @@ const HomeDelivery = () => {
         <Select
           arrayOption={cities}
           label='請選擇城市'
-          onChange={(e) => setSelectedCity(e.target.value)}
+          onChange={handleCities}
         />
         <Select arrayOption={towns} label='' />
       </div>
-      <Input placeholder='收件地址' label='請輸入收件地址' />
+      <Input
+        placeholder='收件地址'
+        label='請輸入收件地址'
+        value={address}
+        onChange={(e) => setAddress(e.target.value)}
+      />
       <div className='content-wrapper'>
         <p>運送說明</p>
         <div className='arrow-right'>
@@ -935,10 +1210,85 @@ const HomeDelivery = () => {
 };
 //7-11取貨
 const SevenElevenPickUp = () => {
-  const [selectedOption, setSelectedOption] = useState("default");
+  const [selectedOption, setSelectedOption] = useState('default');
+  // const [selectedCity, setSelectedCity] = useState(null);
+  // const [townId, setTownId] = useState([]);
+  // const [towns, setTowns] = useState([]);
+
+  // const cities = sevenAreas.map((city) => city.area);
+
+  // useEffect(() => {
+  //   if (selectedCity) {
+  //     const selectedCityData = sevenAreas.find(
+  //       (city) => city.area === selectedCity
+  //     );
+  //     setTownId(selectedCityData.areaID);
+  //     async function getTownNameAsync(){
+  //       try {
+  //         const data = await getTownName(townId);
+  //         // setTowns(data);
+  //         console.log(data);
+  //         return data;
+  //       } catch (error) {
+  //         console.error(error);
+  //       }
+  //     }
+  //     getTownNameAsync()
+  //     return
+  //   }
+  // }, [selectedCity]);
+  // const handleGetCities = async()=>{
+  //   try {
+  //     const data = await getCities();
+  //     console.log(data);
+  //     return data
+  //   } catch (error) {
+
+  //   }
+  // }
+  // const handleGetAreas = async () => {
+  //   try {
+  //     const data = await getAreas();
+  //     console.log(data);
+  //     return data;
+  //   } catch (error) {}
+  // };
+  // const handleGetStories = async()=>{
+  //   try {
+  //     const data = await getStories();
+  //     console.log(data);
+  //     return data
+  //   } catch (error) {
+
+  //   }
+  // }
+  const handleGetTown = async () => {
+    try {
+      const data = await getTownName();
+      console.log(data);
+      return data;
+    } catch (error) {}
+  };
   return (
     <>
-      <button className='button'>選擇取件超商門市</button>
+      {/* <button className='button' onClick={handleGetCities}>
+        選擇取件超商門市
+      </button> */}
+      <button className='button' onClick={handleGetTown}>
+        選擇取件超商門市
+      </button>
+      {/* <Select
+        arrayOption={cities}
+        label='請選擇城市'
+        onChange={(e) => setSelectedCity(e.target.value)}
+      />
+      <Select arrayOption={towns} label='' /> */}
+      {/* <a
+        href='https://emap.presco.com.tw/c2cemap.ashx?eshopid=870&&servicetype=1&url=https://localhost:3000'
+        className='button'
+      >
+        選擇取件超商門市
+      </a> */}
       <div className='content-wrapper'>
         <p>取件門市代號</p>
         <div className='arrow-right'>
@@ -981,7 +1331,7 @@ const SevenElevenPickUp = () => {
           <option value='7-11取貨付款'>7-11取貨付款</option>
         </select>
       </StyledSelect>
-      {selectedOption === "信用卡" && (
+      {selectedOption === '信用卡' && (
         <div className='credit-card-icon-wrapper'>
           <p>可使用</p>
           <div className='icon'>
@@ -1000,7 +1350,7 @@ const SevenElevenPickUp = () => {
 };
 //全家取貨
 const FamilyMartPickUp = () => {
-  const [selectedOption, setSelectedOption] = useState("default");
+  const [selectedOption, setSelectedOption] = useState('default');
   return (
     <>
       <button className='button'>選擇取件超商門市</button>
@@ -1046,7 +1396,7 @@ const FamilyMartPickUp = () => {
           <option value='7-11取貨付款'>7-11取貨付款</option>
         </select>
       </StyledSelect>
-      {selectedOption === "信用卡" && (
+      {selectedOption === '信用卡' && (
         <div className='credit-card-icon-wrapper'>
           <p>可使用</p>
           <div className='icon'>

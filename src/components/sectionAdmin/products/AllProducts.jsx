@@ -58,26 +58,63 @@ const StyledCard = styled.div`
       cursor: pointer;
     }
   }
+  @media screen and (max-width: 992px) {
+    .title {
+      font-size: 16px;
+      height: 30px;
+      line-height: 16px;
+    }
+  }
+  @media screen and (max-width: 577px) {
+    .title {
+      font-size: 12px;
+      height: 28px;
+      line-height: 12px;
+    }
+  }
 `;
 
-const AllProducts = ({ productsAll, handleTogglePriceModal }) => {
+const AllProducts = ({
+  productsAll,
+  handleTogglePriceModal,
+  deleteProduct,
+}) => {
   return (
     <>
       {productsAll?.map((product) => {
         return (
-          <StyledCard onClick={handleTogglePriceModal}>
+          <StyledCard
+            className='card'
+            key={product.id}
+            onClick={handleTogglePriceModal}
+            id={product.id}
+          >
             <div
               className='product'
               style={{ backgroundImage: `url('${product.Images.url}')` }}
+              id={product.id}
             ></div>
-            <div className='wrapper'>
-              <h4 className='title'>{product.name}</h4>
-              <div className='price'>${product.price}</div>
-              <div className='discount-price'>${product.price * 0.8}</div>
+            <div className='wrapper' id={product.id}>
+              <h4 className='title' id={product.id}>
+                {product.name}
+              </h4>
+              <div className='price' id={product.id}>
+                ${product.price}
+              </div>
+              <div className='discount-price' id={product.id}>
+                ${Math.floor(product.price * 0.8)}
+              </div>
             </div>
-            <button className='delete'>
-              <CancelIcon />
-            </button>
+            <div
+              className='delete btn'
+              onClick={(e) => {
+                deleteProduct?.(product.id);
+                e.preventDefault();
+                e.stopPropagation();
+              }}
+            >
+              <CancelIcon className='btn' />
+            </div>
           </StyledCard>
         );
       })}

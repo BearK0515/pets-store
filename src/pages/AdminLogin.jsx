@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { useNavigate } from "react-router";
 import styled from "styled-components";
 import Swal from "sweetalert2";
@@ -53,15 +53,13 @@ const StyledLinkText = styled.div`
 const AdminLogin = () => {
   const emailRef = useRef("");
   const passwordRef = useRef("");
-  const email = emailRef?.current.value;
-  const password = passwordRef?.current.value;
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(email);
-    console.log(password);
-    const success = await adminLogin({ email, password });
+    const email = emailRef?.current.value;
+    const password = passwordRef?.current.value;
+    const { success } = await adminLogin({ email, password });
     if (success) {
       Swal.fire({
         title: "登入成功",
@@ -70,16 +68,20 @@ const AdminLogin = () => {
         timer: 1000,
         position: "top",
       });
+      navigate("/admin/products/all");
       return;
     }
-    Swal.fire({
-      title: "登入失敗",
-      icon: "error",
-      showConfirmButton: false,
-      timer: 1000,
-      position: "top",
-    });
   };
+
+useEffect(() => {
+  const isAdmin = localStorage.getItem("isAdmin");
+  if (isAdmin) {
+    navigate("/admin/products/all");
+  } else {
+    return;
+  }
+// eslint-disable-next-line react-hooks/exhaustive-deps
+}, []);
 
   return (
     <StyledContainer onSubmit={handleSubmit}>
@@ -93,11 +95,8 @@ const AdminLogin = () => {
         placeholder='請輸入密碼'
         forwardref={passwordRef}
       />
-      <StyledButton onSubmit={handleSubmit}>送出</StyledButton>
-      <StyledButton onClick={() => navigate("/admin/products/all")}>
-        登入
-      </StyledButton>
-      <StyledLinkText onClick={() => navigate("/home")}>首頁</StyledLinkText>
+      <StyledButton onSubmit={handleSubmit}>登入</StyledButton>
+      <StyledLinkText onClick={() => navigate("/")}>首頁</StyledLinkText>
     </StyledContainer>
   );
 };

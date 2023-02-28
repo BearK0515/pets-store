@@ -16,6 +16,8 @@ import {
   AiOutlinePlus,
   AiOutlineMinus,
   AiOutlineClockCircle,
+  AiOutlineArrowUp, 
+  AiOutlineArrowDown,
 } from "react-icons/ai";
 import { BiUserCircle, BiCube, BiCaretRight } from "react-icons/bi";
 import {
@@ -70,11 +72,11 @@ const SearchIcon = styled(FiSearch)`
 `;
 const MenuIcon = styled(BsList)`
   color: var(--white);
-  font-size: 20px;
+  font-size: 30px;
 `;
 const LoginIcon = styled(HiOutlineLockClosed)`
   color: var(--white);
-  font-size: 20px;
+  font-size: 30px;
 `;
 const CartNoneIcon = styled(BsCartX)`
   color: var(--white);
@@ -96,6 +98,14 @@ const MinusIcon = styled(AiOutlineMinus)`
   color: #ccc;
   font-size: 20px;
 `;
+const PriceUpIcon = styled(AiOutlineArrowUp)`
+  color: var(--white);
+  font-size: 20px;
+`
+const PriceDownIcon = styled(AiOutlineArrowDown)`
+  color: var(--white);
+  font-size: 20px;
+`
 const BackTopIcon = styled(GrLinkTop)`
   color: var(--white);
   font-size: 26px;
@@ -189,4 +199,6 @@ export {
   JCBIcon,
   MasterIcon,
   VisaIcon,
+  PriceUpIcon,
+  PriceDownIcon,
 };

@@ -10,6 +10,8 @@ import {
 } from "../components/sectionAdmin";
 import SingleOrder from "./SingleOrder";
 import { productsHot } from "../api/products";
+import { admindeleteProduct, ordersAll } from "../api/adminAuth";
+import Swal from "sweetalert2";
 
 const StyledContainer = styled.div`
   max-width: 1140px;
@@ -53,11 +55,11 @@ const NavLink = styled(Link)`
   width: 0 auto;
   height: 40px;
   background-color: ${(props) =>
-    props.active ? "var(--white)" : "var(--footer-background)"};
+    props.currentPage ? "var(--white)" : "var(--footer-background)"};
   color: ${(props) =>
-    props.active ? " var(--footer-background)" : "var(--white)"};
+    props.currentPage ? " var(--footer-background)" : "var(--white)"};
   border: ${(props) =>
-    props.active ? "2px solid var(--footer-background)" : ""};
+    props.currentPage ? "2px solid var(--footer-background)" : ""};
   font-size: 20px;
   font-weight: 400;
   border-radius: 30px;
@@ -71,45 +73,103 @@ const AdminIndex = () => {
   const [isOpenPriceModal, setIsOpenPriceModal] = useState(false);
   const [isOpenProductModal, setIsOpenProductModal] = useState(false);
   const [productsAll, setProductsAll] = useState(null);
+  const [orders, setOrders] = useState(null);
+  const [productId, setProductId] = useState(null);
 
-  const handleTogglePriceModal = () => {
+  //修改商品價錢彈窗開關
+  const handleTogglePriceModal = (e) => {
+    if (e.target.matches(".btn")) {
+      return;
+    }
+    e.preventDefault();
+    e.stopPropagation();
+    setProductId(e.target.id);
     setIsOpenPriceModal(!isOpenPriceModal);
   };
+  //新增商品彈窗開關
   const handleToggleProductModal = () => {
     setIsOpenProductModal(!isOpenProductModal);
   };
-
+  const handleLogout = () => {
+    localStorage.removeItem("authToken");
+    localStorage.removeItem("isAdmin");
+    navigate("/");
+  };
+  //DELETE刪除商品
+  async function deleteProduct(productId) {
+    const newProductAll = productsAll?.filter(
+      (product) => product.id !== productId
+    );
+    try {
+      const deleteProduct = await admindeleteProduct(productId);
+      if (deleteProduct) {
+        Swal.fire({
+          title: "移除商品",
+          text: "是否確定移除商品？",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#3085d6",
+          cancelButtonColor: "#d33",
+          confirmButtonText: "移除",
+        }).then((result) => {
+          if (result.isConfirmed) {
+            Swal.fire("移除商品", "已移除", "success");
+            setProductsAll(newProductAll);
+          }
+          return;
+        });
+      }
+    } catch (error) {
+      console.error("delete product error:", error);
+    }
+  }
+  //GET熱銷商品
   useEffect(() => {
     const getProductsHotAsync = async () => {
       try {
         const resProductsAll = await productsHot();
-        setProductsAll(resProductsAll);
+        const OnShelvesAll = resProductsAll?.filter(
+          (newProducts) => newProducts?.isOnShelves === 1
+        );
+        setProductsAll(OnShelvesAll);
       } catch (error) {
         console.error(error);
       }
     };
     getProductsHotAsync();
     return;
-  }, [setProductsAll]);
-
+  }, [isOpenPriceModal, isOpenProductModal, setProductsAll]);
+  //GET所有訂單
+  useEffect(() => {
+    const getOrdersAllAsync = async () => {
+      try {
+        const resOrdersAll = await ordersAll();
+        setOrders(resOrdersAll);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    getOrdersAllAsync();
+    return;
+  }, [setOrders]);
   return (
     <>
       <StyledContainer>
         <StyledSidebar>
           <div className='button-wrapper'>
             {page.includes("products") ? (
-              <NavLink active>商品列表</NavLink>
+              <NavLink currentPage>商品列表</NavLink>
             ) : (
               <NavLink to='products/all'>商品列表</NavLink>
             )}
             {page.includes("orders") ? (
-              <NavLink active>訂單列表</NavLink>
+              <NavLink currentPage>訂單列表</NavLink>
             ) : (
               <NavLink to='orders'>訂單列表</NavLink>
             )}
             <NavLink onClick={handleToggleProductModal}>新增商品</NavLink>
           </div>
-          <div className='logout' onClick={() => navigate("/home")}>
+          <div className='logout' onClick={handleLogout}>
             登出
           </div>
         </StyledSidebar>
@@ -117,10 +177,11 @@ const AdminIndex = () => {
           <Products
             productsAll={productsAll}
             handleTogglePriceModal={handleTogglePriceModal}
+            deleteProduct={deleteProduct}
           />
         )}
-        {page.includes("orders") && <Orders />}
-        {page.includes("orderId") && <SingleOrder />}
+        {page.includes("orders") && <Orders orders={orders} />}
+        {page.includes("single-order") && <SingleOrder />}
       </StyledContainer>
       {/* Modal-新增商品 */}
       {isOpenProductModal && (
@@ -130,7 +191,7 @@ const AdminIndex = () => {
       {/* Modal-修改價錢 */}
       {isOpenPriceModal && (
         <AdjustPriceModal
-          isOpenPriceModal={isOpenPriceModal}
+          productId={productId}
           setIsOpenPriceModal={setIsOpenPriceModal}
           handleTogglePriceModal={handleTogglePriceModal}
         />

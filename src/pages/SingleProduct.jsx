@@ -1,6 +1,8 @@
-import React, { useState } from "react";
-import { Navigate } from "react-router-dom";
-import styled from "styled-components";
+import React, { useState, useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { useParams, useNavigate } from 'react-router-dom';
+import styled from 'styled-components';
+import Swal from 'sweetalert2';
 import {
   CartIcon,
   CheckedIcon,
@@ -8,11 +10,16 @@ import {
   LineIcon,
   MinusIcon,
   PlusIcon,
-  TwitterIcon,
-} from "../assets/icons";
-import order from "../assets/images/order.png";
+  TwitterIcon
+} from '../assets/icons';
+import order from '../assets/images/order.png';
+import ProductPopCart from './ProductPopCart';
+import { productDetail } from '../api/products';
+import { addTocart, setCount as countRedux } from '../store/productSlice';
+import { IsLoadingComponent as Loading } from '../components/common/IsLoading';
 
 const StyledContainer = styled.div`
+  position: relative;
   font-family: Arial, Helvetica, sans-serif;
   margin: 30px 0;
   .cont {
@@ -31,6 +38,9 @@ const StyledProdutWrapper = styled.div`
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 30px;
+  @media screen and (max-width: 768px) {
+    grid-template-columns: 1fr;
+  }
   .picture {
     display: flex;
     flex-flow: column;
@@ -39,7 +49,7 @@ const StyledProdutWrapper = styled.div`
       position: relative;
       aspect-ratio: 1/1;
       background-size: cover;
-      background-image: url("https://picsum.photos/id/334/600/400");
+      background-image: url('https://picsum.photos/id/334/600/400');
       .number {
         position: absolute;
         display: flex;
@@ -66,7 +76,7 @@ const StyledProdutWrapper = styled.div`
       .pic {
         aspect-ratio: 1/1;
         background-size: cover;
-        background-image: url("https://picsum.photos/id/611/600/400");
+        background-image: url('https://picsum.photos/id/611/600/400');
         cursor: pointer;
       }
     }
@@ -83,6 +93,9 @@ const StyledProdutWrapper = styled.div`
       .icon {
         width: 30px;
         height: 30px;
+      }
+      @media screen and (max-width: 768px) {
+        display: none;
       }
     }
   }
@@ -170,11 +183,22 @@ const StyledProdutWrapper = styled.div`
       }
       & + .count-wrapper {
         margin-bottom: 10px;
+        @media screen and (max-width: 768px) {
+          display: none;
+        }
       }
       & + .button-group {
         display: grid;
         grid-template-columns: 1fr 1fr;
         gap: 10px;
+        height: auto;
+        @media screen and (max-width: 1200px) {
+          grid-template-columns: 1fr;
+        }
+        @media screen and (max-width: 768px) {
+          display: none;
+        }
+
         .button {
           display: flex;
           justify-content: center;
@@ -207,25 +231,45 @@ const StyledProdutWrapper = styled.div`
       border-left: 2px solid #32373a;
     }
     .content {
+      width: 100%;
       padding: 10px;
       background-color: #f9f9f9;
       font-size: 14px;
       font-weight: 400;
       line-height: 1.5;
       color: #212529;
-      word-break: break-all;
+      display: flex;
+      flex-flow: column;
       label {
         width: 100%;
-        display: flex;
-        justify-content: start;
         font-weight: 700;
         color: #333;
+        text-align: left;
       }
       .info {
         width: 100%;
-        display: flex;
-        justify-content: start;
         margin: 5px 0 15px;
+        text-align: left;
+      }
+    }
+  }
+  .share-md {
+    display: none;
+  }
+  @media screen and (max-width: 768px) {
+    .share-md {
+      margin-top: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      height: auto;
+      div {
+        font-size: 14px;
+        line-height: 20px;
+      }
+      .icon {
+        width: 30px;
+        height: 30px;
       }
     }
   }
@@ -274,6 +318,9 @@ const StyleProductsWrapper = styled.div`
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 15px;
+    @media screen and (max-width: 577px) {
+      grid-template-columns: 1fr;
+    }
     .card {
       display: flex;
       flex-flow: column;
@@ -294,7 +341,7 @@ const StyleProductsWrapper = styled.div`
         .pic {
           aspect-ratio: 1/1;
           background-size: cover;
-          background-image: url("https://picsum.photos/id/312/600/400");
+          background-image: url('https://picsum.photos/id/312/600/400');
         }
         .information {
           padding-left: 10px;
@@ -345,10 +392,10 @@ const Button = styled.button`
   align-items: center;
   gap: 5px;
   width: 100px;
-  background-color: ${(props) => (props.selected ? "#c14848" : "var(--white)")};
-  color: ${(props) => (props.selected ? "var(--white)" : "#aaa")};
+  background-color: ${(props) => (props.selected ? '#c14848' : 'var(--white)')};
+  color: ${(props) => (props.selected ? 'var(--white)' : '#aaa')};
   border: ${(props) =>
-    props.selected ? "1px solid #c14848" : "1px solid #aaa"};
+    props.selected ? '1px solid #c14848' : '1px solid #aaa'};
   border-radius: 3px;
   padding: 10px;
   cursor: pointer;
@@ -370,6 +417,9 @@ const StyledCart = styled.div`
   flex-flow: column;
   align-items: start;
   width: 100%;
+  @media screen and (max-width: 768px) {
+    display: none;
+  }
   hr {
     width: 100%;
     margin: 10px 0;
@@ -416,6 +466,10 @@ const StyledCart = styled.div`
     width: 100%;
     display: grid;
     grid-template-columns: 1fr 1fr;
+    @media screen and (max-width: 1200px) {
+      grid-template-columns: 1fr;
+      gap: 10px;
+    }
     .style-count-wrapper {
       display: flex;
       align-items: center;
@@ -479,31 +533,182 @@ const StyledCart = styled.div`
     }
   }
 `;
-
+const StyledBuyButton = styled.div`
+  display: none;
+  @media screen and (max-width: 768px) {
+    position: fixed;
+    display: flex;
+    justify-content: center;
+    bottom: 0;
+    width: 100%;
+    padding: 15px 30px;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: var(--white);
+    background: #c14848;
+    transform: translateX(-40px);
+    z-index: 50;
+    cursor: pointer;
+  }
+`;
 const SingleProduct = () => {
+  window.scrollTo(0, 350);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(true);
+  const { productId } = useParams();
+  const [product, setProduct] = useState(null);
   const [count, setCount] = useState(1);
+  const [addCartPop, setAddCartPop] = useState(false);
+  const [previewPic, setPreviewPic] = useState(0);
+
+  if (product) {
+    const id = product?.id;
+    const imageUrl = product?.Image[0].url;
+    if (!localStorage.getItem('productId')) {
+      localStorage.setItem('productId', JSON.stringify([{ id, imageUrl }]));
+    } else {
+      let record = JSON.parse(localStorage.getItem('productId'));
+      let length = record.length;
+      let isRepeat = false;
+      let repeatIndex;
+      for (let i = 0; i < length; i++) {
+        if (record[i].id === id) {
+          isRepeat = true;
+          repeatIndex = i;
+        }
+      }
+      if (!isRepeat && length < 5) {
+        record.push({ id, imageUrl });
+        localStorage.setItem('productId', JSON.stringify(record));
+      } else {
+        record.splice(repeatIndex, 1);
+        record.push({ id, imageUrl });
+        localStorage.setItem('productId', JSON.stringify(record));
+      }
+    }
+  }
+
+  //抓單一商品
+  useEffect(() => {
+    setIsLoading(true);
+    const getSingleProductAsync = async () => {
+      try {
+        const resSingleProduct = await productDetail(productId);
+        setProduct(resSingleProduct);
+        setIsLoading(false);
+      } catch (err) {
+        console.error(err);
+        setIsLoading(false);
+      }
+    };
+    getSingleProductAsync();
+    return;
+  }, [setProduct, productId]);
+
   const handledecrease = () => {
     if (count === 1) {
       return;
     }
-    setCount(count - 1);
+    setCount((prevCount) => prevCount - 1);
+  };
+
+  const handleAddCart = () => {
+    const id = product?.id;
+    const name = product?.name;
+    const price = product?.price;
+    const image = product?.Image[0].url;
+
+    dispatch(addTocart({ id, name, price, image, count }));
+
+    dispatch(
+      countRedux({
+        productId: id,
+        count: count
+      })
+    );
+
+    Swal.fire({
+      title: '加入購物車成功',
+      icon: 'success',
+      showConfirmButton: false,
+      timer: 1000,
+      position: 'center'
+    });
+    return;
+  };
+
+  const handleToCartPage = () => {
+    const id = product?.id;
+    const name = product?.name;
+    const price = product?.price;
+    const image = product?.Image[0].url;
+
+    dispatch(addTocart({ id, name, price, image, count }));
+
+    dispatch(
+      countRedux({
+        productId: id,
+        count: count
+      })
+    );
+
+    Swal.fire({
+      title: '立即購買成功',
+      icon: 'success',
+      showConfirmButton: false,
+      timer: 1000,
+      position: 'center'
+    }).then(() => {
+      navigate(`/cart`);
+    });
+    return;
+  };
+
+  const handleToggleCartModal = () => {
+    setAddCartPop(!addCartPop);
   };
 
   return (
     <>
+      {isLoading && <Loading />}
       {/* 加入購物車 */}
       <StyledContainer>
         <div className='cont'>
           <div className='item-area'>
             <StyledProdutWrapper>
               <div className='picture'>
-                <div className='preview'>
-                  <div className='number'>1/3</div>
+                <div
+                  className='preview'
+                  style={{
+                    backgroundImage: `url('${product?.Image[previewPic]?.url}')`
+                  }}
+                >
+                  <div className='number'>{previewPic + 1}/3</div>
                 </div>
                 <div className='pics'>
-                  <div className='pic pic1'></div>
-                  <div className='pic pic2'></div>
-                  <div className='pic pic3'></div>
+                  <div
+                    onClick={() => setPreviewPic(0)}
+                    className='pic pic1'
+                    style={{
+                      backgroundImage: `url('${product?.Image[0]?.url}')`
+                    }}
+                  ></div>
+                  <div
+                    onClick={() => setPreviewPic(1)}
+                    className='pic pic2'
+                    style={{
+                      backgroundImage: `url('${product?.Image[1]?.url}')`
+                    }}
+                  ></div>
+                  <div
+                    onClick={() => setPreviewPic(2)}
+                    className='pic pic3'
+                    style={{
+                      backgroundImage: `url('${product?.Image[2]?.url}')`
+                    }}
+                  ></div>
                 </div>
                 <div className='share'>
                   <div>分享商品到</div>
@@ -514,16 +719,18 @@ const SingleProduct = () => {
               </div>
               <div className='information'>
                 <div className='number'>
-                  商品編號：<span>13121100</span>
+                  商品編號：<span>{product?.id}</span>
                 </div>
-                <div className='name'>天然型態6合1專利化毛粉(30包/盒)</div>
+                <div className='name'>{product?.name}</div>
                 <div className='price'>
                   <span>TWD $</span>
-                  <span className='unit-price'>450</span>
+                  <span className='unit-price'>{product?.price}</span>
                 </div>
                 <div className='discount-price'>
                   <span>TWD $</span>
-                  <span className='unit-price'>380</span>
+                  <span className='unit-price'>
+                    {Math.floor(product?.price * 0.8 || 0)}
+                  </span>
                 </div>
                 <div className='row style'>
                   <p>規格</p>
@@ -534,23 +741,25 @@ const SingleProduct = () => {
                   <div className='count-box'>
                     <div onClick={handledecrease}>
                       <MinusIcon
-                        className={count > 1 ? "minus active" : "minus"}
+                        className={count > 1 ? 'minus active' : 'minus'}
                       />
                     </div>
                     <div className='count'>{count}</div>
-                    <div onClick={() => setCount(count + 1)}>
+                    <div onClick={() => setCount((prevCount) => prevCount + 1)}>
                       <PlusIcon className='plus' />
                     </div>
                   </div>
                 </div>
                 <div className='row button-group'>
-                  <button className='button cart'>
+                  <button onClick={handleAddCart} className='button cart'>
                     <span>
                       <CartIcon size='20' />
                     </span>
                     加入購物車
                   </button>
-                  <button className='button buy'>立即購買</button>
+                  <button onClick={handleToCartPage} className='button buy'>
+                    立即購買
+                  </button>
                 </div>
                 <div className='title'>
                   <h5>運送&付款</h5>
@@ -565,6 +774,12 @@ const SingleProduct = () => {
                     轉帳匯款、宅配代收、7-11取貨付款、全家取貨付款、信用卡
                   </div>
                 </div>
+              </div>
+              <div className='share-md'>
+                <div>分享商品到</div>
+                <FacebookIcon className='icon' />
+                <TwitterIcon className='icon' />
+                <LineIcon className='icon' />
               </div>
             </StyledProdutWrapper>
           </div>
@@ -584,9 +799,9 @@ const SingleProduct = () => {
             </div>
             <div className='produts-wrapper'>
               {/* data.map() */}
-              <AddProductCard />
-              <AddProductCard />
-              <AddProductCard />
+              {product?.Image?.map((img) => {
+                return <AddProductCard key={img.url} image={img.url} />;
+              })}
             </div>
           </StyleProductsWrapper>
         </div>
@@ -600,25 +815,29 @@ const SingleProduct = () => {
               <hr />
             </StyledTitle>
             {/* productInfo.map() */}
-            <StyledProductInfo className='product-info'>
-              <img src='https://picsum.photos/id/142/600' alt='' />
-            </StyledProductInfo>
+            {product?.Image?.map((img) => {
+              return (
+                <StyledProductInfo key={img.url} className='product-info'>
+                  <img src={img.url} alt='' />
+                </StyledProductInfo>
+              );
+            })}
             <StyledImage
               className='order'
-              onClick={() => Navigate("/product/all")}
+              onClick={() => navigate('/product/all')}
             >
               <img src={order} alt='' />
             </StyledImage>
             <StyledCart className='cart'>
               <hr />
               <div className='content-wrapper'>
-                <h2>【毛孩時代】腎臟專科保健粉(30包/盒)</h2>
+                <h2>{product?.name}</h2>
                 <div className='price-wrapper'>
                   <div className='price'>
-                    TWD $<span>750</span>
+                    TWD $<span>{product?.price}</span>
                   </div>
                   <div className='discount-price'>
-                    TWD $<span>690</span>
+                    TWD $<span>{Math.floor(product?.price * 0.8 || 0)}</span>
                   </div>
                 </div>
               </div>
@@ -628,7 +847,7 @@ const SingleProduct = () => {
                   <div className='count-box'>
                     <div onClick={handledecrease}>
                       <MinusIcon
-                        className={count > 1 ? "minus active" : "minus"}
+                        className={count > 1 ? 'minus active' : 'minus'}
                       />
                     </div>
                     <div className='count'>{count}</div>
@@ -638,28 +857,50 @@ const SingleProduct = () => {
                   </div>
                 </div>
                 <div className='button-group'>
-                  <button className='button cart'>加入購物車</button>
-                  <button className='button buy'>立即購買</button>
+                  <button onClick={handleAddCart} className='button cart'>
+                    加入購物車
+                  </button>
+                  <button onClick={handleToCartPage} className='button buy'>
+                    立即購買
+                  </button>
                 </div>
               </div>
             </StyledCart>
           </div>
         </div>
       </StyledContainer>
+      <StyledBuyButton onClick={handleToggleCartModal}>
+        我要購買
+      </StyledBuyButton>
+      {addCartPop && (
+        <ProductPopCart
+          product={product}
+          id={product?.id}
+          name={product?.name}
+          price={product?.price}
+          image={product?.Image[0].url}
+          handleToggleCartModal={handleToggleCartModal}
+        />
+      )}
     </>
   );
 };
 
-const AddProductCard = () => {
+const AddProductCard = ({ image }) => {
   const [isSelected, setIsSelected] = useState(false);
   const handleToggleSelectButton = () => {
     setIsSelected(!isSelected);
   };
   return (
-    <div className={`card ${isSelected ? "active" : ""}`}>
+    <div className={`card ${isSelected ? 'active' : ''}`}>
       <header></header>
       <div className='card-wrapper'>
-        <div className='pic'></div>
+        <div
+          className='pic'
+          style={{
+            backgroundImage: `url('${image}')`
+          }}
+        ></div>
         <div className='information'>
           <div className='name'>【超值加購】腎臟保健粉</div>
           <div className='row price-wrapper'>

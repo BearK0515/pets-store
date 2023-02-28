@@ -1,7 +1,6 @@
-import React,{ useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import chatRobot from "../../assets/icons/icon_FB_chat.png";
-
 
 const StyledChatRobot = styled.div`
   .top-button {
@@ -17,8 +16,9 @@ const StyledChatRobot = styled.div`
     border: 1px solid #ddd;
     border-radius: 4px;
     cursor: pointer;
+    opacity: 0.8;
   }
-  
+
   .transformUp {
     animation: messageMoveUp 0.1s ease-in 1 alternate;
     transform: translate(0, -60px);
@@ -35,35 +35,65 @@ const StyledChatRobot = styled.div`
     }
     to {
       transform: translate(0, -60px);
-
     }
   }
 
+  @media screen and (max-width: 768px) {
+    .top-button {
+      width: 40px;
+      height: 40px;
+      position: fixed;
+      right: 20px;
+      bottom: 60px;
+    }
+
+    .transformUp {
+      animation: messageMoveUp 0.1s ease-in 1 alternate;
+      transform: translate(0, -50px);
+    }
+
+    @keyframes messageMoveUp {
+      from {
+        transform: translate(0, 0);
+      }
+      to {
+        transform: translate(0, -50px);
+      }
+    }
+
+    .chat-robot {
+      width: 30px;
+      height: 30px;
+    }
+  }
 `;
 
 export default function ChatRobot() {
-  const [scrollup, setScrollup] = useState(false)
+  const [scrollup, setScrollup] = useState(false);
 
   useEffect(() => {
-    window.addEventListener("scroll" ,() => {
-      if(window.scrollY > 0) {
-        setScrollup(true)
+    window.addEventListener("scroll", () => {
+      if (window.scrollY > 0) {
+        setScrollup(true);
       } else {
-        setScrollup(false)
+        setScrollup(false);
       }
-    })
-  },[])
-  
+    });
+  }, []);
 
   return (
-    <StyledChatRobot>
-      {scrollup ? 
-      (<button className='top-button transformUp'>
-          <img className='chat-robot' src={chatRobot} alt='logo-big' />
-      </button>) : 
-      (<button className='top-button'>
-          <img className='chat-robot' src={chatRobot} alt='logo-big' />
-      </button>) }
-    </StyledChatRobot>
+    <>
+      <StyledChatRobot>
+        {scrollup ? (
+          <button className='top-button transformUp'>
+            <img className='chat-robot' src={chatRobot} alt='logo-big' />
+          </button>
+        ) : (
+          <button className='top-button'>
+            <img className='chat-robot' src={chatRobot} alt='logo-big' />
+          </button>
+        )}
+      </StyledChatRobot>
+    </>
   );
 }

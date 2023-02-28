@@ -1,5 +1,9 @@
-import React from "react";
-import styled from "styled-components";
+import React, { useEffect, useState } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import styled from 'styled-components';
+import { singleOrder } from '../api/adminAuth';
+import { userSingleOrder } from '../api/userAuth';
+import Swal from 'sweetalert2';
 
 const StyledContainer = styled.div`
   width: 100%;
@@ -57,6 +61,9 @@ const StyledWrapper = styled.div`
     .wrapper {
       display: grid;
       grid-template-columns: 3fr 6fr 1fr;
+      @media screen and (max-width: 577px) {
+        grid-template-columns: 3fr 3fr 2fr;
+      }
       p {
         display: flex;
         justify-content: center;
@@ -68,17 +75,30 @@ const StyledWrapper = styled.div`
     width: 100%;
     display: grid;
     grid-template-columns: 100px repeat(2, 200px) 1fr;
-    & p ~ p {
+    @media screen and (max-width: 768px) {
+      grid-template-columns: 100px repeat(2, 1fr);
+      gap: 10px;
+      .remark {
+        display: none;
+      }
+    }
+    .phone,
+    .email,
+    .address,
+    .remark {
       display: flex;
       justify-content: center;
     }
-    & P:nth-last-child(1) {
+    .remark {
       flex-flow: wrap;
       word-wrap: break-all;
     }
   }
   .addressee {
     grid-template-columns: 100px 200px 1fr;
+    @media screen and (max-width: 768px) {
+      grid-template-columns: 60px 110px 1fr;
+    }
   }
   .count {
     display: flex;
@@ -89,14 +109,77 @@ const StyledWrapper = styled.div`
       font-weight: 700;
     }
   }
+  .remark-md {
+    display: none;
+  }
+  @media screen and (max-width: 768px) {
+    .remark-md {
+      display: flex;
+      flex-flow: column;
+      gap: 10px;
+      padding-top: 15px;
+    }
+  }
 `;
 
 const SingleOrder = () => {
+  const navigate = useNavigate();
+  const [order, setOrder] = useState(null);
+  const params = useParams();
+  let total = order?.products?.reduce(
+    (total, item) => total + Number(item.subTotal),
+    0
+  );
+
+  useEffect(() => {
+    const getOrdersAllAsync = async (params) => {
+      try {
+        if (params.orderId) {
+          const resOrder = await singleOrder(params.orderId);
+          if (resOrder === undefined) {
+            Swal.fire({
+              position: 'center',
+              icon: 'error',
+              title: '查無該訂單編號，請重新查詢',
+              text: '訂單編號 ' + params.orderNumber,
+              showConfirmButton: true
+            }).then(() => {
+              navigate(`/admin/orders`);
+            });
+            return;
+          }
+          setOrder(resOrder.data);
+          return;
+        }
+        if (params.orderNumber) {
+          const resUserOrder = await userSingleOrder(params.orderNumber);
+          if (resUserOrder === undefined) {
+            Swal.fire({
+              position: 'center',
+              icon: 'error',
+              title: '查無該訂單編號，請重新查詢',
+              text: '訂單編號 ' + params.orderNumber,
+              showConfirmButton: true
+            }).then(() => {
+              navigate(`/order/query`);
+            });
+            return;
+          }
+          setOrder(resUserOrder.data);
+          return;
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    getOrdersAllAsync(params);
+    return;
+  }, [params, setOrder, navigate]);
   return (
     <StyledContainer>
       <StyledTitle>
         <h2>訂單編號：</h2>
-        <p>3345678</p>
+        <p>{order?.orderNumber}</p>
       </StyledTitle>
       <StyledOrderList>
         <StyledWrapper>
@@ -107,8 +190,8 @@ const SingleOrder = () => {
             <p>處理狀態</p>
           </div>
           <div className='wrapper-content buying-information'>
-            <p>貨到付款</p>
-            <p>7-11到店取貨</p>
+            <p>{order?.Payment?.type}</p>
+            <p>{order?.Delivery?.type}</p>
             <p>撿貨中</p>
           </div>
           <hr />
@@ -120,64 +203,55 @@ const SingleOrder = () => {
               <p>小計</p>
             </div>
           </div>
-          <div className='wrapper-content products'>
-            <p>毛孩時代腎臟專科保健營養品(30包/盒)</p>
-            <div className='wrapper'>
-              <p>2</p>
-              <p>$690</p>
-              <p>$1380</p>
-            </div>
-          </div>
-          <div className='wrapper-content products'>
-            <p>毛孩時代皮膚專科保健營養品(30包/盒)</p>
-            <div className='wrapper'>
-              <p>1</p>
-              <p>$650</p>
-              <p>$650</p>
-            </div>
-          </div>
-          <div className='wrapper-content products'>
-            <p>毛孩時代關節專科保健營養品(30包/盒)</p>
-            <div className='wrapper'>
-              <p>3</p>
-              <p>$450</p>
-              <p>$1350</p>
-            </div>
-          </div>
-          <div className="count">
+          {order?.products?.map((product) => {
+            return (
+              <div key={product.id} className='wrapper-content products'>
+                <p>{product.Product.name}</p>
+                <div className='wrapper'>
+                  <p>{product.orderQuantity}</p>
+                  <p>${product.Product.price}</p>
+                  <p>${product.subTotal}</p>
+                </div>
+              </div>
+            );
+          })}
+          <div className='count'>
             <p>總計</p>
-            <p>$3380</p>
+            <p>${total}</p>
           </div>
         </StyledWrapper>
         <StyledWrapper>
           <h3>購買者資料</h3>
           <hr />
           <div className='wrapper-title sender'>
-            <p>姓名</p>
-            <p>電話</p>
-            <p>email</p>
-            <p>備註</p>
+            <p className='name'>姓名</p>
+            <p className='phone'>電話</p>
+            <p className='email'>email</p>
+            <p className='remark'>備註</p>
           </div>
           <div className='wrapper-content sender'>
-            <p>王大明</p>
-            <p>01-23345678</p>
-            <p>abcac@abcabc.com</p>
-            <p>
-              {/* 英打字母太長沒辦法自動換行 */}
-              英打字母太長沒辦法自動換行
-            </p>
+            <p className='name'>{order?.purchaserName}</p>
+            <p className='phone'>{order?.purchaserPhone}</p>
+            <p className='email'>{order?.purchaserEmail}</p>
+            <p className='remark'>{order?.comment}</p>
+          </div>
+          <div className='remark-md'>
+            <p className='wrapper-title'>備註</p>
+            <p className='wrapper-content'>{order?.comment}</p>
           </div>
         </StyledWrapper>
         <StyledWrapper>
           <h3>收件者資料</h3>
           <hr />
           <div className='wrapper-title addressee'>
-            <p>姓名</p>
-            <p>電話</p>
+            <p className='name'>姓名</p>
+            <p className='phone'>電話</p>
+            <p className='address'>地址</p>
           </div>
           <div className='wrapper-content addressee'>
-            <p>林阿強</p>
-            <p>01-998765432</p>
+            <p className='name'>{order?.receiverName}</p>
+            <p className='phone'>{order?.receiverPhone}</p>
+            <p className='address'>{order?.receiverAddress}</p>
           </div>
         </StyledWrapper>
       </StyledOrderList>

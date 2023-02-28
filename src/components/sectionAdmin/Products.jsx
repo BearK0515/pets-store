@@ -68,8 +68,18 @@ const StyledProdutsContainer = styled.div`
   &::-webkit-scrollbar-thumb {
     background-color: var(--gray);
   }
+  @media screen and (max-width:1012px) {
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  }
+  @media screen and (max-width:768px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
 `;
-const Products = ({ productsAll, handleTogglePriceModal }) => {
+const Products = ({
+  productsAll,
+  handleTogglePriceModal,
+  deleteProduct,
+}) => {
   const page = useLocation().pathname;
   return (
     <StyledContainer>
@@ -102,18 +112,21 @@ const Products = ({ productsAll, handleTogglePriceModal }) => {
           <AllProducts
             productsAll={productsAll}
             handleTogglePriceModal={handleTogglePriceModal}
+            deleteProduct={deleteProduct}
           />
         )}
         {page.includes("dog") && (
           <DogProducts
             productsAll={productsAll}
             handleTogglePriceModal={handleTogglePriceModal}
+            deleteProduct={deleteProduct}
           />
         )}
         {page.includes("cat") && (
           <CatProducts
             productsAll={productsAll}
             handleTogglePriceModal={handleTogglePriceModal}
+            deleteProduct={deleteProduct}
           />
         )}
       </StyledProdutsContainer>
