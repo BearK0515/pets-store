@@ -836,7 +836,7 @@ const Product = ({ product }) => {
       <li className='style'>30包/盒</li>
       <li className='count'>
         <select
-          defaultValue={product?.count}
+          value={product?.count}
           onChange={(e) => {
             dispatch(
               setCount({

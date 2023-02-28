@@ -217,7 +217,7 @@ export const CatrItem = ({ product }) => {
         <div className="price">{product?.price}元</div>
         <div className="count">
           <select
-            defaultValue={product.count}
+            value={product?.count}
             onChange={(e) => {
               dispatch(
                 setCount({
@@ -225,6 +225,7 @@ export const CatrItem = ({ product }) => {
                   count: e.target.value,
                 })
               );
+              console.log(e.target.value);
             }}
           >
             {Array.prototype.map.call(options, ({ value, label }, index) => {
