@@ -34,7 +34,7 @@ const StyledChatRobot = styled.div`
     .top-button {
       position: fixed;
       right: -5px;
-      bottom: 20px;
+      bottom: 60px;
     }
 
     .transformUp {
