@@ -13,6 +13,7 @@ const StyledChatRobot = styled.div`
     align-items: center;
     background-color: var(--white);
     cursor: pointer;
+    z-index: 999;
   }
 
   .transformUp {
@@ -33,12 +34,12 @@ const StyledChatRobot = styled.div`
     .top-button {
       position: fixed;
       right: -5px;
-      bottom: 60px;
+      bottom: 20px;
     }
 
     .transformUp {
       animation: messageMoveUp 0.1s ease-in 1 alternate;
-      transform: translate(0, -20px);
+      transform: translate(0, -25px);
     }
 
     @keyframes messageMoveUp {
@@ -46,7 +47,7 @@ const StyledChatRobot = styled.div`
         transform: translate(0, 0);
       }
       to {
-        transform: translate(0, -20px);
+        transform: translate(0, -25px);
       }
     }
   }
