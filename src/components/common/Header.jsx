@@ -165,7 +165,8 @@ const HeaderStyled = styled.header`
           color: var(--white);
         }
       }
-      .logout {
+      .logout,
+      .admin {
         display: flex;
         justify-content: center;
         align-items: center;
@@ -176,6 +177,9 @@ const HeaderStyled = styled.header`
         line-height: 30px;
         font-size: 12px;
         color: var(--white);
+      }
+      .admin {
+        background-color: #734434;
       }
     }
 
@@ -392,8 +396,8 @@ export default function Header({
             </div>
           )}
 
-          <Link to="login">
-            <div className="icon logout">管理員</div>
+          <Link to='login'>
+            <div className='icon admin'>管理員</div>
           </Link>
         </nav>
         <nav className="tool-box-right">

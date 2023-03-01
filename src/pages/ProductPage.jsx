@@ -19,6 +19,7 @@ const ProductPageStyled = styled.div`
   grid-gap: 0 15px;
   grid-template-columns: 150px 1fr;
   max-width: 1140px;
+  min-height: 1200px;
   margin: 30px auto;
   padding: 0 30px;
   @media screen and (max-width: 992px) {
@@ -62,6 +63,7 @@ const Breadcrumb = styled.div`
 `;
 
 const ProductPage = () => {
+  window.scrollTo(0, 245);
   const [isLoading, setIsLoading] = useState(true);
   const [productHot, setProductHot] = useState([]);
   const [productNew, setProductNew] = useState([]);
@@ -188,8 +190,8 @@ const ProductPage = () => {
 
   return (
     <>
-      {isLoading && <Loading />}
       <ProductPageStyled>
+        {isLoading && <Loading />}
         <ProductAside />
         <ProductWrapper>
           <HomeLinkWrapper>
