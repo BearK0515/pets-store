@@ -401,8 +401,8 @@ export default function Header({
             </div>
           )}
 
-          <Link to="login">
-            <div className="icon admin">管理員</div>
+          <Link to='login'>
+            <div className='icon admin'>管理員</div>
           </Link>
         </nav>
         <nav className="tool-box-right">
