@@ -251,11 +251,11 @@ const Layout = () => {
   const handleToggleSidebar = () => {
     setIsSideabrOpen(!isSideabrOpen);
   };
-  const handleSearch = () => {
-    const keyword = searchRef.current.value;
-    if (!keyword || !searchBarActive) return;
-    searchRef.current.value = null;
-    setSearchBarActive(false);
+  const handleSearch = (ref, callback, setCallback) => {
+    const keyword = ref.current.value;
+    if (!keyword || !callback) return;
+    ref.current.value = null;
+    setCallback(false);
     navigate(`../product/search/${keyword}`);
   };
 
@@ -282,7 +282,6 @@ const Layout = () => {
     getUserInfo();
   }, []);
 
-
   return (
     <>
       <StyledContainer onClick={() => setSearchBarActive(false)}>
@@ -290,6 +289,7 @@ const Layout = () => {
           handleToggleLoginModal={handleToggleLoginModal}
           handleToggleCartModal={handleToggleCartModal}
           handleToggleSidebar={handleToggleSidebar}
+          handleSearch={handleSearch}
           countProducts={productInCart.length}
           setLogin={setLogin}
           login={login}
@@ -324,7 +324,7 @@ const Layout = () => {
               ref={searchRef}
               onKeyDown={(e) => {
                 if (e.key === "Enter") {
-                  handleSearch();
+                  handleSearch(searchRef, searchBarActive, setSearchBarActive);
                 }
               }}
               onClick={(e) => {

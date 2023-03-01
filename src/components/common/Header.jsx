@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { NavLink as Link } from "react-router-dom";
 import styled from "styled-components";
 import {
@@ -19,6 +19,28 @@ import bigLogo from "../../assets/icons/logo.png";
 const HeaderStyled = styled.header`
   display: flex;
   flex-direction: column;
+  .searchbar {
+    display: none;
+    @media screen and (max-width: 992px) {
+      display: unset;
+      position: absolute;
+      top: 52px;
+      padding: 0 10px;
+      height: 30px;
+      width: 100vw;
+    }
+  }
+
+  .back-drop {
+    display: none;
+    @media screen and (max-width: 992px) {
+      display: unset;
+      position: absolute;
+      background: rgba(60, 60, 60, 0.3);
+      width: 100vw;
+      height: 100vh;
+    }
+  }
   .nav-mobile {
     position: fixed;
     top: 0;
@@ -245,10 +267,13 @@ export default function Header({
   handleToggleLoginModal,
   handleToggleCartModal,
   handleToggleSidebar,
+  handleSearch,
   countProducts,
   setLogin,
   login,
 }) {
+  const [searchBarActive, setSearchBarActive] = useState(false);
+  const headerSearchRef = useRef();
   const handleLogout = () => {
     localStorage.removeItem("authToken");
     localStorage.removeItem("UserId");
@@ -265,84 +290,114 @@ export default function Header({
 
   return (
     <HeaderStyled>
-      <div className='nav-mobile'>
+      {searchBarActive && (
+        <div
+          className="back-drop"
+          onClick={() => setSearchBarActive(false)}
+        ></div>
+      )}
+      <div className="nav-mobile">
+        {searchBarActive && (
+          <input
+            type="text"
+            id="search-input"
+            className="searchbar"
+            placeholder="商品搜尋"
+            ref={headerSearchRef}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                handleSearch(
+                  headerSearchRef,
+                  searchBarActive,
+                  setSearchBarActive
+                );
+              }
+            }}
+          />
+        )}
         <ul>
           <li onClick={handleToggleSidebar}>
-            <div className='icon'>
+            <div className="icon">
               <MenuIcon />
             </div>
-            <div className='text'>選單</div>
+            <div className="text">選單</div>
           </li>
           <li>
-            <Link to='order/query'>
-              <div className='icon'>
-                <OrderIcon size='30px' />
+            <Link to="order/query">
+              <div className="icon">
+                <OrderIcon size="30px" />
               </div>
-              <div className='text'>查訂單</div>
+              <div className="text">查訂單</div>
             </Link>
           </li>
           {login ? (
             <li onClick={handleLogout}>
-              <div className='icon'>
+              <div className="icon">
                 <LoginIcon />
               </div>
-              <div className='text '>登出</div>
+              <div className="text ">登出</div>
             </li>
           ) : (
             <li onClick={handleToggleLoginModal}>
-              <div className='icon'>
+              <div className="icon">
                 <LoginIcon />
               </div>
-              <div className='text '>登入</div>
+              <div className="text ">登入</div>
             </li>
           )}
           <li>
-            <div className='icon'>
-              <SearchIcon />
+            <div className="icon">
+              <SearchIcon
+                onClick={(e) => {
+                  setSearchBarActive(!searchBarActive);
+                  e.preventDefault();
+                  e.stopPropagation();
+                }}
+              />
             </div>
-            <div className='text'>搜尋</div>
+            <div className="text">搜尋</div>
           </li>
           <li onClick={handleToggleCartModal}>
-            <div className='icon'>
+            <div className="icon">
               <CartIcon />
-              <div className='count'>{countProducts}</div>
+              <div className="count">{countProducts}</div>
             </div>
-            <div className='text'>購物車</div>
+            <div className="text">購物車</div>
           </li>
         </ul>
       </div>
-      <div className='nav'>
-        <nav className='tool-box-left'>
-          <div className='icon-wrapper'>
-            <Link to='order/query'>
-              <div className='icon order'>
+      <div className="nav">
+        <nav className="tool-box-left">
+          <div className="icon-wrapper">
+            <Link to="order/query">
+              <div className="icon order">
                 <OrderIcon />
               </div>
             </Link>
-            <div className='tips'>訂單查詢</div>
+            <div className="tips">訂單查詢</div>
           </div>
-          <div className='icon-wrapper'>
-            <Link to='faq'>
-              <div className='icon info'>
+          <div className="icon-wrapper">
+            <Link to="faq">
+              <div className="icon info">
                 <FaqIcon />
               </div>
             </Link>
-            <div className='tips'>購物說明</div>
+            <div className="tips">購物說明</div>
           </div>
 
           {login ? (
-            <Link to='/'>
-              <div className='icon logout' onClick={handleLogout}>
+            <Link to="/">
+              <div className="icon logout" onClick={handleLogout}>
                 登出
               </div>
             </Link>
           ) : (
-            <div className='icon-wrapper'>
-              <div className='icon login' onClick={handleToggleLoginModal}>
+            <div className="icon-wrapper">
+              <div className="icon login" onClick={handleToggleLoginModal}>
                 <AccountIcon />
                 登入
               </div>
-              <div className='tips'>會員登入</div>
+              <div className="tips">會員登入</div>
             </div>
           )}
 
@@ -350,29 +405,29 @@ export default function Header({
             <div className='icon admin'>管理員</div>
           </Link>
         </nav>
-        <nav className='tool-box-right'>
-          <FacebookIcon className='icon facebook' />
-          <InstagramIcon className='icon instagram' />
-          <LineIcon className='icon line' />
-          <Link to='/'>
-            <div className='icon homepage'>
+        <nav className="tool-box-right">
+          <FacebookIcon className="icon facebook" />
+          <InstagramIcon className="icon instagram" />
+          <LineIcon className="icon line" />
+          <Link to="/">
+            <div className="icon homepage">
               <HomeIcon />
             </div>
           </Link>
         </nav>
       </div>
 
-      <div className='banner'>
-        <Link to='/'>
-          <BigLogo src={bigLogo} alt='logo-big' />
+      <div className="banner">
+        <Link to="/">
+          <BigLogo src={bigLogo} alt="logo-big" />
         </Link>
         <ul>
-          <NavLink to='/'>首頁</NavLink>
-          <NavLink to='about'>關於</NavLink>
-          <NavLink to='product/all'>全部商品</NavLink>
-          <NavLink to='product/dog'>狗狗專區</NavLink>
-          <NavLink to='product/cat'>貓咪專區</NavLink>
-          <NavLink to='blogs'>部落格</NavLink>
+          <NavLink to="/">首頁</NavLink>
+          <NavLink to="about">關於</NavLink>
+          <NavLink to="product/all">全部商品</NavLink>
+          <NavLink to="product/dog">狗狗專區</NavLink>
+          <NavLink to="product/cat">貓咪專區</NavLink>
+          <NavLink to="blogs">部落格</NavLink>
         </ul>
       </div>
     </HeaderStyled>
