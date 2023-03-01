@@ -88,6 +88,7 @@ const StyledButtonWrapper = styled.div`
       padding: 4px 10px;
       font-size: 14px;
       line-height: 16px;
+      color: #333;
       cursor: pointer;
 
       &:hover {
@@ -336,22 +337,22 @@ const Layout = () => {
           {searchBarActive && (
             <ul className="popular-items">
               <Link to="../product/all">
-                <li className="popular-item" style={{ color: "black" }}>
+                <li className="popular-item">
                   我們
                 </li>
               </Link>
               <Link to="../product/all">
-                <li className="popular-item" style={{ color: "black" }}>
+                <li className="popular-item">
                   分類
                 </li>
               </Link>
               <Link to="../product/all">
-                <li className="popular-item" style={{ color: "black" }}>
+                <li className="popular-item">
                   沒有
                 </li>
               </Link>
               <Link to="../product/all">
-                <li className="popular-item" style={{ color: "black" }}>
+                <li className="popular-item">
                   標籤
                 </li>
               </Link>

@@ -20,21 +20,26 @@ const HeaderStyled = styled.header`
   display: flex;
   flex-direction: column;
   .searchbar {
-    position: absolute;
-    top: 52px;
-    padding: 0 10px;
-    height: 30px;
-    width: 100vw;
-  }
-  .back-drop {
-    position: absolute;
-    background: rgba(60, 60, 60, 0.3);
-    width: 100vw;
-    height: 100vh;
+    display: none;
+    @media screen and (max-width: 992px) {
+      display: unset;
+      position: absolute;
+      top: 52px;
+      padding: 0 10px;
+      height: 30px;
+      width: 100vw;
+    }
   }
 
-  .none {
+  .back-drop {
     display: none;
+    @media screen and (max-width: 992px) {
+      display: unset;
+      position: absolute;
+      background: rgba(60, 60, 60, 0.3);
+      width: 100vw;
+      height: 100vh;
+    }
   }
   .nav-mobile {
     position: fixed;
@@ -165,7 +170,8 @@ const HeaderStyled = styled.header`
           color: var(--white);
         }
       }
-      .logout {
+      .logout,
+      .admin {
         display: flex;
         justify-content: center;
         align-items: center;
@@ -176,6 +182,9 @@ const HeaderStyled = styled.header`
         line-height: 30px;
         font-size: 12px;
         color: var(--white);
+      }
+      .admin {
+        background-color: #734434;
       }
     }
 
@@ -393,7 +402,7 @@ export default function Header({
           )}
 
           <Link to="login">
-            <div className="icon logout">管理員</div>
+            <div className="icon admin">管理員</div>
           </Link>
         </nav>
         <nav className="tool-box-right">
