@@ -89,7 +89,7 @@ export default function ChatRobot() {
           <button className='top-button transformUp'>
             <img className='chat-robot' src={chatRobot} alt='logo-big' />
             <MessengerChat
-              pageId='109268111769502'
+              pageId='100090371424941'
               language='zh_TW'
               themeColor={'#000000'}
               bottomSpacing={300}
@@ -121,7 +121,7 @@ export default function ChatRobot() {
           <button className='top-button'>
             <img className='chat-robot' src={chatRobot} alt='logo-big' />
             <MessengerChat
-              pageId='109268111769502'
+              pageId='100090371424941'
               language='zh_TW'
               themeColor={'#000000'}
               bottomSpacing={300}
