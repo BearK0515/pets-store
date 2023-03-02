@@ -28,11 +28,13 @@ const HeaderStyled = styled.header`
       padding: 0 10px;
       height: 30px;
       width: 100vw;
+      
     }
   }
 
   .back-drop {
     display: none;
+    z-index: 1;
     @media screen and (max-width: 992px) {
       display: unset;
       position: absolute;
