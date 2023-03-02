@@ -1,9 +1,16 @@
 [[redirects]]
+  from = "/api/*"
+  to = "https://www.waylins.com/:splat"
+  status = 200
+  headers = {X-From = "Netlify"}
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+  Access-Control-Allow-Origin = "*"
+
+[[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
 
-[[redirects]]
-  from = "/api/*"
-  to = "https://pets-store.netlify.app/:splat"
-  status = 200
