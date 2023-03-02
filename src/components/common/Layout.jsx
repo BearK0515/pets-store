@@ -4,7 +4,6 @@ import styled from "styled-components";
 import Footer from "./Footer";
 import Header from "./Header";
 import GoTop from "./GoTop";
-import ChatRobot from "./ChatRobot";
 
 import { CartIcon, SearchIcon } from "../../assets/icons";
 import LoginModal from "./LoginModal";
@@ -377,7 +376,6 @@ const Layout = () => {
             </span>
           </StyledSearchWrapper>
         )}
-        <ChatRobot />
         <GoTop />
       </StyledContainer>
       <Footer />
