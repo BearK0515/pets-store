@@ -622,13 +622,6 @@ const SingleProduct = () => {
 
     dispatch(addTocart({ id, name, price, image, count }));
 
-    dispatch(
-      countRedux({
-        productId: id,
-        count: count
-      })
-    );
-
     Swal.fire({
       title: '加入購物車成功',
       icon: 'success',
