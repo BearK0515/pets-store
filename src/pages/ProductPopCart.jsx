@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import Swal from 'sweetalert2';
 import { MinusIcon, PlusIcon } from '../assets/icons/index';
-import { addTocart, setCount as countRedux } from '../store/productSlice';
+import { addTocart } from '../store/productSlice';
 import { useNavigate } from 'react-router-dom';
 
 const StyledModalContainer = styled.div`
@@ -192,13 +192,6 @@ const ProductPopCart = ({ handleToggleCartModal, product, image }) => {
     const price = product.price;
 
     dispatch(addTocart({ id, name, price, image, count }));
-
-    dispatch(
-      countRedux({
-        productId: id,
-        count: count
-      })
-    );
 
     Swal.fire({
       title: '立即購買成功',
