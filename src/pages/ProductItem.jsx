@@ -12,17 +12,11 @@ const StyledCard = styled.div`
   align-items: start;
   aspect-ratio: 3/4;
 
-  .product {
+  .product-img {
     width: 100%;
     aspect-ratio: 1/1;
   }
-  .product-img{
-    position: absolute;
-    width: 100%;
-    aspect-ratio: 1/1;
-    z-index: -1;
-  }
-   .wrapper {
+  .wrapper {
     display: flex;
     flex-flow: column;
     gap: 5px 0;
@@ -122,16 +116,13 @@ export const ProductItem = ({ product }) => {
   return (
     <>
       <StyledCard id={product.id}>
-        <LazyLoadImage
-          className="product-img"
-          alt={product.name}
-          effect="blur"
-          src={product.Images.url}
-        />
-        <Link
-          className="product"
-          to={`/product/detail/${product.id}`}
-        />
+        <Link className="product" to={`/product/detail/${product.id}`}>
+          <LazyLoadImage
+            className="product-img"
+            alt={product.name}
+            src={product.Images.url}
+          />
+        </Link>
         <Button onClick={handleToggleCartModal}>
           <div className="addCart">
             <CartIcon style={{ fontSize: "18px", cursor: "pointer" }} />
