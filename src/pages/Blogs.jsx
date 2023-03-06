@@ -6,6 +6,7 @@ import { HomeLinkWrapper } from '../components/common/HomeLinkWrapper';
 import { artical } from '../api/blogs';
 import { BlogFilterContext } from '../App';
 import { IsLoadingComponent as Loading } from '../components/common/IsLoading';
+import { LazyLoadImage } from 'react-lazy-load-image-component';
 import Swal from 'sweetalert2';
 
 const BlogStyled = styled.div`
@@ -151,16 +152,14 @@ const BlogCard = styled.li`
     line-height: 20px;
     color: var(--dark);
   }
-`;
-
-const BlogCardImg = styled.div`
-  display: block;
-  position: relative;
-  width: 100%;
-  aspect-ratio: 4/2;
-  background-size: cover;
-  background-position: center center;
-  background-image: url('https://i.imgur.com/KZ2rS8G.jpg');
+  .BlogCardImg {
+    display: block;
+    position: relative;
+    width: 100%;
+    aspect-ratio: 4/2;
+    background-size: cover;
+    background-position: center center;
+  }
 `;
 
 const BlogAside = styled.div`
@@ -401,7 +400,7 @@ const Blogs = () => {
         return;
       }
       setArticalAll(searchArtical);
-      setQuery('')
+      setQuery('');
       e.preventDefault(); //瀏覽器預設行為中斷(需放在if)
     }
   };
@@ -451,9 +450,12 @@ const Blogs = () => {
                 articalOrigin?.map((artical) => {
                   return (
                     <BlogCard key={artical.title}>
-                      <BlogCardImg
-                        style={{ backgroundImage: `url("${artical.image}")` }}
+                      <LazyLoadImage
+                        className='BlogCardImg'
+                        alt={artical.title}
+                        src={artical.image}
                       />
+
                       <div className='BlogCardInner'>
                         <div className='BlogCardIntro'>
                           <h2 className='BlogTitle'>
@@ -489,8 +491,10 @@ const Blogs = () => {
               {articalAll?.map((artical) => {
                 return (
                   <BlogCard key={artical.title}>
-                    <BlogCardImg
-                      style={{ backgroundImage: `url("${artical.image}")` }}
+                    <LazyLoadImage
+                      className='BlogCardImg'
+                      alt={artical.title}
+                      src={artical.image}
                     />
                     <div className='BlogCardInner'>
                       <div className='BlogCardIntro'>
