@@ -1,7 +1,9 @@
-import React from "react";
-import { useNavigate } from "react-router-dom";
-import styled from "styled-components";
-import { CartNoneIcon, DeleteProductIcon } from "../../assets/icons";
+import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import styled from 'styled-components';
+import { CartNoneIcon, DeleteProductIcon } from '../../assets/icons';
+import { removeItem, setCount } from '../../store/productSlice';
 
 const CartStyled = styled.div`
   width: 100vw;
@@ -40,6 +42,11 @@ const CartStyled = styled.div`
       padding: 17px;
       border-bottom: 1px solid var(--white);
       margin-bottom: 10px;
+    }
+    .wrapper {
+      display: flex;
+      flex-flow: column;
+      gap: 10px;
     }
     .card-items {
       width: 100%;
@@ -96,6 +103,8 @@ const StyledCardItem = styled.div`
     gap: 10px;
     .wrapper {
       display: flex;
+      flex-flow: row;
+      justify-content: space-between;
       gap: 5px;
       .name {
         color: #333;
@@ -145,63 +154,79 @@ const StyledCardItem = styled.div`
   }
 `;
 
-export default function CartModal({
-  setIsCartOpen,
-  productInCart,
-  setProductInCart,
-}) {
+export default function CartModal({ setIsCartOpen }) {
+  const cartProducts = useSelector((state) => state.product.cart);
   const navigate = useNavigate();
   function goToCart() {
-    navigate("/cart");
+    navigate('/cart');
     setIsCartOpen(false);
   }
   return (
     <CartStyled>
-      <div className="back-drop" onClick={() => setIsCartOpen(false)}></div>
-      <div className="cart-container">
-        <div className="cart-title">我的購物車</div>
-        {productInCart.length !== 0 ? (
-          productInCart?.map((product) => {
-            return (
-              <div className="card-items" key={product.product.id}>
-                <CatrItem
-                  product={product}
-                />
-              </div>
-            );
-          })
-        ) : (
-          <div className="no-item">
-            <CartNoneIcon className="icon" />
-            <span>購物車內無任何商品</span>
-          </div>
+      <div className='back-drop' onClick={() => setIsCartOpen(false)}></div>
+      <div className='cart-container'>
+        <div className='cart-title'>我的購物車</div>
+        <div className='wrapper'>
+          {cartProducts?.length !== 0 ? (
+            cartProducts?.map((product) => {
+              return (
+                <div className='card-items' key={product.id}>
+                  <CatrItem product={product} />
+                </div>
+              );
+            })
+          ) : (
+            <div className='no-item'>
+              <CartNoneIcon className='icon' />
+              <span>購物車內無任何商品</span>
+            </div>
+          )}
+        </div>
+        {cartProducts?.length !== 0 && (
+          <button onClick={goToCart}>前往結帳</button>
         )}
-        <button onClick={goToCart}>前往結帳</button>
       </div>
     </CartStyled>
   );
 }
 
 export const CatrItem = ({ product }) => {
+  const dispatch = useDispatch();
   const options = [];
   for (let i = 1; i <= 999; i++) {
     options.push({ value: i, label: i });
   }
+  const id = product.id;
   return (
-    <StyledCardItem className="card-item">
-      <div className="picture">
-        <img src={product?.product.Images.url} alt={product?.product.name} />
+    <StyledCardItem className='card-item'>
+      <div className='picture'>
+        <img src={product?.image} alt={product?.name} />
       </div>
-      <div className="content">
-        <div className="wrapper">
-          <div className="name">{product?.product.name}</div>
-          <div className="icon">
-            <DeleteProductIcon size="16" />
+      <div className='content'>
+        <div className='wrapper'>
+          <div className='name'>{product?.name}</div>
+          <div
+            className='icon'
+            onClick={() => {
+              dispatch(removeItem(id));
+            }}
+          >
+            <DeleteProductIcon size='16' />
           </div>
         </div>
-        <div className="price">{product?.product.price}元</div>
-        <div className="count">
-          <select defaultValue={options[product?.count - 1].value}>
+        <div className='price'>{product?.price}元</div>
+        <div className='count'>
+          <select
+            value={product?.count}
+            onChange={(e) => {
+              dispatch(
+                setCount({
+                  productId: product.id,
+                  count: e.target.value
+                })
+              );
+            }}
+          >
             {Array.prototype.map.call(options, ({ value, label }, index) => {
               return (
                 <option key={index} value={value}>
@@ -211,8 +236,8 @@ export const CatrItem = ({ product }) => {
             })}
           </select>
         </div>
-        <div className="subTotal">
-          {Math.floor(product?.product.price * product?.count * 0.8)}元
+        <div className='subTotal'>
+          {Math.floor(product?.price * product.count * 0.8)}元
         </div>
       </div>
     </StyledCardItem>

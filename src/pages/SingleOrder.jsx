@@ -1,7 +1,9 @@
-import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import styled from "styled-components";
-import { singleOrder } from "../api/adminAuth";
+import React, { useEffect, useState } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import styled from 'styled-components';
+import { singleOrder } from '../api/adminAuth';
+import { userSingleOrder } from '../api/userAuth';
+import Swal from 'sweetalert2';
 
 const StyledContainer = styled.div`
   width: 100%;
@@ -80,11 +82,14 @@ const StyledWrapper = styled.div`
         display: none;
       }
     }
-    & p ~ p {
+    .phone,
+    .email,
+    .address,
+    .remark {
       display: flex;
       justify-content: center;
     }
-    & P:nth-last-child(1) {
+    .remark {
       flex-flow: wrap;
       word-wrap: break-all;
     }
@@ -118,26 +123,58 @@ const StyledWrapper = styled.div`
 `;
 
 const SingleOrder = () => {
-  const [order, setOrder] = useState({});
-  const params = useParams()
+  const navigate = useNavigate();
+  const [order, setOrder] = useState(null);
+  const params = useParams();
   let total = order?.products?.reduce(
     (total, item) => total + Number(item.subTotal),
     0
   );
-  
+
   useEffect(() => {
-    const getOrdersAllAsync = async () => {
+    const getOrdersAllAsync = async (params) => {
       try {
-        const resOrder = await singleOrder(params.orderId);
-        setOrder(resOrder.data);
+        if (params.orderId) {
+          const resOrder = await singleOrder(params.orderId);
+          if (resOrder === undefined) {
+            Swal.fire({
+              position: 'center',
+              icon: 'error',
+              title: '查無該訂單編號，請重新查詢',
+              text: '訂單編號 ' + params.orderNumber,
+              showConfirmButton: true
+            }).then(() => {
+              navigate(`/admin/orders`);
+            });
+            return;
+          }
+          setOrder(resOrder.data);
+          return;
+        }
+        if (params.orderNumber) {
+          const resUserOrder = await userSingleOrder(params.orderNumber);
+          if (resUserOrder === undefined) {
+            Swal.fire({
+              position: 'center',
+              icon: 'error',
+              title: '查無該訂單編號，請重新查詢',
+              text: '訂單編號 ' + params.orderNumber,
+              showConfirmButton: true
+            }).then(() => {
+              navigate(`/order/query`);
+            });
+            return;
+          }
+          setOrder(resUserOrder.data);
+          return;
+        }
       } catch (error) {
         console.error(error);
       }
     };
-    getOrdersAllAsync();
+    getOrdersAllAsync(params);
     return;
-  }, [params.orderId,setOrder]);
-
+  }, [params, setOrder, navigate]);
   return (
     <StyledContainer>
       <StyledTitle>
@@ -187,34 +224,34 @@ const SingleOrder = () => {
           <h3>購買者資料</h3>
           <hr />
           <div className='wrapper-title sender'>
-            <p>姓名</p>
-            <p>電話</p>
-            <p>email</p>
+            <p className='name'>姓名</p>
+            <p className='phone'>電話</p>
+            <p className='email'>email</p>
             <p className='remark'>備註</p>
           </div>
           <div className='wrapper-content sender'>
-            <p>{order.purchaserName}</p>
-            <p>{order.purchaserPhone}</p>
-            <p>{order.purchaserEmail}</p>
-            <p className='remark'>{order.comment}</p>
+            <p className='name'>{order?.purchaserName}</p>
+            <p className='phone'>{order?.purchaserPhone}</p>
+            <p className='email'>{order?.purchaserEmail}</p>
+            <p className='remark'>{order?.comment}</p>
           </div>
           <div className='remark-md'>
             <p className='wrapper-title'>備註</p>
-            <p className='wrapper-content'>{order.comment}</p>
+            <p className='wrapper-content'>{order?.comment}</p>
           </div>
         </StyledWrapper>
         <StyledWrapper>
           <h3>收件者資料</h3>
           <hr />
           <div className='wrapper-title addressee'>
-            <p>姓名</p>
-            <p>電話</p>
-            <p>地址</p>
+            <p className='name'>姓名</p>
+            <p className='phone'>電話</p>
+            <p className='address'>地址</p>
           </div>
           <div className='wrapper-content addressee'>
-            <p>{order.receiverName}</p>
-            <p>{order.receiverPhone}</p>
-            <p>{order.receiverAddress}</p>
+            <p className='name'>{order?.receiverName}</p>
+            <p className='phone'>{order?.receiverPhone}</p>
+            <p className='address'>{order?.receiverAddress}</p>
           </div>
         </StyledWrapper>
       </StyledOrderList>

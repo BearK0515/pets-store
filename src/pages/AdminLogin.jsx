@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { useNavigate } from "react-router";
 import styled from "styled-components";
 import Swal from "sweetalert2";
@@ -72,6 +72,16 @@ const AdminLogin = () => {
       return;
     }
   };
+
+useEffect(() => {
+  const isAdmin = localStorage.getItem("isAdmin");
+  if (isAdmin) {
+    navigate("/admin/products/all");
+  } else {
+    return;
+  }
+// eslint-disable-next-line react-hooks/exhaustive-deps
+}, []);
 
   return (
     <StyledContainer onSubmit={handleSubmit}>

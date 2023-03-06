@@ -19,12 +19,17 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-icons": "^4.7.1",
+<<<<<<< HEAD
     "react-lazy-load-image-component": "^1.5.6",
+=======
+    "react-messenger-chat-plugin": "^3.0.5",
+>>>>>>> 9e8c9160d996fb5160f2d0637853670c17140c93
     "react-redux": "^8.0.5",
     "react-router-dom": "^6.6.2",
     "react-scripts": "5.0.1",
     "react-scroll-to-top": "^3.0.0",
     "react-social-login-buttons": "^3.6.1",
+    "react-spinners": "^0.13.8",
     "reactjs-social-login": "^2.6.2",
     "styled-components": "^5.3.6",
     "sweetalert2": "^11.7.0",

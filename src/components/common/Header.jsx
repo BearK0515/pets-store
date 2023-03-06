@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { NavLink as Link } from "react-router-dom";
 import styled from "styled-components";
 import {
@@ -19,6 +19,28 @@ import bigLogo from "../../assets/icons/logo.png";
 const HeaderStyled = styled.header`
   display: flex;
   flex-direction: column;
+  .searchbar {
+    display: none;
+    @media screen and (max-width: 992px) {
+      display: unset;
+      position: absolute;
+      top: 52px;
+      padding: 0 10px;
+      height: 30px;
+      width: 100vw;
+    }
+  }
+
+  .back-drop {
+    display: none;
+    @media screen and (max-width: 992px) {
+      display: unset;
+      position: absolute;
+      background: rgba(60, 60, 60, 0.3);
+      width: 100vw;
+      height: 100vh;
+    }
+  }
   .nav-mobile {
     position: fixed;
     top: 0;
@@ -148,7 +170,8 @@ const HeaderStyled = styled.header`
           color: var(--white);
         }
       }
-      .logout {
+      .logout,
+      .admin {
         display: flex;
         justify-content: center;
         align-items: center;
@@ -159,6 +182,9 @@ const HeaderStyled = styled.header`
         line-height: 30px;
         font-size: 12px;
         color: var(--white);
+      }
+      .admin {
+        background-color: #734434;
       }
     }
 
@@ -241,11 +267,54 @@ export default function Header({
   handleToggleLoginModal,
   handleToggleCartModal,
   handleToggleSidebar,
-  countProducts
+  handleSearch,
+  countProducts,
+  setLogin,
+  login,
 }) {
+  const [searchBarActive, setSearchBarActive] = useState(false);
+  const headerSearchRef = useRef();
+  const handleLogout = () => {
+    localStorage.removeItem("authToken");
+    localStorage.removeItem("UserId");
+    setLogin(false);
+  };
+  useEffect(() => {
+    const authToken = localStorage.getItem("authToken");
+    if (authToken) {
+      setLogin(true);
+    } else {
+      setLogin(false);
+    }
+  }, [setLogin]);
+
   return (
     <HeaderStyled>
+      {searchBarActive && (
+        <div
+          className="back-drop"
+          onClick={() => setSearchBarActive(false)}
+        ></div>
+      )}
       <div className="nav-mobile">
+        {searchBarActive && (
+          <input
+            type="text"
+            id="search-input"
+            className="searchbar"
+            placeholder="商品搜尋"
+            ref={headerSearchRef}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                handleSearch(
+                  headerSearchRef,
+                  searchBarActive,
+                  setSearchBarActive
+                );
+              }
+            }}
+          />
+        )}
         <ul>
           <li onClick={handleToggleSidebar}>
             <div className="icon">
@@ -261,15 +330,30 @@ export default function Header({
               <div className="text">查訂單</div>
             </Link>
           </li>
-          <li onClick={handleToggleLoginModal}>
-            <div className="icon">
-              <LoginIcon />
-            </div>
-            <div className="text">登入</div>
-          </li>
+          {login ? (
+            <li onClick={handleLogout}>
+              <div className="icon">
+                <LoginIcon />
+              </div>
+              <div className="text ">登出</div>
+            </li>
+          ) : (
+            <li onClick={handleToggleLoginModal}>
+              <div className="icon">
+                <LoginIcon />
+              </div>
+              <div className="text ">登入</div>
+            </li>
+          )}
           <li>
             <div className="icon">
-              <SearchIcon />
+              <SearchIcon
+                onClick={(e) => {
+                  setSearchBarActive(!searchBarActive);
+                  e.preventDefault();
+                  e.stopPropagation();
+                }}
+              />
             </div>
             <div className="text">搜尋</div>
           </li>
@@ -300,15 +384,25 @@ export default function Header({
             </Link>
             <div className="tips">購物說明</div>
           </div>
-          <div className="icon-wrapper">
-            <div className="icon login" onClick={handleToggleLoginModal}>
-              <AccountIcon />
-              登入
+
+          {login ? (
+            <Link to="/">
+              <div className="icon logout" onClick={handleLogout}>
+                登出
+              </div>
+            </Link>
+          ) : (
+            <div className="icon-wrapper">
+              <div className="icon login" onClick={handleToggleLoginModal}>
+                <AccountIcon />
+                登入
+              </div>
+              <div className="tips">會員登入</div>
             </div>
-            <div className="tips">會員登入</div>
-          </div>
-          <Link to="login">
-            <div className="icon logout">管理員</div>
+          )}
+
+          <Link to='login'>
+            <div className='icon admin'>管理員</div>
           </Link>
         </nav>
         <nav className="tool-box-right">

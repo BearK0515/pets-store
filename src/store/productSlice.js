@@ -1,32 +1,47 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-  addProduct: {
-    name: "",
-    price: 0,
-    style: "",
-    category: "",
-    image:{},
-  },
+  cart: []
 };
 
 const productSlice = createSlice({
-  name: "product",
+  name: 'product',
   initialState: initialState,
   reducers: {
-    setProduct(state, action) {
-      const { name, price, style, category, image } = action.payload;
-      state.value = {
-        name,
-        price,
-        style,
-        category,
-        image,
-      };
+    //添加商品到購物車
+    addTocart: (state, action) => {
+      const itemInCart = state.cart?.find(
+        (item) => item.id === action.payload.id
+      );
+      if (itemInCart) {
+        itemInCart.count++;
+      } else {
+        state.cart?.push({ ...action.payload });
+      }
     },
-  },
+    //購物車中移除商品
+    removeItem: (state, action) => {
+      const removeItem = state.cart.filter(
+        (item) => item.id !== action.payload
+      );
+      state.cart = removeItem;
+    },
+    //select改變商品數量
+    setCount: (state, action) => {
+      const { productId, count } = action.payload;
+      const productIndex = state.cart.findIndex(
+        (product) => product.id === productId
+      );
+      state.cart[productIndex].count = count
+    },
+    //清空購物車
+    setClearCart: (state) => {
+      state.cart = [...initialState.cart];
+    }
+  }
 });
 
-export const { setProduct } = productSlice.actions
+export const { addTocart, removeItem, setCount, setClearCart } =
+  productSlice.actions;
 
-export default productSlice.reducer
+export default productSlice.reducer;

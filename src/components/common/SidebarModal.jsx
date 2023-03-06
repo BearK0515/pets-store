@@ -1,6 +1,6 @@
 import React from "react";
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState, useContext } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import {
   FacebookIcon,
@@ -9,6 +9,7 @@ import {
   LineIcon,
 } from "../../assets/icons";
 import smallLogo from "../../assets/icons/logo-small.jpg";
+import { BlogFilterContext } from "../../App";
 
 const StyledSidebar = styled.div`
   width: 100vw;
@@ -125,9 +126,8 @@ const StyledContainer = styled.div`
         font-size: 12px;
         font-weight: 400;
         transform: translateX(-20px);
-        li{
+        li {
           padding: 10px 10px 10px 36px;
-
         }
       }
     }
@@ -136,7 +136,8 @@ const StyledContainer = styled.div`
 
 const SidebarModal = ({ setIsSideabrOpen }) => {
   const navigate = useNavigate();
-  const [isArticleOpen, setIsArticleOpen] = useState(false)
+  const [isArticleOpen, setIsArticleOpen] = useState(false);
+  const { setBlogFilter } = useContext(BlogFilterContext);
 
   function handleToggleArticle() {
     setIsArticleOpen(!isArticleOpen);
@@ -161,8 +162,14 @@ const SidebarModal = ({ setIsSideabrOpen }) => {
     navigate("/product/cat");
     setIsSideabrOpen(false);
   }
-  function GoToBlogs() {
+  function GoToBlogsDog() {
     navigate("/blogs");
+    setBlogFilter("dog");
+    setIsSideabrOpen(false);
+  }
+  function GoToBlogsCat() {
+    navigate("/blogs");
+    setBlogFilter("cat");
     setIsSideabrOpen(false);
   }
   function GoToOrderSearch() {
@@ -180,9 +187,11 @@ const SidebarModal = ({ setIsSideabrOpen }) => {
       <StyledContainer>
         <div className='top'>
           <div className='logo-wrapper'>
-            <div className='logo'>
-              <img src={smallLogo} alt='' />
-            </div>
+            <Link to='login'>
+              <div className='logo'>
+                <img src={smallLogo} alt='' />
+              </div>
+            </Link>
             <h2>毛孩時代Petstimes | 寵物保健食品領導品牌NO.1</h2>
           </div>
           <div className='icons-group'>
@@ -216,8 +225,8 @@ const SidebarModal = ({ setIsSideabrOpen }) => {
           >
             <p className='blogs'>部落格</p>
             <ul className='article'>
-              <li onClick={GoToBlogs}>狗狗健康知識庫</li>
-              <li onClick={GoToBlogs}>貓貓健康知識庫</li>
+              <li onClick={GoToBlogsDog}>狗狗健康知識庫</li>
+              <li onClick={GoToBlogsCat}>貓貓健康知識庫</li>
             </ul>
           </div>
           <div className='item' onClick={GoToOrderSearch}>

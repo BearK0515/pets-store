@@ -109,7 +109,6 @@ export const getTownName = async (stCate, stCode) => {
         "Content-Type": "application/x-www-form-urlencoded",
       },
     });
-    console.log(res);
     return res;
   } catch (error) {
     console.error("POST Cities Failed", error);

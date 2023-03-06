@@ -1,14 +1,14 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState } from "react";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { LoginSocialFacebook } from "reactjs-social-login";
-import { FacebookLoginButton } from "react-social-login-buttons";
-
-import { facebookLogin, googleLogin } from "../../api/userLogin";
+import { LoginSocialFacebook, LoginSocialGoogle } from "reactjs-social-login";
+import { facebookLogin } from "../../api/userLogin";
 import {
   AlertIcon,
   CancelIcon,
+  FacebookWhiteIcon,
   GoogleIcon,
   LineWhiteIcon,
 } from "../../assets/icons";
@@ -151,82 +151,102 @@ const StyledWrapper = styled.div`
     }
   }
 `;
-const LoginModal = ({ setIsOpenLoginModal, handleToggleLoginModal }) => {
+const LoginModal = ({
+  setIsOpenLoginModal,
+  handleToggleLoginModal,
+  setLogin,
+}) => {
   const navigate = useNavigate();
   const [email, setEmail] = useState(null);
   const [name, setName] = useState(null);
-
   const linkTo = (location) => {
     setIsOpenLoginModal(false);
     navigate(location);
   };
-
   useEffect(() => {
     const getUserInfo = async () => {
-      const data = await facebookLogin({ email, name });
-      console.log(data);
+      const { token, user } = await facebookLogin({ email, name });
+      localStorage.setItem("authToken", token);
+      localStorage.setItem("UserId", user.id);
+      handleToggleLoginModal();
+      setLogin(true);
     };
     if (!email || !name) return;
     getUserInfo();
   }, [email, name]);
 
+  const handleLineLogin = async () => {
+    window.location.replace(
+      `https://access.line.me/oauth2/v2.1/authorize?response_type=code&client_id=1657937254&redirect_uri=https://beark0515.github.io/pets-store/&state=12345abcde&scope=profile%20openid%20email&nonce=09876xyz`
+    );
+    // window.location.replace(
+    //   `https://access.line.me/oauth2/v2.1/authorize?response_type=code&client_id=1657937254&redirect_uri=http://localhost:3000/pets-store&state=12345abcde&scope=profile%20openid%20email&nonce=09876xyz`
+    // );
+  };
+
   return (
     <StyledModalContainer>
-      <div className="overlay"></div>
-      <div className="content">
+      <div className='overlay'></div>
+      <div className='content'>
         <StyledWrapper>
-          <button className="cancel" onClick={handleToggleLoginModal}>
+          <button className='cancel' onClick={handleToggleLoginModal}>
             <CancelIcon size={40} />
           </button>
-          <div className="title">
+          <div className='title'>
             <h2>成為會員，獨享專屬好康優惠！</h2>
           </div>
-          <div className="wrapper">
+          <div className='wrapper'>
             <h3>綁定社群帳號，快速登入</h3>
-            <div className="icon-wrapper">
-              <div className="icon line">
+            <div className='icon-wrapper'>
+              <div className='icon line' onClick={handleLineLogin}>
                 <div>
                   <LineWhiteIcon />
                 </div>
                 <p>登入</p>
               </div>
-              <div
-                className="icon facebook"
-                // onClick={() => handleFbLogin({ email, name })}
+              <LoginSocialFacebook
+                appId='1699530640464382'
+                onResolve={(res) => {
+                  setEmail(res.data.email);
+                  setName(res.data.name);
+                }}
+                onReject={(err) => {
+                  console.log(err);
+                }}
               >
-                <div>
-                  {/* <FacebookWhiteIcon /> */}
-                  <LoginSocialFacebook
-                    // isOnlyGetToken
-                    appId="1699530640464382"
-                    onResolve={(res) => {
-                      // console.log(res.data.email);
-                      setEmail(res.data.email);
-                      setName(res.data.name);
-                    }}
-                    onReject={(err) => {
-                      console.log(err);
-                    }}
-                  >
-                    <FacebookLoginButton />
-                  </LoginSocialFacebook>
+                <div className='icon facebook'>
+                  <div>
+                    <FacebookWhiteIcon />
+                  </div>
+                  <p>登入</p>
                 </div>
-                <p>登入</p>
-              </div>
-              <div className="icon google" onClick={() => googleLogin()}>
-                <div>
-                  <GoogleIcon />
+              </LoginSocialFacebook>
+              <LoginSocialGoogle
+                client_id='1089820286873-p5k491t42gkgbd29cijfuit0kgi7h18k.apps.googleusercontent.com'
+                scope='openid profile email'
+                onResolve={(res) => {
+                  setEmail(res.data.email);
+                  setName(res.data.name);
+                }}
+                onReject={(err) => {
+                  console.log(err);
+                }}
+              >
+                <div className='icon google'>
+                  <div>
+                    <GoogleIcon />
+                  </div>
+                  <p>登入</p>
                 </div>
-                <p>登入</p>
-              </div>
+              </LoginSocialGoogle>
             </div>
-            <div className="waring-wrapper">
+            <div className='waring-wrapper'>
               <div>
                 <AlertIcon />
               </div>
               <p>注意：不同登入方式帳號不互通</p>
             </div>
-            <div className="manual">
+            <div className='manual'>
               註冊帳號即表示您
               <span
                 onClick={() => {

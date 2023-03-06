@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { Outlet, useLocation, useNavigate } from "react-router-dom";
+import React, { useEffect, useRef, useState } from "react";
+import { Outlet, useLocation, useNavigate, Link } from "react-router-dom";
 import styled from "styled-components";
 import Footer from "./Footer";
 import Header from "./Header";
@@ -10,6 +10,9 @@ import { CartIcon, SearchIcon } from "../../assets/icons";
 import LoginModal from "./LoginModal";
 import CartModal from "./CartModal";
 import SidebarModal from "./SidebarModal";
+import { useSelector } from "react-redux";
+import { facebookLogin, lineLogin } from "../../api/userLogin";
+import jwtDecode from "jwt-decode";
 
 const StyledContainer = styled.div`
   display: flex;
@@ -85,6 +88,7 @@ const StyledButtonWrapper = styled.div`
       padding: 4px 10px;
       font-size: 14px;
       line-height: 16px;
+      color: #333;
       cursor: pointer;
 
       &:hover {
@@ -231,9 +235,12 @@ const Layout = () => {
   const [isOpenLoginModal, setIsOpenLoginModal] = useState(false);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isSideabrOpen, setIsSideabrOpen] = useState(false);
-  const [productInCart, setProductInCart] = useState([]);
   let location = useLocation();
   const [records, setRecords] = useState(null);
+  const productInCart = useSelector((state) => state.product.cart);
+  const [login, setLogin] = useState(false);
+  const searchRef = useRef(null);
+  const navigate = useNavigate();
 
   const handleToggleLoginModal = () => {
     setIsOpenLoginModal(!isOpenLoginModal);
@@ -244,10 +251,36 @@ const Layout = () => {
   const handleToggleSidebar = () => {
     setIsSideabrOpen(!isSideabrOpen);
   };
+  const handleSearch = (ref, callback, setCallback) => {
+    const keyword = ref.current.value;
+    if (!keyword || !callback) return;
+    ref.current.value = null;
+    setCallback(false);
+    navigate(`../product/search/${keyword}`);
+  };
 
   useEffect(() => {
     setRecords(JSON.parse(localStorage.getItem("productId")));
   }, [location.pathname]);
+
+  useEffect(() => {
+    const getUserInfo = async () => {
+      const getUrlString = window.location.href;
+      const url = new URL(getUrlString);
+      const code = url.searchParams.get("code");
+      if (code) {
+        const data = await lineLogin(code);
+        const idToken = data?.data.id_token;
+        const userInfo = jwtDecode(idToken);
+        const { email, name } = userInfo;
+        const { token, user } = await facebookLogin({ email, name });
+        localStorage.setItem("authToken", token);
+        localStorage.setItem("UserId", user.id);
+        setLogin(true);
+      }
+    };
+    getUserInfo();
+  }, []);
 
   return (
     <>
@@ -256,9 +289,12 @@ const Layout = () => {
           handleToggleLoginModal={handleToggleLoginModal}
           handleToggleCartModal={handleToggleCartModal}
           handleToggleSidebar={handleToggleSidebar}
+          handleSearch={handleSearch}
           countProducts={productInCart.length}
+          setLogin={setLogin}
+          login={login}
         />
-        <Outlet context={[productInCart, setProductInCart]} />
+        <Outlet />
         <StyledButtonWrapper>
           <button
             className="cart-button"
@@ -285,6 +321,12 @@ const Layout = () => {
               id="search-input"
               className={searchBarActive ? "active" : "none"}
               placeholder="商品搜尋"
+              ref={searchRef}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  handleSearch(searchRef, searchBarActive, setSearchBarActive);
+                }
+              }}
               onClick={(e) => {
                 e.stopPropagation();
                 // e.nativeEvent.stopImmediatePropagation(); 不知道為什麼不用也沒差
@@ -294,12 +336,26 @@ const Layout = () => {
           </span>
           {searchBarActive && (
             <ul className="popular-items">
-              <li className="popular-item">156565</li>
-              <li className="popular-item">256555565</li>
-              <li className="popular-item">356565</li>
-              <li className="popular-item">456565</li>
-              <li className="popular-item">456565</li>
-              <li className="popular-item">4555555555556565</li>
+              <Link to="../product/all">
+                <li className="popular-item">
+                  我們
+                </li>
+              </Link>
+              <Link to="../product/all">
+                <li className="popular-item">
+                  分類
+                </li>
+              </Link>
+              <Link to="../product/all">
+                <li className="popular-item">
+                  沒有
+                </li>
+              </Link>
+              <Link to="../product/all">
+                <li className="popular-item">
+                  標籤
+                </li>
+              </Link>
             </ul>
           )}
         </StyledButtonWrapper>
@@ -325,16 +381,12 @@ const Layout = () => {
         <GoTop />
       </StyledContainer>
       <Footer />
-      {isCartOpen && (
-        <CartModal
-          setIsCartOpen={setIsCartOpen}
-          productInCart={productInCart}
-        />
-      )}
+      {isCartOpen && <CartModal setIsCartOpen={setIsCartOpen} />}
       {isOpenLoginModal && (
         <LoginModal
           setIsOpenLoginModal={setIsOpenLoginModal}
           handleToggleLoginModal={handleToggleLoginModal}
+          setLogin={setLogin}
         />
       )}
       {isSideabrOpen && (
