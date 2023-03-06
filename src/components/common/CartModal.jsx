@@ -145,7 +145,11 @@ const StyledCardItem = styled.div`
   }
 `;
 
-export default function CartModal({ setIsCartOpen, productInCart }) {
+export default function CartModal({
+  setIsCartOpen,
+  productInCart,
+  setProductInCart,
+}) {
   const navigate = useNavigate();
   function goToCart() {
     navigate("/cart");
@@ -160,7 +164,9 @@ export default function CartModal({ setIsCartOpen, productInCart }) {
           productInCart?.map((product) => {
             return (
               <div className="card-items" key={product.product.id}>
-                <CatrItem product={product} />
+                <CatrItem
+                  product={product}
+                />
               </div>
             );
           })

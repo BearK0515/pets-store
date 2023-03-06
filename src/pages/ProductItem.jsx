@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { CartIcon } from "../assets/icons/index";
 import { Link } from "react-router-dom";
 import ProductPopCart from "./ProductPopCart";
+import { LazyLoadImage } from "react-lazy-load-image-component";
 
 const StyledCard = styled.div`
   position: relative;
@@ -14,11 +15,14 @@ const StyledCard = styled.div`
   .product {
     width: 100%;
     aspect-ratio: 1/1;
-    background-size: cover;
-    background-image: url("https://picsum.photos/id/20/400");
   }
-
-  .wrapper {
+  .product-img{
+    position: absolute;
+    width: 100%;
+    aspect-ratio: 1/1;
+    z-index: -1;
+  }
+   .wrapper {
     display: flex;
     flex-flow: column;
     gap: 5px 0;
@@ -118,9 +122,14 @@ export const ProductItem = ({ product }) => {
   return (
     <>
       <StyledCard id={product.id}>
+        <LazyLoadImage
+          className="product-img"
+          alt={product.name}
+          effect="blur"
+          src={product.Images.url}
+        />
         <Link
           className="product"
-          style={{ backgroundImage: `url('${product.Images.url}')` }}
           to={`/product/detail/${product.id}`}
         />
         <Button onClick={handleToggleCartModal}>
