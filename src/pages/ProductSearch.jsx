@@ -59,7 +59,6 @@ const ProductSearch = ({
   const keyword = params.keyword;
 
   useEffect(() => {
-    // console.log(searchKeyword);
 
     setProductsSearchHot(
       productHot?.filter((productHot) => productHot.name.includes(keyword))
