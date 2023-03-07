@@ -203,7 +203,8 @@ const LoginModal = ({
               </div>
               <LoginSocialFacebook
                 appId='1132874990740447'
-                fields="email"
+                fields='email'
+                scope='public_profile'
                 onResolve={(res) => {
                   setEmail(res.data.email);
                   setName(res.data.name);
