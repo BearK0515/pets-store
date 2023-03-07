@@ -202,7 +202,7 @@ const LoginModal = ({
                 <p>登入</p>
               </div>
               <LoginSocialFacebook
-                appId='856598795433962'
+                appId='1699530640464382'
                 onResolve={(res) => {
                   setEmail(res.data.email);
                   setName(res.data.name);
