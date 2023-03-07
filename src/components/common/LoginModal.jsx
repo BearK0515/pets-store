@@ -204,11 +204,11 @@ const LoginModal = ({
               <LoginSocialFacebook
                 appId='1132874990740447'
                 fields='email'
-                scope='public_profile'
+                scope='email'
                 onResolve={(res) => {
                   setEmail(res.data.email);
                   setName(res.data.name);
-                  console.log("FB login",res.data)
+                  console.log("FB login", res.data);
                 }}
                 onReject={(err) => {
                   console.log(err);
