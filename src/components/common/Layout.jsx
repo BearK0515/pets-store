@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Outlet, useLocation, useNavigate, Link } from "react-router-dom";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import Footer from "./Footer";
 import Header from "./Header";
@@ -296,16 +296,16 @@ const Layout = () => {
         <Outlet />
         <StyledButtonWrapper>
           <button
-            className="cart-button"
+            className='cart-button'
             onClick={() => setIsCartOpen(!isCartOpen)}
           >
             <CartIcon />
           </button>
-          <div className="count">{productInCart.length}</div>
-          <span className="search-bar">
+          <div className='count'>{productInCart.length}</div>
+          <span className='search-bar'>
             <label
-              className="search"
-              htmlFor="search-input"
+              className='search'
+              htmlFor='search-input'
               onClick={(e) => {
                 e.stopPropagation();
                 // e.nativeEvent.stopImmediatePropagation(); 不知道為什麼不用也沒差
@@ -316,10 +316,10 @@ const Layout = () => {
               <SearchIcon />
             </label>
             <input
-              type="text"
-              id="search-input"
+              type='text'
+              id='search-input'
               className={searchBarActive ? "active" : "none"}
-              placeholder="商品搜尋"
+              placeholder='商品搜尋'
               ref={searchRef}
               onKeyDown={(e) => {
                 if (e.key === "Enter") {
@@ -333,35 +333,11 @@ const Layout = () => {
               }}
             />
           </span>
-          {searchBarActive && (
-            <ul className="popular-items">
-              <Link to="../product/all">
-                <li className="popular-item">
-                  我們
-                </li>
-              </Link>
-              <Link to="../product/all">
-                <li className="popular-item">
-                  分類
-                </li>
-              </Link>
-              <Link to="../product/all">
-                <li className="popular-item">
-                  沒有
-                </li>
-              </Link>
-              <Link to="../product/all">
-                <li className="popular-item">
-                  標籤
-                </li>
-              </Link>
-            </ul>
-          )}
         </StyledButtonWrapper>
         {records && (
           <StyledSearchWrapper>
             <h6>瀏覽紀錄</h6>
-            <div className="product-wrapper">
+            <div className='product-wrapper'>
               {records?.map((record) => {
                 return <CardItem record={record} key={record.id} />;
               })}
@@ -403,14 +379,14 @@ export const CardItem = ({ record }) => {
   const navigate = useNavigate();
   return (
     <StyledCardItem
-      className="product"
+      className='product'
       onClick={() => {
         navigate(`/product/detail/${record.id}`);
       }}
     >
-      <div className="back-drop"></div>
-      <img src={record.imageUrl} alt="" className="image" />
-      <div className="view">檢視</div>
+      <div className='back-drop'></div>
+      <img src={record.imageUrl} alt='' className='image' />
+      <div className='view'>檢視</div>
     </StyledCardItem>
   );
 };
