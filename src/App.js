@@ -17,7 +17,6 @@ import {
   Home,
   Order,
   ProductAll,
-  ProductCat,
   ProductPage,
   SingleOrder,
   SingleProduct
