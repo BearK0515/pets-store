@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import Swal from 'sweetalert2';
-import { getTownName } from '../api/products';
 import { submitOrder } from '../api/userAuth';
 import {
   AlertIcon,
@@ -1211,84 +1210,11 @@ const HomeDelivery = () => {
 //7-11取貨
 const SevenElevenPickUp = () => {
   const [selectedOption, setSelectedOption] = useState('default');
-  // const [selectedCity, setSelectedCity] = useState(null);
-  // const [townId, setTownId] = useState([]);
-  // const [towns, setTowns] = useState([]);
-
-  // const cities = sevenAreas.map((city) => city.area);
-
-  // useEffect(() => {
-  //   if (selectedCity) {
-  //     const selectedCityData = sevenAreas.find(
-  //       (city) => city.area === selectedCity
-  //     );
-  //     setTownId(selectedCityData.areaID);
-  //     async function getTownNameAsync(){
-  //       try {
-  //         const data = await getTownName(townId);
-  //         // setTowns(data);
-  //         console.log(data);
-  //         return data;
-  //       } catch (error) {
-  //         console.error(error);
-  //       }
-  //     }
-  //     getTownNameAsync()
-  //     return
-  //   }
-  // }, [selectedCity]);
-  // const handleGetCities = async()=>{
-  //   try {
-  //     const data = await getCities();
-  //     console.log(data);
-  //     return data
-  //   } catch (error) {
-
-  //   }
-  // }
-  // const handleGetAreas = async () => {
-  //   try {
-  //     const data = await getAreas();
-  //     console.log(data);
-  //     return data;
-  //   } catch (error) {}
-  // };
-  // const handleGetStories = async()=>{
-  //   try {
-  //     const data = await getStories();
-  //     console.log(data);
-  //     return data
-  //   } catch (error) {
-
-  //   }
-  // }
-  const handleGetTown = async () => {
-    try {
-      const data = await getTownName();
-      console.log(data);
-      return data;
-    } catch (error) {}
-  };
   return (
     <>
-      {/* <button className='button' onClick={handleGetCities}>
-        選擇取件超商門市
-      </button> */}
-      <button className='button' onClick={handleGetTown}>
+      <button className='button'>
         選擇取件超商門市
       </button>
-      {/* <Select
-        arrayOption={cities}
-        label='請選擇城市'
-        onChange={(e) => setSelectedCity(e.target.value)}
-      />
-      <Select arrayOption={towns} label='' /> */}
-      {/* <a
-        href='https://emap.presco.com.tw/c2cemap.ashx?eshopid=870&&servicetype=1&url=https://localhost:3000'
-        className='button'
-      >
-        選擇取件超商門市
-      </a> */}
       <div className='content-wrapper'>
         <p>取件門市代號</p>
         <div className='arrow-right'>

@@ -1,7 +1,7 @@
-import React from 'react';
-import styled from 'styled-components';
-import { BiArrowToTop } from 'react-icons/bi';
-import ScrollToTop from 'react-scroll-to-top';
+import React from "react";
+import styled from "styled-components";
+import { BiArrowToTop } from "react-icons/bi";
+import ScrollToTop from "react-scroll-to-top";
 
 const GoTopStyled = styled.ul`
   .top-icon {
@@ -39,6 +39,7 @@ const GoTopStyled = styled.ul`
       height: 40px;
       width: 40px;
       margin: 20px 0;
+    }
   }
 `;
 
@@ -49,7 +50,7 @@ export default function GoTop() {
         smooth
         top={100}
         className='top-icon'
-        component={<BiArrowToTop style={{ color: 'white' }} />}
+        component={<BiArrowToTop style={{ color: "white" }} />}
       />
     </GoTopStyled>
   );

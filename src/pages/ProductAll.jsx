@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import {  PriceUpIcon, PriceDownIcon } from "../assets/icons/index";
+import { PriceUpIcon, PriceDownIcon } from "../assets/icons/index";
 import { ProductItem } from "./ProductItem";
 
 const ProductList = styled.div`
@@ -52,15 +52,16 @@ const ProductAll = ({
   sortSelect,
   sortSelectToggle,
 }) => {
+
   return (
     <>
       <ProductsSort>
-        <ul className="sort-nav">
+        <ul className='sort-nav'>
           <button
             key={1}
             className={sortSelect?.top ? "sort active" : "sort"}
             onClick={sortSelectToggle}
-            value="top"
+            value='top'
           >
             熱銷排行
           </button>
@@ -68,7 +69,7 @@ const ProductAll = ({
             key={2}
             className={sortSelect?.new ? "sort active" : "sort"}
             onClick={sortSelectToggle}
-            value="new"
+            value='new'
           >
             最新上架
           </button>
@@ -76,7 +77,7 @@ const ProductAll = ({
             key={3}
             className={sortSelect?.price ? "sort active" : "sort"}
             onClick={sortSelectToggle}
-            value="price"
+            value='price'
           >
             價格
             {sortSelect?.price &&
