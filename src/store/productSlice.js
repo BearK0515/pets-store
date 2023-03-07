@@ -18,7 +18,7 @@ const productSlice = createSlice({
         let newCount = Number(action.payload.count);
         itemInCart.count = preCount + newCount;
       } else {
-        state.cart?.push({ ...action.payload });
+        state.cart.push({ ...action.payload });
       }
     },
     //購物車中移除商品
