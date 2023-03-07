@@ -208,6 +208,7 @@ const LoginModal = ({
                 onResolve={(res) => {
                   setEmail(res.data.email);
                   setName(res.data.name);
+                  console.log("FB login",res.data)
                 }}
                 onReject={(err) => {
                   console.log(err);
