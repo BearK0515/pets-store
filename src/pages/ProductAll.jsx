@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { PriceUpIcon, PriceDownIcon } from "../assets/icons/index";
 import { ProductItem } from "./ProductItem";
+import useFilteredData from "../hooks/useFilterData";
 
 const ProductList = styled.div`
   width: 100%;
@@ -46,22 +47,40 @@ const ProductsSort = styled.div`
 
 const ProductAll = ({
   productHot,
-  productNew,
-  productPrice,
   priceToggle,
   sortSelect,
   sortSelectToggle,
+  type,
+  keyword = "",
 }) => {
-
+  const [productAfterSort, setProductAfterSort] = useState(null);
+  const [priceFowardOrder, setPriceFowardOrder] = useState(true);
+  const productNew = useFilteredData(productAfterSort, 1, keyword).filteredData;
+  const productPrice = useFilteredData(
+    productAfterSort,
+    2,
+    keyword,
+    priceFowardOrder
+  ).filteredData;
+  //將商品分類
+  useEffect(() => {
+    if (!type) {
+      setProductAfterSort(productHot);
+      return;
+    }
+    setProductAfterSort(
+      productHot?.filter((productHot) => productHot.Category.name === type)
+    );
+  }, [type, productHot]);
   return (
     <>
       <ProductsSort>
-        <ul className='sort-nav'>
+        <ul className="sort-nav">
           <button
             key={1}
             className={sortSelect?.top ? "sort active" : "sort"}
             onClick={sortSelectToggle}
-            value='top'
+            value="top"
           >
             熱銷排行
           </button>
@@ -69,15 +88,18 @@ const ProductAll = ({
             key={2}
             className={sortSelect?.new ? "sort active" : "sort"}
             onClick={sortSelectToggle}
-            value='new'
+            value="new"
           >
             最新上架
           </button>
           <button
             key={3}
             className={sortSelect?.price ? "sort active" : "sort"}
-            onClick={sortSelectToggle}
-            value='price'
+            onClick={(e) => {
+              setPriceFowardOrder(!priceFowardOrder);
+              sortSelectToggle(e);
+            }}
+            value="price"
           >
             價格
             {sortSelect?.price &&
@@ -95,7 +117,7 @@ const ProductAll = ({
       </ProductsSort>
       <ProductList>
         {sortSelect?.top &&
-          productHot?.map((product) => {
+          productAfterSort?.map((product) => {
             return <ProductItem product={product} key={product.id} />;
           })}
         {sortSelect?.new &&
