@@ -1129,12 +1129,12 @@ const CashOnDelivery = ({ setReceiverAddress }) => {
           送貨前，司機會以電話聯絡，請務必保持手機暢通，謝謝
         </div>
       </div>
-      <div className='shipping-method-wrapper'>
+      {/* <div className='shipping-method-wrapper'>
         <div className='arrow-right'>
           <ArrowRightIcon />
         </div>
         <div className='content'>宅配代收</div>
-      </div>
+      </div> */}
     </>
   );
 };
