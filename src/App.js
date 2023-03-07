@@ -18,7 +18,6 @@ import {
   Order,
   ProductAll,
   ProductCat,
-  ProductDog,
   ProductPage,
   SingleOrder,
   SingleProduct
@@ -26,6 +25,7 @@ import {
 import ProductSearch from './pages/ProductSearch';
 
 const basename = process.env.PUBLIC_URL;
+const type = "dog";
 
 function App() {
   const [blogFilter, setBlogFilter] = useState(null);
@@ -41,9 +41,10 @@ function App() {
               <Route path='about' element={<About />} />
               <Route path='product' element={<ProductPage />}>
                 <Route path='all' element={<ProductAll />} />
-                <Route path='search/:keyword' element={<ProductSearch/>}/>
-                <Route path='dog' element={<ProductDog />} />
-                <Route path='cat' element={<ProductCat />} />
+                <Route path='search/:keyword' element={<ProductSearch />} />
+                <Route path='dog' element={<ProductAll />} />
+                <Route path='test' element={<ProductAll />} />
+                <Route path='cat' element={<ProductAll />} />
                 <Route path='detail/:productId' element={<SingleProduct />} />
               </Route>
               <Route path='blogs' element={<Blogs />} />

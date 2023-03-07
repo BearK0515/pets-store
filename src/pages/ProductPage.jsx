@@ -3,10 +3,8 @@ import styled from "styled-components";
 import { useLocation, useNavigate } from "react-router-dom";
 import ProductAside from "./ProductAside";
 import ProductAll from "./ProductAll";
-import ProductDog from "./ProductDog";
 import { productsHot, productsNew, productsPrice } from "../api/products";
 import { HomeIcon } from "../assets/icons/index";
-import ProductCat from "./ProductCat";
 import SingleProduct from "./SingleProduct";
 import { HomeLinkWrapper } from "../components/common/HomeLinkWrapper";
 import { IsLoadingComponent as Loading } from "../components/common/IsLoading";
@@ -86,7 +84,6 @@ const ProductPage = () => {
   } else if (page.includes("cat")) {
     NowPage = "貓貓專區";
   }
-
   // useEffect
   //抓熱銷排行
   useEffect(() => {
@@ -205,32 +202,37 @@ const ProductPage = () => {
           <Breadcrumb />
           {page === "/product/all" && (
             <ProductAll
-              productHot={productHot}
-              productNew={productNew}
-              productPrice={productPrice}
+              productHot={productHot}       
               priceToggle={priceToggle}
               sortSelect={sortSelect}
               sortSelectToggle={sortSelectToggle}
             />
           )}
           {page === "/product/dog" && (
-            <ProductDog
-              productHot={productHot}
-              productNew={productNew}
-              productPrice={productPrice}
+            <ProductAll
+              productHot={productHot}  
               priceToggle={priceToggle}
               sortSelect={sortSelect}
               sortSelectToggle={sortSelectToggle}
+              type={"dog"}
             />
           )}
           {page === "/product/cat" && (
-            <ProductCat
+            <ProductAll
               productHot={productHot}
-              productNew={productNew}
-              productPrice={productPrice}
               priceToggle={priceToggle}
               sortSelect={sortSelect}
               sortSelectToggle={sortSelectToggle}
+              type={"cat"}
+            />
+          )}
+          {page === "/product/test" && (
+            <ProductAll
+              productHot={productHot}
+              priceToggle={priceToggle}
+              sortSelect={sortSelect}
+              sortSelectToggle={sortSelectToggle}
+              type={"dog"}
             />
           )}
           {page.includes("search") && (
