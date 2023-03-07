@@ -123,9 +123,17 @@ const StyledCardItem = styled.div`
       }
     }
     .price {
-      font-size: 14px;
+      font-size: 12px;
       line-height: 16px;
+      text-decoration: line-through;
       color: #808080;
+    }
+    .discount-price {
+      text-align: left;
+      font-family: Roboto, sans-serif;
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text-red);
     }
     .count {
       width: 100%;
@@ -171,7 +179,7 @@ export default function CartModal({ setIsCartOpen }) {
             cartProducts?.map((product) => {
               return (
                 <div className='card-items' key={product.id}>
-                  <CatrItem product={product} />
+                  <CartItem product={product} />
                 </div>
               );
             })
@@ -190,7 +198,7 @@ export default function CartModal({ setIsCartOpen }) {
   );
 }
 
-export const CatrItem = ({ product }) => {
+export const CartItem = ({ product }) => {
   const dispatch = useDispatch();
   const options = [];
   for (let i = 1; i <= 999; i++) {
@@ -215,6 +223,9 @@ export const CatrItem = ({ product }) => {
           </div>
         </div>
         <div className='price'>{product?.price}元</div>
+        <div className='discount-price'>
+          ${Math.floor(product?.price * 0.8)}
+        </div>
         <div className='count'>
           <select
             value={product?.count}
@@ -237,7 +248,7 @@ export const CatrItem = ({ product }) => {
           </select>
         </div>
         <div className='subTotal'>
-          {Math.floor(product?.price * product.count * 0.8)}元
+          {Math.floor(product?.price * 0.8) * product?.count}元
         </div>
       </div>
     </StyledCardItem>

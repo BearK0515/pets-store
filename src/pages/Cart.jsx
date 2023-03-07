@@ -14,7 +14,7 @@ import {
   MasterIcon,
   VisaIcon
 } from '../assets/icons';
-import { taiwan } from '../components/common/country';
+import { taiwan } from '../constants/country';
 import { removeItem, setClearCart, setCount } from '../store/productSlice';
 // import { sevenAreas } from "../components/common/sevenStories";
 
@@ -553,7 +553,7 @@ const Cart = () => {
   const cartProducts = useSelector((state) => state.product.cart);
   let totalAmount = cartProducts.reduce(
     (total, item) =>
-      Math.floor(total + Number(item.count) * Number(item.price) * 0.8),
+      total + (Math.floor(Number(item.price) * 0.8) * Number(item.count)),
     0
   );
   const dispatch = useDispatch();
@@ -857,7 +857,7 @@ const Product = ({ product }) => {
       <li className='price'>${Math.floor(product?.price * 0.8)}</li>
       <li className='price-md'>每盒${Math.floor(product?.price * 0.8)}元</li>
       <li className='subtotal'>
-        ${Math.floor(product?.count * product?.price * 0.8)}
+        ${Math.floor(product?.price * 0.8) * product?.count}
       </li>
       <li className='subtotal-md'>
         小計：${Math.floor(product?.count * product?.price * 0.8)}
@@ -1128,12 +1128,12 @@ const CashOnDelivery = ({ setReceiverAddress }) => {
           送貨前，司機會以電話聯絡，請務必保持手機暢通，謝謝
         </div>
       </div>
-      <div className='shipping-method-wrapper'>
+      {/* <div className='shipping-method-wrapper'>
         <div className='arrow-right'>
           <ArrowRightIcon />
         </div>
         <div className='content'>宅配代收</div>
-      </div>
+      </div> */}
     </>
   );
 };

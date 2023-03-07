@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import Swal from 'sweetalert2';
 import { MinusIcon, PlusIcon } from '../assets/icons/index';
-import { addTocart } from '../store/productSlice';
+import { addTocart, setCount as countRedux } from '../store/productSlice';
 import { useNavigate } from 'react-router-dom';
 
 const StyledModalContainer = styled.div`
@@ -174,6 +174,13 @@ const ProductPopCart = ({ handleToggleCartModal, product, image }) => {
 
     dispatch(addTocart({ id, name, price, image, count }));
 
+    dispatch(
+      countRedux({
+        productId: id,
+        count: count
+      })
+    );
+
     Swal.fire({
       title: '加入購物車成功',
       icon: 'success',
@@ -192,6 +199,13 @@ const ProductPopCart = ({ handleToggleCartModal, product, image }) => {
     const price = product.price;
 
     dispatch(addTocart({ id, name, price, image, count }));
+
+    dispatch(
+      countRedux({
+        productId: id,
+        count: count
+      })
+    );
 
     Swal.fire({
       title: '立即購買成功',
@@ -218,7 +232,7 @@ const ProductPopCart = ({ handleToggleCartModal, product, image }) => {
           <div className='price-wrapper'>
             <div className='price'>${product?.price * count}</div>
             <div className='discount-price'>
-              ${Math.floor(product?.price * 0.8 * count)}
+              ${Math.floor(product?.price * 0.8) * count}
             </div>
           </div>
           <div className='count-wrapper'>
