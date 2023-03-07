@@ -1,7 +1,7 @@
 import { createContext, useState } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import './App.css';
-import { GlobalStyle, ResetStyle } from './components/common/globalStyle';
+import { GlobalStyle, ResetStyle } from './constants/globalStyle';
 import Layout from './components/common/Layout';
 import { Orders, Products } from './components/sectionAdmin';
 import AllProducts from './components/sectionAdmin/products/AllProducts';

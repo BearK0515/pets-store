@@ -15,7 +15,7 @@ import {
   MasterIcon,
   VisaIcon
 } from '../assets/icons';
-import { taiwan } from '../components/common/country';
+import { taiwan } from '../constants/country';
 import { removeItem, setClearCart, setCount } from '../store/productSlice';
 // import { sevenAreas } from "../components/common/sevenStories";
 
