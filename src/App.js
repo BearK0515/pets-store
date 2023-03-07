@@ -24,7 +24,6 @@ import {
 import ProductSearch from './pages/ProductSearch';
 
 const basename = process.env.PUBLIC_URL;
-const type = "dog";
 
 function App() {
   const [blogFilter, setBlogFilter] = useState(null);
