@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
 import { PriceUpIcon, PriceDownIcon } from "../assets/icons/index";
+import useFilteredData from "../hooks/useFilterData";
 import { ProductItem } from "./ProductItem";
 
 const ProductList = styled.div`
@@ -46,40 +47,30 @@ const ProductsSort = styled.div`
 `;
 const ProductSearch = ({
   productHot,
-  productNew,
-  productPrice,
   priceToggle,
   sortSelect,
   sortSelectToggle,
 }) => {
-  const [productsSearchHot, setProductsSearchHot] = useState([]);
-  const [productsSearchNew, setProductsSearchNew] = useState([]);
-  const [productsSearchPrice, setProductsSearchPrice] = useState([]);
+  const [priceFowardOrder, setPriceFowardOrder] = useState(true);
   const params = useParams();
   const keyword = params.keyword;
 
-  useEffect(() => {
-
-    setProductsSearchHot(
-      productHot?.filter((productHot) => productHot.name.includes(keyword))
-    );
-  }, [productHot, keyword]);
-
-  useEffect(() => {
-    setProductsSearchNew(
-      productNew?.filter((productNew) => productNew.name.includes(keyword))
-    );
-  }, [productNew, keyword]);
-
-  useEffect(() => {
-    if (priceToggle) {
-      setProductsSearchPrice(
-        productPrice?.filter((productPrice) =>
-          productPrice.name.includes(keyword)
-        )
-      );
-    }
-  }, [productPrice, priceToggle, keyword]);
+  const productsSearchHot = useFilteredData(
+    productHot,
+    0,
+    keyword
+  ).filteredData;
+  const productsSearchNew = useFilteredData(
+    productHot,
+    1,
+    keyword
+  ).filteredData;
+  const productsSearchPrice = useFilteredData(
+    productHot,
+    2,
+    keyword,
+    priceFowardOrder,
+  ).filteredData;
 
   return (
     <>
@@ -104,7 +95,10 @@ const ProductSearch = ({
           <button
             key={3}
             className={sortSelect?.price ? "sort active" : "sort"}
-            onClick={sortSelectToggle}
+            onClick={(e) => {
+              setPriceFowardOrder(!priceFowardOrder);
+              sortSelectToggle(e);
+            }}
             value="price"
           >
             價格

@@ -6,7 +6,12 @@ const FILTER_TYPE = {
   PRICE: 2,
 };
 
-const useFilteredData = (data, filterType, keyword = "", priceFowardOrder) => {
+const useFilteredData = (
+  data,
+  filterType,
+  keyword = "",
+  priceFowardOrder = true
+) => {
   const filteredData = useMemo(() => {
     if (!data) return;
     const filteredKeywordData = data.filter((item) =>
