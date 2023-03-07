@@ -73,7 +73,6 @@ const ProductPage = () => {
     top: true,
   });
   const [priceToggle, setPriceToggle] = useState("desc");
-  // const [pageChange, setPageChange] = useState(true)
 
   const navigate = useNavigate();
   const location = useLocation();

@@ -128,9 +128,7 @@ const StyledButtonWrapper = styled.div`
 
 const Order = () => {
   const [orderNumberError, setOrderNumberError] = useState(false);
-  // const [authenticationError, setAuthenticationError] = useState(false);
   const [orderNumber, setOrderNumber] = useState('');
-  // const [authentication, setAuthentication] = useState("");
 
   const navigate = useNavigate();
 
@@ -152,17 +150,6 @@ const Order = () => {
     }).then(() => {
       navigate(`/user-order/${orderNumber}`); // 絕對路由前面要加一槓
     });
-    // .catch((error) => {
-    //   Swal.showValidationMessage(`Request failed: ${error}`);
-    // });
-
-    // if (authentication?.length === 0) {
-    //   setAuthenticationError(true);
-    // }
-    // if(orderNumber?.length === 0 || authentication?.length === 0){
-    //   console.log("禁止送出");
-    //   return
-    // }
   };
 
   return (
