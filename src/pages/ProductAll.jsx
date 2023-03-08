@@ -53,16 +53,20 @@ const ProductAll = ({
   type,
   keyword = ''
 }) => {
+  const priceOrderInitial = {
+    priceOrder: true,
+    priceToggle: false
+  };
   const [productAfterSort, setProductAfterSort] = useState(null);
-  const [priceForwardOrder, setPriceForwardOrder] = useState(true);
+  const [priceForwardOrder, setPriceForwardOrder] = useState(priceOrderInitial);
   const productNew = useFilteredData(productAfterSort, 1, keyword).filteredData;
   const productPrice = useFilteredData(
     productAfterSort,
     2,
     keyword,
-    priceForwardOrder
+    priceForwardOrder.priceOrder
   ).filteredData;
-  
+
   //將商品分類
   useEffect(() => {
     if (!type) {
@@ -80,7 +84,10 @@ const ProductAll = ({
           <button
             key={1}
             className={sortSelect?.top ? 'sort active' : 'sort'}
-            onClick={sortSelectToggle}
+            onClick={(e) => {
+              setPriceForwardOrder(priceOrderInitial);
+              sortSelectToggle(e);
+            }}
             value='top'
           >
             熱銷排行
@@ -88,7 +95,10 @@ const ProductAll = ({
           <button
             key={2}
             className={sortSelect?.new ? 'sort active' : 'sort'}
-            onClick={sortSelectToggle}
+            onClick={(e) => {
+              setPriceForwardOrder(priceOrderInitial);
+              sortSelectToggle(e);
+            }}
             value='new'
           >
             最新上架
@@ -97,14 +107,18 @@ const ProductAll = ({
             key={3}
             className={sortSelect?.price ? 'sort active' : 'sort'}
             onClick={(e) => {
-              setPriceForwardOrder(!priceForwardOrder);
+              setPriceForwardOrder((prevState) => ({
+                ...prevState,
+                priceOrder: !prevState.priceOrder,
+                priceToggle: !prevState.priceToggle
+              }));
               sortSelectToggle(e);
             }}
             value='price'
           >
             價格
             {sortSelect?.price &&
-              (priceToggle === 'asc' ? (
+              (priceForwardOrder.priceToggle ? (
                 <PriceUpIcon
                   style={{ fontSize: '14px', pointerEvents: 'none' }}
                 />
