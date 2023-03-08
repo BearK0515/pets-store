@@ -397,9 +397,11 @@ const Blogs = () => {
           showConfirmButton: false,
           timer: 1000
         });
+        setQuery('');
         return;
       }
       setArticalAll(searchArtical);
+      setQuery('')
       e.preventDefault(); //瀏覽器預設行為中斷(需放在if)
     }
   };

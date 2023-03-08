@@ -3,14 +3,12 @@ import styled from "styled-components";
 import { useLocation, useNavigate } from "react-router-dom";
 import ProductAside from "./ProductAside";
 import ProductAll from "./ProductAll";
-import ProductDog from "./ProductDog";
-import { productsHot, productsNew, productsPrice } from "../api/products";
+import { productsHot } from "../api/products";
 import { HomeIcon } from "../assets/icons/index";
-import ProductCat from "./ProductCat";
 import SingleProduct from "./SingleProduct";
 import { HomeLinkWrapper } from "../components/common/HomeLinkWrapper";
 import { IsLoadingComponent as Loading } from "../components/common/IsLoading";
-import ProductSearch from "./ProductSearch";
+import CATEGORY_TYPE from "../constants/categoryTypeConst";
 
 const ProductPageStyled = styled.div`
   box-sizing: border-box;
@@ -62,18 +60,13 @@ const Breadcrumb = styled.div`
   position: relative;
 `;
 
-const ProductPage = () => {
+const ProductPage = ({ keyword }) => {
   window.scrollTo(0, 245);
   const [isLoading, setIsLoading] = useState(true);
   const [productHot, setProductHot] = useState([]);
-  const [productNew, setProductNew] = useState([]);
-  const [productPrice, setProductPrice] = useState([]);
-  const [productPriceOrigin, setProductPriceOrigin] = useState([]);
   const [sortSelect, setSortSelect] = useState({
     top: true,
   });
-  const [priceToggle, setPriceToggle] = useState("desc");
-  // const [pageChange, setPageChange] = useState(true)
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -89,7 +82,7 @@ const ProductPage = () => {
   }
 
   // useEffect
-  //抓熱銷排行
+  //抓全部商品
   useEffect(() => {
     setIsLoading(true);
     const getProductHotAsync = async () => {
@@ -109,76 +102,8 @@ const ProductPage = () => {
     return;
   }, [setProductHot]);
 
-  //抓最新商品
-  useEffect(() => {
-    setIsLoading(true);
-    const getProductNewAsync = async () => {
-      try {
-        const resProductNew = await productsNew();
-        const onShelvesProductNew = resProductNew?.filter(
-          (product) => product.isOnShelves === 1
-        );
-        setProductNew(onShelvesProductNew);
-        setIsLoading(false);
-      } catch (err) {
-        console.error(err);
-        setIsLoading(false);
-      }
-    };
-    getProductNewAsync();
-    return;
-  }, [setProductNew]);
-
-  //抓價格排序
-  useEffect(() => {
-    setIsLoading(true);
-    const getProductPriceAsync = async () => {
-      try {
-        const resProductPrice = await productsPrice();
-        const onShelvesProductPrice = resProductPrice?.filter(
-          (product) => product.isOnShelves === 1
-        );
-        setProductPriceOrigin(onShelvesProductPrice);
-        setProductPrice(onShelvesProductPrice);
-        setIsLoading(false);
-      } catch (err) {
-        console.error(err);
-        setIsLoading(false);
-      }
-    };
-    getProductPriceAsync();
-
-    return;
-  }, [setProductPriceOrigin]);
-
   // 點擊時，其他二個會變成 undefine 為 false，當為 true 時不改變
   const sortSelectToggle = (e) => {
-    if (e.target.value === "price") {
-      if (priceToggle === "asc") {
-        setProductPrice(
-          productPriceOrigin.sort((a, b) => {
-            return a.price - b.price;
-          })
-        );
-        const priceSortOrder = priceToggle === "asc" ? "desc" : "asc";
-        setPriceToggle(priceSortOrder);
-      } else if (priceToggle === "desc") {
-        setProductPrice(
-          productPriceOrigin.sort((a, b) => {
-            return b.price - a.price;
-          })
-        );
-        const priceSortOrder = priceToggle === "asc" ? "desc" : "asc";
-        setPriceToggle(priceSortOrder);
-      }
-    } else {
-      setPriceToggle("desc");
-      setProductPrice(
-        productPriceOrigin.sort((a, b) => {
-          return b.price - a.price;
-        })
-      );
-    }
     if (sortSelect[e.target.value] === true) {
       return;
     } else {
@@ -207,39 +132,29 @@ const ProductPage = () => {
           {page === "/product/all" && (
             <ProductAll
               productHot={productHot}
-              productNew={productNew}
-              productPrice={productPrice}
-              priceToggle={priceToggle}
               sortSelect={sortSelect}
               sortSelectToggle={sortSelectToggle}
             />
           )}
           {page === "/product/dog" && (
-            <ProductDog
+            <ProductAll
               productHot={productHot}
-              productNew={productNew}
-              productPrice={productPrice}
-              priceToggle={priceToggle}
               sortSelect={sortSelect}
               sortSelectToggle={sortSelectToggle}
+              type={CATEGORY_TYPE.DOG}
             />
           )}
           {page === "/product/cat" && (
-            <ProductCat
+            <ProductAll
               productHot={productHot}
-              productNew={productNew}
-              productPrice={productPrice}
-              priceToggle={priceToggle}
               sortSelect={sortSelect}
               sortSelectToggle={sortSelectToggle}
+              type={CATEGORY_TYPE.CAT}
             />
           )}
           {page.includes("search") && (
-            <ProductSearch
+            <ProductAll
               productHot={productHot}
-              productNew={productNew}
-              productPrice={productPrice}
-              priceToggle={priceToggle}
               sortSelect={sortSelect}
               sortSelectToggle={sortSelectToggle}
             />

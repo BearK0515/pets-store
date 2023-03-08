@@ -1,7 +1,10 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import {  PriceUpIcon, PriceDownIcon } from "../assets/icons/index";
+import { PriceUpIcon, PriceDownIcon } from "../assets/icons/index";
 import { ProductItem } from "./ProductItem";
+import useFilteredData from "../hooks/useFilterData";
+import { useParams } from "react-router-dom";
+import FILTER_TYPE from "../constants/filterTypeConst";
 
 const ProductList = styled.div`
   width: 100%;
@@ -44,14 +47,43 @@ const ProductsSort = styled.div`
   }
 `;
 
-const ProductAll = ({
-  productHot,
-  productNew,
-  productPrice,
-  priceToggle,
-  sortSelect,
-  sortSelectToggle,
-}) => {
+const ProductAll = ({ productHot, sortSelect, sortSelectToggle, type }) => {
+  const priceOrderInitial = {
+    priceOrder: true,
+    priceToggle: false,
+  };
+  const params = useParams();
+  const keyword = params?.keyword;
+  const [productAfterSort, setProductAfterSort] = useState(null);
+  const [priceForwardOrder, setPriceForwardOrder] = useState(priceOrderInitial);
+  const productHotSales = useFilteredData(
+    productAfterSort,
+    FILTER_TYPE.HOT,
+    keyword
+  ).filteredData;
+  const productNew = useFilteredData(
+    productAfterSort,
+    FILTER_TYPE.NEW,
+    keyword
+  ).filteredData;
+  const productPrice = useFilteredData(
+    productAfterSort,
+    FILTER_TYPE.PRICE,
+    keyword,
+    priceForwardOrder.priceOrder
+  ).filteredData;
+
+  //將商品分類
+  useEffect(() => {
+    if (!type) {
+      setProductAfterSort(productHot);
+      return;
+    }
+    setProductAfterSort(
+      productHot?.filter((productHot) => productHot.Category.name === type)
+    );
+  }, [type, productHot]);
+
   return (
     <>
       <ProductsSort>
@@ -59,7 +91,10 @@ const ProductAll = ({
           <button
             key={1}
             className={sortSelect?.top ? "sort active" : "sort"}
-            onClick={sortSelectToggle}
+            onClick={(e) => {
+              setPriceForwardOrder(priceOrderInitial);
+              sortSelectToggle(e);
+            }}
             value="top"
           >
             熱銷排行
@@ -67,7 +102,10 @@ const ProductAll = ({
           <button
             key={2}
             className={sortSelect?.new ? "sort active" : "sort"}
-            onClick={sortSelectToggle}
+            onClick={(e) => {
+              setPriceForwardOrder(priceOrderInitial);
+              sortSelectToggle(e);
+            }}
             value="new"
           >
             最新上架
@@ -75,12 +113,19 @@ const ProductAll = ({
           <button
             key={3}
             className={sortSelect?.price ? "sort active" : "sort"}
-            onClick={sortSelectToggle}
+            onClick={(e) => {
+              setPriceForwardOrder((prevState) => ({
+                ...prevState,
+                priceOrder: !prevState.priceOrder,
+                priceToggle: !prevState.priceToggle,
+              }));
+              sortSelectToggle(e);
+            }}
             value="price"
           >
             價格
             {sortSelect?.price &&
-              (priceToggle === "asc" ? (
+              (priceForwardOrder.priceToggle ? (
                 <PriceUpIcon
                   style={{ fontSize: "14px", pointerEvents: "none" }}
                 />
@@ -94,7 +139,7 @@ const ProductAll = ({
       </ProductsSort>
       <ProductList>
         {sortSelect?.top &&
-          productHot?.map((product) => {
+          productHotSales?.map((product) => {
             return <ProductItem product={product} key={product.id} />;
           })}
         {sortSelect?.new &&

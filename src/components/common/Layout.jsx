@@ -1,10 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Outlet, useLocation, useNavigate, Link } from "react-router-dom";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import Footer from "./Footer";
 import Header from "./Header";
 import GoTop from "./GoTop";
-import ChatRobot from "./ChatRobot";
 
 import { CartIcon, SearchIcon } from "../../assets/icons";
 import LoginModal from "./LoginModal";
@@ -29,7 +28,7 @@ const StyledContainer = styled.div`
     max-width: 95%;
   }
   @media screen and (max-width: 768px) {
-    max-width: 99%;
+    max-width: 100%;
   }
   @media screen and (max-width: 577px) {
     max-width: 100%;
@@ -251,11 +250,11 @@ const Layout = () => {
   const handleToggleSidebar = () => {
     setIsSideabrOpen(!isSideabrOpen);
   };
-  const handleSearch = () => {
-    const keyword = searchRef.current.value;
-    if (!keyword || !searchBarActive) return;
-    searchRef.current.value = null;
-    setSearchBarActive(false);
+  const handleSearch = (ref, callback, setCallback) => {
+    const keyword = ref.current.value;
+    if (!keyword || !callback) return;
+    ref.current.value = null;
+    setCallback(false);
     navigate(`../product/search/${keyword}`);
   };
 
@@ -282,7 +281,6 @@ const Layout = () => {
     getUserInfo();
   }, []);
 
-
   return (
     <>
       <StyledContainer onClick={() => setSearchBarActive(false)}>
@@ -290,6 +288,7 @@ const Layout = () => {
           handleToggleLoginModal={handleToggleLoginModal}
           handleToggleCartModal={handleToggleCartModal}
           handleToggleSidebar={handleToggleSidebar}
+          handleSearch={handleSearch}
           countProducts={productInCart.length}
           setLogin={setLogin}
           login={login}
@@ -297,16 +296,16 @@ const Layout = () => {
         <Outlet />
         <StyledButtonWrapper>
           <button
-            className="cart-button"
+            className='cart-button'
             onClick={() => setIsCartOpen(!isCartOpen)}
           >
             <CartIcon />
           </button>
-          <div className="count">{productInCart.length}</div>
-          <span className="search-bar">
+          <div className='count'>{productInCart.length}</div>
+          <span className='search-bar'>
             <label
-              className="search"
-              htmlFor="search-input"
+              className='search'
+              htmlFor='search-input'
               onClick={(e) => {
                 e.stopPropagation();
                 // e.nativeEvent.stopImmediatePropagation(); 不知道為什麼不用也沒差
@@ -317,14 +316,14 @@ const Layout = () => {
               <SearchIcon />
             </label>
             <input
-              type="text"
-              id="search-input"
+              type='text'
+              id='search-input'
               className={searchBarActive ? "active" : "none"}
-              placeholder="商品搜尋"
+              placeholder='商品搜尋'
               ref={searchRef}
               onKeyDown={(e) => {
                 if (e.key === "Enter") {
-                  handleSearch();
+                  handleSearch(searchRef, searchBarActive, setSearchBarActive);
                 }
               }}
               onClick={(e) => {
@@ -334,35 +333,11 @@ const Layout = () => {
               }}
             />
           </span>
-          {searchBarActive && (
-            <ul className="popular-items">
-              <Link to="../product/all">
-                <li className="popular-item">
-                  我們
-                </li>
-              </Link>
-              <Link to="../product/all">
-                <li className="popular-item">
-                  分類
-                </li>
-              </Link>
-              <Link to="../product/all">
-                <li className="popular-item">
-                  沒有
-                </li>
-              </Link>
-              <Link to="../product/all">
-                <li className="popular-item">
-                  標籤
-                </li>
-              </Link>
-            </ul>
-          )}
         </StyledButtonWrapper>
         {records && (
           <StyledSearchWrapper>
             <h6>瀏覽紀錄</h6>
-            <div className="product-wrapper">
+            <div className='product-wrapper'>
               {records?.map((record) => {
                 return <CardItem record={record} key={record.id} />;
               })}
@@ -377,7 +352,6 @@ const Layout = () => {
             </span>
           </StyledSearchWrapper>
         )}
-        <ChatRobot />
         <GoTop />
       </StyledContainer>
       <Footer />
@@ -405,14 +379,14 @@ export const CardItem = ({ record }) => {
   const navigate = useNavigate();
   return (
     <StyledCardItem
-      className="product"
+      className='product'
       onClick={() => {
         navigate(`/product/detail/${record.id}`);
       }}
     >
-      <div className="back-drop"></div>
-      <img src={record.imageUrl} alt="" className="image" />
-      <div className="view">檢視</div>
+      <div className='back-drop'></div>
+      <img src={record.imageUrl} alt='' className='image' />
+      <div className='view'>檢視</div>
     </StyledCardItem>
   );
 };

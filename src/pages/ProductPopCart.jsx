@@ -232,7 +232,7 @@ const ProductPopCart = ({ handleToggleCartModal, product, image }) => {
           <div className='price-wrapper'>
             <div className='price'>${product?.price * count}</div>
             <div className='discount-price'>
-              ${Math.floor(product?.price * 0.8 * count)}
+              ${Math.floor(product?.price * 0.8) * count}
             </div>
           </div>
           <div className='count-wrapper'>

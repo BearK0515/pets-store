@@ -1,7 +1,7 @@
 import { createContext, useState } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import './App.css';
-import { GlobalStyle, ResetStyle } from './components/common/globalStyle';
+import { GlobalStyle, ResetStyle } from './constants/globalStyle';
 import Layout from './components/common/Layout';
 import { Orders, Products } from './components/sectionAdmin';
 import AllProducts from './components/sectionAdmin/products/AllProducts';
@@ -17,13 +17,10 @@ import {
   Home,
   Order,
   ProductAll,
-  ProductCat,
-  ProductDog,
   ProductPage,
   SingleOrder,
   SingleProduct
 } from './pages';
-import ProductSearch from './pages/ProductSearch';
 
 const basename = process.env.PUBLIC_URL;
 
@@ -41,9 +38,10 @@ function App() {
               <Route path='about' element={<About />} />
               <Route path='product' element={<ProductPage />}>
                 <Route path='all' element={<ProductAll />} />
-                <Route path='search/:keyword' element={<ProductSearch/>}/>
-                <Route path='dog' element={<ProductDog />} />
-                <Route path='cat' element={<ProductCat />} />
+                <Route path='search/:keyword' element={<ProductAll />} />
+                <Route path='dog' element={<ProductAll />} />
+                <Route path='test' element={<ProductAll />} />
+                <Route path='cat' element={<ProductAll />} />
                 <Route path='detail/:productId' element={<SingleProduct />} />
               </Route>
               <Route path='blogs' element={<Blogs />} />

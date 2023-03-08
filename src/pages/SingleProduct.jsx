@@ -15,7 +15,7 @@ import {
 import order from '../assets/images/order.png';
 import ProductPopCart from './ProductPopCart';
 import { productDetail } from '../api/products';
-import { addTocart, setCount as countRedux } from '../store/productSlice';
+import { addTocart } from '../store/productSlice';
 import { IsLoadingComponent as Loading } from '../components/common/IsLoading';
 
 const StyledContainer = styled.div`
@@ -553,7 +553,6 @@ const StyledBuyButton = styled.div`
   }
 `;
 const SingleProduct = () => {
-  window.scrollTo(0, 350);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
@@ -590,6 +589,10 @@ const SingleProduct = () => {
     }
   }
 
+  useEffect(() => {
+    window.scrollTo(0, 350);
+  }, []);
+
   //抓單一商品
   useEffect(() => {
     setIsLoading(true);
@@ -622,13 +625,6 @@ const SingleProduct = () => {
 
     dispatch(addTocart({ id, name, price, image, count }));
 
-    dispatch(
-      countRedux({
-        productId: id,
-        count: count
-      })
-    );
-
     Swal.fire({
       title: '加入購物車成功',
       icon: 'success',
@@ -646,13 +642,6 @@ const SingleProduct = () => {
     const image = product?.Image[0].url;
 
     dispatch(addTocart({ id, name, price, image, count }));
-
-    dispatch(
-      countRedux({
-        productId: id,
-        count: count
-      })
-    );
 
     Swal.fire({
       title: '立即購買成功',
@@ -851,7 +840,7 @@ const SingleProduct = () => {
                       />
                     </div>
                     <div className='count'>{count}</div>
-                    <div onClick={() => setCount(count + 1)}>
+                    <div onClick={() => setCount((prevCount) => prevCount + 1)}>
                       <PlusIcon className='plus' />
                     </div>
                   </div>

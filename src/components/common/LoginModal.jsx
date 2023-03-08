@@ -179,9 +179,6 @@ const LoginModal = ({
     window.location.replace(
       `https://access.line.me/oauth2/v2.1/authorize?response_type=code&client_id=1657937254&redirect_uri=https://beark0515.github.io/pets-store/&state=12345abcde&scope=profile%20openid%20email&nonce=09876xyz`
     );
-    // window.location.replace(
-    //   `https://access.line.me/oauth2/v2.1/authorize?response_type=code&client_id=1657937254&redirect_uri=http://localhost:3000/pets-store&state=12345abcde&scope=profile%20openid%20email&nonce=09876xyz`
-    // );
   };
 
   return (
@@ -205,10 +202,13 @@ const LoginModal = ({
                 <p>登入</p>
               </div>
               <LoginSocialFacebook
-                appId='1699530640464382'
+                appId='1132874990740447'
+                fields='email'
+                scope='email'
                 onResolve={(res) => {
                   setEmail(res.data.email);
                   setName(res.data.name);
+                  console.log("FB login", res.data);
                 }}
                 onReject={(err) => {
                   console.log(err);

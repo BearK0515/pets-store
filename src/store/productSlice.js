@@ -14,9 +14,11 @@ const productSlice = createSlice({
         (item) => item.id === action.payload.id
       );
       if (itemInCart) {
-        itemInCart.count++;
+        let preCount = Number(itemInCart.count);
+        let newCount = Number(action.payload.count);
+        itemInCart.count = preCount + newCount;
       } else {
-        state.cart?.push({ ...action.payload });
+        state.cart.push({ ...action.payload });
       }
     },
     //購物車中移除商品
@@ -32,7 +34,7 @@ const productSlice = createSlice({
       const productIndex = state.cart.findIndex(
         (product) => product.id === productId
       );
-      state.cart[productIndex].count = count
+      state.cart[productIndex].count = count;
     },
     //清空購物車
     setClearCart: (state) => {

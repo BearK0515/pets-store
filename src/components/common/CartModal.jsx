@@ -1,9 +1,9 @@
-import React from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import styled from "styled-components";
-import { CartNoneIcon, DeleteProductIcon } from "../../assets/icons";
-import { removeItem, setCount } from "../../store/productSlice";
+import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import styled from 'styled-components';
+import { CartNoneIcon, DeleteProductIcon } from '../../assets/icons';
+import { removeItem, setCount } from '../../store/productSlice';
 
 const CartStyled = styled.div`
   width: 100vw;
@@ -123,9 +123,17 @@ const StyledCardItem = styled.div`
       }
     }
     .price {
-      font-size: 14px;
+      font-size: 12px;
       line-height: 16px;
+      text-decoration: line-through;
       color: #808080;
+    }
+    .discount-price {
+      text-align: left;
+      font-family: Roboto, sans-serif;
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text-red);
     }
     .count {
       width: 100%;
@@ -158,26 +166,26 @@ export default function CartModal({ setIsCartOpen }) {
   const cartProducts = useSelector((state) => state.product.cart);
   const navigate = useNavigate();
   function goToCart() {
-    navigate("/cart");
+    navigate('/cart');
     setIsCartOpen(false);
   }
   return (
     <CartStyled>
-      <div className="back-drop" onClick={() => setIsCartOpen(false)}></div>
-      <div className="cart-container">
-        <div className="cart-title">我的購物車</div>
-        <div className="wrapper">
+      <div className='back-drop' onClick={() => setIsCartOpen(false)}></div>
+      <div className='cart-container'>
+        <div className='cart-title'>我的購物車</div>
+        <div className='wrapper'>
           {cartProducts?.length !== 0 ? (
             cartProducts?.map((product) => {
               return (
-                <div className="card-items" key={product.id}>
-                  <CatrItem product={product} />
+                <div className='card-items' key={product.id}>
+                  <CartItem product={product} />
                 </div>
               );
             })
           ) : (
-            <div className="no-item">
-              <CartNoneIcon className="icon" />
+            <div className='no-item'>
+              <CartNoneIcon className='icon' />
               <span>購物車內無任何商品</span>
             </div>
           )}
@@ -190,7 +198,7 @@ export default function CartModal({ setIsCartOpen }) {
   );
 }
 
-export const CatrItem = ({ product }) => {
+export const CartItem = ({ product }) => {
   const dispatch = useDispatch();
   const options = [];
   for (let i = 1; i <= 999; i++) {
@@ -198,31 +206,34 @@ export const CatrItem = ({ product }) => {
   }
   const id = product.id;
   return (
-    <StyledCardItem className="card-item">
-      <div className="picture">
+    <StyledCardItem className='card-item'>
+      <div className='picture'>
         <img src={product?.image} alt={product?.name} />
       </div>
-      <div className="content">
-        <div className="wrapper">
-          <div className="name">{product?.name}</div>
+      <div className='content'>
+        <div className='wrapper'>
+          <div className='name'>{product?.name}</div>
           <div
-            className="icon"
+            className='icon'
             onClick={() => {
               dispatch(removeItem(id));
             }}
           >
-            <DeleteProductIcon size="16" />
+            <DeleteProductIcon size='16' />
           </div>
         </div>
-        <div className="price">{product?.price}元</div>
-        <div className="count">
+        <div className='price'>{product?.price}元</div>
+        <div className='discount-price'>
+          ${Math.floor(product?.price * 0.8)}
+        </div>
+        <div className='count'>
           <select
-            defaultValue={product.count}
+            value={product?.count}
             onChange={(e) => {
               dispatch(
                 setCount({
                   productId: product.id,
-                  count: e.target.value,
+                  count: e.target.value
                 })
               );
             }}
@@ -236,8 +247,8 @@ export const CatrItem = ({ product }) => {
             })}
           </select>
         </div>
-        <div className="subTotal">
-          {Math.floor(product?.price * product.count * 0.8)}元
+        <div className='subTotal'>
+          {Math.floor(product?.price * 0.8) * product?.count}元
         </div>
       </div>
     </StyledCardItem>
