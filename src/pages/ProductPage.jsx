@@ -67,7 +67,6 @@ const ProductPage = ({ keyword }) => {
   const [sortSelect, setSortSelect] = useState({
     top: true
   });
-  // const [priceToggle, setPriceToggle] = useState('desc');
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -113,43 +112,6 @@ const ProductPage = ({ keyword }) => {
       }));
     }
   };
-
-  // 點擊時，其他二個會變成 undefine 為 false，當為 true 時不改變
-  // const sortSelectToggle = (e) => {
-  //   if (e.target.value === 'price') {
-  //     if (priceToggle === 'asc') {
-  //       setProductPrice(
-  //         productPriceOrigin.sort((a, b) => {
-  //           return a.price - b.price;
-  //         })
-  //       );
-  //       const priceSortOrder = priceToggle === 'asc' ? 'desc' : 'asc';
-  //       setPriceToggle(priceSortOrder);
-  //     } else if (priceToggle === 'desc') {
-  //       setProductPrice(
-  //         productPriceOrigin.sort((a, b) => {
-  //           return b.price - a.price;
-  //         })
-  //       );
-  //       const priceSortOrder = priceToggle === 'asc' ? 'desc' : 'asc';
-  //       setPriceToggle(priceSortOrder);
-  //     }
-  //   } else {
-  //     setPriceToggle('desc');
-  //     setProductPrice(
-  //       productPriceOrigin.sort((a, b) => {
-  //         return b.price - a.price;
-  //       })
-  //     );
-  //   }
-  //   if (sortSelect[e.target.value] === true) {
-  //     return;
-  //   } else {
-  //     setSortSelect(() => ({
-  //       [e.target.value]: !sortSelect[e.target.value]
-  //     }));
-  //   }
-  // };
 
   return (
     <>

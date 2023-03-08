@@ -47,12 +47,12 @@ const ProductsSort = styled.div`
 
 const ProductAll = ({
   productHot,
-  priceToggle,
   sortSelect,
   sortSelectToggle,
   type,
   keyword = ''
 }) => {
+
   const priceOrderInitial = {
     priceOrder: true,
     priceToggle: false
@@ -77,6 +77,7 @@ const ProductAll = ({
       productHot?.filter((productHot) => productHot.Category.name === type)
     );
   }, [type, productHot]);
+
   return (
     <>
       <ProductsSort>
