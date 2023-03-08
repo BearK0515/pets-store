@@ -21,7 +21,6 @@ import {
   SingleOrder,
   SingleProduct
 } from './pages';
-import ProductSearch from './pages/ProductSearch';
 
 const basename = process.env.PUBLIC_URL;
 
@@ -39,7 +38,7 @@ function App() {
               <Route path='about' element={<About />} />
               <Route path='product' element={<ProductPage />}>
                 <Route path='all' element={<ProductAll />} />
-                <Route path='search/:keyword' element={<ProductSearch />} />
+                <Route path='search/:keyword' element={<ProductAll />} />
                 <Route path='dog' element={<ProductAll />} />
                 <Route path='test' element={<ProductAll />} />
                 <Route path='cat' element={<ProductAll />} />

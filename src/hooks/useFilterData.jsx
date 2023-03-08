@@ -1,10 +1,6 @@
 import { useMemo } from "react";
+import FILTER_TYPE from "../constants/filterTypeConst";
 
-const FILTER_TYPE = {
-  HOT: 0,
-  NEW: 1,
-  PRICE: 2,
-};
 
 const useFilteredData = (
   data,
