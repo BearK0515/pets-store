@@ -9,8 +9,8 @@ const FILTER_TYPE = {
 const useFilteredData = (
   data,
   filterType,
-  keyword = "",
-  priceFowardOrder = true
+  keyword = '',
+  priceForwardOrder = true
 ) => {
   const filteredData = useMemo(() => {
     if (!data) return;
@@ -26,14 +26,14 @@ const useFilteredData = (
       return [...filteredKeywordData].sort((a, b) => a.id - b.id);
     }
 
-    if (filterType === FILTER_TYPE.PRICE && priceFowardOrder) {
+    if (filterType === FILTER_TYPE.PRICE && priceForwardOrder) {
       return [...filteredKeywordData].sort((a, b) => a.price - b.price);
     }
-    if (filterType === FILTER_TYPE.PRICE && !priceFowardOrder) {
+    if (filterType === FILTER_TYPE.PRICE && !priceForwardOrder) {
       return [...filteredKeywordData].sort((a, b) => b.price - a.price);
     }
     return filteredKeywordData;
-  }, [data, filterType, keyword, priceFowardOrder]);
+  }, [data, filterType, keyword, priceForwardOrder]);
 
   return { filteredData };
 };

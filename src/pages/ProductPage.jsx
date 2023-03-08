@@ -80,6 +80,7 @@ const ProductPage = ({keyword}) => {
   } else if (page.includes("cat")) {
     NowPage = "貓貓專區";
   }
+  
   // useEffect
   //抓全部商品
   useEffect(() => {
