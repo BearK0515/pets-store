@@ -1,14 +1,14 @@
-import React, { useState, useEffect } from "react";
-import styled from "styled-components";
-import { useLocation, useNavigate } from "react-router-dom";
-import ProductAside from "./ProductAside";
-import ProductAll from "./ProductAll";
-import { productsHot } from "../api/products";
-import { HomeIcon } from "../assets/icons/index";
-import SingleProduct from "./SingleProduct";
-import { HomeLinkWrapper } from "../components/common/HomeLinkWrapper";
-import { IsLoadingComponent as Loading } from "../components/common/IsLoading";
-import ProductSearch from "./ProductSearch";
+import React, { useState, useEffect } from 'react';
+import styled from 'styled-components';
+import { useLocation, useNavigate } from 'react-router-dom';
+import ProductAside from './ProductAside';
+import ProductAll from './ProductAll';
+import { productsHot } from '../api/products';
+import { HomeIcon } from '../assets/icons/index';
+import SingleProduct from './SingleProduct';
+import { HomeLinkWrapper } from '../components/common/HomeLinkWrapper';
+import { IsLoadingComponent as Loading } from '../components/common/IsLoading';
+import ProductSearch from './ProductSearch';
 
 const ProductPageStyled = styled.div`
   box-sizing: border-box;
@@ -60,26 +60,27 @@ const Breadcrumb = styled.div`
   position: relative;
 `;
 
-const ProductPage = ({keyword}) => {
+const ProductPage = ({ keyword }) => {
   window.scrollTo(0, 245);
   const [isLoading, setIsLoading] = useState(true);
   const [productHot, setProductHot] = useState([]);
   const [sortSelect, setSortSelect] = useState({
-    top: true,
+    top: true
   });
 
   const navigate = useNavigate();
   const location = useLocation();
   const page = location.pathname;
-  let NowPage = "";
+  let NowPage = '';
 
-  if (page.includes("all")) {
-    NowPage = "全部商品";
-  } else if (page.includes("dog")) {
-    NowPage = "狗狗專區";
-  } else if (page.includes("cat")) {
-    NowPage = "貓貓專區";
+  if (page.includes('all')) {
+    NowPage = '全部商品';
+  } else if (page.includes('dog')) {
+    NowPage = '狗狗專區';
+  } else if (page.includes('cat')) {
+    NowPage = '貓貓專區';
   }
+
   // useEffect
   //抓全部商品
   useEffect(() => {
@@ -107,7 +108,7 @@ const ProductPage = ({keyword}) => {
       return;
     } else {
       setSortSelect(() => ({
-        [e.target.value]: !sortSelect[e.target.value],
+        [e.target.value]: !sortSelect[e.target.value]
       }));
     }
   };
@@ -121,37 +122,37 @@ const ProductPage = ({keyword}) => {
           <HomeLinkWrapper>
             <GoToHome>
               <HomeIcon
-                onClick={() => navigate("/")}
-                style={{ color: "var(--dark)", cursor: "pointer" }}
+                onClick={() => navigate('/')}
+                style={{ color: 'var(--dark)', cursor: 'pointer' }}
               />
-              <p className="text">{NowPage}</p>
+              <p className='text'>{NowPage}</p>
             </GoToHome>
           </HomeLinkWrapper>
           <Breadcrumb />
-          {page === "/product/all" && (
+          {page === '/product/all' && (
             <ProductAll
               productHot={productHot}
               sortSelect={sortSelect}
               sortSelectToggle={sortSelectToggle}
             />
           )}
-          {page === "/product/dog" && (
+          {page === '/product/dog' && (
             <ProductAll
               productHot={productHot}
               sortSelect={sortSelect}
               sortSelectToggle={sortSelectToggle}
-              type={"dog"}
+              type={'dog'}
             />
           )}
-          {page === "/product/cat" && (
+          {page === '/product/cat' && (
             <ProductAll
               productHot={productHot}
               sortSelect={sortSelect}
               sortSelectToggle={sortSelectToggle}
-              type={"cat"}
+              type={'cat'}
             />
           )}
-          {page.includes("search") && (
+          {page.includes('search') && (
             <ProductSearch
               productHot={productHot}
               sortSelect={sortSelect}
@@ -159,7 +160,7 @@ const ProductPage = ({keyword}) => {
               keyword={keyword}
             />
           )}
-          {page.includes("detail") && <SingleProduct />}
+          {page.includes('detail') && <SingleProduct />}
         </ProductWrapper>
       </ProductPageStyled>
     </>
