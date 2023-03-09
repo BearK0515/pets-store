@@ -1,9 +1,9 @@
-import React, { useState } from "react";
-import styled from "styled-components";
-import { CartIcon } from "../assets/icons/index";
-import { Link } from "react-router-dom";
-import ProductPopCart from "./ProductPopCart";
-import { LazyLoadImage } from "react-lazy-load-image-component";
+import React, { useState } from 'react';
+import styled from 'styled-components';
+import { CartIcon } from '../assets/icons/index';
+import { Link } from 'react-router-dom';
+import ProductPopCart from './ProductPopCart';
+import { LazyLoadImage } from 'react-lazy-load-image-component';
 
 const StyledCard = styled.div`
   position: relative;
@@ -78,9 +78,9 @@ const Button = styled.div`
     background-color: var(--red);
     border-width: 1px;
     background-color: ${(props) =>
-      props.active ? "var(--white)" : "var(--red)"};
-    color: ${(props) => (props.active ? " var(--red)" : "var(--white)")};
-    border: ${(props) => (props.active ? "2px solid var(--red)" : "")};
+      props.active ? 'var(--white)' : 'var(--red)'};
+    color: ${(props) => (props.active ? ' var(--red)' : 'var(--white)')};
+    border: ${(props) => (props.active ? '2px solid var(--red)' : '')};
     font-size: 20px;
     font-weight: 400;
     border-radius: 10%;
@@ -116,23 +116,23 @@ export const ProductItem = ({ product }) => {
   return (
     <>
       <StyledCard id={product.id}>
-        <Link className="product" to={`/product/detail/${product.id}`}>
+        <Link className='product' to={`/product/detail/${product.id}`}>
           <LazyLoadImage
-            className="product-img"
+            className='product-img'
             alt={product.name}
             src={product.Images.url}
           />
         </Link>
         <Button onClick={handleToggleCartModal}>
-          <div className="addCart">
-            <CartIcon style={{ fontSize: "18px", cursor: "pointer" }} />
+          <div className='addCart'>
+            <CartIcon style={{ fontSize: '18px', cursor: 'pointer' }} />
           </div>
         </Button>
-        <div className="wrapper">
+        <div className='wrapper'>
           <Link to={`/product/detail/${product.id}`}>
-            <h4 className="title">{product.name}</h4>
-            <div className="price">${product.price}</div>
-            <div className="discount-price">
+            <h4 className='title'>{product.name}</h4>
+            <div className='price'>${product.price}</div>
+            <div className='discount-price'>
               ${Math.floor(product.price * 0.8)}
             </div>
           </Link>
