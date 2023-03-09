@@ -204,7 +204,7 @@ const LoginModal = ({
               <LoginSocialFacebook
                 appId='1132874990740447'
                 fields='email'
-                scope='email'
+                scope='email,public_profile'
                 onResolve={(res) => {
                   setEmail(res.data.email);
                   setName(res.data.name);
