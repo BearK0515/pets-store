@@ -1,11 +1,10 @@
-import axios from 'axios';
-import { useState, useMemo, useEffect } from 'react';
+import axios from "axios";
+import { useState, useMemo, useEffect } from "react";
 
-const baseURL = 'https://www.waylins.com';
+const baseURL = "https://www.waylins.com";
 
-const useFetch = (url) => {
+const useFetch = (url, { setProductHot }) => {
   const [isLoading, setIsLoading] = useState(false);
-  const [value, setValue] = useState({});
   const [error, setError] = useState(null);
 
   const targetURL = useMemo(() => {
@@ -17,15 +16,14 @@ const useFetch = (url) => {
       setIsLoading(true);
 
       const DEFAULT_OPTIONS = {
-        method: 'GET'
+        method: "GET",
       };
 
       const res = await axios({
         ...DEFAULT_OPTIONS,
-        url: targetURL
+        url: targetURL,
       });
-      // console.log(res);
-      setValue(res.data);
+      setProductHot(res.data?.filter((product) => product.isOnShelves === 1));
       setIsLoading(false);
     } catch (error) {
       setError(error);
@@ -36,15 +34,12 @@ const useFetch = (url) => {
 
   useEffect(() => {
     fetchData();
-    console.log(value);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
 
   return {
     isLoading,
-    value,
     error,
-    fetchData
   };
 };
 
