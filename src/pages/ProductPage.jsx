@@ -8,7 +8,7 @@ import SingleProduct from './SingleProduct';
 import { HomeLinkWrapper } from '../components/common/HomeLinkWrapper';
 import { IsLoadingComponent as Loading } from '../components/common/IsLoading';
 import CATEGORY_TYPE from '../constants/categoryTypeConst';
-import useFetch from '../hooks/useFetch';
+import useFetchAPI from '../hooks/useFetchAPI';
 
 const ProductPageStyled = styled.div`
   box-sizing: border-box;
@@ -60,9 +60,8 @@ const Breadcrumb = styled.div`
   position: relative;
 `;
 
-const ProductPage = ({ keyword }) => {
+const ProductPage = () => {
   window.scrollTo(0, 245);
-  // const [isLoading, setIsLoading] = useState(true);
   const [productHot, setProductHot] = useState([]);
   const [sortSelect, setSortSelect] = useState({
     top: true
@@ -81,46 +80,11 @@ const ProductPage = ({ keyword }) => {
     NowPage = '貓貓專區';
   }
 
-  const { isLoading, value } = useFetch(`/api/products/all/bestsell`, {
-    setProductHot
-  });
-
-  // useEffect(() => {
-  //   fetchData();
-  //   const productData = value?.data;
-  //   console.log(productData);
-
-  //   const onShelvesProductHot = productData?.filter(
-  //     (product) => product.isOnShelves === 1
-  //   );
-  //   setProductHot(onShelvesProductHot);
-  // }, []);
+  const { isLoading, value } = useFetchAPI(`/api/products/all/bestsell`);
 
   useEffect(() => {
-    console.log('l:', isLoading);
-    console.log('v:', value);
-  }, [isLoading, value]);
-
-  // useEffect
-  //抓全部商品
-  // useEffect(() => {
-  //   setIsLoading(true);
-  //   const getProductHotAsync = async () => {
-  //     try {
-  //       const resProductlHot = await productsHot();
-  //       const onShelvesProductHot = resProductlHot?.filter(
-  //         (product) => product.isOnShelves === 1
-  //       );
-  //       setProductHot(onShelvesProductHot);
-  //       setIsLoading(false);
-  //     } catch (err) {
-  //       console.error(err);
-  //       setIsLoading(false);
-  //     }
-  //   };
-  //   getProductHotAsync();
-  //   return;
-  // }, [setProductHot]);
+    setProductHot(value.data?.filter((product) => product.isOnShelves === 1));
+  }, [value.data]);
 
   // 點擊時，其他二個會變成 undefine 為 false，當為 true 時不改變
   const sortSelectToggle = (e) => {

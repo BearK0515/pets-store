@@ -3,11 +3,10 @@ import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import { HomeIcon, ClockIcon, BookMarkIcon } from '../assets/icons/index';
 import { HomeLinkWrapper } from '../components/common/HomeLinkWrapper';
-// import { artical } from '../api/blogs';
 import { BlogFilterContext } from '../App';
 import { IsLoadingComponent as Loading } from '../components/common/IsLoading';
 import Swal from 'sweetalert2';
-import useFetchBlog from '../hooks/useFetchBlog';
+import useFetchAPI from '../hooks/useFetchAPI';
 
 const BlogStyled = styled.div`
   box-sizing: border-box;
@@ -303,31 +302,16 @@ const Blogs = () => {
   const [optionsState, setOptionsState] = useState('');
   const { blogFilter } = useContext(BlogFilterContext);
 
-  const { isLoading } = useFetchBlog(`/api/blogs`, {
-    setArticalOrigin,
-    setArticalAll
-  });
-  console.log(articalOrigin);
-  // //抓文章api
-  // useEffect(() => {
-  //   // setIsLoading(true);
-  //   const getBlogsArticalAsync = async () => {
-  //     try {
-  //       const resArticalAll = await artical();
-  //       resArticalAll.sort((a, b) => {
-  //         return b.isTop - a.isTop; //正數-負數排序(true[1]-false[0])
-  //       });
-  //       setArticalOrigin(resArticalAll);
-  //       setArticalAll(resArticalAll);
-  //       // setIsLoading(false);
-  //     } catch (err) {
-  //       console.error(err);
-  //       // setIsLoading(false);
-  //     }
-  //   };
-  //   getBlogsArticalAsync();
-  //   return;
-  // }, [setArticalOrigin]);
+  const { isLoading, value } = useFetchAPI(`/api/blogs`);
+
+  useEffect(() => {
+    const resArticalAll = value.data;
+    resArticalAll?.sort((a, b) => {
+      return b.isTop - a.isTop;
+    });
+    setArticalOrigin(resArticalAll);
+    setArticalAll(resArticalAll);
+  }, [setArticalOrigin, setArticalAll, value]);
 
   useEffect(() => {
     if (blogFilter === 'null') {
