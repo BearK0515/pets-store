@@ -3,7 +3,7 @@ import { useState, useMemo, useEffect, useCallback } from 'react';
 
 const baseURL = 'https://www.waylins.com';
 
-const useFetch = (url, { setProductHot }) => {
+const useFetchBlog = (url, { setArticalOrigin, setArticalAll }) => {
   const [isLoading, setIsLoading] = useState(false);
   // const [value, setValue] = useState({});
   const [error, setError] = useState(null);
@@ -24,14 +24,20 @@ const useFetch = (url, { setProductHot }) => {
         url: targetURL
       });
       // setValue(res.data);
-      setProductHot(res.data?.filter((product) => product.isOnShelves === 1));
+      console.log(res.data);
+      const articleData = res.data?.sort((a, b) => {
+        return b.isTop - a.isTop;
+      });
+      setArticalOrigin(articleData);
+      setArticalAll(articleData);
+
       setIsLoading(false);
     } catch (error) {
       setError(error);
     } finally {
       setIsLoading(false);
     }
-  }, [setProductHot, targetURL]);
+  }, [setArticalOrigin, setArticalAll, targetURL]);
 
   useEffect(() => {
     fetchData();
@@ -43,4 +49,4 @@ const useFetch = (url, { setProductHot }) => {
   };
 };
 
-export default useFetch;
+export default useFetchBlog;

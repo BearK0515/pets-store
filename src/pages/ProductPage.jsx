@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import { useLocation, useNavigate } from 'react-router-dom';
 import ProductAside from './ProductAside';
 import ProductAll from './ProductAll';
-import { productsHot } from '../api/products';
 import { HomeIcon } from '../assets/icons/index';
 import SingleProduct from './SingleProduct';
 import { HomeLinkWrapper } from '../components/common/HomeLinkWrapper';
@@ -82,20 +81,25 @@ const ProductPage = ({ keyword }) => {
     NowPage = '貓貓專區';
   }
 
-  const { isLoading, value, fetchData } = useFetch(
-    `/api/products/all/bestsell`
-  );
+  const { isLoading, value } = useFetch(`/api/products/all/bestsell`, {
+    setProductHot
+  });
+
+  // useEffect(() => {
+  //   fetchData();
+  //   const productData = value?.data;
+  //   console.log(productData);
+
+  //   const onShelvesProductHot = productData?.filter(
+  //     (product) => product.isOnShelves === 1
+  //   );
+  //   setProductHot(onShelvesProductHot);
+  // }, []);
 
   useEffect(() => {
-    fetchData();
-    console.log(value)
-    const productData = value?.data;
-    const onShelvesProductHot = productData?.filter(
-      (product) => product.isOnShelves === 1
-    );
-
-    setProductHot(onShelvesProductHot);
-  }, []);
+    console.log('l:', isLoading);
+    console.log('v:', value);
+  }, [isLoading, value]);
 
   // useEffect
   //抓全部商品

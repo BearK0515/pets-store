@@ -3,7 +3,7 @@ import { useState, useMemo, useEffect, useCallback } from 'react';
 
 const baseURL = 'https://www.waylins.com';
 
-const useFetch = (url, { setProductHot }) => {
+const useFetchAPI = (url, { setProductHot }) => {
   const [isLoading, setIsLoading] = useState(false);
   // const [value, setValue] = useState({});
   const [error, setError] = useState(null);
@@ -43,4 +43,4 @@ const useFetch = (url, { setProductHot }) => {
   };
 };
 
-export default useFetch;
+export default useFetchAPI;
