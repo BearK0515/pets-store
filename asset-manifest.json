@@ -1,8 +1,8 @@
 {
   "files": {
     "main.css": "/pets-store/static/css/main.31d6cfe0.css",
-    "main.js": "/pets-store/static/js/main.e98df5b1.js",
-    "static/js/27.1049f872.chunk.js": "/pets-store/static/js/27.1049f872.chunk.js",
+    "main.js": "/pets-store/static/js/main.58465d19.js",
+    "static/js/787.4aaff206.chunk.js": "/pets-store/static/js/787.4aaff206.chunk.js",
     "static/media/home2.png": "/pets-store/static/media/home2.10ecd2f0d66f1926b91c.png",
     "static/media/home1.png": "/pets-store/static/media/home1.f61e98efee5f494b5806.png",
     "static/media/about2.png": "/pets-store/static/media/about2.b482a6972472d98fead8.png",
@@ -26,10 +26,12 @@
     "static/media/icon_Twitter.svg": "/pets-store/static/media/icon_Twitter.abe25430f026dbaa0d2cf71ba9f61d46.svg",
     "static/media/img_facebook-white.svg": "/pets-store/static/media/img_facebook-white.fc14aac1551b710b4edce1ea836f1ebf.svg",
     "static/media/img_facebook.svg": "/pets-store/static/media/img_facebook.e8176365db8c7995c7a048901ac021e4.svg",
-    "static/media/icon_google.svg": "/pets-store/static/media/icon_google.1d2804f5bd03f831fed855eca61c2c61.svg"
+    "static/media/icon_google.svg": "/pets-store/static/media/icon_google.1d2804f5bd03f831fed855eca61c2c61.svg",
+    "main.58465d19.js.map": "/pets-store/static/js/main.58465d19.js.map",
+    "787.4aaff206.chunk.js.map": "/pets-store/static/js/787.4aaff206.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.31d6cfe0.css",
-    "static/js/main.e98df5b1.js"
+    "static/js/main.58465d19.js"
   ]
 }
