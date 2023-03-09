@@ -177,7 +177,7 @@ const LoginModal = ({
 
   const handleLineLogin = async () => {
     window.location.replace(
-      `https://access.line.me/oauth2/v2.1/authorize?response_type=code&client_id=1657937254&redirect_uri=https://beark0515.github.io/pets-store/&state=12345abcde&scope=profile%20openid%20email&nonce=09876xyz`
+      `https://access.line.me/oauth2/v2.1/authorize?response_type=code&client_id=933286057690890&redirect_uri=https://beark0515.github.io/pets-store/&state=12345abcde&scope=profile%20openid%20email&nonce=09876xyz`
     );
   };
 
