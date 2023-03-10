@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import styled from 'styled-components';
 import { useLocation, useNavigate } from 'react-router-dom';
 import ProductAside from './ProductAside';
@@ -87,15 +87,18 @@ const ProductPage = () => {
   }, [value.data]);
 
   // 點擊時，其他二個會變成 undefine 為 false，當為 true 時不改變
-  const sortSelectToggle = (e) => {
-    if (sortSelect[e.target.value] === true) {
-      return;
-    } else {
-      setSortSelect(() => ({
-        [e.target.value]: !sortSelect[e.target.value]
-      }));
-    }
-  };
+  const sortSelectToggle = useCallback(
+    (e) => {
+      if (sortSelect[e.target.value] === true) {
+        return;
+      } else {
+        setSortSelect(() => ({
+          [e.target.value]: !sortSelect[e.target.value]
+        }));
+      }
+    },
+    [sortSelect]
+  );
 
   return (
     <>

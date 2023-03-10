@@ -295,7 +295,6 @@ const BlogCategoryList = styled.ul`
 
 const Blogs = () => {
   const navigate = useNavigate();
-  // const [isLoading, setIsLoading] = useState(true);
   const [articalOrigin, setArticalOrigin] = useState([]);
   const [articalAll, setArticalAll] = useState([]);
   const [query, setQuery] = useState('');
@@ -311,7 +310,7 @@ const Blogs = () => {
     });
     setArticalOrigin(resArticalAll);
     setArticalAll(resArticalAll);
-  }, [setArticalOrigin, setArticalAll, value]);
+  }, [value]);
 
   useEffect(() => {
     if (blogFilter === 'null') {
@@ -437,7 +436,7 @@ const Blogs = () => {
           </BlogSearchTop>
           <BlogListWrapper>
             <ul>
-              {articalAll.length === 0 &&
+              {articalAll === undefined &&
                 articalOrigin?.map((artical) => {
                   return (
                     <BlogCard key={artical.title}>
