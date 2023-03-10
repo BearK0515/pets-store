@@ -1,17 +1,17 @@
-import React, { useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router";
-import styled from "styled-components";
-import { NavLink as Link } from "react-router-dom";
+import React, { useEffect, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router';
+import styled from 'styled-components';
+import { NavLink as Link } from 'react-router-dom';
 import {
   AddProductModal,
   AdjustPriceModal,
   Products,
-  Orders,
-} from "../components/sectionAdmin";
-import SingleOrder from "./SingleOrder";
-import { productsHot } from "../api/products";
-import { admindeleteProduct, ordersAll } from "../api/adminAuth";
-import Swal from "sweetalert2";
+  Orders
+} from '../components/sectionAdmin';
+import SingleOrder from './SingleOrder';
+import { admindeleteProduct, ordersAll } from '../api/adminAuth';
+import Swal from 'sweetalert2';
+import useFetchAPI from '../hooks/useFetchAPI';
 
 const StyledContainer = styled.div`
   max-width: 1140px;
@@ -55,11 +55,11 @@ const NavLink = styled(Link)`
   width: 0 auto;
   height: 40px;
   background-color: ${(props) =>
-    props.currentPage ? "var(--white)" : "var(--footer-background)"};
+    props.currentPage ? 'var(--white)' : 'var(--footer-background)'};
   color: ${(props) =>
-    props.currentPage ? " var(--footer-background)" : "var(--white)"};
+    props.currentPage ? ' var(--footer-background)' : 'var(--white)'};
   border: ${(props) =>
-    props.currentPage ? "2px solid var(--footer-background)" : ""};
+    props.currentPage ? '2px solid var(--footer-background)' : ''};
   font-size: 20px;
   font-weight: 400;
   border-radius: 30px;
@@ -78,7 +78,7 @@ const AdminIndex = () => {
 
   //修改商品價錢彈窗開關
   const handleTogglePriceModal = (e) => {
-    if (e.target.matches(".btn")) {
+    if (e.target.matches('.btn')) {
       return;
     }
     e.preventDefault();
@@ -91,9 +91,9 @@ const AdminIndex = () => {
     setIsOpenProductModal(!isOpenProductModal);
   };
   const handleLogout = () => {
-    localStorage.removeItem("authToken");
-    localStorage.removeItem("isAdmin");
-    navigate("/");
+    localStorage.removeItem('authToken');
+    localStorage.removeItem('isAdmin');
+    navigate('/');
   };
   //DELETE刪除商品
   async function deleteProduct(productId) {
@@ -104,41 +104,32 @@ const AdminIndex = () => {
       const deleteProduct = await admindeleteProduct(productId);
       if (deleteProduct) {
         Swal.fire({
-          title: "移除商品",
-          text: "是否確定移除商品？",
-          icon: "warning",
+          title: '移除商品',
+          text: '是否確定移除商品？',
+          icon: 'warning',
           showCancelButton: true,
-          confirmButtonColor: "#3085d6",
-          cancelButtonColor: "#d33",
-          confirmButtonText: "移除",
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: '移除'
         }).then((result) => {
           if (result.isConfirmed) {
-            Swal.fire("移除商品", "已移除", "success");
+            Swal.fire('移除商品', '已移除', 'success');
             setProductsAll(newProductAll);
           }
           return;
         });
       }
     } catch (error) {
-      console.error("delete product error:", error);
+      console.error('delete product error:', error);
     }
   }
-  //GET熱銷商品
+
+  const { value } = useFetchAPI(`/api/products/all/bestsell`);
+
   useEffect(() => {
-    const getProductsHotAsync = async () => {
-      try {
-        const resProductsAll = await productsHot();
-        const OnShelvesAll = resProductsAll?.filter(
-          (newProducts) => newProducts?.isOnShelves === 1
-        );
-        setProductsAll(OnShelvesAll);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-    getProductsHotAsync();
-    return;
-  }, [isOpenPriceModal, isOpenProductModal, setProductsAll]);
+    setProductsAll(value.data?.filter((product) => product.isOnShelves === 1));
+  }, [value.data]);
+
   //GET所有訂單
   useEffect(() => {
     const getOrdersAllAsync = async () => {
@@ -157,12 +148,12 @@ const AdminIndex = () => {
       <StyledContainer>
         <StyledSidebar>
           <div className='button-wrapper'>
-            {page.includes("products") ? (
+            {page.includes('products') ? (
               <NavLink currentPage>商品列表</NavLink>
             ) : (
               <NavLink to='products/all'>商品列表</NavLink>
             )}
-            {page.includes("orders") ? (
+            {page.includes('orders') ? (
               <NavLink currentPage>訂單列表</NavLink>
             ) : (
               <NavLink to='orders'>訂單列表</NavLink>
@@ -173,15 +164,15 @@ const AdminIndex = () => {
             登出
           </div>
         </StyledSidebar>
-        {page.includes("products") && (
+        {page.includes('products') && (
           <Products
             productsAll={productsAll}
             handleTogglePriceModal={handleTogglePriceModal}
             deleteProduct={deleteProduct}
           />
         )}
-        {page.includes("orders") && <Orders orders={orders} />}
-        {page.includes("single-order") && <SingleOrder />}
+        {page.includes('orders') && <Orders orders={orders} />}
+        {page.includes('single-order') && <SingleOrder />}
       </StyledContainer>
       {/* Modal-新增商品 */}
       {isOpenProductModal && (

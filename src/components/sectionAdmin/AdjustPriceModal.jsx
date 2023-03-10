@@ -1,8 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { adjustProduct } from '../../api/adminAuth';
-import { productDetail } from '../../api/products';
 import { CancelIcon } from '../../assets/icons';
+import useFetchAPI from '../../hooks/useFetchAPI';
 
 const StyledModalContainer = styled.div`
   width: 100vw;
@@ -136,18 +136,28 @@ const AdjustPriceModal = ({
       console.error(error);
     }
   }
-  //GET單一商品
-  useEffect(() => {
-    const getSingleProduct = async () => {
-      try {
-        const resSingleProduct = await productDetail(productId);
-        setSingleProduct(resSingleProduct);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-    getSingleProduct();
-  }, [productId, setSingleProduct]);
+
+    const { value } = useFetchAPI(
+      `/api/products/detail/${productId}`
+    );
+
+    useEffect(() => {
+      setSingleProduct(value?.data);
+    }, [value]);
+
+  // //GET單一商品
+  // useEffect(() => {
+  //   const getSingleProduct = async () => {
+  //     try {
+  //       const resSingleProduct = await productDetail(productId);
+  //       setSingleProduct(resSingleProduct);
+  //     } catch (error) {
+  //       console.error(error);
+  //     }
+  //   };
+  //   getSingleProduct();
+  // }, [productId, setSingleProduct]);
+
   return (
     <StyledModalContainer>
       <div className='overlay'>

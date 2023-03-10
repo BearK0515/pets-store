@@ -1,17 +1,17 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useState } from "react";
-import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import styled from "styled-components";
-import { LoginSocialFacebook, LoginSocialGoogle } from "reactjs-social-login";
-import { facebookLogin } from "../../api/userLogin";
+import React, { useState } from 'react';
+import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import styled from 'styled-components';
+import { LoginSocialFacebook, LoginSocialGoogle } from 'reactjs-social-login';
+import { facebookLogin } from '../../api/userLogin';
 import {
   AlertIcon,
   CancelIcon,
   FacebookWhiteIcon,
   GoogleIcon,
-  LineWhiteIcon,
-} from "../../assets/icons";
+  LineWhiteIcon
+} from '../../assets/icons';
 
 const StyledModalContainer = styled.div`
   width: 100vw;
@@ -154,7 +154,7 @@ const StyledWrapper = styled.div`
 const LoginModal = ({
   setIsOpenLoginModal,
   handleToggleLoginModal,
-  setLogin,
+  setLogin
 }) => {
   const navigate = useNavigate();
   const [email, setEmail] = useState(null);
@@ -166,8 +166,8 @@ const LoginModal = ({
   useEffect(() => {
     const getUserInfo = async () => {
       const { token, user } = await facebookLogin({ email, name });
-      localStorage.setItem("authToken", token);
-      localStorage.setItem("UserId", user.id);
+      localStorage.setItem('authToken', token);
+      localStorage.setItem('UserId', user.id);
       handleToggleLoginModal();
       setLogin(true);
     };
@@ -202,13 +202,13 @@ const LoginModal = ({
                 <p>登入</p>
               </div>
               <LoginSocialFacebook
-                appId='1132874990740447'
+                appId={process.env.REACT_APP_FACEBOOK_APPID}
                 fields='email'
-                scope='email'
+                scope='email,public_profile'
                 onResolve={(res) => {
                   setEmail(res.data.email);
                   setName(res.data.name);
-                  console.log("FB login", res.data);
+                  console.log('FB login', res.data);
                 }}
                 onReject={(err) => {
                   console.log(err);
@@ -250,7 +250,7 @@ const LoginModal = ({
               註冊帳號即表示您
               <span
                 onClick={() => {
-                  linkTo("/faq#member_level");
+                  linkTo('/faq#member_level');
                 }}
               >
                 同意會員權益說明
@@ -258,7 +258,7 @@ const LoginModal = ({
               與
               <span
                 onClick={() => {
-                  linkTo("/faq#policy");
+                  linkTo('/faq#policy');
                 }}
               >
                 隱私權條款

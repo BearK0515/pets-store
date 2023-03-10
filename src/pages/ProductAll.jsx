@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from "react";
-import styled from "styled-components";
-import { PriceUpIcon, PriceDownIcon } from "../assets/icons/index";
-import { ProductItem } from "./ProductItem";
-import useFilteredData from "../hooks/useFilterData";
-import { useParams } from "react-router-dom";
-import FILTER_TYPE from "../constants/filterTypeConst";
+import React, { useEffect, useState, useMemo } from 'react';
+import styled from 'styled-components';
+import { PriceUpIcon, PriceDownIcon } from '../assets/icons/index';
+import { ProductItem } from './ProductItem';
+import useFilteredData from '../hooks/useFilterData';
+import { useParams } from 'react-router-dom';
+import FILTER_TYPE from '../constants/filterTypeConst';
 
 const ProductList = styled.div`
   width: 100%;
@@ -48,10 +48,13 @@ const ProductsSort = styled.div`
 `;
 
 const ProductAll = ({ productHot, sortSelect, sortSelectToggle, type }) => {
-  const priceOrderInitial = {
-    priceOrder: true,
-    priceToggle: false,
-  };
+  const priceOrderInitial = useMemo(() => {
+    return {
+      priceOrder: true,
+      priceToggle: false
+    };
+  }, []);
+
   const params = useParams();
   const keyword = params?.keyword;
   const [productAfterSort, setProductAfterSort] = useState(null);
@@ -84,54 +87,55 @@ const ProductAll = ({ productHot, sortSelect, sortSelectToggle, type }) => {
     );
   }, [type, productHot]);
 
+
   return (
     <>
       <ProductsSort>
-        <ul className="sort-nav">
+        <ul className='sort-nav'>
           <button
             key={1}
-            className={sortSelect?.top ? "sort active" : "sort"}
+            className={sortSelect?.top ? 'sort active' : 'sort'}
             onClick={(e) => {
               setPriceForwardOrder(priceOrderInitial);
               sortSelectToggle(e);
             }}
-            value="top"
+            value='top'
           >
             熱銷排行
           </button>
           <button
             key={2}
-            className={sortSelect?.new ? "sort active" : "sort"}
+            className={sortSelect?.new ? 'sort active' : 'sort'}
             onClick={(e) => {
               setPriceForwardOrder(priceOrderInitial);
               sortSelectToggle(e);
             }}
-            value="new"
+            value='new'
           >
             最新上架
           </button>
           <button
             key={3}
-            className={sortSelect?.price ? "sort active" : "sort"}
+            className={sortSelect?.price ? 'sort active' : 'sort'}
             onClick={(e) => {
               setPriceForwardOrder((prevState) => ({
                 ...prevState,
                 priceOrder: !prevState.priceOrder,
-                priceToggle: !prevState.priceToggle,
+                priceToggle: !prevState.priceToggle
               }));
               sortSelectToggle(e);
             }}
-            value="price"
+            value='price'
           >
             價格
             {sortSelect?.price &&
               (priceForwardOrder.priceToggle ? (
                 <PriceUpIcon
-                  style={{ fontSize: "14px", pointerEvents: "none" }}
+                  style={{ fontSize: '14px', pointerEvents: 'none' }}
                 />
               ) : (
                 <PriceDownIcon
-                  style={{ fontSize: "14px", pointerEvents: "none" }}
+                  style={{ fontSize: '14px', pointerEvents: 'none' }}
                 />
               ))}
           </button>

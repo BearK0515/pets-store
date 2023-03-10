@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import lineLink from '../assets/images/home1.png';
@@ -6,7 +6,7 @@ import productsLink from '../assets/images/home2.png';
 import SGS from '../assets/images/home3.png';
 import tips from '../assets/images/home4.jpg';
 import ProductAll from './ProductAll';
-import { productsHot, productsNew, productsPrice } from '../api/products';
+import useFetchAPI from '../hooks/useFetchAPI';
 import { IsLoadingComponent as Loading } from '../components/common/IsLoading';
 
 const StyledContainer = styled.div`
@@ -64,114 +64,30 @@ const StyledProductsContainer = styled.div`
 
 const Home = () => {
   const navigate = useNavigate();
-  const [isLoading, setIsLoading] = useState(true);
   const [productHot, setProductHot] = useState([]);
-  const [productNew, setProductNew] = useState([]);
-  const [productPrice, setProductPrice] = useState([]);
-  const [productPriceOrigin, setProductPriceOrigin] = useState([]);
   const [sortSelect, setSortSelect] = useState({
     top: true
   });
-  const [priceToggle, setPriceToggle] = useState('desc');
 
-  // useEffect
-  //抓熱銷排行
-  useEffect(() => {
-    setIsLoading(true);
-    const getProductHotAsync = async () => {
-      try {
-        const resProductlHot = await productsHot();
-        const onShelvesProductHot = resProductlHot?.filter(
-          (product) => product.isOnShelves === 1
-        );
-        setProductHot(onShelvesProductHot);
-        setIsLoading(false);
-      } catch (err) {
-        setIsLoading(false);
-        console.error(err);
-      }
-    };
-    getProductHotAsync();
-    return;
-  }, [setProductHot]);
+  const { isLoading, value } = useFetchAPI(`/api/products/all/bestsell`);
 
-  //抓最新商品
   useEffect(() => {
-    setIsLoading(true);
-    const getProductNewAsync = async () => {
-      try {
-        const resProductNew = await productsNew();
-        const onShelvesProductNew = resProductNew?.filter(
-          (product) => product.isOnShelves === 1
-        );
-        setProductNew(onShelvesProductNew);
-        setIsLoading(false);
-      } catch (err) {
-        console.error(err);
-        setIsLoading(false);
-      }
-    };
-    getProductNewAsync();
-    return;
-  }, [setProductNew]);
-
-  //抓價格排序
-  useEffect(() => {
-    setIsLoading(true);
-    const getProductPriceAsync = async () => {
-      try {
-        const resProductPrice = await productsPrice();
-        const onShelvesProductPrice = resProductPrice?.filter(
-          (product) => product.isOnShelves === 1
-        );
-        setProductPriceOrigin(onShelvesProductPrice);
-        setProductPrice(onShelvesProductPrice);
-        setIsLoading(false);
-      } catch (err) {
-        console.error(err);
-        setIsLoading(false);
-      }
-    };
-    getProductPriceAsync();
-    return;
-  }, [setProductPriceOrigin]);
+    setProductHot(value.data?.filter((product) => product.isOnShelves === 1));
+  }, [value.data]);
 
   // 點擊時，其他二個會變成 undefine 為 false，當為 true 時不改變
-  const sortSelectToggle = (e) => {
-    if (e.target.value === 'price') {
-      if (priceToggle === 'asc') {
-        setProductPrice(
-          productPriceOrigin.sort((a, b) => {
-            return a.price - b.price;
-          })
-        );
-        const priceSortOrder = priceToggle === 'asc' ? 'desc' : 'asc';
-        setPriceToggle(priceSortOrder);
-      } else if (priceToggle === 'desc') {
-        setProductPrice(
-          productPriceOrigin.sort((a, b) => {
-            return b.price - a.price;
-          })
-        );
-        const priceSortOrder = priceToggle === 'asc' ? 'desc' : 'asc';
-        setPriceToggle(priceSortOrder);
+  const sortSelectToggle = useCallback(
+    (e) => {
+      if (sortSelect[e.target.value] === true) {
+        return;
+      } else {
+        setSortSelect(() => ({
+          [e.target.value]: !sortSelect[e.target.value]
+        }));
       }
-    } else {
-      setPriceToggle('desc');
-      setProductPrice(
-        productPriceOrigin.sort((a, b) => {
-          return b.price - a.price;
-        })
-      );
-    }
-    if (sortSelect[e.target.value] === true) {
-      return;
-    } else {
-      setSortSelect(() => ({
-        [e.target.value]: !sortSelect[e.target.value]
-      }));
-    }
-  };
+    },
+    [sortSelect]
+  );
 
   return (
     <>
@@ -198,9 +114,6 @@ const Home = () => {
       <StyledProductsContainer>
         <ProductAll
           productHot={productHot}
-          productNew={productNew}
-          productPrice={productPrice}
-          priceToggle={priceToggle}
           sortSelect={sortSelect}
           sortSelectToggle={sortSelectToggle}
         />

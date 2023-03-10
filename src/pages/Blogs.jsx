@@ -3,10 +3,10 @@ import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import { HomeIcon, ClockIcon, BookMarkIcon } from '../assets/icons/index';
 import { HomeLinkWrapper } from '../components/common/HomeLinkWrapper';
-import { artical } from '../api/blogs';
 import { BlogFilterContext } from '../App';
 import { IsLoadingComponent as Loading } from '../components/common/IsLoading';
 import Swal from 'sweetalert2';
+import useFetchAPI from '../hooks/useFetchAPI';
 
 const BlogStyled = styled.div`
   box-sizing: border-box;
@@ -295,33 +295,22 @@ const BlogCategoryList = styled.ul`
 
 const Blogs = () => {
   const navigate = useNavigate();
-  const [isLoading, setIsLoading] = useState(true);
   const [articalOrigin, setArticalOrigin] = useState([]);
   const [articalAll, setArticalAll] = useState([]);
   const [query, setQuery] = useState('');
   const [optionsState, setOptionsState] = useState('');
   const { blogFilter } = useContext(BlogFilterContext);
 
-  //抓文章api
+  const { isLoading, value } = useFetchAPI(`/api/blogs`);
+
   useEffect(() => {
-    setIsLoading(true);
-    const getBlogsArticalAsync = async () => {
-      try {
-        const resArticalAll = await artical();
-        resArticalAll.sort((a, b) => {
-          return b.isTop - a.isTop; //正數-負數排序(true[1]-false[0])
-        });
-        setArticalOrigin(resArticalAll);
-        setArticalAll(resArticalAll);
-        setIsLoading(false);
-      } catch (err) {
-        console.error(err);
-        setIsLoading(false);
-      }
-    };
-    getBlogsArticalAsync();
-    return;
-  }, [setArticalOrigin]);
+    const resArticalAll = value.data;
+    resArticalAll?.sort((a, b) => {
+      return b.isTop - a.isTop;
+    });
+    setArticalOrigin(resArticalAll);
+    setArticalAll(resArticalAll);
+  }, [value]);
 
   useEffect(() => {
     if (blogFilter === 'null') {
@@ -401,7 +390,7 @@ const Blogs = () => {
         return;
       }
       setArticalAll(searchArtical);
-      setQuery('')
+      setQuery('');
       e.preventDefault(); //瀏覽器預設行為中斷(需放在if)
     }
   };
@@ -447,7 +436,7 @@ const Blogs = () => {
           </BlogSearchTop>
           <BlogListWrapper>
             <ul>
-              {articalAll.length === 0 &&
+              {articalAll === undefined &&
                 articalOrigin?.map((artical) => {
                   return (
                     <BlogCard key={artical.title}>
