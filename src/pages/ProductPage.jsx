@@ -1,14 +1,14 @@
-import React, { useState } from "react";
-import styled from "styled-components";
-import { useLocation, useNavigate } from "react-router-dom";
-import ProductAside from "./ProductAside";
-import ProductAll from "./ProductAll";
-import { HomeIcon } from "../assets/icons/index";
-import SingleProduct from "./SingleProduct";
-import { HomeLinkWrapper } from "../components/common/HomeLinkWrapper";
-import { IsLoadingComponent as Loading } from "../components/common/IsLoading";
-import CATEGORY_TYPE from "../constants/categoryTypeConst";
-import useFetch from "../hooks/useFetch";
+import React, { useState, useEffect, useCallback } from 'react';
+import styled from 'styled-components';
+import { useLocation, useNavigate } from 'react-router-dom';
+import ProductAside from './ProductAside';
+import ProductAll from './ProductAll';
+import { HomeIcon } from '../assets/icons/index';
+import SingleProduct from './SingleProduct';
+import { HomeLinkWrapper } from '../components/common/HomeLinkWrapper';
+import { IsLoadingComponent as Loading } from '../components/common/IsLoading';
+import CATEGORY_TYPE from '../constants/categoryTypeConst';
+import useFetchAPI from '../hooks/useFetchAPI';
 
 const ProductPageStyled = styled.div`
   box-sizing: border-box;
@@ -62,66 +62,43 @@ const Breadcrumb = styled.div`
 
 const ProductPage = () => {
   window.scrollTo(0, 245);
-  // const [isLoading, setIsLoading] = useState(true);
   const [productHot, setProductHot] = useState([]);
   const [sortSelect, setSortSelect] = useState({
-    top: true,
+    top: true
   });
 
   const navigate = useNavigate();
   const location = useLocation();
   const page = location.pathname;
-  let NowPage = "";
+  let NowPage = '';
 
-  if (page.includes("all")) {
-    NowPage = "全部商品";
-  } else if (page.includes("dog")) {
-    NowPage = "狗狗專區";
-  } else if (page.includes("cat")) {
-    NowPage = "貓貓專區";
+  if (page.includes('all')) {
+    NowPage = '全部商品';
+  } else if (page.includes('dog')) {
+    NowPage = '狗狗專區';
+  } else if (page.includes('cat')) {
+    NowPage = '貓貓專區';
   }
 
-  const { isLoading } = useFetch(`/api/products/all/bestsell`, {
-    productHot,
-    setProductHot,
-  });
+  const { isLoading, value } = useFetchAPI(`/api/products/all/bestsell`);
 
-  // useEffect(() => {
-  //   console.log("l:", isLoading);
-  //   console.log("v:", value);
-  // }, [isLoading, value]);
-
-  // useEffect
-  //抓全部商品
-  // useEffect(() => {
-  //   setIsLoading(true);
-  //   const getProductHotAsync = async () => {
-  //     try {
-  //       const resProductlHot = await productsHot();
-  //       const onShelvesProductHot = resProductlHot?.filter(
-  //         (product) => product.isOnShelves === 1
-  //       );
-  //       setProductHot(onShelvesProductHot);
-  //       setIsLoading(false);
-  //     } catch (err) {
-  //       console.error(err);
-  //       setIsLoading(false);
-  //     }
-  //   };
-  //   getProductHotAsync();
-  //   return;
-  // }, [setProductHot]);
+  useEffect(() => {
+    setProductHot(value.data?.filter((product) => product.isOnShelves === 1));
+  }, [value.data]);
 
   // 點擊時，其他二個會變成 undefine 為 false，當為 true 時不改變
-  const sortSelectToggle = (e) => {
-    if (sortSelect[e.target.value] === true) {
-      return;
-    } else {
-      setSortSelect(() => ({
-        [e.target.value]: !sortSelect[e.target.value],
-      }));
-    }
-  };
+  const sortSelectToggle = useCallback(
+    (e) => {
+      if (sortSelect[e.target.value] === true) {
+        return;
+      } else {
+        setSortSelect(() => ({
+          [e.target.value]: !sortSelect[e.target.value]
+        }));
+      }
+    },
+    [sortSelect]
+  );
 
   return (
     <>
@@ -132,21 +109,21 @@ const ProductPage = () => {
           <HomeLinkWrapper>
             <GoToHome>
               <HomeIcon
-                onClick={() => navigate("/")}
-                style={{ color: "var(--dark)", cursor: "pointer" }}
+                onClick={() => navigate('/')}
+                style={{ color: 'var(--dark)', cursor: 'pointer' }}
               />
-              <p className="text">{NowPage}</p>
+              <p className='text'>{NowPage}</p>
             </GoToHome>
           </HomeLinkWrapper>
           <Breadcrumb />
-          {page === "/product/all" && (
+          {page === '/product/all' && (
             <ProductAll
               productHot={productHot}
               sortSelect={sortSelect}
               sortSelectToggle={sortSelectToggle}
             />
           )}
-          {page === "/product/dog" && (
+          {page === '/product/dog' && (
             <ProductAll
               productHot={productHot}
               sortSelect={sortSelect}
@@ -154,7 +131,7 @@ const ProductPage = () => {
               type={CATEGORY_TYPE.DOG}
             />
           )}
-          {page === "/product/cat" && (
+          {page === '/product/cat' && (
             <ProductAll
               productHot={productHot}
               sortSelect={sortSelect}
@@ -162,14 +139,14 @@ const ProductPage = () => {
               type={CATEGORY_TYPE.CAT}
             />
           )}
-          {page.includes("search") && (
+          {page.includes('search') && (
             <ProductAll
               productHot={productHot}
               sortSelect={sortSelect}
               sortSelectToggle={sortSelectToggle}
             />
           )}
-          {page.includes("detail") && <SingleProduct />}
+          {page.includes('detail') && <SingleProduct />}
         </ProductWrapper>
       </ProductPageStyled>
     </>
