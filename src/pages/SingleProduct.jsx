@@ -14,9 +14,9 @@ import {
 } from '../assets/icons';
 import order from '../assets/images/order.png';
 import ProductPopCart from './ProductPopCart';
-import { productDetail } from '../api/products';
 import { addTocart } from '../store/productSlice';
 import { IsLoadingComponent as Loading } from '../components/common/IsLoading';
+import useFetchAPI from '../hooks/useFetchAPI';
 
 const StyledContainer = styled.div`
   position: relative;
@@ -555,7 +555,6 @@ const StyledBuyButton = styled.div`
 const SingleProduct = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [isLoading, setIsLoading] = useState(true);
   const { productId } = useParams();
   const [product, setProduct] = useState(null);
   const [count, setCount] = useState(1);
@@ -593,22 +592,11 @@ const SingleProduct = () => {
     window.scrollTo(0, 350);
   }, []);
 
-  //抓單一商品
+  const { isLoading, value } = useFetchAPI(`/api/products/detail/${productId}`);
+
   useEffect(() => {
-    setIsLoading(true);
-    const getSingleProductAsync = async () => {
-      try {
-        const resSingleProduct = await productDetail(productId);
-        setProduct(resSingleProduct);
-        setIsLoading(false);
-      } catch (err) {
-        console.error(err);
-        setIsLoading(false);
-      }
-    };
-    getSingleProductAsync();
-    return;
-  }, [setProduct, productId]);
+    setProduct(value?.data);
+  }, [value]);
 
   const handledecrease = () => {
     if (count === 1) {

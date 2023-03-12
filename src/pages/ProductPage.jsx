@@ -1,15 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import styled from 'styled-components';
 import { useLocation, useNavigate } from 'react-router-dom';
 import ProductAside from './ProductAside';
 import ProductAll from './ProductAll';
-import { productsHot } from '../api/products';
 import { HomeIcon } from '../assets/icons/index';
 import SingleProduct from './SingleProduct';
 import { HomeLinkWrapper } from '../components/common/HomeLinkWrapper';
 import { IsLoadingComponent as Loading } from '../components/common/IsLoading';
 import CATEGORY_TYPE from '../constants/categoryTypeConst';
-import useFetch from '../hooks/useFetch';
+import useFetchAPI from '../hooks/useFetchAPI';
 
 const ProductPageStyled = styled.div`
   box-sizing: border-box;
@@ -61,9 +60,8 @@ const Breadcrumb = styled.div`
   position: relative;
 `;
 
-const ProductPage = ({ keyword }) => {
+const ProductPage = () => {
   window.scrollTo(0, 245);
-  // const [isLoading, setIsLoading] = useState(true);
   const [productHot, setProductHot] = useState([]);
   const [sortSelect, setSortSelect] = useState({
     top: true
@@ -82,52 +80,25 @@ const ProductPage = ({ keyword }) => {
     NowPage = '貓貓專區';
   }
 
-  const { isLoading, value,fetchData } = useFetch(
-    `/api/products/all/bestsell`
-  );
+  const { isLoading, value } = useFetchAPI(`/api/products/all/bestsell`);
 
   useEffect(() => {
-    fetchData();
-    console.log("value:", value);
-    const productData = value?.data;
-    const onShelvesProductHot = productData?.filter(
-      (product) => product.isOnShelves === 1
-    );
-
-    setProductHot(onShelvesProductHot);
-  }, []);
-
-  // useEffect
-  //抓全部商品
-  // useEffect(() => {
-  //   setIsLoading(true);
-  //   const getProductHotAsync = async () => {
-  //     try {
-  //       const resProductlHot = await productsHot();
-  //       const onShelvesProductHot = resProductlHot?.filter(
-  //         (product) => product.isOnShelves === 1
-  //       );
-  //       setProductHot(onShelvesProductHot);
-  //       setIsLoading(false);
-  //     } catch (err) {
-  //       console.error(err);
-  //       setIsLoading(false);
-  //     }
-  //   };
-  //   getProductHotAsync();
-  //   return;
-  // }, [setProductHot]);
+    setProductHot(value.data?.filter((product) => product.isOnShelves === 1));
+  }, [value.data]);
 
   // 點擊時，其他二個會變成 undefine 為 false，當為 true 時不改變
-  const sortSelectToggle = (e) => {
-    if (sortSelect[e.target.value] === true) {
-      return;
-    } else {
-      setSortSelect(() => ({
-        [e.target.value]: !sortSelect[e.target.value]
-      }));
-    }
-  };
+  const sortSelectToggle = useCallback(
+    (e) => {
+      if (sortSelect[e.target.value] === true) {
+        return;
+      } else {
+        setSortSelect(() => ({
+          [e.target.value]: !sortSelect[e.target.value]
+        }));
+      }
+    },
+    [sortSelect]
+  );
 
   return (
     <>
