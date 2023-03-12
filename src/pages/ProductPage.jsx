@@ -82,13 +82,13 @@ const ProductPage = ({ keyword }) => {
     NowPage = '貓貓專區';
   }
 
-  const { isLoading, value, fetchData } = useFetch(
+  const { isLoading, value,fetchData } = useFetch(
     `/api/products/all/bestsell`
   );
 
   useEffect(() => {
     fetchData();
-    console.log(value)
+    console.log("value:", value);
     const productData = value?.data;
     const onShelvesProductHot = productData?.filter(
       (product) => product.isOnShelves === 1

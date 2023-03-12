@@ -1,11 +1,11 @@
 import axios from 'axios';
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo } from 'react';
 
 const baseURL = 'https://www.waylins.com';
 
 const useFetch = (url) => {
   const [isLoading, setIsLoading] = useState(false);
-  const [value, setValue] = useState({});
+  const [value, setValue] = useState(null);
   const [error, setError] = useState(null);
 
   const targetURL = useMemo(() => {
@@ -27,18 +27,14 @@ const useFetch = (url) => {
       // console.log(res);
       setValue(res.data);
       setIsLoading(false);
+      console.log("res:", res.data);
+      console.log("value:",value)
     } catch (error) {
       setError(error);
     } finally {
       setIsLoading(false);
     }
   };
-
-  useEffect(() => {
-    fetchData();
-    console.log(value);
-  }, []);
-
 
   return {
     isLoading,
