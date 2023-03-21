@@ -596,7 +596,7 @@ const Cart = () => {
         totalAmount,
         deliveryId
       });
-      const { status, orderNumber } = data.data;
+      const { status, orderNumber } = data?.data;
 
       if (status === 'success') {
         Swal.fire({
