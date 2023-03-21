@@ -596,7 +596,7 @@ const Cart = () => {
         totalAmount,
         deliveryId
       });
-      const { status, orderNumber } = data;
+      const { status, orderNumber } = data?.data;
 
       if (status === 'success') {
         Swal.fire({
@@ -606,17 +606,17 @@ const Cart = () => {
           text: '訂單編號' + orderNumber,
           showConfirmButton: true
         });
+        setPurchaserName('');
+        setPurchaserPhone('');
+        setPurchaserEmail('');
+        setReceiverName('');
+        setReceiverPhone('');
+        setReceiverAddress('');
+        setComment('');
+        setDeliveryId('');
+        dispatch(setClearCart());
       }
 
-      setPurchaserName('');
-      setPurchaserPhone('');
-      setPurchaserEmail('');
-      setReceiverName('');
-      setReceiverPhone('');
-      setReceiverAddress('');
-      setComment('');
-      setDeliveryId('');
-      dispatch(setClearCart());
     } catch (error) {
       console.error('Order Submit faild :', error);
     }

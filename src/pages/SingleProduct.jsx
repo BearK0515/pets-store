@@ -5,7 +5,6 @@ import styled from 'styled-components';
 import Swal from 'sweetalert2';
 import {
   CartIcon,
-  CheckedIcon,
   FacebookIcon,
   LineIcon,
   MinusIcon,
@@ -14,9 +13,9 @@ import {
 } from '../assets/icons';
 import order from '../assets/images/order.png';
 import ProductPopCart from './ProductPopCart';
-import { productDetail } from '../api/products';
 import { addTocart } from '../store/productSlice';
 import { IsLoadingComponent as Loading } from '../components/common/IsLoading';
+import useFetchAPI from '../hooks/useFetchAPI';
 
 const StyledContainer = styled.div`
   position: relative;
@@ -301,110 +300,7 @@ const StyledImage = styled.div`
     cursor: pointer;
   }
 `;
-const StyleProductsWrapper = styled.div`
-  .add {
-    font-size: 14px;
-    line-height: 1;
-    text-align: right;
-    margin-bottom: 10px;
-    font-weight: 400;
-    span {
-      color: #cb3747;
-      margin: 0 5px;
-      font-weight: bolder;
-    }
-  }
-  .produts-wrapper {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 15px;
-    @media screen and (max-width: 577px) {
-      grid-template-columns: 1fr;
-    }
-    .card {
-      display: flex;
-      flex-flow: column;
-      font-size: 1rem;
-      font-weight: 400;
-      border: 1px solid #ccc;
-      &.active {
-        border-color: #c14848;
-      }
-      header {
-        height: 25px;
-        background-color: #efefef;
-      }
-      .card-wrapper {
-        padding: 10px;
-        display: grid;
-        grid-template-columns: 75px 1fr;
-        .pic {
-          aspect-ratio: 1/1;
-          background-size: cover;
-          background-image: url('https://picsum.photos/id/312/600/400');
-        }
-        .information {
-          padding-left: 10px;
-          .name {
-            display: flex;
-            justify-content: start;
-            height: 38px;
-            font-size: 14px;
-            font-weight: 500;
-            line-height: 18px;
-            margin-bottom: 5px;
-            cursor: pointer;
-          }
-          .price-wrapper {
-            display: flex;
-            align-items: baseline;
-            justify-content: space-between;
-            font-size: 1rem;
-            font-weight: 400;
-            line-height: 1.5;
-            color: #212529;
-            margin-bottom: 10px;
-            .price {
-              font-size: 14px;
-              letter-spacing: 1px;
-              font-weight: 500;
-              line-height: 1.2;
-            }
-            .discount-price {
-              font-size: 14px;
-              letter-spacing: 1px;
-              font-weight: 700;
-              line-height: 1.2;
-            }
-          }
-          .button {
-            display: flex;
-            justify-content: end;
-          }
-        }
-      }
-    }
-  }
-`;
-const Button = styled.button`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 5px;
-  width: 100px;
-  background-color: ${(props) => (props.selected ? '#c14848' : 'var(--white)')};
-  color: ${(props) => (props.selected ? 'var(--white)' : '#aaa')};
-  border: ${(props) =>
-    props.selected ? '1px solid #c14848' : '1px solid #aaa'};
-  border-radius: 3px;
-  padding: 10px;
-  cursor: pointer;
-  .checked {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-`;
+
 const StyledProductInfo = styled.div`
   width: 100%;
   margin-bottom: 10px;
@@ -555,7 +451,6 @@ const StyledBuyButton = styled.div`
 const SingleProduct = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [isLoading, setIsLoading] = useState(true);
   const { productId } = useParams();
   const [product, setProduct] = useState(null);
   const [count, setCount] = useState(1);
@@ -593,22 +488,11 @@ const SingleProduct = () => {
     window.scrollTo(0, 350);
   }, []);
 
-  //抓單一商品
+  const { isLoading, value } = useFetchAPI(`/api/products/detail/${productId}`);
+
   useEffect(() => {
-    setIsLoading(true);
-    const getSingleProductAsync = async () => {
-      try {
-        const resSingleProduct = await productDetail(productId);
-        setProduct(resSingleProduct);
-        setIsLoading(false);
-      } catch (err) {
-        console.error(err);
-        setIsLoading(false);
-      }
-    };
-    getSingleProductAsync();
-    return;
-  }, [setProduct, productId]);
+    setProduct(value?.data);
+  }, [value]);
 
   const handledecrease = () => {
     if (count === 1) {
@@ -774,27 +658,7 @@ const SingleProduct = () => {
           </div>
         </div>
       </StyledContainer>
-      {/* 加購商品 */}
-      <StyledContainer>
-        <div className='cont'>
-          <StyleProductsWrapper className='item-area'>
-            <StyledTitle className='title'>
-              <h2>優惠加購</h2>
-              <hr />
-            </StyledTitle>
-            <div className='add'>
-              加購可選
-              <span>1</span>件
-            </div>
-            <div className='produts-wrapper'>
-              {/* data.map() */}
-              {product?.Image?.map((img) => {
-                return <AddProductCard key={img.url} image={img.url} />;
-              })}
-            </div>
-          </StyleProductsWrapper>
-        </div>
-      </StyledContainer>
+
       {/* 商品詳情 */}
       <StyledContainer>
         <div className='cont'>
@@ -875,44 +739,4 @@ const SingleProduct = () => {
   );
 };
 
-const AddProductCard = ({ image }) => {
-  const [isSelected, setIsSelected] = useState(false);
-  const handleToggleSelectButton = () => {
-    setIsSelected(!isSelected);
-  };
-  return (
-    <div className={`card ${isSelected ? 'active' : ''}`}>
-      <header></header>
-      <div className='card-wrapper'>
-        <div
-          className='pic'
-          style={{
-            backgroundImage: `url('${image}')`
-          }}
-        ></div>
-        <div className='information'>
-          <div className='name'>【超值加購】腎臟保健粉</div>
-          <div className='row price-wrapper'>
-            <div className='price'>1盒(每盒$690元)</div>
-            <div className='discount-price'>
-              TWD <span>$489</span>
-            </div>
-          </div>
-          <div className='button'>
-            {isSelected ? (
-              <Button selected onClick={handleToggleSelectButton}>
-                <div className='checked'>
-                  <CheckedIcon />
-                </div>
-                已選購
-              </Button>
-            ) : (
-              <Button onClick={handleToggleSelectButton}>選購</Button>
-            )}
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
 export default SingleProduct;
