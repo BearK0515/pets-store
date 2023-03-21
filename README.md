@@ -88,6 +88,14 @@
   ![](https://i.imgur.com/bM41AFr.gif)
 
 
+### 結帳流程
+
+- 從加入購物車到送出訂單，最後收到信箱後查詢訂單狀態。
+
+  ![](https://i.imgur.com/7oLYuRP.gif)
+
+
+
 ## 開發工具
 
 - Create React App - 建立專案項目環境
